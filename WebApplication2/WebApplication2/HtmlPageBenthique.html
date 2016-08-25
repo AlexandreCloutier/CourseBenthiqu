@@ -1,23 +1,17 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet"  href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        canvas {
-            margin-top:10px;
-            border: 1px solid #d3d3d3;
-            background-color: #f1f1f1;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-    </style>
 </head>
 <body onload="startGame()">
     <script>
         var myGamePiece;
         var myBackground;
+        var iDiv = document.createElement('div');
+        iDiv.id = 'block';
+        iDiv.className = 'block';
+        document.getElementsByTagName('body')[0].appendChild(iDiv);
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
