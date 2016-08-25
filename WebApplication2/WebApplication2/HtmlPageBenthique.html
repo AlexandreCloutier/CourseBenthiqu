@@ -16,15 +16,16 @@
 </head>
 <body onload="startGame()">
     <script>
-
         var myGamePiece;
         var myBackground;
 
+        //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
-            myBackground = new component(650, 650, "resources/PlateauJeu.jpg", 0, 0, "image");
+            myBackground = new component(650, 650, "resources/PlateauJeu.jpg", 0, 10, "image");
             myGameArea.start();
         }
 
+        //Instantie "l'area" du jeu,
         var myGameArea = {
             canvas: document.createElement("canvas"),
             start: function () {
@@ -43,18 +44,21 @@
             }
         }
 
+        //Fonction qui crée les "component" et entre les valeurs voulu.
         function component(width, height, color, x, y, type) {
             this.type = type;
             if (type == "image") {
                 this.image = new Image();
                 this.image.src = color;
             }
+            this.image.draggable = true;
+            this.allowDrop = true;
             this.width = width;
             this.height = height;
             this.speedX = 0;
             this.speedY = 0;
             this.x = x;
-            this.y = y+10;
+            this.y = y;
             this.update = function () {
                 ctx = myGameArea.context;
                 if (type == "image") {
@@ -73,11 +77,12 @@
             }
         }
 
+        //Fonction qui "update" le jeu.
         function updateGameArea() {
             myGameArea.clear();
             myBackground.newPos();
             myBackground.update();
         }
-    </script>
+  </script>
 </body>
 </html>
