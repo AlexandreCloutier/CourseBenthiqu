@@ -94,6 +94,5 @@ C:\Users\Samuel\Documents\GitHub\CourseBenthique\WebApplication2\WebApplication2
 C:\Users\Samuel\Documents\GitHub\CourseBenthique\WebApplication2\WebApplication2\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\Samuel\Documents\GitHub\CourseBenthique\WebApplication2\WebApplication2\bin\Microsoft.ApplicationInsights.xml
 C:\Users\Samuel\Documents\GitHub\CourseBenthique\WebApplication2\WebApplication2\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\Samuel\Documents\GitHub\CourseBenthique\WebApplication2\WebApplication2\obj\Debug\WebApplication2.csprojResolveAssemblyReference.cache
 C:\Users\Samuel\Documents\GitHub\CourseBenthique\WebApplication2\WebApplication2\obj\Debug\WebApplication2.dll
 C:\Users\Samuel\Documents\GitHub\CourseBenthique\WebApplication2\WebApplication2\obj\Debug\WebApplication2.pdb
