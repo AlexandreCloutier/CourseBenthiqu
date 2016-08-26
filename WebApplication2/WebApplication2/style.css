@@ -34,3 +34,11 @@ canvas {
     width: 100px;
     height: 60px;
 }
+
+.divEmplacementHabitat {
+    width: 60px;
+    height:100px;
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid blue;
+}

@@ -58,10 +58,21 @@
             ev.preventDefault(ev);
         }
 
+        function remplirDivHabitat() {
+            var dropVariable = document.createAttribute("ondrop");
+            dropvariable.value = "drop(event)";
+
+            var divEmplacementHabitat = document.createElement('div');
+            divEmplacementHabitat.className = 'divEmplacementHabitat';
+            divEmplacementHabitat.setAttributeNode(dropVariable);
+            document.getElementsByTagName('body')[0].appendChild(divEmplacementHabitat);
+        }
+
         //****************** ************TEST******************
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
+            remplirDivHabitat();
             myBackground = new component(650, 650, "resources/PlateauJeu.jpg", 0, 10, "image");
             myGameArea.start();
         }
@@ -72,6 +83,7 @@
             start: function () {
                 this.canvas.width = 650;
                 this.canvas.height = 800;
+                this.canvas.id = ''
                 this.context = this.canvas.getContext("2d");
                 document.body.insertBefore(this.canvas, document.body.childNodes[0]);
                 this.frameNo = 0;
