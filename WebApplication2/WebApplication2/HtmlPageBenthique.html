@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet"  href="style.css">
+    <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body onload="startGame()">
@@ -13,25 +13,24 @@
         var iDiv = document.createElement('div');
         iDiv.id = 'divCarte';
         iDiv.className = 'divCarte';
-        iDiv.ondrop = "drop(event)";
-        iDiv.ondragover = "allowDrop(event)";
+        iDiv.ondrop = 'drop(event)';
+        iDiv.ondragover = 'allowDrop(event)';
         document.getElementsByTagName('body')[0].appendChild(iDiv);
 
         var image = document.createElement('img');
         image.id = 'imageCarte';
         image.className = 'imageCarte';
         image.draggable = 'true';
-        image.ondragstart = "drag(event)";
+        image.ondragstart = 'drag(event)';
         image.src = 'resources/PlateauJeu.jpg';
-
         // Mes image Dans le idiv
         iDiv.appendChild(image);
 
         var divEmplacement = document.createElement('div');
         divEmplacement.id = 'emplacementCarte';
         divEmplacement.className = 'emplacementCarte';
-        divEmplacement.ondrop = "drop(event)";
-        divEmplacement.ondragover = "allowDrop(event)";
+        divEmplacement.ondrop = 'drop(event)';
+        divEmplacement.ondragover = 'allowDrop(event)';
         document.getElementsByTagName('body')[0].appendChild(divEmplacement);
 
         //Fonction qui "prévient" le navigateur car normalement il l'empèche de drag les images.
@@ -48,9 +47,6 @@
             ev.target.appendChild(document.getElementById(data));
             ev.preventDefault(ev);
         }
-
-
-
 
         //****************** ************TEST******************
 
@@ -118,6 +114,6 @@
             myBackground.newPos();
             myBackground.update();
         }
-  </script>
+    </script>
 </body>
 </html>
