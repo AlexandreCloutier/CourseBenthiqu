@@ -10,10 +10,14 @@
         var myBackground;
         var dropvariable = document.createAttribute("ondrop");
         dropvariable.value = "drop(event)";
-        var dragVariable = document.createAttribute("ondrag");
-        dragVariable = "drag(event)";
+        var dropVariable2 = document.createAttribute("ondrop");
+        dropVariable2.value = "drop(event)";
+        var dragVariable = document.createAttribute("ondragstart");
+        dragVariable.value = "drag(event)";
         var allowDropVariable = document.createAttribute("ondragover");
-        allowDropVariable = "allowDrop(event)";
+        allowDropVariable.value = "allowDrop(event)";
+        var allowDropVariable2 = document.createAttribute("ondragover");
+        allowDropVariable2.value = "allowDrop(event)";
 
         //*******************************TEST******************
         var iDiv = document.createElement('div');
@@ -27,7 +31,7 @@
         image.id = 'imageCarte';
         image.className = 'imageCarte';
         image.draggable = 'true';
-        //image.setAttributeNode(dragVariable);
+        image.setAttributeNode(dragVariable);
         image.src = 'resources/PlateauJeu.jpg';
         // Mes image Dans le idiv
         iDiv.appendChild(image);
@@ -35,8 +39,8 @@
         var divEmplacement = document.createElement('div');
         divEmplacement.id = 'emplacementCarte';
         divEmplacement.className = 'emplacementCarte';
-        //divEmplacement.setAttributeNode(dropvariable);
-        //divEmplacement.setAttributeNode(allowDropVariable);
+        divEmplacement.setAttributeNode(dropVariable2);
+        divEmplacement.setAttributeNode(allowDropVariable2);
         document.getElementsByTagName('body')[0].appendChild(divEmplacement);
 
         //Fonction qui "prévient" le navigateur car normalement il l'empèche de drag les images.
