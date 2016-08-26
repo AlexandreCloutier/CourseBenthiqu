@@ -1,44 +1,25 @@
 ﻿body {
 }
 
-canvas {
+#plateau {
     margin-top: 10px;
+    margin-bottom: 10px;
     border: 1px solid #d3d3d3;
-    background-color: #f1f1f1;
+    background-image: url(resources/PlateauJeu.jpg);
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    height: 756px;
+    width: 752px;
 }
 
-#divCarte {
+.divEmplacementHabitatBas {
     float: left;
-    width: 100px;
-    height: 60px;
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid black;
-    
-}
-
-#emplacementCarte {
-    float: left;
-    width: 100px;
-    height: 60px;
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid black;
-}
-
-#imageCarte {
-    width: 100px;
-    height: 60px;
-}
-
-.divEmplacementHabitat {
     width: 60px;
-    height:100px;
+    height: 100px;
     margin: 5px;
     padding: 5px;
     border: 1px solid blue;
+    bottom: 10px;
 }
