@@ -110,8 +110,7 @@
     <Content Include="resources\PlateauJeu.jpg" />
     <Content Include="scripts\ai.0.15.0-build58334.js" />
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
-    <Content Include="scripts\DragDrop.js" />
-    <Content Include="scripts\processing.js" />
+    <Content Include="scripts\jquery-ui.min.js" />
     <Content Include="style.css" />
     <Content Include="Web.config" />
   </ItemGroup>
