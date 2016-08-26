@@ -10,6 +10,7 @@
         function startGame() {
             creerFond();
             ajouterEmplacementHabitatBas();
+            ajouterEmplacementCarteBas();
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
@@ -30,6 +31,19 @@
                 divEmplacementHabitat.id = 'divEmplacementHabitatBas' + id;
                 divEmplacementHabitat.className = 'divEmplacementHabitatBas';
                 document.getElementById('plateau').appendChild(divEmplacementHabitat);
+            }
+        }
+
+        //Fonction qui ajoute 4 emplacement de carte sur les emplacements d'habitats du bas.
+        function ajouterEmplacementCarteBas() {
+
+            //Boucle 4 fois pour ajouter les 4 emplacements sur les emplacements D'habitats du bas.
+            var id;
+            for (id = 1; id < 5; id++) {
+                var divEmplacementCarte = document.createElement('div');
+                divEmplacementCarte.id = 'divEmplacementCarteBas' + id;
+                divEmplacementCarte.className = 'divEmplacementCarteBas';
+                document.getElementById('plateau').appendChild(divEmplacementCarte);
             }
         }
 
