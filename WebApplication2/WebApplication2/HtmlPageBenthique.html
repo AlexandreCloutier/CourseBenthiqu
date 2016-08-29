@@ -37,7 +37,7 @@
                 var divEmplacementHabitat = document.createElement('div');
                 divEmplacementHabitat.id = 'divEmplacementHabitatBas' + id;
                 divEmplacementHabitat.className = 'divEmplacementHabitatBas';
-                divEmplacementHabitat.style.left = 70 + 80 * id + 'px';
+                divEmplacementHabitat.style.left = 117 + 66 * id + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementHabitat);
                 $(function () {
                     $('.divEmplacementHabitatBas').droppable({
@@ -58,8 +58,7 @@
                 var divEmplacementCarte = document.createElement('div');
                 divEmplacementCarte.id = 'divEmplacementCarteBas' + id;
                 divEmplacementCarte.className = 'divEmplacementCarteBas';
-                divEmplacementCarte.style.left = 110 + 80 * id + 'px';
-                divEmplacementCarte.style.bottom = 150 + 'px';
+                divEmplacementCarte.style.left = 181 + 66 * id + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementCarte);
                 $(function () {
                     $('.divEmplacementCarteBas').droppable({
@@ -76,19 +75,19 @@
             var id;
             for (id = 1; id < 7; id++) {
                 var iDiv = document.createElement('div');
-                iDiv.id = 'divCarte';
+                iDiv.id = 'divCarte' + id;
                 iDiv.className = 'divCarte';
                 document.getElementById('divMain').appendChild(iDiv);
 
                 var image = document.createElement('img');
-                image.id = 'imageCarte';
+                image.id = 'imageCarte'+ id;
                 image.className = 'imageCarte';
                 image.src = 'resources/CarteEau.jpg';
                 // Mes image Dans le idiv
                 iDiv.appendChild(image);
 
                 $(function () {
-                    $('#imageCarte').draggable({ revert: 'invalid' });
+                    $('.divCarte').draggable({ revert: 'invalid' });
                 });
             }
         }
