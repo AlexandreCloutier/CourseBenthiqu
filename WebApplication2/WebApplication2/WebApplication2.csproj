@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="HtmlPageBenthique.html" />
+    <Content Include="resources\CarteEau.jpg" />
     <Content Include="resources\PlateauJeu.jpg" />
     <Content Include="scripts\ai.0.15.0-build58334.js" />
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />

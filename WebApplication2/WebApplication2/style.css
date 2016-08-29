@@ -13,6 +13,11 @@
     height: 756px;
     width: 752px;
 }
+.divMain{
+    background-color: green;
+    height: 756px;
+    width:350px;
+}
 
 .divEmplacementHabitatBas {
     float: left;

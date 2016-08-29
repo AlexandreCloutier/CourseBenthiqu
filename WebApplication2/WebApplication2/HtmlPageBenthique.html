@@ -13,27 +13,16 @@
             creerFond();
             ajouterEmplacementHabitatBas();
             ajouterEmplacementCarteBas();
-
-            var iDiv = document.createElement('div');
-            iDiv.id = 'divCarte';
-            iDiv.className = 'divCarte';
-            document.getElementsByTagName('body')[0].appendChild(iDiv);
-
-            var image = document.createElement('img');
-            image.id = 'imageCarte';
-            image.className = 'imageCarte';
-            image.src = 'resources/PlateauJeu.jpg';
-            // Mes image Dans le idiv
-            iDiv.appendChild(image);
-
-            $(function () {
-                $('#imageCarte').draggable({ revert: 'invalid' });
-            });
-
+            creerMain();
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
         function creerFond() {
+            var divMain = document.createElement('div');
+            divMain.id = 'divMain';
+            divMain.className = 'divMain';
+            document.getElementsByTagName('body')[0].appendChild(divMain);
+
             var plateau = document.createElement('div');
             plateau.id = 'plateau';
             plateau.className = 'plateau';
@@ -78,6 +67,28 @@
                     });
                 });
             }
+        }
+
+        function creerMain() {
+            var id;
+            for (id = 1; id < 7; id++) {
+                var iDiv = document.createElement('div');
+                iDiv.id = 'divCarte';
+                iDiv.className = 'divCarte';
+                document.getElementById('divMain').appendChild(iDiv);
+
+                var image = document.createElement('img');
+                image.id = 'imageCarte';
+                image.className = 'imageCarte';
+                image.src = 'resources/CarteEau.jpg';
+                // Mes image Dans le idiv
+                iDiv.appendChild(image);
+
+                $(function () {
+                    $('#imageCarte').draggable({ revert: 'invalid' });
+                });
+            }
+
         }
 
         //Fonction qui "update" le jeu.
