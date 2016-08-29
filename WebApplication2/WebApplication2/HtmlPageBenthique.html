@@ -5,12 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body onload="startGame()">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script>
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
             creerFond();
             ajouterEmplacementHabitatBas();
             ajouterEmplacementCarteBas();
+
+            var iDiv = document.createElement('div');
+            iDiv.id = 'divCarte';
+            iDiv.className = 'divCarte';
+            document.getElementsByTagName('body')[0].appendChild(iDiv);
+
+            var image = document.createElement('img');
+            image.id = 'imageCarte';
+            image.className = 'imageCarte';
+            image.src = 'resources/PlateauJeu.jpg';
+            // Mes image Dans le idiv
+            iDiv.appendChild(image);
+
+            $(function () {
+                $('#imageCarte').draggable({ revert: 'invalid' });
+            });
+
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
@@ -31,6 +50,14 @@
                 divEmplacementHabitat.id = 'divEmplacementHabitatBas' + id;
                 divEmplacementHabitat.className = 'divEmplacementHabitatBas';
                 document.getElementById('plateau').appendChild(divEmplacementHabitat);
+                $(function() {
+                    $('.divEmplacementHabitatBas').droppable({
+                        drop: function(event, ui) {
+                            ui.draggable.draggable('disable');
+                            ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                        }
+                    });
+                });
             }
         }
 
@@ -44,6 +71,14 @@
                 divEmplacementCarte.id = 'divEmplacementCarteBas' + id;
                 divEmplacementCarte.className = 'divEmplacementCarteBas';
                 document.getElementById('plateau').appendChild(divEmplacementCarte);
+                $(function () {
+                    $('.divEmplacementCarteBas').droppable({
+                        drop: function (event, ui) {
+                            ui.draggable.draggable('disable');
+                            ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                        }
+                    });
+                });
             }
         }
 

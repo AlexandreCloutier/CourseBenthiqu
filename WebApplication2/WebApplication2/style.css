@@ -33,3 +33,13 @@
     border: 1px solid pink;
     bottom: 10px;
 }
+
+.divCarte {
+    width: 60px;
+    height: 100px;
+}
+
+.imageCarte{
+    width:inherit;
+    height:inherit;
+}
