@@ -8,11 +8,16 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script>
+        var paquetCarte;
+
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
             creerFond();
             ajouterEmplacementHabitatBas();
             ajouterEmplacementCarteBas();
+            //paquetCarte = creerPaquetCarte();
+            //melangerPaquetCarte(paquetCarte);
+            //pigerCarte();
             creerMain();
         }
 
@@ -92,22 +97,52 @@
             }
         }
         /*****************************TEST*******/
-        //Défini une classe carte.
-        function Carte(nom, type, coutResources, tolerance, taille, predateur) {
-
-        }
-
-        function Carte(type, params) {
-            if (type === predateur) {
+        
+        //Définition de la classe.
+        function Carte(type, nom, params) {
+            if (type === 'predateur') {
                 this.nom = nom;
-                this.tolerance = tolerance;
-                this.force = force;
-                this.coutResources = coutResources;
+                this.type = type;
+                this.tolerance = params.tolerance;
+                this.force = params.force;
+                this.coutResources = params.coutResources;
+                this.condition = params.condition;
+            }
+            else if (type === 'habitats') {
+                this.nom = nom;
+                this.type = type;
+                this.habitats = params.habitats;
+                this.coutResources = params.coutResources;
+            }
+            else if (type === 'solmonide') {
+                this.nom = nom;
+                this.type = type;
+                this.coutResources = params.coutResources;
+                this.condition = params.condition;
             }
         }
 
-        var carte = new Carte(predateur,{nom:toto,tolerance:5,force:10, coutResources:2});
+        //function pour piger une carte.
+        function pigerCarte(paquetCarte) {
+
+        }
+
+        //Function qui melange le paquet de carte.
+        function melangerPaquetCarte() {
+
+        }
+
+        //function qui crée le paquet de carte.
+        function creerPaquetCarte() {
+            var paquetCarte = new Array();
+            /* Exemple d'une création de carte.
+            var carte = new Carte(predateur, { tolerance: 5, force: 10, coutResources: 2, condition: [1, 2, 3] });
+            */
+            return paquetCarte;
+        }
         /*****************************************/
+
+        
         //Fonction qui "update" le jeu.
         function updateGameArea() {
             
