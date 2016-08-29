@@ -28,7 +28,7 @@
             plateau.className = 'plateau';
             document.getElementsByTagName('body')[0].appendChild(plateau);
         }
-        
+
         //Fonction qui ajoute 6 emplacement d'habitats dans le bas.
         function ajouterEmplacementHabitatBas() {
             //Boucle 6 fois pour ajouter les 6 emplacements D'habitats du bas.
@@ -39,9 +39,9 @@
                 divEmplacementHabitat.className = 'divEmplacementHabitatBas';
                 divEmplacementHabitat.style.left = 70 + 80 * id + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementHabitat);
-                $(function() {
+                $(function () {
                     $('.divEmplacementHabitatBas').droppable({
-                        drop: function(event, ui) {
+                        drop: function (event, ui) {
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
                         }
@@ -72,7 +72,6 @@
             }
         }
 
-<<<<<<< HEAD
         function creerMain() {
             var id;
             for (id = 1; id < 7; id++) {
@@ -92,10 +91,9 @@
                     $('#imageCarte').draggable({ revert: 'invalid' });
                 });
             }
-=======
+        }
         //Défini une classe carte.
         function Carte(nom, type, coutResources, tolerance, taille, predateur) {
->>>>>>> bbaaadd4fd166dba9593ba0c2e5918add0df9814
 
         }
 
