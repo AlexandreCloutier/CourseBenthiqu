@@ -92,14 +92,26 @@
                 });
             }
         }
+        /*****************************TEST*******/
         //Défini une classe carte.
         function Carte(nom, type, coutResources, tolerance, taille, predateur) {
 
         }
 
+        function Carte(type, params) {
+            if (type === predateur) {
+                this.nom = nom;
+                this.tolerance = tolerance;
+                this.force = force;
+                this.coutResources = coutResources;
+            }
+        }
+
+        var carte = new Carte(predateur,{nom:toto,tolerance:5,force:10, coutResources:2});
+        /*****************************************/
         //Fonction qui "update" le jeu.
         function updateGameArea() {
-
+            
         }
     </script>
 </body>
