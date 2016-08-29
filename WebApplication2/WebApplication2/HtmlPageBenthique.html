@@ -48,6 +48,7 @@
                 var divEmplacementHabitat = document.createElement('div');
                 divEmplacementHabitat.id = 'divEmplacementHabitatBas' + id;
                 divEmplacementHabitat.className = 'divEmplacementHabitatBas';
+                divEmplacementHabitat.style.left = 70 + 80 * id + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementHabitat);
                 $(function() {
                     $('.divEmplacementHabitatBas').droppable({
@@ -68,6 +69,8 @@
                 var divEmplacementCarte = document.createElement('div');
                 divEmplacementCarte.id = 'divEmplacementCarteBas' + id;
                 divEmplacementCarte.className = 'divEmplacementCarteBas';
+                divEmplacementCarte.style.left = 110 + 80 * id + 'px';
+                divEmplacementCarte.style.bottom = 150 + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementCarte);
                 $(function () {
                     $('.divEmplacementCarteBas').droppable({
@@ -78,6 +81,11 @@
                     });
                 });
             }
+        }
+
+        //Défini une classe carte.
+        function Carte(nom, type, coutResources, tolerance, taille, predateur) {
+
         }
 
         //Fonction qui "update" le jeu.
