@@ -15,8 +15,9 @@
             creerFond();
             ajouterEmplacementHabitatBas();
             ajouterEmplacementCarteBas();
-            paquetCarte = creerPaquetCarte();
-            melangerPaquetCarte(paquetCarte);
+            //paquetCarte = creerPaquetCarte();
+            //melangerPaquetCarte(paquetCarte);
+            //pigerCarte();
             creerMain();
         }
 
@@ -95,6 +96,7 @@
                 });
             }
         }
+        /*****************************TEST*******/
         
         //Définition de la classe.
         function Carte(type, nom, params) {
@@ -122,59 +124,24 @@
 
         //function pour piger une carte.
         function pigerCarte(paquetCarte) {
-            return paquetCarte.pop();
+
         }
 
         //Function qui melange le paquet de carte.
-        function melangerPaquetCarte(paquetCarte) {
-            var currentIndex = paquetCarte.length, temporaryValue, randomIndex;
+        function melangerPaquetCarte() {
 
-            // While there remain elements to shuffle...
-            while (0 !== currentIndex) {
-
-                // Pick a remaining element...
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex -= 1;
-
-                // And swap it with the current element.
-                temporaryValue = paquetCarte[currentIndex];
-                paquetCarte[currentIndex] = paquetCarte[randomIndex];
-                paquetCarte[randomIndex] = temporaryValue;
-            }
         }
 
         //function qui crée le paquet de carte.
         function creerPaquetCarte() {
             var paquetCarte = new Array();
-
-            //Boucle pour ajouter les 8 habitats rapide.
-            for (var id = 1; id < 9; id++) {
-                var carteHabitatsRapide = new Carte('habitats', 'rapide', { habitats: 'rapide', coutResources: 2 });
-                paquetCarte.push(carteHabitatsRapide);
-            }
-            //Boucle pour ajouter les 5 habitats galet.
-            for (var id = 1; id < 6; id++) {
-                var carteHabitatsGalet = new Carte('habitats', 'galet', { habitats: 'galet', coutResources: 2 });
-                paquetCarte.push(carteHabitatsGalet);
-            }
-            //Boucle pour ajouter les 6 habitats gravier.
-            for (var id = 1; id < 7; id++) {
-                var carteHabitatsGravier = new Carte('habitats', 'gravier', { habitats: 'gravier', coutResources: 2 });
-                paquetCarte.push(carteHabitatsGravier);
-            }
-            //Boucle pour ajouter les 4 habitats sable.
-            for (var id = 1; id < 5; id++) {
-                var carteHabitatsSable = new Carte('habitats', 'sable', { habitats: 'sable', coutResources: 2 });
-                paquetCarte.push(carteHabitatsSable);
-            }
-            //Boucle pour ajouter les 4 habitats fosse.
-            for (var id = 1; id < 5; id++) {
-                var carteHabitatsFosse = new Carte('habitats', 'fosse', { habitats: 'fosse', coutResources: 2 });
-                paquetCarte.push(carteHabitatsFosse);
-            }
-
+            /* Exemple d'une création de carte.
+            var carte = new Carte(predateur, { tolerance: 5, force: 10, coutResources: 2, condition: [1, 2, 3] });
+            */
             return paquetCarte;
         }
+        /*****************************************/
+
         
         //Fonction qui "update" le jeu.
         function updateGameArea() {
