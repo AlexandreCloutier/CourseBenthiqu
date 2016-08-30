@@ -12,13 +12,6 @@
     width: 752px;
     z-index: 0;
 }
-.divMain{
-    background-color: green;
-    height: 756px;
-    width:350px;
-    float:left;
-    position:relative;
-}
 
 .divEmplacementHabitatBas {
     float: left;
@@ -38,13 +31,33 @@
     bottom: 131px;
 }
 
+/* -----------------Zone Main--------------------*/
+
+.divMain{
+    background-color: dimgray;
+    border: 1px solid #000000;
+    margin-top: 10px;
+    height: 726px;
+    width:300px;
+    float:left;
+    position:relative;
+    padding: 15px;
+}
+
 .divCarte {
-    width: 59px;
-    height: 90px;
+    width: 118px;
+    height: 180px;
     z-index:3;
 }
 
 .imageCarte{
     width:inherit;
     height:inherit;
+}
+
+.liMain{
+    list-style: none;
+    display: block;
+    float: left;
+    margin: 15px;
 }

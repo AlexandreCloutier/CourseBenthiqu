@@ -46,6 +46,10 @@
                 $(function () {
                     $('.divEmplacementHabitatBas').droppable({
                         drop: function (event, ui) {
+                            ui.draggable.css('width', '59px');
+                            ui.draggable.css('height', '90px');
+                            ui.draggable.parentNode.parentNode.removeChild(ui.draggable.parentNode);
+                            divEmplacementHabitat.appendChild(ui.draggable);
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
                         }
@@ -67,6 +71,10 @@
                 $(function () {
                     $('.divEmplacementCarteBas').droppable({
                         drop: function (event, ui) {
+                            ui.draggable.css('width', '59px');
+                            ui.draggable.css('height', '90px');
+                            ui.draggable.parentNode.parentNode.removeChild(ui.draggable.parentNode);
+                            divEmplacementCarte.appendChild(ui.draggable);
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
                         }
@@ -78,17 +86,20 @@
         function creerMain() {
             var id;
             for (id = 1; id < 7; id++) {
-                var iDiv = document.createElement('div');
-                iDiv.id = 'divCarte' + id;
-                iDiv.className = 'divCarte';
-                document.getElementById('divMain').appendChild(iDiv);
+                var li = document.createElement('li');
+                li.className = 'liMain';
+                document.getElementById('divMain').appendChild(li);
+                var divCarte = document.createElement('div');
+                divCarte.id = 'divCarte' + id;
+                divCarte.className = 'divCarte';
+                li.appendChild(divCarte);
 
                 var image = document.createElement('img');
                 image.id = 'imageCarte'+ id;
                 image.className = 'imageCarte';
                 image.src = 'resources/CarteEau.jpg';
                 // Mes image Dans le idiv
-                iDiv.appendChild(image);
+                divCarte.appendChild(image);
 
                 $(function () {
                     $('.divCarte').draggable({ revert: 'invalid' });
