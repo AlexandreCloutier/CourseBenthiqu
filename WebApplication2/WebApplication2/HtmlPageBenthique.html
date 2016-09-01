@@ -48,8 +48,7 @@
                         drop: function (event, ui) {
                             ui.draggable.css('width', '59px');
                             ui.draggable.css('height', '90px');
-                            //ui.draggable.parentNode.parentNode.removeChild(ui.draggable.parentNode);
-                            //divEmplacementHabitat.appendChild(ui.draggable);
+                            ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
                         }
@@ -73,8 +72,7 @@
                         drop: function (event, ui) {
                             ui.draggable.css('width', '59px');
                             ui.draggable.css('height', '90px');
-                            //ui.draggable.parentNode.parentNode.removeChild(ui.draggable.parentNode);
-                            //divEmplacementCarte.appendChild(ui.draggable);
+                            ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
                         }
@@ -86,14 +84,13 @@
         function creerMain() {
             var id;
             for (id = 1; id < 7; id++) {
-                //var li = document.createElement('li');
-                //li.className = 'liMain';
-                //document.getElementById('divMain').appendChild(li);
+                var li = document.createElement('li');
+                li.className = 'liMain';
+                document.getElementById('divMain').appendChild(li);
                 var divCarte = document.createElement('div');
                 divCarte.id = 'divCarte' + id;
-                divCarte.className = 'divCarte';
-                document.getElementById('divMain').appendChild(divCarte);
-                //li.appendChild(divCarte);
+                divCarte.className = 'divCarte';             
+                li.appendChild(divCarte);
 
                 var image = document.createElement('img');
                 image.id = 'imageCarte'+ id;
