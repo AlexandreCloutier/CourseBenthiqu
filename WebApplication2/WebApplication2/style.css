@@ -57,7 +57,7 @@
 
 .liMain{
     list-style: none;
-    display: block;
+    display: inline-block;
     float: left;
     margin: 15px;
 }
