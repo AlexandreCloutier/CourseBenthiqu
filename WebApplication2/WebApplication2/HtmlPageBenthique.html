@@ -160,47 +160,13 @@
         //function qui crée le paquet de carte.
         function creerPaquetCarte() {
             var paquetCarte = new Array();
-
+            //TODO: je vais utiliser la bdd bientot :) 
             //Boucle pour ajouter les 8 habitats rapide.
             for (var id = 1; id < 9; id++) {
                 var carteHabitatsRapide = new Carte('habitats', 'rapide', { habitats: 'rapide', coutResources: 2 });
                 paquetCarte.push(carteHabitatsRapide);
             }
-            //Boucle pour ajouter les 5 habitats galet.
-            for (var id = 1; id < 6; id++) {
-                var carteHabitatsGalet = new Carte('habitats', 'galet', { habitats: 'galet', coutResources: 2 });
-                paquetCarte.push(carteHabitatsGalet);
-            }
-            //Boucle pour ajouter les 6 habitats gravier.
-            for (var id = 1; id < 7; id++) {
-                var carteHabitatsGravier = new Carte('habitats', 'gravier', { habitats: 'gravier', coutResources: 2 });
-                paquetCarte.push(carteHabitatsGravier);
-            }
-            //Boucle pour ajouter les 4 habitats sable.
-            for (var id = 1; id < 5; id++) {
-                var carteHabitatsSable = new Carte('habitats', 'sable', { habitats: 'sable', coutResources: 2 });
-                paquetCarte.push(carteHabitatsSable);
-            }
-            //Boucle pour ajouter les 4 habitats fosse.
-            for (var id = 1; id < 5; id++) {
-                var carteHabitatsFosse = new Carte('habitats', 'fosse', { habitats: 'fosse', coutResources: 2 });
-                paquetCarte.push(carteHabitatsFosse);
-            }
-            //Boucle pour ajouter les 3 bande riveraine arbre.
-            for (var id = 1; id < 4; id++) {
-                var carteBandeRiveraineArbre = new Carte('bandeRiveraine', 'arbre', { coutResources: 3 })
-                paquetCarte.push(carteBandeRiveraineArbre);
-            }
-            ////Boucle pour ajouter les 3 bande riveraine herbace naturelle.
-            for (var id = 1; id < 4; id++) {
-                var carteBandeRiveraineHerbaceNaturelle = new Carte('bandeRiveraine', 'herbaceNaturelle', { coutResources: 1 })
-                paquetCarte.push(carteBandeRiveraineHerbaceNaturelle);
-            }
-            //Boucle pour ajouter les 3 bande riveraine arbuste
-            for (var id = 1; id < 4; id++) {
-                var carteBandeRiveraineArbuste = new Carte('bandeRiveraine', 'arbuste', { coutResources: 2 })
-                paquetCarte.push(carteBandeRiveraineArbuste);
-            }
+            
             return paquetCarte;
         }
 
