@@ -1,12 +1,14 @@
 ﻿body {
 }
 
+/*  --------------- Zone centre -------------*/
+
 .plateau {
     margin-top: 10px;
     margin-bottom: 10px;
     border: 1px solid #d3d3d3;
     background-image: url(resources/PlateauJeu.jpg);
-    float:left;
+    float: left;
     position: relative;
     height: 756px;
     width: 752px;
@@ -33,31 +35,65 @@
 
 /* -----------------Zone Main--------------------*/
 
-.divMain{
+.divMain {
     background-color: dimgray;
     border: 1px solid #000000;
     margin-top: 10px;
     height: 726px;
-    width:300px;
-    float:left;
-    position:relative;
+    width: 300px;
+    float: left;
+    position: relative;
     padding: 15px;
 }
 
 .divCarte {
     width: 118px;
     height: 180px;
-    z-index:3;
+    z-index: 3;
 }
 
-.imageCarte{
-    width:inherit;
-    height:inherit;
+.imageCarte {
+    width: inherit;
+    height: inherit;
 }
 
-.liMain{
+.liMain {
     list-style: none;
     display: inline-block;
     float: left;
     margin: 15px;
+}
+
+/* ------------------Zone droite------------------ */
+
+.divDroite {
+    background-color: deeppink;
+    border: 1px solid blue;
+    margin-top: 10px;
+    height: 726px;
+    width: 300px;
+    float: left;
+    position: relative;
+    padding: 15px;
+}
+
+.buttonPasserTour {
+    position: absolute;
+    bottom: 30px;
+    height: 40px;
+    width: 290px;
+}
+
+.buttonProposerEchange {
+    position: absolute;
+    bottom: 75px;
+    height: 40px;
+    width: 290px;
+}
+
+.buttonDemarerNouvellePartie {
+    position: absolute;
+    bottom: 120px;
+    height: 40px;
+    width: 290px;
 }

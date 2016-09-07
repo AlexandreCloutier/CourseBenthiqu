@@ -18,19 +18,86 @@
             paquetCarte = creerPaquetCarte();
             melangerPaquetCarte(paquetCarte);
             creerMain();
+            creerPartieDroite();
+        }
+
+        //Fonction qui ajoute la partie de droite.
+        function creerPartieDroite() {
+            var divTextNomJoueurA = document.createElement('div');
+            divTextNomJoueurA.id = 'divTextNomJoueurA';
+            divTextNomJoueurA.className = 'divTextNomJoueurA';
+            divTextNomJoueurA.innerHTML = '<strong> Nom du joueurA: lorem ipsum</strong>'
+            document.getElementById('divDroite').appendChild(divTextNomJoueurA);
+
+            var divTextNomJoueurB = document.createElement('div');
+            divTextNomJoueurB.id = 'divTextNomJoueurB';
+            divTextNomJoueurB.className = 'divTextNomJoueurB';
+            divTextNomJoueurB.innerHTML = '<p></p><strong> Nom du joueurB: lorem ipsum</strong>'
+            document.getElementById('divDroite').appendChild(divTextNomJoueurB);
+
+            var divTextePointResource = document.createElement('div');
+            divTextePointResource.id = 'divTextePointResource';
+            divTextePointResource.className = 'divTextePointResource';
+            divTextePointResource.innerHTML = '<p></p><strong>Points de resources disponible : 6</strong>';
+            document.getElementById('divDroite').appendChild(divTextePointResource);
+
+            var divTextePointJoueurA = document.createElement('div');
+            divTextePointJoueurA.id = 'divTextePointJoueurA';
+            divTextePointJoueurA.className = 'divTextePointJoueurA';
+            divTextePointJoueurA.innerHTML = '<p></p><strong>JoueurA a 100 points.</strong>';
+            document.getElementById('divDroite').appendChild(divTextePointJoueurA);
+
+            var divTextePointJoueurB = document.createElement('div');
+            divTextePointJoueurB.id = 'divTextePointJoueurB';
+            divTextePointJoueurB.className = 'divTextePointJoueurB';
+            divTextePointJoueurB.innerHTML = '<p></p><strong>JoueurB a 100 points.</strong>';
+            document.getElementById('divDroite').appendChild(divTextePointJoueurB);
+
+            var divTexteMessageJeu = document.createElement('div');
+            divTexteMessageJeu.id = 'divTexteMessageJeu';
+            divTexteMessageJeu.className = 'divTexteMessageJeu';
+            divTexteMessageJeu.innerHTML = '<p></p><strong>Zone de message:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas suscipit, nibh vel sodales malesuada, justo sem consectetur lacus, quis pulvinar erat orci id mauris. Maecenas pulvinar risus sit amet justo</strong>';
+            divTexteMessageJeu.style.width = 280 + 'px';
+            document.getElementById('divDroite').appendChild(divTexteMessageJeu);
+
+            var buttonPasserTour = document.createElement('button');
+            buttonPasserTour.id = 'buttonPasserTour';
+            buttonPasserTour.className = 'buttonPasserTour';
+            buttonPasserTour.textContent = 'Passer son tour';
+            document.getElementById('divDroite').appendChild(buttonPasserTour);
+
+            var buttonProposerEchange = document.createElement('button');
+            buttonProposerEchange.id = 'buttonProposerEchange';
+            buttonProposerEchange.className = 'buttonProposerEchange';
+            buttonProposerEchange.textContent = 'Proposer un échange.';
+            document.getElementById('divDroite').appendChild(buttonProposerEchange);
+
+            var buttonDemarerNouvellePartie = document.createElement('button');
+            buttonDemarerNouvellePartie.id = 'buttonDemarerNouvellePartie';
+            buttonDemarerNouvellePartie.className = 'buttonDemarerNouvellePartie';
+            buttonDemarerNouvellePartie.textContent = 'Démarer une nouvelle partie.';
+            document.getElementById('divDroite').appendChild(buttonDemarerNouvellePartie);
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
         function creerFond() {
+            //Partie de gauche.
             var divMain = document.createElement('div');
             divMain.id = 'divMain';
             divMain.className = 'divMain';
             document.getElementsByTagName('body')[0].appendChild(divMain);
 
+            //Partie du millieu.
             var plateau = document.createElement('div');
             plateau.id = 'plateau';
             plateau.className = 'plateau';
             document.getElementsByTagName('body')[0].appendChild(plateau);
+
+            //Partie de droite.
+            var divDroite = document.createElement('div');
+            divDroite.id = 'divDroite';
+            divDroite.className = 'divDroite';
+            document.getElementsByTagName('body')[0].appendChild(divDroite);
         }
 
         //Fonction qui ajoute 6 emplacement d'habitats dans le bas.
@@ -89,11 +156,11 @@
                 document.getElementById('divMain').appendChild(li);
                 var divCarte = document.createElement('div');
                 divCarte.id = 'divCarte' + id;
-                divCarte.className = 'divCarte';             
+                divCarte.className = 'divCarte';
                 li.appendChild(divCarte);
 
                 var image = document.createElement('img');
-                image.id = 'imageCarte'+ id;
+                image.id = 'imageCarte' + id;
                 image.className = 'imageCarte';
                 image.src = 'resources/CarteEau.jpg';
                 // Mes image Dans le idiv
@@ -127,7 +194,7 @@
                 this.coutResources = params.coutResources;
                 this.condition = params.condition;
             }
-            else if (type ==='bandeRiveraine') {
+            else if (type === 'bandeRiveraine') {
                 this.nom = nom;
                 this.type = type;
                 this.coutResources = params.coutResources;
@@ -160,13 +227,16 @@
         //function qui crée le paquet de carte.
         function creerPaquetCarte() {
             var paquetCarte = new Array();
-            //TODO: je vais utiliser la bdd bientot :) 
-            //Boucle pour ajouter les 8 habitats rapide.
+            //TODO: je vais utiliser la bdd bientot :)
+
+
+
+
             for (var id = 1; id < 9; id++) {
                 var carteHabitatsRapide = new Carte('habitats', 'rapide', { habitats: 'rapide', coutResources: 2 });
                 paquetCarte.push(carteHabitatsRapide);
             }
-            
+
             return paquetCarte;
         }
 
