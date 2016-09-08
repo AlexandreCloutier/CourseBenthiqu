@@ -248,7 +248,7 @@ if ($mysqli->connect_errno){
             return paquetCarte;
         }
 
-        //Fonction de test pour la BD
+        //Fonction de test pour la BD TEST
         function montrerCarte() {
             var jqxhr = $.ajax({
                 type: 'POST',
