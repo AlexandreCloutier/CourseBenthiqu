@@ -1,10 +1,4 @@
-﻿<?php
-@$mysqli = new mysqli("localhost", "root", "", "coursebenthiquedb");
-if ($mysqli->connect_errno){
-    die("&Eacute;chec lors de la connexion à la base de donn&eacute;es");
-}
-?>
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="style.css">
@@ -33,13 +27,13 @@ if ($mysqli->connect_errno){
             var divTextNomJoueurA = document.createElement('div');
             divTextNomJoueurA.id = 'divTextNomJoueurA';
             divTextNomJoueurA.className = 'divTextNomJoueurA';
-            divTextNomJoueurA.innerHTML = '<strong> Nom du joueurA: lorem ipsum</strong>'
+            divTextNomJoueurA.innerHTML = '<strong> Nom du joueurA: lorem ipsum</strong>';
             document.getElementById('divDroite').appendChild(divTextNomJoueurA);
 
             var divTextNomJoueurB = document.createElement('div');
             divTextNomJoueurB.id = 'divTextNomJoueurB';
             divTextNomJoueurB.className = 'divTextNomJoueurB';
-            divTextNomJoueurB.innerHTML = '<p></p><strong> Nom du joueurB: lorem ipsum</strong>'
+            divTextNomJoueurB.innerHTML = '<p></p><strong> Nom du joueurB: lorem ipsum</strong>';
             document.getElementById('divDroite').appendChild(divTextNomJoueurB);
 
             var divTextePointResource = document.createElement('div');
@@ -77,7 +71,6 @@ if ($mysqli->connect_errno){
             buttonProposerEchange.id = 'buttonProposerEchange';
             buttonProposerEchange.className = 'buttonProposerEchange';
             buttonProposerEchange.textContent = 'Proposer un échange.';
-            buttonProposerEchange.setAttribute('onclick', 'montrerCarte()');
             document.getElementById('divDroite').appendChild(buttonProposerEchange);
 
             var buttonDemarerNouvellePartie = document.createElement('button');
@@ -248,32 +241,10 @@ if ($mysqli->connect_errno){
             return paquetCarte;
         }
 
-        //Fonction de test pour la BD TEST
-        function montrerCarte() {
-            var jqxhr = $.ajax({
-                type: 'POST',
-                url: '',
-                dataType: 'json',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                data: '{id:' + 1 + '}'
-            })
-                .done(function (response, textStatus, jqXHR){
-                    document.getElementById('buttonProposerEchange').textContent = response.type.toString();
-                })
-            .fail(function (jqXHR, textStatus, errorThrown){
-                document.getElementById('buttonProposerEchange').textContent = errorThrown.toString();
-            })
-
-
-        }
-
         //Fonction qui "update" le jeu.
         function updateGameArea() {
 
         }
     </script>
-    <?php
-    $mysqli->close();
-    ?>
 </body>
 </html>
