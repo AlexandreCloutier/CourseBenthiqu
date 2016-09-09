@@ -119,6 +119,9 @@
                             ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                            if($(this).children().length > 1) {
+                                ui.draggable.css('margin-top', ($(this).children().length * 10)-10 + 'px');
+                            }
                         }
                     });
                 });
@@ -142,7 +145,10 @@
                             ui.draggable.css('height', '90px');
                             ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
-                            ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                            ui.draggable.position({of: $(this), my: 'center', at: 'center'});
+                            if($(this).children().length > 1) {
+                                    ui.draggable.css('margin-top', ($(this).children().length * 10)-10 + 'px');
+                            }
                         }
                     });
                 });
