@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 </head>
 <body onload="startGame()">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -19,7 +20,6 @@
             melangerPaquetCarte(paquetCarte);
             creerMain();
             creerPartieDroite();
-            chargerCarte();
         }
 
         //Fonction qui ajoute la partie de droite.
@@ -27,13 +27,13 @@
             var divTextNomJoueurA = document.createElement('div');
             divTextNomJoueurA.id = 'divTextNomJoueurA';
             divTextNomJoueurA.className = 'divTextNomJoueurA';
-            divTextNomJoueurA.innerHTML = '<strong> Nom du joueurA: lorem ipsum</strong>'
+            divTextNomJoueurA.innerHTML = '<strong> Nom du joueurA: lorem ipsum</strong>';
             document.getElementById('divDroite').appendChild(divTextNomJoueurA);
 
             var divTextNomJoueurB = document.createElement('div');
             divTextNomJoueurB.id = 'divTextNomJoueurB';
             divTextNomJoueurB.className = 'divTextNomJoueurB';
-            divTextNomJoueurB.innerHTML = '<p></p><strong> Nom du joueurB: lorem ipsum</strong>'
+            divTextNomJoueurB.innerHTML = '<p></p><strong> Nom du joueurB: lorem ipsum</strong>';
             document.getElementById('divDroite').appendChild(divTextNomJoueurB);
 
             var divTextePointResource = document.createElement('div');
@@ -119,6 +119,9 @@
                             ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                            if($(this).children().length > 1) {
+                                ui.draggable.css('margin-top', ($(this).children().length * 10)-10 + 'px');
+                            }
                         }
                     });
                 });
@@ -142,7 +145,10 @@
                             ui.draggable.css('height', '90px');
                             ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
-                            ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                            ui.draggable.position({of: $(this), my: 'center', at: 'center'});
+                            if($(this).children().length > 1) {
+                                    ui.draggable.css('margin-top', ($(this).children().length * 10)-10 + 'px');
+                            }
                         }
                     });
                 });
@@ -239,23 +245,6 @@
             }
 
             return paquetCarte;
-        }
-
-        //Fonction de test pour la BD
-        function chargerCarte() {
-            var jqxhr = $.ajax({
-                type: 'get',
-                url: 'ChargerCartes.php',
-                dataType: '',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                data: ''
-            })
-            .done(function (response, textStatus, jqXHR) {
-                document.getElementById("buttonProposerEchange").textContent = "Sa marche";
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                document.getElementById("buttonProposerEchange").textContent = errorThrown.toString();
-            });
         }
 
         //Fonction qui "update" le jeu.
