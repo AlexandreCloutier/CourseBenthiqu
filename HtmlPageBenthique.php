@@ -33,13 +33,13 @@ if ($mysqli->connect_errno){
             var divTextNomJoueurA = document.createElement('div');
             divTextNomJoueurA.id = 'divTextNomJoueurA';
             divTextNomJoueurA.className = 'divTextNomJoueurA';
-            divTextNomJoueurA.innerHTML = '<strong> Nom du joueurA: lorem ipsum</strong>'
+            divTextNomJoueurA.innerHTML = '<strong> Nom du joueurA: lorem ipsum</strong>';
             document.getElementById('divDroite').appendChild(divTextNomJoueurA);
 
             var divTextNomJoueurB = document.createElement('div');
             divTextNomJoueurB.id = 'divTextNomJoueurB';
             divTextNomJoueurB.className = 'divTextNomJoueurB';
-            divTextNomJoueurB.innerHTML = '<p></p><strong> Nom du joueurB: lorem ipsum</strong>'
+            divTextNomJoueurB.innerHTML = '<p></p><strong> Nom du joueurB: lorem ipsum</strong>';
             document.getElementById('divDroite').appendChild(divTextNomJoueurB);
 
             var divTextePointResource = document.createElement('div');
@@ -126,6 +126,9 @@ if ($mysqli->connect_errno){
                             ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                            if($(this).children().length > 1) {
+                                ui.draggable.css('margin-top', ($(this).children().length * 10)-10 + 'px');
+                            }
                         }
                     });
                 });
@@ -149,7 +152,10 @@ if ($mysqli->connect_errno){
                             ui.draggable.css('height', '90px');
                             ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
-                            ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                            ui.draggable.position({of: $(this), my: 'center', at: 'center'});
+                            if($(this).children().length > 1) {
+                                    ui.draggable.css('margin-top', ($(this).children().length * 10)-10 + 'px');
+                            }
                         }
                     });
                 });
