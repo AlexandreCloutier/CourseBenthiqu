@@ -245,7 +245,7 @@
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
-            carte = new Carte('habitats', 'rapide', 'rapide.jpg', 3, { habitats: 'rapide' });
+            carte = new Carte('habitats', 'rapides', 'rapides.jpg', 3, { habitats: 'rapides' });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
@@ -357,34 +357,81 @@
             carte = new Carte('reglementation', 'politique', 'politique.jpg', 3);
             paquetCarte.push(carte);
 
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, typeMacro: 'amelide', condition: [''], predateur: 0 });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
+            carte = new Carte('macroInvertebre', 'simuliidae', 'simuliidae.jpg', 1, { tolerance: 6, taille: 2, typeMacro: 'diptere', condition: ['rapides', 'galets'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'chironomidae', 'chironomidae.jpg', 1, { tolerance: 8, taille: 2, typeMacro: 'diptere', condition: [''], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'psephenidae', 'psephenidae.jpg', 2, { tolerance: 3, taille: 4, typeMacro: 'coleoptere', condition: ['rapides', 'galets'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'hydropsychidae', 'hydropsychidae.jpg', 2, { tolerance: 5, taille: 4, typeMacro: 'trichoptere', condition: ['rapides'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'elmidae', 'elmidae.jpg', 2, { tolerance: 3, taille: 3, typeMacro: 'coleoptere', condition: ['rapides'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'baetidae', 'baetidae.jpg', 2, { tolerance: 5, taille: 3, typeMacro: 'ephemeroptere', condition: ['rapides'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'hydroptilidae', 'hydroptilidae.jpg', 2, { tolerance: 4, taille: 2, typeMacro: 'trichoptere', condition: ['rapides', 'sable', 'galets'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'ephemeridae', 'ephemeridae.jpg', 2, { tolerance: 3, taille: 5, typeMacro: 'ephemeroptere', condition: ['sable'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'prosobranchia', 'prosobranchia.jpg', 2, { tolerance: 8, taille: 5, typeMacro: 'mollusque', condition: [''], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'sphaeridae', 'sphaeridae.jpg', 2, { tolerance: 5, taille: 3, typeMacro: 'mollusque', condition: ['rapides', 'gravier'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'anisoptera', 'anisoptera.jpg', 3, { tolerance: 5, taille: 6, typeMacro: 'odonate', condition: ['rapides'], predateur: 1 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'glossosomatidae', 'glossosomatidae.jpg', 3, { tolerance: 0, taille: 5, typeMacro: 'trichoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'heptageniidae', 'heptageniidae.jpg', 3, { tolerance: 2, taille: 4, typeMacro: 'ephemeroptere', condition: ['rapides', 'galets'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 3, { tolerance: 8, taille: 1, condition: [, ] });
             carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
 
 
 
