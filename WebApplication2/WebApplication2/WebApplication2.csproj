@@ -94,11 +94,11 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ChargerCartes.php" />
     <Content Include="App_Data\CourseBenthiqueDB.mdf" />
     <Content Include="App_Data\CourseBenthiqueDB_log.ldf">
       <DependentUpon>CourseBenthiqueDB.mdf</DependentUpon>
     </Content>
+    <Content Include="ChargerCarte.php" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

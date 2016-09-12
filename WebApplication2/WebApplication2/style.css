@@ -10,7 +10,7 @@
     background-image: url(resources/PlateauJeu.jpg);
     float: left;
     position: relative;
-    height: 756px;
+    height: 753px;
     width: 752px;
     z-index: 0;
 }
@@ -19,18 +19,18 @@
     float: left;
     width: 59px;
     height: 90px;
-    border: 1px solid blue;
+    /*border: 1px solid blue;*/
     position: absolute;
-    bottom: 31px;
+    bottom: 34px;
 }
 
 .divEmplacementCarteBas {
     float: left;
     width: 59px;
     height: 90px;
-    border: 1px solid pink;
+    /*border: 1px solid pink;*/
     position: absolute;
-    bottom: 131px;
+    bottom: 134px;
 }
 
 /* -----------------Zone Main--------------------*/
@@ -39,7 +39,7 @@
     background-color: dimgray;
     border: 1px solid #000000;
     margin-top: 10px;
-    height: 726px;
+    height: 723px;
     width: 300px;
     float: left;
     position: relative;
@@ -62,6 +62,9 @@
     display: inline-block;
     float: left;
     margin: 15px;
+    table-layout: fixed;
+    width: 118px;
+    height: 180px;
 }
 
 /* ------------------Zone droite------------------ */
@@ -70,30 +73,61 @@
     background-color: greenyellow;
     border: 1px solid blue;
     margin-top: 10px;
-    height: 726px;
+    height: 723px;
     width: 300px;
     float: left;
     position: relative;
     padding: 15px;
 }
 
+.divNomJoueurs {
+    border: double 4px black;
+    padding: 2px;
+    margin: 5px;
+    text-align: center;
+}
+
+.divTextePointsRessource {
+    border: groove 3px black;
+    margin: 5px;
+    padding: 2px;
+    text-align: center;
+}
+
+.divTextePointsJoueurs {
+    border:dashed 3px black;
+    margin: 5px;
+    padding: 2px;
+}
+
+.titrePoint {
+    font-size: 20px;
+    font-weight: 900;
+    text-align: center;
+    margin: 3px;
+}
+.pointsEquipe {
+    margin: 5px;
+}
+
 .buttonPasserTour {
     position: absolute;
     bottom: 30px;
-    height: 40px;
-    width: 290px;
+    height: 50px;
+    width: 150px;
 }
 
 .buttonProposerEchange {
     position: absolute;
-    bottom: 75px;
+    bottom: 90px;
     height: 40px;
-    width: 290px;
+    width: 150px;
 }
 
-.buttonDemarerNouvellePartie {
+.buttonOption {
     position: absolute;
-    bottom: 120px;
+    bottom: 30px;
     height: 40px;
-    width: 290px;
+    width: 75px;
+    left: 240px;
 }

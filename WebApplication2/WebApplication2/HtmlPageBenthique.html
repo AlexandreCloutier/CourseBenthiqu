@@ -24,35 +24,24 @@
 
         //Fonction qui ajoute la partie de droite.
         function creerPartieDroite() {
-            var divTextNomJoueurA = document.createElement('div');
-            divTextNomJoueurA.id = 'divTextNomJoueurA';
-            divTextNomJoueurA.className = 'divTextNomJoueurA';
-            divTextNomJoueurA.innerHTML = '<strong> Nom du joueurA: lorem ipsum</strong>';
-            document.getElementById('divDroite').appendChild(divTextNomJoueurA);
+            var divNomJoueurs = document.createElement('div');
+            divNomJoueurs.id = 'divNomJoueurs';
+            divNomJoueurs.className = 'divNomJoueurs';
+            divNomJoueurs.innerHTML = '<strong> Nom de l\'équipe A: Toto <br /> Nom de l\'équipe B: Tata</strong>';
+            document.getElementById('divDroite').appendChild(divNomJoueurs);
 
-            var divTextNomJoueurB = document.createElement('div');
-            divTextNomJoueurB.id = 'divTextNomJoueurB';
-            divTextNomJoueurB.className = 'divTextNomJoueurB';
-            divTextNomJoueurB.innerHTML = '<p></p><strong> Nom du joueurB: lorem ipsum</strong>';
-            document.getElementById('divDroite').appendChild(divTextNomJoueurB);
 
-            var divTextePointResource = document.createElement('div');
-            divTextePointResource.id = 'divTextePointResource';
-            divTextePointResource.className = 'divTextePointResource';
-            divTextePointResource.innerHTML = '<p></p><strong>Points de resources disponible : 6</strong>';
-            document.getElementById('divDroite').appendChild(divTextePointResource);
+            var divTextePointsRessource = document.createElement('div');
+            divTextePointsRessource.id = 'divTextePointsRessource';
+            divTextePointsRessource.className = 'divTextePointsRessource';
+            divTextePointsRessource.innerHTML = '<strong>Points de ressources disponible : 6</strong>';
+            document.getElementById('divDroite').appendChild(divTextePointsRessource);
 
-            var divTextePointJoueurA = document.createElement('div');
-            divTextePointJoueurA.id = 'divTextePointJoueurA';
-            divTextePointJoueurA.className = 'divTextePointJoueurA';
-            divTextePointJoueurA.innerHTML = '<p></p><strong>JoueurA a 100 points.</strong>';
-            document.getElementById('divDroite').appendChild(divTextePointJoueurA);
-
-            var divTextePointJoueurB = document.createElement('div');
-            divTextePointJoueurB.id = 'divTextePointJoueurB';
-            divTextePointJoueurB.className = 'divTextePointJoueurB';
-            divTextePointJoueurB.innerHTML = '<p></p><strong>JoueurB a 100 points.</strong>';
-            document.getElementById('divDroite').appendChild(divTextePointJoueurB);
+            var divTextePointsJoueurs = document.createElement('div');
+            divTextePointsJoueurs.id = 'divTextePointsJoueurs';
+            divTextePointsJoueurs.className = 'divTextePointsJoueurs';
+            divTextePointsJoueurs.innerHTML = '<p class=titrePoint>Points:</p><p class=pointsEquipe>Équipe A: 100 <br/> Équipe B: 100 </p>';
+            document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
             var divTexteMessageJeu = document.createElement('div');
             divTexteMessageJeu.id = 'divTexteMessageJeu';
@@ -73,11 +62,11 @@
             buttonProposerEchange.textContent = 'Proposer un échange.';
             document.getElementById('divDroite').appendChild(buttonProposerEchange);
 
-            var buttonDemarerNouvellePartie = document.createElement('button');
-            buttonDemarerNouvellePartie.id = 'buttonDemarerNouvellePartie';
-            buttonDemarerNouvellePartie.className = 'buttonDemarerNouvellePartie';
-            buttonDemarerNouvellePartie.textContent = 'Démarer une nouvelle partie.';
-            document.getElementById('divDroite').appendChild(buttonDemarerNouvellePartie);
+            var buttonOption = document.createElement('button');
+            buttonOption.id = 'buttonOption';
+            buttonOption.className = 'buttonOption';
+            buttonOption.textContent = 'Options';
+            document.getElementById('divDroite').appendChild(buttonOption);
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
@@ -109,7 +98,7 @@
                 var divEmplacementHabitat = document.createElement('div');
                 divEmplacementHabitat.id = 'divEmplacementHabitatBas' + id;
                 divEmplacementHabitat.className = 'divEmplacementHabitatBas';
-                divEmplacementHabitat.style.left = 117 + 66 * id + 'px';
+                divEmplacementHabitat.style.left = 116 + 66 * id + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementHabitat);
                 $(function () {
                     $('.divEmplacementHabitatBas').droppable({
@@ -174,7 +163,7 @@
                 divCarte.appendChild(image);
 
                 $(function () {
-                    $('.divCarte').draggable({ revert: 'invalid' });
+                    $('.divCarte').draggable({ revert: 'invalid', cursorAt: { top: 90, left: 59 } });
                 });
             }
         }
