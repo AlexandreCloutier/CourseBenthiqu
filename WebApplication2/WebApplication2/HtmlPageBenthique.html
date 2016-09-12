@@ -221,9 +221,25 @@
         }
 
         //function qui crée le paquet de carte.
-        function creerPaquetCarte() {
+        function creerPaquetCarte(difficulte) {
             var carte;
             var paquetCarte = new Array();
+
+            //Dépendant du niveau de la partie, il n'y aura pas les mêmes cartes  dans le deck.
+            if (difficulte >= 1)//Facile
+            {
+
+            }
+            if (difficulte >= 2)//Moyen
+            {
+
+            }
+            if (difficulte >= 3)//Difficile
+            {
+
+            }
+
+            //----------------------------------habitats-----------------------------------
 
             carte = new Carte('habitats', 'fosse', 'fosse.jpg', 1, { habitats: 'fosse' });
             paquetCarte.push(carte);
@@ -261,6 +277,8 @@
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
+
+            //-----------------------------------speciale--------------------------------
 
             carte = new Carte('speciale', 'prisSurFait', 'prisSurFait.jpg', 0);
             paquetCarte.push(carte);
@@ -306,6 +324,8 @@
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
+            //---------------------------action--------------------------------------
+
             carte = new Carte('action', 'corveNettoyage', 'corveNettoyage.jpg', 1);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
@@ -320,6 +340,8 @@
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
+
+            //--------------------------perturbation--------------------------------------
 
             carte = new Carte('perturbation', 'dechets', 'dechets.jpg', 2, { tempsActif: 0 });
             paquetCarte.push(carte);
@@ -348,6 +370,8 @@
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
+            //--------------------------------reglementation----------------------------------------------
+
             carte = new Carte('reglementation', 'assainissement', 'assainissement.jpg', 3);
             paquetCarte.push(carte);
 
@@ -356,6 +380,8 @@
 
             carte = new Carte('reglementation', 'politique', 'politique.jpg', 3);
             paquetCarte.push(carte);
+
+            // ----------------------------MacroInvertebre--------------------------------------------------
 
             carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, typeMacro: 'amelide', condition: [''], predateur: 0 });
             paquetCarte.push(carte);
@@ -424,17 +450,93 @@
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 3, { tolerance: 8, taille: 1, condition: [, ] });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1, condition: [, ] });
+            carte = new Carte('macroInvertebre', 'ephemerellidae', 'ephemerellidae.jpg', 3, { tolerance: 1, taille: 4, typeMacro: 'ephemeroptere', condition: ['rapides', 'gravier'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
 
+            carte = new Carte('macroInvertebre', 'brachycentrus', 'brachycentrus.jpg', 3, { tolerance: 3, taille: 4, typeMacro: 'trichoptere', condition: ['rapides', 'galets'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
 
+            carte = new Carte('macroInvertebre', 'rhyacophilidae', 'rhyacophilidae.jpg', 4, { tolerance: 0, taille: 4, typeMacro: 'trichoptere', condition: ['rapides'], predateur: 1 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
 
+            carte = new Carte('macroInvertebre', 'tipulidae', 'tipulidae.jpg', 4, { tolerance: 3, taille: 8, typeMacro: 'diptere', condition: ['fosse'], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'gyrinidae', 'gyrinidae.jpg', 4, { tolerance: 4, taille: 5, typeMacro: 'coleoptere', condition: ['fosse'], predateur: 1 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'perlidae', 'perlidae.jpg', 4, { tolerance: 1, taille: 5, typeMacro: 'plecoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 1 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'corydalidae', 'corydalidae.jpg', 5, { tolerance: 0, taille: 8, typeMacro: 'megaloptere', condition: ['rapides', 'gravier', 'galets'], predateur: 1 });
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'nepidae', 'nepidae.jpg', 6, { tolerance: 6, taille: 9, typeMacro: 'hemiptere', condition: ['fosse'], predateur: 1 });
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'decapoda', 'decapoda.jpg', 6, { tolerance: 5, taille: 10, typeMacro: 'crustace', condition: ['galets'], predateur: 0 });
+            paquetCarte.push(carte);
+
+            carte = new Carte('macroInvertebre', 'pteronarcydae', 'pteronarcydae.jpg', 7, { tolerance: 0, taille: 8, typeMacro: 'plecoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 0 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            //---------------------------------salmonide---------------------------------
+
+            carte = new Carte('salmonide', 'ombleFontaine', 'ombleFontaine.jpg', 10, { tolerance: 4, condition: ['fosse', 'rapides', 'gravier', 'galets'], predateur: 2 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            //---------------------------------bandeRiveraine----------------------------
+
+            carte = new Carte('bandeRiveraine', 'herbaceesNaturelles', 'herbaceesNaturelles.jpg', 1);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('bandeRiveraine', 'arbustes', 'arbustes.jpg', 2);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('bandeRiveraine', 'arbres', 'arbres.jpg', 3);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            //---------------------------------intervention------------------------------
+
+            carte = new Carte('intervention', 'habitatAmenageSable', 'habitatAmenageSable.jpg', 1, { habitats: 'sable' });
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'habitatAmenageRapides', 'habitatAmenageRapides.jpg', 1, { habitats: 'rapides' });
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'habitatAmenageFosse', 'habitatAmenageFosse.jpg', 1, { habitats: 'fosse' });
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'habitatAmenageGalets', 'habitatAmenageGalets.jpg', 1, { habitats: 'galets' });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'habitatAmenageGravier', 'habitatAmenageGravier.jpg', 1, { habitats: 'sgravier' });
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'bandeRiveraineHerbace', 'bandeRiveraineHerbace.jpg', 1);
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'bandeRiveraineArbuste', 'bandeRiveraineArbuste.jpg', 2);
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'bandeRiveraineArbre', 'bandeRiveraineArbre.jpg', 3);
+            paquetCarte.push(carte);
 
             return paquetCarte;
         }
