@@ -119,8 +119,8 @@
                             ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
-                            if($(this).children().length > 1) {
-                                ui.draggable.css('margin-top', ($(this).children().length * 10)-10 + 'px');
+                            if ($(this).children().length > 1) {
+                                ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
                             }
                         }
                     });
@@ -145,9 +145,9 @@
                             ui.draggable.css('height', '90px');
                             ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
-                            ui.draggable.position({of: $(this), my: 'center', at: 'center'});
-                            if($(this).children().length > 1) {
-                                    ui.draggable.css('margin-top', ($(this).children().length * 10)-10 + 'px');
+                            ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                            if ($(this).children().length > 1) {
+                                ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
                             }
                         }
                     });
@@ -180,7 +180,7 @@
         }
 
         //Définition de la classe.
-        function Carte(type, nom, params) {
+        function Carte(type, nom, nomImage, coutResource, params) {
             if (type === 'predateur') {
                 this.nom = nom;
                 this.type = type;
@@ -233,16 +233,167 @@
 
         //function qui crée le paquet de carte.
         function creerPaquetCarte() {
+            var carte;
             var paquetCarte = new Array();
-            //TODO: je vais utiliser la bdd bientot :)
+
+            carte = new Carte('habitats', 'fosse', 'fosse.jpg', 1, { habitats: 'fosse' });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('habitats', 'sable', 'sable.jpg', 1, { habitats: 'sable' });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('habitats', 'gravier', 'gravier.jpg', 2, { habitats: 'gravier' });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('habitats', 'rapide', 'rapide.jpg', 3, { habitats: 'rapide' });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('habitats', 'galets', 'galets.jpg', 3, { habitats: 'galets' });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('speciale', 'prisSurFait', 'prisSurFait.jpg', 0);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('speciale', 'pecheur', 'pecheur.jpg', 0);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('speciale', 'crueSoudaine', 'crueSoudaine.jpg', 0);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('speciale', 'zonage', 'zonage.jpg', 0);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('speciale', 'retention', 'retention.jpg', 0);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('speciale', 'emergence', 'emergence.jpg', 0);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('speciale', 'derivation', 'derivation.jpg', 0);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('speciale', 'accumulation', 'accumulation.jpg', 0);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('speciale', 'predation', 'predation.jpg', 0);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('action', 'corveNettoyage', 'corveNettoyage.jpg', 1);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('action', 'naturalisation', 'naturalisation.jpg', 2);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('action', 'amenagement', 'amenagement.jpg', 3);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'dechets', 'dechets.jpg', 2, { tempsActif: 0 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'erosion', 'erosion.jpg', 3, { tempsActif: 0 });
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'passageToutTerrain', 'passageToutTerrain.jpg', 3, { tempsActif: 1 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'artificialisation', 'artificialisation.jpg', 3, { tempsActif: 0 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'pollutionOrganique', 'pollutionOrganique.jpg', 4, { tempsActif: 2 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'deversement', 'deversement.jpg', 2, { tempsActif: 1 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('reglementation', 'assainissement', 'assainissement.jpg', 3);
+            paquetCarte.push(carte);
+
+            carte = new Carte('reglementation', 'interdiction', 'interdiction.jpg', 3);
+            paquetCarte.push(carte);
+
+            carte = new Carte('reglementation', 'politique', 'politique.jpg', 3);
+            paquetCarte.push(carte);
+
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.jpg', 1, { tolerance: 8, taille: 1 });
 
 
 
-
-            for (var id = 1; id < 9; id++) {
-                var carteHabitatsRapide = new Carte('habitats', 'rapide', { habitats: 'rapide', coutResources: 2 });
-                paquetCarte.push(carteHabitatsRapide);
-            }
 
             return paquetCarte;
         }
