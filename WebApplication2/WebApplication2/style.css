@@ -110,6 +110,28 @@
     margin: 5px;
 }
 
+.divTexteMessageJeu {
+    border: solid 3px black;
+    padding: 2px;
+    margin: 3px;
+    background-color: white;
+}
+
+.titreMessage {
+    text-align :center;
+    margin: 3px;
+}
+
+.zoneMessage {
+    width: 267px;
+    height: 181px;
+    resize: none;
+    outline:none;
+    overflow:auto;
+    vertical-align: 90%;
+    align-content:flex-end;
+}
+
 .buttonPasserTour {
     position: absolute;
     bottom: 30px;

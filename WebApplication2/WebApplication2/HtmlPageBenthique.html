@@ -128,7 +128,7 @@
             var divTexteMessageJeu = document.createElement('div');
             divTexteMessageJeu.id = 'divTexteMessageJeu';
             divTexteMessageJeu.className = 'divTexteMessageJeu';
-            divTexteMessageJeu.innerHTML = '<p></p><strong>Zone de message:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas suscipit, nibh vel sodales malesuada, justo sem consectetur lacus, quis pulvinar erat orci id mauris. Maecenas pulvinar risus sit amet justo</strong>';
+            divTexteMessageJeu.innerHTML = '<p class=titreMessage><strong>Messages:</strong><textarea readonly class=zoneMessage>Ceci est une test</textarea>';
             divTexteMessageJeu.style.width = 280 + 'px';
             document.getElementById('divDroite').appendChild(divTexteMessageJeu);
 
@@ -350,7 +350,7 @@
                 paquetCarte[randomIndex] = temporaryValue;
             }
         }
-
+        
         //function qui crée le paquet de carte.
         function creerPaquetCarte(difficulte) {
             var carte;
@@ -664,7 +664,6 @@
                 paquetCarte.push(carte);
                 paquetCarte.push(carte);
             }
-
             return paquetCarte;
         }
 
