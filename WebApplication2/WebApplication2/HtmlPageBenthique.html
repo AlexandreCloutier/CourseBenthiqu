@@ -132,7 +132,11 @@
         function remplirMain() {
             if (tour === 0) {
                 main[0] = chercherCarteParticuliere('rapides', paquetCarte);//Première carte c'est un habitats rapides.
-                //main[1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);//Deuxième carte c'est un habitats au hasard.
+                main[1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);//Deuxième carte c'est un habitats au hasard.
+                main[2] = pigerCarte(paquetCarte);
+                main[3] = pigerCarte(paquetCarte);
+                main[4] = pigerCarte(paquetCarte);
+                main[5] = pigerCarte(paquetCarte);
             }
             else {
                 //Boucle pour toute les position de la main.
