@@ -33,11 +33,106 @@
             updateJeu();
         }
 
+        //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
+        function verifierCondition(carte) {
+            if (carte.condition.length === 1) {
+                var condition1 = carte.condition[0];
+
+                for(var i = 0; i<carteBas.length;i++) {
+                    if (carteBas[i] != null) {// Si il y a une carte.
+                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition.
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (carte.condition.length === 2) {
+                var condition1 = carte.condition[0];
+                var condition2 = carte.condition[1];
+
+                for (var i = 0; i < carteBas.length; i++) {
+                    if (carteBas[i] != null) {// Si il y a une carte.
+                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
+                                condition1 = 'ok';
+                            }
+                            else if (carteBas[i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                                condition2 = 'ok';
+                            }
+                        }
+                    }
+                }
+
+                if (condition1 === 'ok' && condition2 === 'ok') {
+                    return true;
+                }
+            }
+            else if (carte.condition.length === 3) {
+                var condition1 = carte.condition[0];
+                var condition2 = carte.condition[1];
+                var condition3 = carte.condition[2];
+
+                for (var i = 0; i < carteBas.length; i++) {
+                    if (carteBas[i] != null) {// Si il y a une carte.
+                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
+                                condition1 = 'ok';
+                            }
+                            else if (carteBas[i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                                condition2 = 'ok';
+                            }
+                            else if (carteBas[i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
+                                condition3 = 'ok';
+                            }
+                        }
+                    }
+                }
+
+                if (condition1 === 'ok' && condition2 === 'ok' && condition3 ==='ok') {
+                    return true;
+                }
+            }
+            else if (carte.condition.length === 4) {
+                var condition1 = carte.condition[0];
+                var condition2 = carte.condition[1];
+                var condition3 = carte.condition[2];
+                var condition4 = carte.condition[3];
+
+                for (var i = 0; i < carteBas.length; i++) {
+                    if (carteBas[i] != null) {// Si il y a une carte.
+                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
+                                condition1 = 'ok';
+                            }
+                            else if (carteBas[i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                                condition2 = 'ok';
+                            }
+                            else if (carteBas[i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
+                                condition3 = 'ok';
+                            }
+                            else if (carteBas[i].habitats === condition4) {//Si l'habitats de la carte est la meme que la condition4.
+                                condition4 = 'ok';
+                            }
+                        }
+                    }
+                }
+
+                if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok'&& condition4 === 'ok') {
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+
         //Fonction qui sera fréquement appeler pour ré-emplir la main
         function remplirMain() {
-            if(tour === 0) {
+            if (tour === 0) {
                 main[0] = chercherCarteParticuliere('rapides', paquetCarte);//Première carte c'est un habitats rapides.
-                main[1] = chercherCarteParticuliere(habitatsHasard(),paquetCarte);//Deuxième carte c'est un habitats au hasard.
+                //main[1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);//Deuxième carte c'est un habitats au hasard.
             }
             else {
                 //Boucle pour toute les position de la main.
@@ -53,31 +148,55 @@
         function habitatsHasard() {
             var habitatsRetourner;//Habitats qui sera retourner.
 
-            //math.random qui décidera qu'elle habitats on retourne.
+            //Variable qui contiendra le nombres de chaque habitats qui sont présentement dans le paquet de carte.
+            var nombreHabitats = 0;
+            var nombreFosse = 0;
+            var nombreRapides = 0;
+            var nombreSable = 0;
+            var nombreGravier = 0;
+            var nombreGalets = 0;
+
+            for (var i = 0; i < paquetCarte.length ; i++) {
+                if (paquetCarte[i].nom === 'fosse') {
+                    nombreFosse++;
+                    nombreHabitats++;
+                }
+                else if (paquetCarte[i].nom === 'sable') {
+                    nombreSable++;
+                    nombreHabitats++;
+                }
+                else if (paquetCarte[i].nom === 'gravier') {
+                    nombreGravier++;
+                    nombreHabitats++;
+                }
+                else if (paquetCarte[i].nom === 'rapides') {
+                    nombreRapides++;
+                    nombreHabitats++;
+                }
+                else if (paquetCarte[i].nom === 'galets') {
+                    nombreGalets++;
+                    nombreHabitats++;
+                }
+            }
+
+            //math.random qui décidera qu'elle habitats on retourne. Elle envoie un chiffre au hasard entre 1 et le nombre d'habitats.
             var nombreHasard;
-            nombreHasard = Math.floor((Math.random() * 25) + 1);
+            nombreHasard = Math.floor((Math.random() * nombreHabitats) + 1);
 
-            /* for(int i = 0;i<paquetcarte.lenght;i++)
-            if(nom = fosse
-            else if( nom = sable ETC
-            fosse ++
-            sable++
-
-            et ensuite les if on les mes avec le nombres exact de carte. */
-
-            if (nombreHasard === 1 || nombreHasard === 2 || nombreHasard === 3 || nombreHasard === 4) {
+            //Tout les if pour savoir c'est qu'elle habitats, Toujours plus petit que l'habitats et plus grand que l'ancien habitats.
+            if (nombreHasard <= nombreFosse) {
                 habitatsRetourner = 'fosse';
             }
-            else if(nombreHasard === 5 || nombreHasard === 6 || nombreHasard === 7 || nombreHasard === 8){
+            else if (nombreHasard <= nombreFosse + nombreSable && nombreHasard > nombreFosse) {
                 habitatsRetourner = 'sable';
             }
-            else if (nombreHasard === 9 || nombreHasard === 10 || nombreHasard === 11 || nombreHasard === 12 || nombreHasard === 13 || nombreHasard === 14) {
+            else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier && nombreHasard > nombreFosse + nombreSable) {
                 habitatsRetourner = 'gravier';
             }
-            else if (nombreHasard === 15 || nombreHasard === 16 || nombreHasard === 17 || nombreHasard === 18 || nombreHasard === 19 || nombreHasard === 20) {
+            else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier + nombreRapides && nombreHasard > nombreFosse + nombreSable + nombreGravier) {
                 habitatsRetourner = 'rapides';
             }
-            else if (nombreHasard === 21 || nombreHasard === 22 || nombreHasard === 23 || nombreHasard === 24 || nombreHasard === 25) {
+            else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier + nombreRapides + nombreGalets && nombreHasard > nombreFosse + nombreSable + nombreGravier + nombreRapides) {
                 habitatsRetourner = 'galets';
             }
 
@@ -85,12 +204,12 @@
         }
 
         //Fonction qui permet de chercher une carte en particulier.
-        function chercherCarteParticuliere(nomCarte, paquetCarte) {
+        function chercherCarteParticuliere(nomCarte) {
             var carteRetours
 
             //Boucle dans tout le paquet de cartes à la recherche de la bonne carte.
-            for (var i = 0; i < paquetCarte.length() + 1; i++) {
-                if (paquetCarte[i].nomCarte === nomCarte) {
+            for (var i = 0; i < paquetCarte.length + 1; i++) {              
+                if (paquetCarte[i].nom === nomCarte) {
                     carteRetour = paquetCarte[i];
 
                     //Code qui change la valeur i avec la première valeur pour pouvoir faire un array.shift().
@@ -351,7 +470,7 @@
                 paquetCarte[randomIndex] = temporaryValue;
             }
         }
-        
+
         //function qui crée le paquet de carte.
         function creerPaquetCarte(difficulte) {
             var carte;
