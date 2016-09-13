@@ -10,6 +10,8 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script>
         var paquetCarte;
+        var main;
+        var carteBas;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -169,31 +171,80 @@
         }
 
         //Définition de la classe.
-        function Carte(type, nom, nomImage, coutResource, params) {
-            if (type === 'predateur') {
-                this.nom = nom;
-                this.type = type;
-                this.tolerance = params.tolerance;
-                this.force = params.force;
-                this.coutResources = params.coutResources;
-                this.condition = params.condition;
-            }
-            else if (type === 'habitats') {
+        function Carte(type, nom, nomImage, coutResources, params) {
+            if (type === 'habitats') {
                 this.nom = nom;
                 this.type = type;
                 this.habitats = params.habitats;
-                this.coutResources = params.coutResources;
+                this.coutResources = coutResources;
+                this.nomImage = nomImage;
             }
             else if (type === 'salmonide') {
                 this.nom = nom;
                 this.type = type;
-                this.coutResources = params.coutResources;
+                this.coutResources = coutResources;
+                this.condition = params.condition;
+                this.nomImage = nomImage;
+            }
+            else if (type === 'bandeRiveraine') {
+                this.nom = nom;
+                this.type = type;
+                this.coutResources = coutResources;
+                this.nomImage = nomImage;
+            }
+            else if (type === 'speciale') {
+                this.nom = nom;
+                this.type = type;
+                this.nomImage = nomImage;
+                this.coutResources = coutResources;
+            }
+            else if (type === 'speciale') {
+                this.nom = nom;
+                this.type = type;
+                this.nomImage = nomImage;
+                this.coutResources = coutResources;
+            }
+            else if (type === 'action') {
+                this.nom = nom;
+                this.type = type;
+                this.nomImage = nomImage;
+                this.coutResources = coutResources;
+            }
+            else if (type === 'perturbation') {
+                this.nom = nom;
+                this.type = type;
+                this.nomImage = nomImage;
+                this.coutResources = coutResources;
+                this.tempsActif = params.tempsActif;
+            }
+            else if (type === 'reglementation') {
+                this.nom = nom;
+                this.type = type;
+                this.nomImage = nomImage;
+                this.coutResources = coutResources;
+            }
+            else if (type === 'macroInvertebre') {
+                this.nom = nom;
+                this.type = type;
+                this.nomImage = nomImage;
+                this.coutResources = coutResources;
+                this.tolerance = params.tolerance;
+                this.taille = params.taille;
+                this.predateur = params.predateur;
+                this.typeMacro = params.typeMacro;
                 this.condition = params.condition;
             }
             else if (type === 'bandeRiveraine') {
                 this.nom = nom;
                 this.type = type;
-                this.coutResources = params.coutResources;
+                this.nomImage = nomImage;
+                this.coutResources = coutResources;
+            }
+            else if (type === 'intervention') {
+                this.nom = nom;
+                this.type = type;
+                this.nomImage = nomImage;
+                this.coutResources = coutResources;
             }
         }
 
@@ -482,6 +533,7 @@
                 carte = new Carte('intervention', 'bandeRiveraineArbuste', 'bandeRiveraineArbuste.jpg', 2);
                 paquetCarte.push(carte);
 
+<<<<<<< HEAD
                 carte = new Carte('intervention', 'bandeRiveraineArbre', 'bandeRiveraineArbre.jpg', 3);
                 paquetCarte.push(carte);
             }
@@ -533,6 +585,32 @@
                 paquetCarte.push(carte);
                 paquetCarte.push(carte);
             }
+=======
+            carte = new Carte('intervention', 'habitatAmenageSable', 'habitatAmenageSable.jpg', 1, { habitats: 'sable' });
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'habitatAmenageRapides', 'habitatAmenageRapides.jpg', 1, { habitats: 'rapides' });
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'habitatAmenageFosse', 'habitatAmenageFosse.jpg', 1, { habitats: 'fosse' });
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'habitatAmenageGalets', 'habitatAmenageGalets.jpg', 1, { habitats: 'galets' });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'habitatAmenageGravier', 'habitatAmenageGravier.jpg', 1, { habitats: 'gravier' });
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'bandeRiveraineHerbace', 'bandeRiveraineHerbace.jpg', 1);
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'bandeRiveraineArbuste', 'bandeRiveraineArbuste.jpg', 2);
+            paquetCarte.push(carte);
+
+            carte = new Carte('intervention', 'bandeRiveraineArbre', 'bandeRiveraineArbre.jpg', 3);
+            paquetCarte.push(carte);
+>>>>>>> origin/master
 
             return paquetCarte;
         }
