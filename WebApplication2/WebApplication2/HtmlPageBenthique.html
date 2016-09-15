@@ -13,16 +13,12 @@
         var paquetCarte;
         //Tableau contenant les mains.
         var mains;
-
         //Tableau contenant toute les cartes du bas de chaque joueur.
         var carteBas;
-
         //Numero du joueur présentement actif.
         var numeroJoueurActif;
-
         //Variable comptant le nombre de tour *TEMPORAIRE POUR L'INSTANT* mais on va l'utiliser pour vrai plus tard.
         var tour = 0;
-
         //Variable content le nb de clic sur le bouton Passer son tour
         var facteurRotation = 0;
 
@@ -36,16 +32,16 @@
             melangerPaquetCarte(paquetCarte);
             creerMain();
             creerPartieDroite();
-
             /////////////NEW 4 joueurs //////////////////////////////////
             instantierTableauJoueur();
+            instantierTableauEmplacementBas();
             remplirMain();
             numeroJoueurActif = 0;
 
             updateJeu();
         }
 
-        //Fonction qui va instantier les différents tableau de tableau pour chaque jouer.
+        //Fonction qui va instantier le tableau bi-dimensionel de mains.
         function instantierTableauJoueur() {
 
             mains = new Array(4);
@@ -53,8 +49,15 @@
             mains[1] = new Array(6);
             mains[2] = new Array(6);
             mains[3] = new Array(6);
+        }
 
-            //TODO: faire pareil pour les emplacements du bas..
+        //Fonction qui va instantier le tableau bi-dimensionel d'emplacement bas.
+        function instantierTableauEmplacementBas() {
+            carteBas = new Array(4);
+            carteBas[0] = new Array(10);
+            carteBas[1] = new Array(10);
+            carteBas[2] = new Array(10);
+            carteBas[3] = new Array(10);
         }
 
         //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
@@ -62,10 +65,10 @@
             if (carte.condition.length === 1) {
                 var condition1 = carte.condition[0];
 
-                for (var i = 0; i < carteBas.length; i++) {
+                for (var i = 0; i < 10; i++) {
                     if (carteBas[i] != null) {// Si il y a une carte.
-                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
-                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition.
+                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition.
                                 return true;
                             }
                         }
@@ -78,11 +81,11 @@
 
                 for (var i = 0; i < carteBas.length; i++) {
                     if (carteBas[i] != null) {// Si il y a une carte.
-                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
-                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
+                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
                             }
                         }
@@ -100,14 +103,14 @@
 
                 for (var i = 0; i < carteBas.length; i++) {
                     if (carteBas[i] != null) {// Si il y a une carte.
-                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
-                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
+                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
+                        else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
                                 condition3 = 'ok';
                             }
                         }
@@ -126,17 +129,17 @@
 
                 for (var i = 0; i < carteBas.length; i++) {
                     if (carteBas[i] != null) {// Si il y a une carte.
-                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
-                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
+                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
                                 condition3 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition4) {//Si l'habitats de la carte est la meme que la condition4.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition4) {//Si l'habitats de la carte est la meme que la condition4.
                                 condition4 = 'ok';
                             }
                         }
