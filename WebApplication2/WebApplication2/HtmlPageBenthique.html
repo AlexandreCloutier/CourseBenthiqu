@@ -110,7 +110,7 @@
                             else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
                             }
-                        else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
                                 condition3 = 'ok';
                             }
                         }
@@ -184,7 +184,7 @@
 
                 //5e carte
                 mains[0][4] = pigerCarte(paquetCarte);
-                
+
                 mains[1][4] = pigerCarte(paquetCarte);
                 mains[2][4] = pigerCarte(paquetCarte);
                 mains[3][4] = pigerCarte(paquetCarte);
@@ -379,7 +379,7 @@
                             if ($(this).children().length > 1) {
                                 ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
                             }
-                        }
+                        }, tolerance: 'pointer'
                     });
                 });
             }
@@ -398,15 +398,13 @@
                 $(function () {
                     $('.divEmplacementCarteBas').droppable({
                         drop: function (event, ui) {
-                            ui.draggable.css('width', '58px');
-                            ui.draggable.css('height', '90px');
                             ui.draggable.appendTo(this);
                             ui.draggable.draggable('disable');
                             ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
                             if ($(this).children().length > 1) {
                                 ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
                             }
-                        }
+                        }, tolerance: 'pointer'
                     });
                 });
             }
@@ -879,8 +877,31 @@
                         image.className = 'imageCarte';
                         image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
                         carteMain.appendChild(image);
+
                         $(function () {
-                            $('.imageCarte').draggable({ revert: 'invalid', cursorAt: { top: 90, left: 59 } });
+                            $('.imageCarte').draggable({
+                                revert: function (socketObj) {
+                                    if (socketObj === false) {
+                                        console.log('mouse up');
+                                        $(this).animate({
+                                            height: 180,
+                                            width: 118
+                                        }, 200);
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                },
+                                revertDuration: 400,
+                                cursorAt: { top: 45, left: 30 }
+                            });
+                            $('.imageCarte').mousedown(function () {
+                                $(this).animate({
+                                    height: 90,
+                                    width: 58
+                                }, 400);
+                            });
                         });
                     }
                 }
