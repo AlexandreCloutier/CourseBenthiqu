@@ -198,8 +198,8 @@
             else {
                 //Boucle pour toute les position de la main.
                 for (var i = 0; i < 6; i++) {
-                    if (mains[numeroJoueurActif, i] === null) {
-                        mains[numeroJoueurActif, i] = pigerCarte(paquetCarte);
+                    if (mains[numeroJoueurActif][i] === null) {
+                        mains[numeroJoueurActif][i] = pigerCarte(paquetCarte);
                     }
                 }
             }
