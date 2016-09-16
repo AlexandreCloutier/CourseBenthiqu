@@ -424,16 +424,6 @@
                 divCarte.id = 'divCarte' + id;
                 divCarte.className = 'divCarte';
                 li.appendChild(divCarte);
-
-                //var image = document.createElement('img');
-                //image.className = 'imageCarte';
-                //image.src = 'resources/CarteEau.png';
-                //// Mes image Dans le idiv
-                //divCarte.appendChild(image);
-
-                //$(function () {
-                //    $('.imageCarte').draggable({ revert: 'invalid', cursorAt: { top: 90, left: 59 } });
-                //});
             }
         }
 
@@ -871,18 +861,11 @@
                     $plateau.css('transform', 'rotate(' + now + 'deg)');
                 }
             });
-<<<<<<< HEAD
-=======
-
-            //var plateau = document.getElementById('plateau');
-
-            //plateau.style.animation = 'transform: rotate(' + angleRotation + 'deg';
             numeroJoueurActif++;
             if (numeroJoueurActif === 4) {
                 numeroJoueurActif = 0;
             }
             updateJeu();
->>>>>>> origin/master
         }
 
         //Fonction qui "update" le jeu.
