@@ -11,19 +11,19 @@
     <script>
         //Paquet de carte principal.
         var paquetCarte;
-        //Tableau de la main.
-        var main;
-        //Tableau contenant toute les cartes du bas.
+        //Tableau contenant les mains.
+        var mains;
+        //Tableau contenant toute les cartes du bas de chaque joueur.
         var carteBas;
+        //Numero du joueur présentement actif.
+        var numeroJoueurActif;
         //Variable comptant le nombre de tour *TEMPORAIRE POUR L'INSTANT* mais on va l'utiliser pour vrai plus tard.
         var tour = 0;
-
         //Variable content le nb de clic sur le bouton Passer son tour
         var facteurRotation = 0;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
-            main = new Array();
             carteBas = new Array();
             creerFond();
             ajouterEmplacementHabitatBas();
@@ -32,8 +32,32 @@
             melangerPaquetCarte(paquetCarte);
             creerMain();
             creerPartieDroite();
+            /////////////NEW 4 joueurs //////////////////////////////////
+            instantierTableauJoueur();
+            instantierTableauEmplacementBas();
             remplirMain();
+            numeroJoueurActif = 0;
+
             updateJeu();
+        }
+
+        //Fonction qui va instantier le tableau bi-dimensionel de mains.
+        function instantierTableauJoueur() {
+
+            mains = new Array(4);
+            mains[0] = new Array(6);
+            mains[1] = new Array(6);
+            mains[2] = new Array(6);
+            mains[3] = new Array(6);
+        }
+
+        //Fonction qui va instantier le tableau bi-dimensionel d'emplacement bas.
+        function instantierTableauEmplacementBas() {
+            carteBas = new Array(4);
+            carteBas[0] = new Array(10);
+            carteBas[1] = new Array(10);
+            carteBas[2] = new Array(10);
+            carteBas[3] = new Array(10);
         }
 
         //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
@@ -41,10 +65,10 @@
             if (carte.condition.length === 1) {
                 var condition1 = carte.condition[0];
 
-                for(var i = 0; i<carteBas.length;i++) {
+                for (var i = 0; i < 10; i++) {
                     if (carteBas[i] != null) {// Si il y a une carte.
-                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
-                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition.
+                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition.
                                 return true;
                             }
                         }
@@ -57,11 +81,11 @@
 
                 for (var i = 0; i < carteBas.length; i++) {
                     if (carteBas[i] != null) {// Si il y a une carte.
-                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
-                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
+                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
                             }
                         }
@@ -79,21 +103,21 @@
 
                 for (var i = 0; i < carteBas.length; i++) {
                     if (carteBas[i] != null) {// Si il y a une carte.
-                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
-                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
+                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
+                        else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
                                 condition3 = 'ok';
                             }
                         }
                     }
                 }
 
-                if (condition1 === 'ok' && condition2 === 'ok' && condition3 ==='ok') {
+                if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok') {
                     return true;
                 }
             }
@@ -105,24 +129,24 @@
 
                 for (var i = 0; i < carteBas.length; i++) {
                     if (carteBas[i] != null) {// Si il y a une carte.
-                        if (carteBas[i].type === 'habitats' || carteBas[i].type === 'intervention') {// Si la carte est une habitats.
-                            if (carteBas[i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
+                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
                                 condition3 = 'ok';
                             }
-                            else if (carteBas[i].habitats === condition4) {//Si l'habitats de la carte est la meme que la condition4.
+                            else if (carteBas[numeroJoueurActif][i].habitats === condition4) {//Si l'habitats de la carte est la meme que la condition4.
                                 condition4 = 'ok';
                             }
                         }
                     }
                 }
 
-                if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok'&& condition4 === 'ok') {
+                if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok' && condition4 === 'ok') {
                     return true;
                 }
             }
@@ -133,19 +157,49 @@
 
         //Fonction qui sera fréquement appeler pour ré-emplir la main
         function remplirMain() {
-            if (tour === 0) {
-                main[0] = chercherCarteParticuliere('rapides', paquetCarte);//Première carte c'est un habitats rapides.
-                main[1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);//Deuxième carte c'est un habitats au hasard.
-                main[2] = pigerCarte(paquetCarte);
-                main[3] = pigerCarte(paquetCarte);
-                main[4] = pigerCarte(paquetCarte);
-                main[5] = pigerCarte(paquetCarte);
+            if (tour === 0) {//Avant de commencer, remplie toutes les mains.
+                //Première carte c'est un habitats rapides.
+                mains[0][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                mains[1][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                mains[2][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                mains[3][0] = chercherCarteParticuliere('rapides', paquetCarte);
+
+                //Deuxième carte c'est un habitats au hasard.
+                mains[0][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+                mains[1][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+                mains[2][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+                mains[3][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+
+                //3e carte
+                mains[0][2] = pigerCarte(paquetCarte);
+                mains[1][2] = pigerCarte(paquetCarte);
+                mains[2][2] = pigerCarte(paquetCarte);
+                mains[3][2] = pigerCarte(paquetCarte);
+
+                //4e carte
+                mains[0][3] = pigerCarte(paquetCarte);
+                mains[1][3] = pigerCarte(paquetCarte);
+                mains[2][3] = pigerCarte(paquetCarte);
+                mains[3][3] = pigerCarte(paquetCarte);
+
+                //5e carte
+                mains[0][4] = pigerCarte(paquetCarte);
+                
+                mains[1][4] = pigerCarte(paquetCarte);
+                mains[2][4] = pigerCarte(paquetCarte);
+                mains[3][4] = pigerCarte(paquetCarte);
+
+                //6e carte
+                mains[0][5] = pigerCarte(paquetCarte);
+                mains[1][5] = pigerCarte(paquetCarte);
+                mains[2][5] = pigerCarte(paquetCarte);
+                mains[3][5] = pigerCarte(paquetCarte);
             }
             else {
                 //Boucle pour toute les position de la main.
                 for (var i = 0; i < 6; i++) {
-                    if (main[i] === null) {
-                        main[i] = pigerCarte(paquetCarte);
+                    if (mains[numeroJoueurActif][i] === null) {
+                        mains[numeroJoueurActif][i] = pigerCarte(paquetCarte);
                     }
                 }
             }
@@ -215,7 +269,7 @@
             var carteRetours
 
             //Boucle dans tout le paquet de cartes à la recherche de la bonne carte.
-            for (var i = 0; i < paquetCarte.length + 1; i++) {              
+            for (var i = 0; i < paquetCarte.length + 1; i++) {
                 if (paquetCarte[i].nom === nomCarte) {
                     carteRetour = paquetCarte[i];
 
@@ -224,7 +278,7 @@
                     paquetCarte[0] = paquetCarte[i];
                     paquetCarte[i] = valeurEnregistrer;
 
-                    
+
                     //Retire la carte sur le dessus
                     paquetCarte.shift();
 
@@ -801,12 +855,12 @@
         }
 
         //Fonction appellé lors d'un clic sur le boutton Passer son tour
-        function passerTour() {            
+        function passerTour() {
             facteurRotation += 1;
             if (facteurRotation > 4) {
                 facteurRotation = 1;
             }
-            var angleRotationDebut = (90 * (facteurRotation -1));
+            var angleRotationDebut = (90 * (facteurRotation - 1));
             var angleRotationFin = (90 * facteurRotation);
             var $plateau = $('#plateau');
             $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
@@ -817,19 +871,43 @@
                     $plateau.css('transform', 'rotate(' + now + 'deg)');
                 }
             });
+<<<<<<< HEAD
+=======
+
+            //var plateau = document.getElementById('plateau');
+
+            //plateau.style.animation = 'transform: rotate(' + angleRotation + 'deg';
+            numeroJoueurActif++;
+            if (numeroJoueurActif === 4) {
+                numeroJoueurActif = 0;
+            }
+            updateJeu();
+>>>>>>> origin/master
         }
 
         //Fonction qui "update" le jeu.
         function updateJeu() {
             //Afficher les cartes selon le tableau main[]
-            for(i = 0; i < 6; i++)
-            {
+            for (i = 0; i < 6; i++) {
                 carteMain = document.getElementById('divCarte' + i)
                 if (carteMain.children.length === 0) {
-                    if (main[i] != null) {
+                    if (mains[numeroJoueurActif][i] != null) {
                         var image = document.createElement('img');
                         image.className = 'imageCarte';
-                        image.src ='ressources/'+ main[i].nomImage;
+                        image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
+                        carteMain.appendChild(image);
+                        $(function () {
+                            $('.imageCarte').draggable({ revert: 'invalid', cursorAt: { top: 90, left: 59 } });
+                        });
+                    }
+                }
+                else {
+                    carteMain.removeChild(carteMain.firstChild);
+
+                    if (mains[numeroJoueurActif][i] != null) {
+                        var image = document.createElement('img');
+                        image.className = 'imageCarte';
+                        image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
                         carteMain.appendChild(image);
                         $(function () {
                             $('.imageCarte').draggable({ revert: 'invalid', cursorAt: { top: 90, left: 59 } });
