@@ -34,6 +34,10 @@
     bottom: 129px;
 }
 
+.ui-droppable-hover {
+    background-color: deeppink;
+}
+
 /* -----------------Zone Main--------------------*/
 
 .divMain {
