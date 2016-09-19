@@ -23,6 +23,10 @@
         var facteurRotation = 0;
         //Variable qui detecte si la souris bouge lors d'un clic
         var isClick = false;
+        //Variable de la carte qui sera transférer de la main à la zone du bas, ou ailleurs.
+        var carteDrag;
+        //Variable du numero de la carte dans la main pour pouvoir le supprimer facilement lorsqu'on le drop à quelque part.
+        var carteDragNumero;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -34,7 +38,6 @@
             melangerPaquetCarte(paquetCarte);
             creerMain();
             creerPartieDroite();
-            /////////////NEW 4 joueurs //////////////////////////////////
             instantierTableauJoueur();
             instantierTableauEmplacementBas();
             remplirMain();
@@ -406,7 +409,16 @@
                             if ($(this).children().length > 1) {
                                 ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
                             }
-                        }, tolerance: 'pointer'
+
+                            //Partie qui change les données de la mains vers la partie du bas.
+
+                            //TODO: IF CONDITION (appeler la fonction) si il y a des conditions à vérifier
+                            //TODO: IF carte peut être mis et non empiler.
+                            //TODO: mette le code plus haut dans les if's.
+
+
+                        },
+                        tolerance: 'pointer',
                     });
                 });
             }
@@ -425,6 +437,11 @@
                 divCarte.className = 'divCarte';
                 li.appendChild(divCarte);
             }
+        }
+
+        //Fonction qui va supprimer une carte de la main, appeler lors du drop dans la zone du bas
+        function supprimerCartePrecise(positionCarte) {
+            mains[numeroJoueurActif][positionCarte] = null;
         }
 
         //Définition de la classe.
@@ -882,6 +899,12 @@
 
                         $(function () {
                             $('.imageCarte').draggable({
+                                start: function(){
+                                    $(this).animate({
+                                        height: 90,
+                                        width: 58
+                                    }, 400);
+                                },
                                 revert: function (socketObj) {
                                     if (socketObj === false) {
                                         $(this).animate({
@@ -895,25 +918,37 @@
                                     }
                                 },
                                 revertDuration: 400,
-                                cursorAt: { top: 45, left: 30 }
-                            });
-                            $('.imageCarte')
-                                .mousedown(function () {
-                                    isClick = true;
-                                })
-                                .mousemove(function () {
-                                    console.log(isClick);
-                                    if (isClick === true) {
-                                        $(this).animate({
-                                            height: 90,
-                                            width: 58
-                                        }, 400);
+                                cursorAt: { top: 45, left: 30 },
+                                drag: function (event, ui) {//Ondrag, appeller directement lorsque nous cliquons sur la carte et que nous la bougeons.
+                                    var parent = event.target.parentNode.id;//Parent pour savoir la carte se situe ou dans le tableau de mains.
+
+                                    //Les if qui vont envoyer l'objet carte dans la variable.
+                                    if(parent === 'divCarte0'){
+                                        carteDrag = mains[numeroJoueurActif][0];
+                                        carteDragNumero = 0;
                                     }
-                                    isClick = false;
-                                })
-                                .mouseup(function () {
-                                    isClick = false;
-                                });
+                                    else if (parent === 'divCarte1') {
+                                        carteDrag = mains[numeroJoueurActif][1];
+                                        carteDragNumero = 1;
+                                    }
+                                    else if (parent === 'divCarte2') {
+                                        carteDrag = mains[numeroJoueurActif][2];
+                                        carteDragNumero = 2;
+                                    }
+                                    else if (parent === 'divCarte3') {
+                                        carteDrag = mains[numeroJoueurActif][3];
+                                        carteDragNumero = 3;
+                                    }
+                                    else if (parent === 'divCarte4') {
+                                        carteDrag = mains[numeroJoueurActif][4];
+                                        carteDragNumero = 4;
+                                    }
+                                    else if (parent === 'divCarte5') {
+                                        carteDrag = mains[numeroJoueurActif][5];
+                                        carteDragNumero = 5;
+                                    }
+                                }
+                            });
                         });
                     }
                 }
@@ -926,7 +961,31 @@
                         image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
                         carteMain.appendChild(image);
                         $(function () {
-                            $('.imageCarte').draggable({ revert: 'invalid', cursorAt: { top: 90, left: 59 } });
+                            $('.imageCarte').draggable({
+                                start: function () {
+                                    $(this).animate({
+                                        height: 90,
+                                        width: 58
+                                    }, 400);
+                                },
+                                revert: function (socketObj) {
+                                    if (socketObj === false) {
+                                        $(this).animate({
+                                            height: 180,
+                                            width: 118
+                                        }, 200);
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                },
+                                revertDuration: 400,
+                                cursorAt: { top: 45, left: 30 },
+                                drag: function (event, ui) {//Ondrag, appeller directement lorsque nous cliquons sur la carte et que nous la bougeons.
+
+                                }
+                            });
                         });
                     }
                 }
