@@ -367,11 +367,11 @@
         function ajouterEmplacementHabitatBas() {
             //Boucle 6 fois pour ajouter les 6 emplacements D'habitats du bas.
             var id;
-            for (id = 1; id < 7; id++) {
+            for (id = 4; id < 10; id++) {
                 var divEmplacementHabitat = document.createElement('div');
-                divEmplacementHabitat.id = 'divEmplacementHabitatBas' + id;
+                divEmplacementHabitat.id = 'divEmplacementCarteBas' + id;
                 divEmplacementHabitat.className = 'divEmplacementHabitatBas';
-                divEmplacementHabitat.style.left = 117 + 66 * id + 'px';
+                divEmplacementHabitat.style.left = 117 + 66 * (id-3) + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementHabitat);
                 $(function () {
                     $('.divEmplacementHabitatBas').droppable({
@@ -384,7 +384,9 @@
                             if ($(this).children().length > 1) {
                                 ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
                             }
-                        }, tolerance: 'pointer'
+                            alert(event.target.id);
+                        },
+                        tolerance: 'pointer'
                     });
                 });
             }
@@ -394,11 +396,11 @@
         function ajouterEmplacementCarteBas() {
             //Boucle 4 fois pour ajouter les 4 emplacements sur les emplacements D'habitats du bas.
             var id;
-            for (id = 1; id < 5; id++) {
+            for (id = 0; id < 4; id++) {
                 var divEmplacementCarte = document.createElement('div');
                 divEmplacementCarte.id = 'divEmplacementCarteBas' + id;
                 divEmplacementCarte.className = 'divEmplacementCarteBas';
-                divEmplacementCarte.style.left = 182 + 66 * id + 'px';
+                divEmplacementCarte.style.left = 182 + 66 * (id+1) + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementCarte);
                 $(function () {
                     $('.divEmplacementCarteBas').droppable({
@@ -415,7 +417,7 @@
                             //TODO: IF CONDITION (appeler la fonction) si il y a des conditions à vérifier
                             //TODO: IF carte peut être mis et non empiler.
                             //TODO: mette le code plus haut dans les if's.
-
+                            alert(event.target.id);
 
                         },
                         tolerance: 'pointer',
