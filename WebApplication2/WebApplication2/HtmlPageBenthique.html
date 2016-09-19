@@ -384,7 +384,35 @@
                             if ($(this).children().length > 1) {
                                 ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
                             }
-                            alert(event.target.id);
+                            //Partie qui change les données de la mains vers la partie du bas.
+
+                            //TODO: IF CONDITION (appeler la fonction) si il y a des conditions à vérifier
+                            //TODO: IF carte peut être mis et non empiler.
+                            //TODO: mette le code plus haut dans les if's.
+                            if (event.target.id === 'divEmplacementCarteBas4') {
+                                carteBas[numeroJoueurActif][4] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                            }
+                            else if (event.target.id === 'divEmplacementCarteBas5') {
+                                carteBas[numeroJoueurActif][5] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                            }
+                            else if (event.target.id === 'divEmplacementCarteBas6') {
+                                carteBas[numeroJoueurActif][6] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                            }
+                            else if (event.target.id === 'divEmplacementCarteBas7') {
+                                carteBas[numeroJoueurActif][7] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                            }
+                            else if (event.target.id === 'divEmplacementCarteBas8') {
+                                carteBas[numeroJoueurActif][8] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                            }
+                            else if (event.target.id === 'divEmplacementCarteBas9') {
+                                carteBas[numeroJoueurActif][9] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                            }
                         },
                         tolerance: 'pointer'
                     });
@@ -417,7 +445,23 @@
                             //TODO: IF CONDITION (appeler la fonction) si il y a des conditions à vérifier
                             //TODO: IF carte peut être mis et non empiler.
                             //TODO: mette le code plus haut dans les if's.
-                            alert(event.target.id);
+                            if (event.target.id === 'divEmplacementCarteBas0') {
+                                carteBas[numeroJoueurActif][0] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                                alert(carteBas[numeroJoueurActif][0].nom);
+                            }
+                            else if (event.target.id === 'divEmplacementCarteBas1') {
+                                carteBas[numeroJoueurActif][1] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                            }
+                            else if (event.target.id === 'divEmplacementCarteBas2') {
+                                carteBas[numeroJoueurActif][2] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                            }
+                            else if (event.target.id === 'divEmplacementCarteBas3') {
+                                carteBas[numeroJoueurActif][3] = carteDrag;
+                                supprimerCartePrecise(carteDragNumero);
+                            }
                         },
                         tolerance: 'pointer',
                     });
