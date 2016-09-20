@@ -7,7 +7,7 @@
 .plateau {
     margin-top: 10px;
     margin-bottom: 10px;
-    border: 1px solid #d3d3d3;
+    border: 1px solid black;
     background-image: url(ressources/PlateauJeu.jpg);
     float: left;
     position: relative;
@@ -16,24 +16,13 @@
     z-index: 0;
 }
 
-.divEmplacementHabitatBas {
+.emplacementJoueurA {
     float: left;
     width: 59px;
     height: 90px;
     /*border: 1px solid blue;*/
     position: absolute;
     border-radius: 5px;
-    bottom: 30px;
-}
-
-.divEmplacementCarteBas {
-    float: left;
-    width: 59px;
-    height: 90px;
-    /*border: 1px solid blue;*/
-    position: absolute;
-    border-radius: 5px;
-    bottom: 131px;
 }
 .emplacementJoueurB {
     float: left;
@@ -41,6 +30,7 @@
     height: 90px;
     /*border: 1px solid pink;*/
     position: absolute;
+    border-radius: 5px;
 }
 
 .emplacementJoueurC {
@@ -49,6 +39,7 @@
     height: 59px;
     /*border: 1px solid green;*/
     position: absolute;
+    border-radius: 5px;
 }
 
 .emplacementJoueurD {
@@ -103,8 +94,8 @@
 /* ------------------Zone droite------------------ */
 
 .divDroite {
-    background-color: greenyellow;
-    border: 1px solid blue;
+    background-color: #61933a;
+    border: 1px solid black;
     margin-top: 10px;
     height: 723px;
     width: 300px;

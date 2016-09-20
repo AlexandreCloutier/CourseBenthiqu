@@ -41,8 +41,6 @@
             carteBas = new Array();
             creerFond();
             creerEmplacementsPlateau();
-            ajouterEmplacementHabitatBas();
-            ajouterEmplacementCarteBas();
             paquetCarte = creerPaquetCarte(1);
             melangerPaquetCarte(paquetCarte);
             creerMain();
@@ -441,10 +439,17 @@
         function creerEmplacementsPlateau() {
             $(function () {
                 for (i = 0; i < 6; i++) {
+                    var emplacementBasJoueurA = document.createElement('div');
+                    emplacementBasJoueurA.id = 'emplacementBasJoueurA' + i;
+                    emplacementBasJoueurA.className = 'emplacementJoueurA';
+                    emplacementBasJoueurA.style.left = 115 + 66 * (i + 1) + 'px';
+                    emplacementBasJoueurA.style.bottom = '29px';
+                    document.getElementById('plateau').appendChild(emplacementBasJoueurA);
+
                     var emplacementBasJoueurB = document.createElement('div');
                     emplacementBasJoueurB.id = 'emplacementBasJoueurB' + i;
                     emplacementBasJoueurB.className = 'emplacementJoueurB';
-                    emplacementBasJoueurB.style.left = 114 + 66 * (i + 1) + 'px';
+                    emplacementBasJoueurB.style.left = 115 + 66 * (i + 1) + 'px';
                     emplacementBasJoueurB.style.top = '29px';
                     $('#plateau').append(emplacementBasJoueurB);
 
@@ -452,7 +457,7 @@
                         var emplacementBasJoueurC = document.createElement('div');
                         emplacementBasJoueurC.id = 'emplacementBasJoueurC' + i;
                         emplacementBasJoueurC.className = 'emplacementJoueurC';
-                        emplacementBasJoueurC.style.top = 114 + 66 * (i + 1) + 'px';
+                        emplacementBasJoueurC.style.top = 115 + 66 * (i + 1) + 'px';
                         emplacementBasJoueurC.style.left = '29px';
                         $('#plateau').append(emplacementBasJoueurC);
                     }
@@ -460,17 +465,24 @@
                         var emplacementBasJoueurD = document.createElement('div');
                         emplacementBasJoueurD.id = 'emplacementBasJoueurD' + i;
                         emplacementBasJoueurD.className = 'emplacementJoueurD';
-                        emplacementBasJoueurD.style.top = 114 + 66 * (i + 1) + 'px';
+                        emplacementBasJoueurD.style.top = 115 + 66 * (i + 1) + 'px';
                         emplacementBasJoueurD.style.right = '29px'
                         $('#plateau').append(emplacementBasJoueurD);
                     }
                 }
                 for (i = 6; i < 10; i++) {
+                    var emplacementHautJoueurA = document.createElement('div');
+                    emplacementHautJoueurA.id = 'emplacementHautJoueurA' + i;
+                    emplacementHautJoueurA.className = 'emplacementJoueurA';
+                    emplacementHautJoueurA.style.left = 181 + 66 * (i - 5) + 'px';
+                    emplacementHautJoueurA.style.bottom = '131px';
+                    document.getElementById('plateau').appendChild(emplacementHautJoueurA);
+
                     var emplacementHautJoueurB = document.createElement('div');
                     emplacementHautJoueurB.id = 'emplacementHautJoueurB' + i;
                     emplacementHautJoueurB.className = 'emplacementJoueurB';
                     emplacementHautJoueurB.style.left = 180 + 66 * (i - 5) + 'px';
-                    emplacementHautJoueurB.style.top = '130px';
+                    emplacementHautJoueurB.style.top = '131px';
                     $('#plateau').append(emplacementHautJoueurB);
 
                     if (nombreJoueur >= 3) {
@@ -478,7 +490,7 @@
                         emplacementHautJoueurC.id = 'emplacementHautJoueurC' + i;
                         emplacementHautJoueurC.className = 'emplacementJoueurC';
                         emplacementHautJoueurC.style.top = 180 + 66 * (i - 5) + 'px';
-                        emplacementHautJoueurC.style.left = '130px'
+                        emplacementHautJoueurC.style.left = '131px'
                         $('#plateau').append(emplacementHautJoueurC);
                     }
 
@@ -487,116 +499,37 @@
                         emplacementHautJoueurD.id = 'emplacementHautJoueurD' + i;
                         emplacementHautJoueurD.className = 'emplacementJoueurD';
                         emplacementHautJoueurD.style.top = 180 + 66 * (i - 5) + 'px';
-                        emplacementHautJoueurD.style.right = '130px';
+                        emplacementHautJoueurD.style.right = '131px';
                         $('#plateau').append(emplacementHautJoueurD);
                     }
                 }
-            });
-        }
-
-        //Fonction qui ajoute 6 emplacement d'habitats dans le bas.
-        function ajouterEmplacementHabitatBas() {
-            //Boucle 6 fois pour ajouter les 6 emplacements D'habitats du bas.
-            var id;
-            for (id = 4; id < 10; id++) {
-                var divEmplacementHabitat = document.createElement('div');
-                divEmplacementHabitat.id = 'divEmplacementCarteBas' + id;
-                divEmplacementHabitat.className = 'divEmplacementHabitatBas';
-                divEmplacementHabitat.style.left = 115 + 66 * (id - 3) + 'px';
-                document.getElementById('plateau').appendChild(divEmplacementHabitat);
                 $(function () {
-                    $('.divEmplacementHabitatBas').droppable({
+                    $('.emplacementJoueurA').droppable({
                         drop: function (event, ui) {
-                            ui.draggable.css('width', '58px');
-                            ui.draggable.css('height', '90px');
-                            ui.draggable.appendTo(this);
-                            ui.draggable.draggable('disable');
-                            ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
-                            if ($(this).children().length > 1) {
-                                ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
-                            }
-                            //Partie qui change les données de la mains vers la partie du bas.
-                            if (carteDrag.coutResources < pointsRessources[numeroJoueurActif]) {
-                                // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
-
-                                if (carteDrag.type === 'macroInvertebre' || carteDrag.type === 'salmonide') {
-                                    if (verifierCondition(carteDrag)) {
-                                        alert('condition passe');
-                                    }
-                                    else {
-                                        //TODO: Message qu'il ne respecte pas les conditions nécéssaire.
-                                        alert('Vous ne respecter pas les conditions nécéssaire.');
-                                    }
-                                }
-                                else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention') {
-                                    //TODO:Entrer la carte normalement.
-                                }
-                            }
-                            else {
-                                //TODO: message qu'il manque de points ressources.
-                                alert('Vous manquer de points ressources pour jouer la carte.')
-                            }
-
-                            //TODO: IF carte peut être mis et non empiler.
-                            //TODO: mette le code plus haut dans les if's.
-                            var id;
-                            id = event.target.id.substr(event.target.id.length - 1);
-
-                            carteBas[numeroJoueurActif][id] = carteDrag;
-                            supprimerCartePrecise(carteDragNumero);
+                            onDrop(event, ui, this);
+                        },
+                        tolerance: 'pointer'
+                    });
+                    $('.emplacementJoueurB').droppable({
+                        drop: function (event, ui) {
+                            onDrop(event, ui, this);
+                        },
+                        tolerance: 'pointer'
+                    });
+                    $('.emplacementJoueurC').droppable({
+                        drop: function (event, ui) {
+                            onDrop(event, ui, this);
+                        },
+                        tolerance: 'pointer'
+                    });
+                    $('.emplacementJoueurD').droppable({
+                        drop: function (event, ui) {
+                            onDrop(event, ui, this);
                         },
                         tolerance: 'pointer'
                     });
                 });
-            }
-        }
-
-        //Fonction qui ajoute 4 emplacement de carte sur les emplacements d'habitats du bas.
-        function ajouterEmplacementCarteBas() {
-            //Boucle 4 fois pour ajouter les 4 emplacements sur les emplacements D'habitats du bas.
-            var id;
-            for (id = 0; id < 4; id++) {
-                var divEmplacementCarte = document.createElement('div');
-                divEmplacementCarte.id = 'divEmplacementCarteBas' + id;
-                divEmplacementCarte.className = 'divEmplacementCarteBas';
-                divEmplacementCarte.style.left = 181 + 66 * (id + 1) + 'px';
-                document.getElementById('plateau').appendChild(divEmplacementCarte);
-                $(function () {
-                    $('.divEmplacementCarteBas').droppable({
-                        drop: function (event, ui) {
-                            ui.draggable.appendTo(this);
-                            ui.draggable.draggable('disable');
-                            ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
-                            if ($(this).children().length > 1) {
-                                ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
-                            }
-
-                            //Partie qui change les données de la mains vers la partie du bas.
-
-                            //TODO: IF CONDITION (appeler la fonction) si il y a des conditions à vérifier
-                            //TODO: IF carte peut être mis et non empiler.
-                            //TODO: mette le code plus haut dans les if's.
-                            if (event.target.id === 'divEmplacementCarteBas0') {
-                                carteBas[numeroJoueurActif][0] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
-                            }
-                            else if (event.target.id === 'divEmplacementCarteBas1') {
-                                carteBas[numeroJoueurActif][1] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
-                            }
-                            else if (event.target.id === 'divEmplacementCarteBas2') {
-                                carteBas[numeroJoueurActif][2] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
-                            }
-                            else if (event.target.id === 'divEmplacementCarteBas3') {
-                                carteBas[numeroJoueurActif][3] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
-                            }
-                        },
-                        tolerance: 'pointer',
-                    });
-                });
-            }
+            });
         }
 
         function creerMain() {
@@ -612,6 +545,48 @@
                 divCarte.className = 'divCarte';
                 li.appendChild(divCarte);
             }
+        }
+
+        function onDrop(event, ui, drop) {
+            $(function() {
+                ui.draggable.css('width', '58px');
+                ui.draggable.css('height', '90px');
+                ui.draggable.appendTo(drop);
+                ui.draggable.draggable('disable');
+                ui.draggable.position({ of: $(drop), my: 'center', at: 'center' });
+                if ($(drop).children().length > 1) {
+                    ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
+                }
+                //Partie qui change les données de la mains vers la partie du bas.
+                if (carteDrag.coutResources < pointsRessources[numeroJoueurActif]) {
+                    // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
+
+                    if (carteDrag.type === 'macroInvertebre' || carteDrag.type === 'salmonide') {
+                        if (verifierCondition(carteDrag)) {
+                            alert('condition passe');
+                        }
+                        else {
+                            //TODO: Message qu'il ne respecte pas les conditions nécéssaire.
+                            alert('Vous ne respecter pas les conditions nécéssaire.');
+                        }
+                    }
+                    else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention') {
+                        //TODO:Entrer la carte normalement.
+                    }
+                }
+                else {
+                    //TODO: message qu'il manque de points ressources.
+                    alert('Vous manquer de points ressources pour jouer la carte.')
+                }
+
+                //TODO: IF carte peut être mis et non empiler.
+                //TODO: mette le code plus haut dans les if's.
+                var id;
+                id = event.target.id.substr(event.target.id.length - 1);
+
+                carteBas[numeroJoueurActif][id] = carteDrag;
+                supprimerCartePrecise(carteDragNumero);
+            });
         }
 
         //Fonction qui va supprimer une carte de la main, appeler lors du drop dans la zone du bas
