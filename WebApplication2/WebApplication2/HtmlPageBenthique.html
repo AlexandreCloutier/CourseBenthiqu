@@ -40,6 +40,7 @@
 
             carteBas = new Array();
             creerFond();
+            creerEmplacementsPlateau();
             ajouterEmplacementHabitatBas();
             ajouterEmplacementCarteBas();
             paquetCarte = creerPaquetCarte(1);
@@ -433,6 +434,55 @@
             document.getElementsByTagName('body')[0].appendChild(divDroite);
         }
 
+        function creerEmplacementsPlateau() {
+            $(function() {
+                for (i = 0; i < 6; i++) {
+                    var emplacementBasJoueurB = document.createElement('div');
+                    emplacementBasJoueurB.id = 'emplacementBasJoueurB' + i;
+                    emplacementBasJoueurB.className = 'emplacementJoueurB';
+                    emplacementBasJoueurB.style.left = 114 + 66 * (i + 1) + 'px';
+                    emplacementBasJoueurB.style.top = '29px';
+                    $('#plateau').append(emplacementBasJoueurB);
+
+                    var emplacementBasJoueurC = document.createElement('div');
+                    emplacementBasJoueurC.id = 'emplacementBasJoueurC' + i;
+                    emplacementBasJoueurC.className = 'emplacementJoueurC';
+                    emplacementBasJoueurC.style.top = 114 + 66 * (i + 1) + 'px';
+                    emplacementBasJoueurC.style.left = '29px';
+                    $('#plateau').append(emplacementBasJoueurC);
+
+                    var emplacementBasJoueurD = document.createElement('div');
+                    emplacementBasJoueurD.id = 'emplacementBasJoueurD' + i;
+                    emplacementBasJoueurD.className = 'emplacementJoueurD';
+                    emplacementBasJoueurD.style.top = 114 + 66 * (i + 1) + 'px';
+                    emplacementBasJoueurD.style.right = '29px'
+                    $('#plateau').append(emplacementBasJoueurD);
+                }
+                for (i = 6; i < 10; i++) {
+                    var emplacementHautJoueurB = document.createElement('div');
+                    emplacementHautJoueurB.id = 'emplacementHautJoueurB' + i;
+                    emplacementHautJoueurB.className = 'emplacementJoueurB';
+                    emplacementHautJoueurB.style.left = 180 + 66 * (i - 5) + 'px';
+                    emplacementHautJoueurB.style.top = '130px';
+                    $('#plateau').append(emplacementHautJoueurB);
+
+                    var emplacementHautJoueurC = document.createElement('div');
+                    emplacementHautJoueurC.id = 'emplacementHautJoueurC' + i;
+                    emplacementHautJoueurC.className = 'emplacementJoueurC';
+                    emplacementHautJoueurC.style.top = 180 + 66 * (i - 5) + 'px';
+                    emplacementHautJoueurC.style.left = '130px'
+                    $('#plateau').append(emplacementHautJoueurC);
+
+                    var emplacementHautJoueurD = document.createElement('div');
+                    emplacementHautJoueurD.id = 'emplacementHautJoueurD' + i;
+                    emplacementHautJoueurD.className = 'emplacementJoueurD';
+                    emplacementHautJoueurD.style.top = 180 + 66 * (i - 5) + 'px';
+                    emplacementHautJoueurD.style.right = '130px';
+                    $('#plateau').append(emplacementHautJoueurD);
+                }
+            });
+        }
+
         //Fonction qui ajoute 6 emplacement d'habitats dans le bas.
         function ajouterEmplacementHabitatBas() {
             //Boucle 6 fois pour ajouter les 6 emplacements D'habitats du bas.
@@ -441,7 +491,7 @@
                 var divEmplacementHabitat = document.createElement('div');
                 divEmplacementHabitat.id = 'divEmplacementCarteBas' + id;
                 divEmplacementHabitat.className = 'divEmplacementHabitatBas';
-                divEmplacementHabitat.style.left = 117 + 66 * (id-3) + 'px';
+                divEmplacementHabitat.style.left = 114 + 66 * (id-3) + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementHabitat);
                 $(function () {
                     $('.divEmplacementHabitatBas').droppable({
@@ -596,7 +646,7 @@
                 var divEmplacementCarte = document.createElement('div');
                 divEmplacementCarte.id = 'divEmplacementCarteBas' + id;
                 divEmplacementCarte.className = 'divEmplacementCarteBas';
-                divEmplacementCarte.style.left = 182 + 66 * (id+1) + 'px';
+                divEmplacementCarte.style.left = 180 + 66 * (id+1) + 'px';
                 document.getElementById('plateau').appendChild(divEmplacementCarte);
                 $(function () {
                     $('.divEmplacementCarteBas').droppable({

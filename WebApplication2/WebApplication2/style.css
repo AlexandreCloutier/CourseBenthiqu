@@ -29,9 +29,32 @@
     float: left;
     width: 59px;
     height: 90px;
+    border: 1px solid blue;
+    position: absolute;
+    bottom: 130px;
+}
+.emplacementJoueurB {
+    float: left;
+    width: 59px;
+    height: 90px;
     border: 1px solid pink;
     position: absolute;
-    bottom: 129px;
+}
+
+.emplacementJoueurC {
+    float: left;
+    width: 90px;
+    height: 59px;
+    border: 1px solid green;
+    position: absolute;
+}
+
+.emplacementJoueurD {
+    float: left;
+    width: 90px;
+    height: 59px;
+    border: 1px solid red;
+    position: absolute;
 }
 
 .ui-droppable-hover {
