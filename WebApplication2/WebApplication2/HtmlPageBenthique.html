@@ -204,7 +204,7 @@
             }
         }
 
-        //Fonction qui sera fréquement appeler pour ré-emplir la main
+        //Fonction qui sera fréquement appeler pour ré-emplir la main.
         function remplirMain() {
             if (tour === 0) {//Avant de commencer, remplie toutes les mains.
                 //Première carte c'est un habitats rapides.
@@ -436,6 +436,7 @@
             document.getElementsByTagName('body')[0].appendChild(divDroite);
         }
 
+        //Fonction qui crée les divers emplacement sur le tableau.
         function creerEmplacementsPlateau() {
             $(function () {
                 for (i = 0; i < 6; i++) {
@@ -506,7 +507,49 @@
                 $(function () {
                     $('.emplacementJoueurA').droppable({
                         drop: function (event, ui) {
+<<<<<<< HEAD
                             onDrop(event, ui, this);
+=======
+                            ui.draggable.css('width', '58px');
+                            ui.draggable.css('height', '90px');
+                            ui.draggable.appendTo(this);
+                            ui.draggable.draggable('disable');
+                            ui.draggable.position({ of: $(this), my: 'center', at: 'center' });
+                            if ($(this).children().length > 1) {
+                                ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
+                            }
+                            //Partie qui change les données de la mains vers la partie du bas.
+                            if (carteDrag.coutResources < pointsRessources[numeroJoueurActif]) {
+                                // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
+
+                                if (carteDrag.type === 'macroInvertebre' || carteDrag.type === 'salmonide') {
+                                    if (verifierCondition(carteDrag)) {
+                                        alert('condition passe');
+                                        pointsRessources[numeroJoueurActif] -= carteDrag.coutResources;
+                                    }
+                                    else {
+                                        //TODO: Message qu'il ne respecte pas les conditions nécéssaire.
+                                        alert('Vous ne respecter pas les conditions nécéssaire.');
+                                    }
+                                }
+                                else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention') {
+                                    //TODO:Entrer la carte normalement.
+                                    pointsRessources[numeroJoueurActif] -= carteDrag.coutResources;
+                                }
+                            }
+                            else {
+                                //TODO: message qu'il manque de points ressources.
+                                alert('Vous manquer de points ressources pour jouer la carte.')
+                            }
+
+                            //TODO: IF carte peut être mis et non empiler.
+                            //TODO: mette le code plus haut dans les if's.
+                            var id;
+                            id = event.target.id.substr(event.target.id.length - 1);
+
+                            carteBas[numeroJoueurActif][id] = carteDrag;
+                            supprimerCartePrecise(carteDragNumero);
+>>>>>>> origin/master
                         },
                         tolerance: 'pointer'
                     });
@@ -532,6 +575,7 @@
             });
         }
 
+        //Fonction qui crée l'espace de la main.
         function creerMain() {
             var id;
             for (id = 0; id < 6; id++) {
@@ -547,6 +591,7 @@
             }
         }
 
+<<<<<<< HEAD
         function onDrop(event, ui, drop) {
             $(function() {
                 ui.draggable.css('width', '58px');
@@ -590,6 +635,9 @@
         }
 
         //Fonction qui va supprimer une carte de la main, appeler lors du drop dans la zone du bas
+=======
+        //Fonction qui va supprimer une carte de la main, appeler lors du drop dans la zone du bas.
+>>>>>>> origin/master
         function supprimerCartePrecise(positionCarte) {
             mains[numeroJoueurActif][positionCarte] = null;
         }
@@ -953,10 +1001,10 @@
                 carte = new Carte('intervention', 'bandeRiveraineHerbace', 'bandeRiveraineHerbace.png', 1);
                 paquetCarte.push(carte);
 
-                carte = new Carte('intervention', 'bandeRiveraineArbuste', 'bandeRiveraineArbuste.png', 2);
+                carte = new Carte('intervention', 'bandeRiveraineArbustes', 'bandeRiveraineArbuste.png', 2);
                 paquetCarte.push(carte);
 
-                carte = new Carte('intervention', 'bandeRiveraineArbre', 'bandeRiveraineArbre.png', 3);
+                carte = new Carte('intervention', 'bandeRiveraineArbres', 'bandeRiveraineArbre.png', 3);
                 paquetCarte.push(carte);
             }
 
@@ -1011,7 +1059,7 @@
             return paquetCarte;
         }
 
-        //Fonction appellé lors d'un clic sur le boutton Passer son tour
+        //Fonction appellé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
             facteurRotation += 1;
             if (facteurRotation > 4) {
@@ -1038,8 +1086,37 @@
 
         //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
         function pointsRessourcesAdditionel() {
-            //TODO: Boucler dans le tableau d'emplacement du joueur et vérifier.
-            return 0;
+            //Variable qui contiendra le nombre de bande riveraine.
+            var nombreBandeRiveraine = 0;
+            //Variable des bandes riveraine différente si chacune est présente.
+            var arbres = 0;
+            var arbustes = 0;
+            var herbace = 0;
+
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
+                    nombreBandeRiveraine++;
+
+                    if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
+                        herbace = 1;
+                    }
+                    else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
+                        arbuste = 1;
+                    }
+                    else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
+                        arbres = 1;
+                    }
+                }
+            }
+
+            if (nombreBandeRiveraine > 3) {
+                nombreBandeRiveraine = 3;
+            }
+            if (arbes === 1 && arbustes === 1 && herbace === 1) {
+                nombreBandeRiveraine = 5;
+            }
+
+            return nombreBandeRiveraine;
         }
 
         //Fonction qui "update" le jeu.
