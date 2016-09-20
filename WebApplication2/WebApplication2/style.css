@@ -20,24 +20,26 @@
     float: left;
     width: 59px;
     height: 90px;
-    border: 1px solid blue;
+    /*border: 1px solid blue;*/
     position: absolute;
-    bottom: 29px;
+    border-radius: 5px;
+    bottom: 30px;
 }
 
 .divEmplacementCarteBas {
     float: left;
     width: 59px;
     height: 90px;
-    border: 1px solid blue;
+    /*border: 1px solid blue;*/
     position: absolute;
-    bottom: 130px;
+    border-radius: 5px;
+    bottom: 131px;
 }
 .emplacementJoueurB {
     float: left;
     width: 59px;
     height: 90px;
-    border: 1px solid pink;
+    /*border: 1px solid pink;*/
     position: absolute;
 }
 
@@ -45,7 +47,7 @@
     float: left;
     width: 90px;
     height: 59px;
-    border: 1px solid green;
+    /*border: 1px solid green;*/
     position: absolute;
 }
 
@@ -53,12 +55,14 @@
     float: left;
     width: 90px;
     height: 59px;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
     position: absolute;
 }
 
 .ui-droppable-hover {
-    background-color: deeppink;
+    -moz-box-shadow: 0 0 15px 10px #fff;
+    -webkit-box-shadow: 0 0 15px 10px #fff;
+    box-shadow: 0px 0px 15px 10px #fff;
 }
 
 /* -----------------Zone Main--------------------*/
