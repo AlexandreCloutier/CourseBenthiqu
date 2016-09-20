@@ -15,6 +15,8 @@
         var mains;
         //Tableau contenant toute les cartes du bas de chaque joueur.
         var carteBas;
+        //Tableau contenant les points de ressources.
+        var pointsRessources;
         //Numero du joueur présentement actif.
         var numeroJoueurActif;
         //Variable comptant le nombre de tour *TEMPORAIRE POUR L'INSTANT* mais on va l'utiliser pour vrai plus tard.
@@ -27,9 +29,15 @@
         var carteDrag;
         //Variable du numero de la carte dans la main pour pouvoir le supprimer facilement lorsqu'on le drop à quelque part.
         var carteDragNumero;
+        //Fonction qui contient le nombre de joueur.
+        var nombreJoueur;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
+            //Temporaire.
+            nombreJoueur = 4;
+            //Temporaire.
+
             carteBas = new Array();
             creerFond();
             ajouterEmplacementHabitatBas();
@@ -38,31 +46,64 @@
             melangerPaquetCarte(paquetCarte);
             creerMain();
             creerPartieDroite();
-            instantierTableauJoueur();
-            instantierTableauEmplacementBas();
+            instantierTableau();
             remplirMain();
             numeroJoueurActif = 0;
-
             updateJeu();
+        }
+
+        //Fonction qui appelle les fonctions qui instantie les différents tableaux.
+        function instantierTableau() {
+            instantierTableauJoueur();
+            instantierTableauEmplacementBas();
+            instantierTableauPointsRessources();
+        }
+
+        //Fonction qui va instantier et remplir le tableau des points de ressources.
+        function instantierTableauPointsRessources() {
+            pointsRessources = new Array(4);
+            pointsRessources[0] = 6;
+            pointsRessources[1] = 6;
+
+            if (nombreJoueur >= 3) {
+                pointsRessources[2] = 6;
+            }
+            if (nombreJoueur === 4) {
+                pointsRessources = 6;
+            }
         }
 
         //Fonction qui va instantier le tableau bi-dimensionel de mains.
         function instantierTableauJoueur() {
 
             mains = new Array(4);
+            
+            //Minimum de 2 joueurs.
             mains[0] = new Array(6);
             mains[1] = new Array(6);
-            mains[2] = new Array(6);
-            mains[3] = new Array(6);
+
+            if (nombreJoueur >= 3) {//3 joueurs.
+                mains[2] = new Array(6);
+            }
+            if (nombreJoueur === 4) {//4 joueurs.
+                mains[3] = new Array(6);
+            }
         }
 
         //Fonction qui va instantier le tableau bi-dimensionel d'emplacement bas.
         function instantierTableauEmplacementBas() {
             carteBas = new Array(4);
+
+            //Minimum de 2 joueurs.
             carteBas[0] = new Array(10);
             carteBas[1] = new Array(10);
-            carteBas[2] = new Array(10);
-            carteBas[3] = new Array(10);
+
+            if (nombreJoueur >= 3) {//3 joueurs.
+                carteBas[2] = new Array(10);
+            }
+            if (nombreJoueur === 4) {//4 joueurs.
+                carteBas[3] = new Array(10);
+            }
         }
 
         //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
@@ -166,39 +207,68 @@
                 //Première carte c'est un habitats rapides.
                 mains[0][0] = chercherCarteParticuliere('rapides', paquetCarte);
                 mains[1][0] = chercherCarteParticuliere('rapides', paquetCarte);
-                mains[2][0] = chercherCarteParticuliere('rapides', paquetCarte);
-                mains[3][0] = chercherCarteParticuliere('rapides', paquetCarte);
+
+                if(nombreJoueur >= 3){//3 joueurs.
+                    mains[2][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                }
+                if (nombreJoueur === 4) {//4 joueurs.
+                    mains[3][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                }
 
                 //Deuxième carte c'est un habitats au hasard.
                 mains[0][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
                 mains[1][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
-                mains[2][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
-                mains[3][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+
+                if (nombreJoueur >= 3) {//3 joueurs.
+                    mains[2][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+                }
+                if (nombreJoueur === 4) {//4 joueurs.
+                    mains[3][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+                }
 
                 //3e carte
                 mains[0][2] = pigerCarte(paquetCarte);
                 mains[1][2] = pigerCarte(paquetCarte);
-                mains[2][2] = pigerCarte(paquetCarte);
-                mains[3][2] = pigerCarte(paquetCarte);
+
+                if (nombreJoueur >= 3) {//3 joueurs.
+                    mains[2][2] = pigerCarte(paquetCarte);
+                }
+                if (nombreJoueur === 4) {//4 joueurs.
+                    mains[3][2] = pigerCarte(paquetCarte);
+                }
 
                 //4e carte
                 mains[0][3] = pigerCarte(paquetCarte);
                 mains[1][3] = pigerCarte(paquetCarte);
-                mains[2][3] = pigerCarte(paquetCarte);
-                mains[3][3] = pigerCarte(paquetCarte);
+
+                if (nombreJoueur >= 3) {//3 joueurs.
+                    mains[2][3] = pigerCarte(paquetCarte);
+                }
+                if (nombreJoueur === 4) {//4 joueurs.
+                    mains[3][3] = pigerCarte(paquetCarte);
+                }
 
                 //5e carte
                 mains[0][4] = pigerCarte(paquetCarte);
-
                 mains[1][4] = pigerCarte(paquetCarte);
-                mains[2][4] = pigerCarte(paquetCarte);
-                mains[3][4] = pigerCarte(paquetCarte);
+
+                if (nombreJoueur >= 3) {//3 joueurs.
+                    mains[2][4] = pigerCarte(paquetCarte);
+                }
+                if (nombreJoueur === 4) {//4 joueurs.
+                    mains[3][4] = pigerCarte(paquetCarte);
+                }
 
                 //6e carte
                 mains[0][5] = pigerCarte(paquetCarte);
                 mains[1][5] = pigerCarte(paquetCarte);
-                mains[2][5] = pigerCarte(paquetCarte);
-                mains[3][5] = pigerCarte(paquetCarte);
+
+                if (nombreJoueur >= 3) {//3 joueurs.
+                    mains[2][5] = pigerCarte(paquetCarte);
+                }
+                if (nombreJoueur === 4) {//4 joueurs.
+                    mains[3][5] = pigerCarte(paquetCarte);
+                }
             }
             else {
                 //Boucle pour toute les position de la main.
@@ -385,33 +455,131 @@
                                 ui.draggable.css('margin-top', ($(this).children().length * 10) - 10 + 'px');
                             }
                             //Partie qui change les données de la mains vers la partie du bas.
+                            if (carteDrag.coutResources < pointsResources[numeroJoueurActif]) {
+                                // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
+                                if (carteDrag.type === 'macroInvertebre' || carteDrag.type === 'salmonide') {
+                                    if (verifierCondition(carteDrag)) {
+                                        alert('condition passe');
+                                    }
+                                    else {
+                                        //TODO: Message qu'il ne respecte pas les conditions nécéssaire.
+                                        alert('Vous ne respecter pas les conditions nécéssaire.');
+                                    }
+                                }
+                                else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention') {
 
-                            //TODO: IF CONDITION (appeler la fonction) si il y a des conditions à vérifier
+                                }
+                            }
+                            else {
+                                //TODO: message qu'il manque de points ressources.
+                                alert('Vous manquer de points ressources pour jouer la carte.')
+                            }
+
                             //TODO: IF carte peut être mis et non empiler.
                             //TODO: mette le code plus haut dans les if's.
-                            if (event.target.id === 'divEmplacementCarteBas4') {
-                                carteBas[numeroJoueurActif][4] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
+                            if (numeroJoueurActif === 0) {
+                                if (event.target.id === 'divEmplacementCarteBas4') {
+                                    carteBas[numeroJoueurActif][4] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteBas5') {
+                                    carteBas[numeroJoueurActif][5] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteBas6') {
+                                    carteBas[numeroJoueurActif][6] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteBas7') {
+                                    carteBas[numeroJoueurActif][7] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteBas8') {
+                                    carteBas[numeroJoueurActif][8] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteBas9') {
+                                    carteBas[numeroJoueurActif][9] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
                             }
-                            else if (event.target.id === 'divEmplacementCarteBas5') {
-                                carteBas[numeroJoueurActif][5] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
+                            else if (numeroJoueurActif === 1) {
+                                if (event.target.id === 'divEmplacementCarteDroit4') {
+                                    carteBas[numeroJoueurActif][4] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteDroit5') {
+                                    carteBas[numeroJoueurActif][5] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteDroit6') {
+                                    carteBas[numeroJoueurActif][6] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteDroit7') {
+                                    carteBas[numeroJoueurActif][7] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteDroit8') {
+                                    carteBas[numeroJoueurActif][8] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteDroit9') {
+                                    carteBas[numeroJoueurActif][9] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
                             }
-                            else if (event.target.id === 'divEmplacementCarteBas6') {
-                                carteBas[numeroJoueurActif][6] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
+                            else if (numeroJoueurActif === 2) {
+                                if (event.target.id === 'divEmplacementCarteHaut4') {
+                                    carteBas[numeroJoueurActif][4] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteHaut5') {
+                                    carteBas[numeroJoueurActif][5] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteHaut6') {
+                                    carteBas[numeroJoueurActif][6] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteHaut7') {
+                                    carteBas[numeroJoueurActif][7] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteHaut8') {
+                                    carteBas[numeroJoueurActif][8] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteHaut9') {
+                                    carteBas[numeroJoueurActif][9] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
                             }
-                            else if (event.target.id === 'divEmplacementCarteBas7') {
-                                carteBas[numeroJoueurActif][7] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
-                            }
-                            else if (event.target.id === 'divEmplacementCarteBas8') {
-                                carteBas[numeroJoueurActif][8] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
-                            }
-                            else if (event.target.id === 'divEmplacementCarteBas9') {
-                                carteBas[numeroJoueurActif][9] = carteDrag;
-                                supprimerCartePrecise(carteDragNumero);
+                            else if (numeroJoueurActif === 3) {
+                                if (event.target.id === 'divEmplacementCarteGauche4') {
+                                    carteBas[numeroJoueurActif][4] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteGauche5') {
+                                    carteBas[numeroJoueurActif][5] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteGauche6') {
+                                    carteBas[numeroJoueurActif][6] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteGauche7') {
+                                    carteBas[numeroJoueurActif][7] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteGauche8') {
+                                    carteBas[numeroJoueurActif][8] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
+                                else if (event.target.id === 'divEmplacementCarteGauche9') {
+                                    carteBas[numeroJoueurActif][9] = carteDrag;
+                                    supprimerCartePrecise(carteDragNumero);
+                                }
                             }
                         },
                         tolerance: 'pointer'
@@ -448,7 +616,6 @@
                             if (event.target.id === 'divEmplacementCarteBas0') {
                                 carteBas[numeroJoueurActif][0] = carteDrag;
                                 supprimerCartePrecise(carteDragNumero);
-                                alert(carteBas[numeroJoueurActif][0].nom);
                             }
                             else if (event.target.id === 'divEmplacementCarteBas1') {
                                 carteBas[numeroJoueurActif][1] = carteDrag;
@@ -924,10 +1091,17 @@
                 }
             });
             numeroJoueurActif++;
-            if (numeroJoueurActif === 4) {
+            if (numeroJoueurActif === nombreJoueur) {
                 numeroJoueurActif = 0;
             }
+            pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
             updateJeu();
+        }
+
+        //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
+        function pointsRessourcesAdditionel() {
+            //TODO: Boucler dans le tableau d'emplacement du joueur et vérifier.
+            return 0;
         }
 
         //Fonction qui "update" le jeu.
