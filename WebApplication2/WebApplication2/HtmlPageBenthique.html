@@ -1047,17 +1047,19 @@
             var herbace = 0;
 
             for (var i = 0; i < 10; i++) {
-                if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
-                    nombreBandeRiveraine++;
+                if(carteBas[numeroJoueurActif][i] != null){
+                    if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
+                        nombreBandeRiveraine++;
 
-                    if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
-                        herbace = 1;
-                    }
-                    else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
-                        arbuste = 1;
-                    }
-                    else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
-                        arbres = 1;
+                        if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
+                            herbace = 1;
+                        }
+                        else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
+                            arbuste = 1;
+                        }
+                        else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
+                            arbres = 1;
+                        }
                     }
                 }
             }
@@ -1065,7 +1067,7 @@
             if (nombreBandeRiveraine > 3) {
                 nombreBandeRiveraine = 3;
             }
-            if (arbes === 1 && arbustes === 1 && herbace === 1) {
+            if (arbres === 1 && arbustes === 1 && herbace === 1) {
                 nombreBandeRiveraine = 5;
             }
 
