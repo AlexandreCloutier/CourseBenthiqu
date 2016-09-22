@@ -505,25 +505,7 @@
                     }
                 }
                 $(function () {
-                    $('.emplacementJoueurA').droppable({
-                        drop: function (event, ui) {
-                            onDrop(event, ui, this);
-                        },
-                        tolerance: 'pointer'
-                    });
-                    $('.emplacementJoueurB').droppable({
-                        drop: function (event, ui) {
-                            onDrop(event, ui, this);
-                        },
-                        tolerance: 'pointer'
-                    });
-                    $('.emplacementJoueurC').droppable({
-                        drop: function (event, ui) {
-                            onDrop(event, ui, this);
-                        },
-                        tolerance: 'pointer'
-                    });
-                    $('.emplacementJoueurD').droppable({
+                    $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         drop: function (event, ui) {
                             onDrop(event, ui, this);
                         },
@@ -535,15 +517,14 @@
 
         //Fonction qui crée l'espace de la main.
         function creerMain() {
-            var id;
-            for (id = 0; id < 6; id++) {
+            for (i = 0; i < 6; i++) {
                 var li = document.createElement('li');
                 li.className = 'liMain';
-                li.id = 'liMain' + id;
+                li.id = 'liMain' + i;
                 document.getElementById('divMain').appendChild(li);
 
                 var divCarte = document.createElement('div');
-                divCarte.id = 'divCarte' + id;
+                divCarte.id = 'divCarte' + i;
                 divCarte.className = 'divCarte';
                 li.appendChild(divCarte);
             }
@@ -552,6 +533,8 @@
             $(function() {
                 ui.draggable.css('width', '58px');
                 ui.draggable.css('height', '90px');
+                ui.draggable.css('top', '0px');
+                ui.draggable.css('left', '0px');
                 ui.draggable.appendTo(drop);
                 ui.draggable.draggable('disable');
                 ui.draggable.position({ of: $(drop), my: 'center', at: 'center' });
