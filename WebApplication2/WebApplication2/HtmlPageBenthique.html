@@ -515,6 +515,10 @@
                     });
                 });
             });
+            if (prototype) {
+                $('.emplacementJoueurC').css('background-color', 'grey');
+                $('.emplacementJoueurD').css('background-color', 'grey');
+            }
         }
 
         //Fonction qui crée l'espace de la main.
@@ -534,7 +538,7 @@
 
         //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
-            $(function() {
+            $(function () {
                 ui.draggable.css('width', '58px');
                 ui.draggable.css('height', '90px');
                 ui.draggable.css('top', '0px');
@@ -1025,7 +1029,7 @@
             }
             updateJeu();
             tour++;
-            simulerIA();         
+            simulerIA();
         }
 
         //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
@@ -1038,7 +1042,7 @@
             var herbace = 0;
 
             for (var i = 0; i < 10; i++) {
-                if(carteBas[numeroJoueurActif][i] != null){
+                if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
                         nombreBandeRiveraine++;
 
@@ -1197,7 +1201,7 @@
             }
 
             //Sombrer les partie pour montrer que c'est à 2 joueurs le prototype.
-            
+
         }
     </script>
 </body>
