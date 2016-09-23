@@ -19,7 +19,7 @@
         var pointsRessources;
         //Numero du joueur présentement actif.
         var numeroJoueurActif;
-        //Variable comptant le nombre de tour *TEMPORAIRE POUR L'INSTANT* mais on va l'utiliser pour vrai plus tard.
+        //Variable comptant le nombre de tour.
         var tour = 0;
         //Variable content le nb de clic sur le bouton Passer son tour
         var facteurRotation = 0;
@@ -32,7 +32,7 @@
         //Fonction qui contient le nombre de joueur.
         var nombreJoueur;
         //Fonction qui nous dira si c'est le prototype.
-        var prototype = true;
+        var prototype = false;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -510,7 +510,14 @@
                     $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         tolerance: 'intersect',
                         drop: function (event, ui) {
-                            onDrop(event, ui, this);
+                            if (accepterDrop() === true) {
+                                console.log('drop accepter');
+                                onDrop(event, ui, this);
+                            }
+                            else {
+                                console.log('drop pas accepter');
+                                ui.draggable.draggable({ revert: true });
+                            }
                         }
                     });
                 });
@@ -536,48 +543,51 @@
             }
         }
 
+        function accepterDrop() {
+            if (carteDrag.coutResources <= pointsRessources[numeroJoueurActif]) {
+                // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
+                if (carteDrag.type === 'macroInvertebre' || carteDrag.type === 'salmonide') {
+                    if (verifierCondition(carteDrag)) {
+                        return true;
+                    }
+                    else {
+                        alert('Vous ne respecter pas les conditions nécéssaire.');
+                        return false;
+                    }
+                }
+                else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention') {
+                    return true;
+                }
+            }
+            else {
+                //TODO: message qu'il manque de points ressources.
+                alert('Vous manquer de points ressources pour jouer la carte.');
+                return false;
+            }
+        }
+
         //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
             $(function () {
-                ui.draggable.css('width', '58px');
-                ui.draggable.css('height', '90px');
-                ui.draggable.css('top', '0px');
-                ui.draggable.css('left', '0px');
-                ui.draggable.appendTo(drop);
-                ui.draggable.draggable('disable');
-                ui.draggable.position({ of: $(drop), my: 'center', at: 'center' });
-                if ($(drop).children().length > 1) {
-                    ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
-                }
-                //Partie qui change les données de la mains vers la partie du bas.
-                if (carteDrag.coutResources < pointsRessources[numeroJoueurActif]) {
-                    // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
-
-                    if (carteDrag.type === 'macroInvertebre' || carteDrag.type === 'salmonide') {
-                        if (verifierCondition(carteDrag)) {
-                            alert('condition passe');
-                        }
-                        else {
-                            //TODO: Message qu'il ne respecte pas les conditions nécéssaire.
-                            alert('Vous ne respecter pas les conditions nécéssaire.');
-                        }
+                    ui.draggable.css('width', '58px');
+                    ui.draggable.css('height', '90px');
+                    ui.draggable.css('top', '0px');
+                    ui.draggable.css('left', '0px');
+                    ui.draggable.appendTo(drop);
+                    ui.draggable.draggable('disable');
+                    ui.draggable.position({ of: $(drop), my: 'center', at: 'center' });
+                    if ($(drop).children().length > 1) {
+                        ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
                     }
-                    else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention') {
-                        //TODO:Entrer la carte normalement.
-                    }
-                }
-                else {
-                    //TODO: message qu'il manque de points ressources.
-                    alert('Vous manquer de points ressources pour jouer la carte.')
-                }
 
-                //TODO: IF carte peut être mis et non empiler.
-                //TODO: mette le code plus haut dans les if's.
-                var id;
-                id = event.target.id.substr(event.target.id.length - 1);
+                    //Partie qui change les données de la mains vers la partie du bas.
+                    var id;
+                    pointsRessources[numeroJoueurActif] -= carteDrag.coutResources;
+                    id = event.target.id.substr(event.target.id.length - 1);
+                    carteBas[numeroJoueurActif][id] = carteDrag;
+                    supprimerCartePrecise(carteDragNumero);
 
-                carteBas[numeroJoueurActif][id] = carteDrag;
-                supprimerCartePrecise(carteDragNumero);
+                    //TODO: IF carte peut être empiler au lieu d'être mis.
             });
         }
 
@@ -1030,7 +1040,9 @@
             }
             updateJeu();
             tour++;
-            simulerIA();
+            if (prototype) {
+                simulerIA();
+            }
         }
 
         //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
@@ -1089,6 +1101,14 @@
                                         height: 90,
                                         width: 58
                                     }, 400);
+                                    var id;
+                                    id = event.target.parentNode.id.substr(event.target.id.length - 1);
+
+                                    carteBas[numeroJoueurActif][id] = carteDrag;
+
+                                    //Les if qui vont envoyer l'objet carte dans la variable.
+                                    carteDrag = mains[numeroJoueurActif][id];
+                                    carteDragNumero = id;
                                 },
                                 revert: function (socketObj) {
                                     if (socketObj === false) {
@@ -1102,17 +1122,7 @@
                                         return false;
                                     }
                                 },
-                                revertDuration: 400,
-                                drag: function (event, ui) {//Ondrag, appeller directement lorsque nous cliquons sur la carte et que nous la bougeons.
-                                    var id;
-                                    id = event.target.parentNode.id.substr(event.target.id.length - 1);
-
-                                    carteBas[numeroJoueurActif][id] = carteDrag;
-
-                                    //Les if qui vont envoyer l'objet carte dans la variable.
-                                    carteDrag = mains[numeroJoueurActif][id];
-                                    carteDragNumero = id;
-                                }
+                                revertDuration: 400
                             });
                         });
                     }
@@ -1132,6 +1142,14 @@
                                         height: 90,
                                         width: 58
                                     }, 400);
+                                    var id;
+                                    id = event.target.parentNode.id.substr(event.target.id.length - 1);
+
+                                    carteBas[numeroJoueurActif][id] = carteDrag;
+
+                                    //Les if qui vont envoyer l'objet carte dans la variable.
+                                    carteDrag = mains[numeroJoueurActif][id];
+                                    carteDragNumero = id;
                                 },
                                 revert: function (socketObj) {
                                     if (socketObj === false) {
@@ -1146,17 +1164,7 @@
                                     }
                                 },
                                 revertDuration: 400,
-                                cursorAt: { top: 45, left: 30 },
-                                drag: function (event, ui) {//Ondrag, appeller directement lorsque nous cliquons sur la carte et que nous la bougeons.
-                                    var id;
-                                    id = event.target.parentNode.id.substr(event.target.id.length - 1);
-
-                                    carteBas[numeroJoueurActif][id] = carteDrag;
-
-                                    //Les if qui vont envoyer l'objet carte dans la variable.
-                                    carteDrag = mains[numeroJoueurActif][id];
-                                    carteDragNumero = id;
-                                }
+                                cursorAt: { top: 45, left: 30 }
                             });
                         });
                     }
