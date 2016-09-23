@@ -31,6 +31,8 @@
         var carteDragNumero;
         //Fonction qui contient le nombre de joueur.
         var nombreJoueur;
+        //Fonction qui nous dira si c'est le prototype.
+        var prototype = true;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -513,6 +515,10 @@
                     });
                 });
             });
+            if (prototype) {
+                $('.emplacementJoueurC').css('background-color', 'grey');
+                $('.emplacementJoueurD').css('background-color', 'grey');
+            }
         }
 
         //Fonction qui crée l'espace de la main.
@@ -529,8 +535,10 @@
                 li.appendChild(divCarte);
             }
         }
+
+        //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
-            $(function() {
+            $(function () {
                 ui.draggable.css('width', '58px');
                 ui.draggable.css('height', '90px');
                 ui.draggable.css('top', '0px');
@@ -997,28 +1005,39 @@
 
         //Fonction appellé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
-            facteurRotation += 1;
-            if (facteurRotation > 4) {
-                facteurRotation = 1;
-            }
-            var angleRotationDebut = (90 * (facteurRotation - 1));
-            var angleRotationFin = (90 * facteurRotation);
-            var $plateau = $('#plateau');
-            $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
-                duration: 1000,
-                step: function (now) {
-                    $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
-                    $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
-                    $plateau.css('transform', 'rotate(' + now + 'deg)');
+            if (!prototype) {
+                facteurRotation += 1;
+                if (facteurRotation > 4) {
+                    facteurRotation = 1;
                 }
+<<<<<<< HEAD
             });
             
             numeroJoueurActif++;
             if (numeroJoueurActif === nombreJoueur) {
                 numeroJoueurActif = 0;
+=======
+                var angleRotationDebut = (90 * (facteurRotation - 1));
+                var angleRotationFin = (90 * facteurRotation);
+                var $plateau = $('#plateau');
+                $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
+                    duration: 1000,
+                    step: function (now) {
+                        $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
+                        $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
+                        $plateau.css('transform', 'rotate(' + now + 'deg)');
+                    }
+                });
+                numeroJoueurActif++;
+                if (numeroJoueurActif === nombreJoueur) {
+                    numeroJoueurActif = 0;
+                }
+                pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
+>>>>>>> origin/master
             }
-            pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
             updateJeu();
+            tour++;
+            simulerIA();
         }
 
         //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
@@ -1031,7 +1050,7 @@
             var herbace = 0;
 
             for (var i = 0; i < 10; i++) {
-                if(carteBas[numeroJoueurActif][i] != null){
+                if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
                         nombreBandeRiveraine++;
 
@@ -1162,6 +1181,35 @@
                     }
                 }
             }
+        }
+
+        //Fonction qui mes des cartes dans le jeu de l'adversaire pour simuler une IA durant la présentation du prototype.
+        function simulerIA() {
+            if (tour === 1) {
+                var image = document.createElement('img');
+                image.className = 'imageCarte';
+                image.src = 'ressources/rapides.png';
+                document.getElementById('emplacementBasJoueurB0').appendChild(image);
+
+                image = document.createElement('img');
+                image.className = 'imageCarte';
+                image.src = 'ressources/oligochaeta.png';
+                document.getElementById('emplacementBasJoueurB4').appendChild(image);
+            }
+            else if (tour === 2) {
+                var image = document.createElement('img');
+                image.className = 'imageCarte';
+                image.src = 'ressources/galets.png';
+                document.getElementById('emplacementBasJoueurB1').appendChild(image);
+
+                image = document.createElement('img');
+                image.className = 'imageCarte';
+                image.src = 'ressources/simuliidae.png';
+                document.getElementById('emplacementBasJoueurB5').appendChild(image);
+            }
+
+            //Sombrer les partie pour montrer que c'est à 2 joueurs le prototype.
+
         }
     </script>
 </body>
