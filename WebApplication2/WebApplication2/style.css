@@ -31,24 +31,27 @@
     border: 1px solid pink;
     position: absolute;
     border-radius: 5px;
+    transform: rotate(180deg);
 }
 
 .emplacementJoueurC {
     float: left;
-    width: 90px;
-    height: 59px;
+    width: 59px;
+    height: 90px;
     border: 1px solid green;
     position: absolute;
     border-radius: 5px;
+    transform: rotate(90deg);
 }
 
 .emplacementJoueurD {
     float: left;
-    width: 90px;
-    height: 59px;
+    width: 59px;
+    height: 90px;
     border: 1px solid red;
     position: absolute;
     border-radius: 5px;
+    transform: rotate(-90deg);
 }
 
 .ui-droppable-hover {
@@ -79,6 +82,7 @@
     width: inherit;
     height: inherit;
     z-index: 3;
+    border-radius: 5px;
 }
 
 .liMain {

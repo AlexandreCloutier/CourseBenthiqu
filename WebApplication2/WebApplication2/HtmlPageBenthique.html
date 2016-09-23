@@ -458,16 +458,16 @@
                         var emplacementBasJoueurC = document.createElement('div');
                         emplacementBasJoueurC.id = 'emplacementBasJoueurC' + i;
                         emplacementBasJoueurC.className = 'emplacementJoueurC';
-                        emplacementBasJoueurC.style.top = 115 + 66 * (i + 1) + 'px';
-                        emplacementBasJoueurC.style.left = '29px';
+                        emplacementBasJoueurC.style.top = 100 + 66 * (i + 1) + 'px';
+                        emplacementBasJoueurC.style.left = '44px';
                         $('#plateau').append(emplacementBasJoueurC);
                     }
                     if (nombreJoueur === 4) {
                         var emplacementBasJoueurD = document.createElement('div');
                         emplacementBasJoueurD.id = 'emplacementBasJoueurD' + i;
                         emplacementBasJoueurD.className = 'emplacementJoueurD';
-                        emplacementBasJoueurD.style.top = 115 + 66 * (i + 1) + 'px';
-                        emplacementBasJoueurD.style.right = '29px'
+                        emplacementBasJoueurD.style.top = 100 + 66 * (i + 1) + 'px';
+                        emplacementBasJoueurD.style.right = '44px'
                         $('#plateau').append(emplacementBasJoueurD);
                     }
                 }
@@ -490,8 +490,8 @@
                         var emplacementHautJoueurC = document.createElement('div');
                         emplacementHautJoueurC.id = 'emplacementHautJoueurC' + i;
                         emplacementHautJoueurC.className = 'emplacementJoueurC';
-                        emplacementHautJoueurC.style.top = 180 + 66 * (i - 5) + 'px';
-                        emplacementHautJoueurC.style.left = '131px'
+                        emplacementHautJoueurC.style.top = 165 + 66 * (i - 5) + 'px';
+                        emplacementHautJoueurC.style.left = '145px'
                         $('#plateau').append(emplacementHautJoueurC);
                     }
 
@@ -499,17 +499,17 @@
                         var emplacementHautJoueurD = document.createElement('div');
                         emplacementHautJoueurD.id = 'emplacementHautJoueurD' + i;
                         emplacementHautJoueurD.className = 'emplacementJoueurD';
-                        emplacementHautJoueurD.style.top = 180 + 66 * (i - 5) + 'px';
-                        emplacementHautJoueurD.style.right = '131px';
+                        emplacementHautJoueurD.style.top = 165 + 66 * (i - 5) + 'px';
+                        emplacementHautJoueurD.style.right = '145px';
                         $('#plateau').append(emplacementHautJoueurD);
                     }
                 }
                 $(function () {
                     $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
+                        tolerance: 'intersect',
                         drop: function (event, ui) {
                             onDrop(event, ui, this);
-                        },
-                        tolerance: 'pointer'
+                        }                        
                     });
                 });
             });
@@ -1012,6 +1012,7 @@
                     $plateau.css('transform', 'rotate(' + now + 'deg)');
                 }
             });
+            
             numeroJoueurActif++;
             if (numeroJoueurActif === nombreJoueur) {
                 numeroJoueurActif = 0;
