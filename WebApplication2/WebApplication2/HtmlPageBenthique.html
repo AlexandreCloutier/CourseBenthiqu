@@ -77,7 +77,7 @@
         //Fonction qui va instantier le tableau bi-dimensionel de mains.
         function instantierTableauJoueur() {
 
-            mains = new Array(4);
+            mains = new Array(nombreJoueur);
 
             //Minimum de 2 joueurs.
             mains[0] = new Array(6);
@@ -510,11 +510,28 @@
                     $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         tolerance: 'intersect',
                         drop: function (event, ui) {
-                            if (accepterDrop() === true) {
-                                console.log('drop accepter');
-                                onDrop(event, ui, this);
+                            if ($(this).children().length >= 1) {
+                                var id;
+                                id = event.target.id.substr(event.target.id.length - 1);
+                                console.log(id);
                             }
-                            else {
+                            if (accepterDrop() === true) {
+                                if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
+                                    console.log('drop accepter');
+                                    onDrop(event, ui, this);
+                                }//sinon si l'endroit contient une carte ET qu'elle est identique.
+                                else if ($(this).children().length >= 1) {
+                                    if (carteDrag.nom === carteBas[numeroJoueurActif][id].nom) {
+                                        console.log('drop accepter');
+                                        onDrop(event, ui, this);
+                                    }
+                                    else {//Sinon, le drop est pas accepter.
+                                        console.log('drop pas accepter');
+                                        ui.draggable.draggable({ revert: true });
+                                    }
+                                }
+                            }
+                            else {//Respecte pas les conditions, donc drop pas accepter.
                                 console.log('drop pas accepter');
                                 ui.draggable.draggable({ revert: true });
                             }
@@ -543,6 +560,7 @@
             }
         }
 
+        //Fonction qui valide si le drop est accepter.
         function accepterDrop() {
             if (carteDrag.coutResources <= pointsRessources[numeroJoueurActif]) {
                 // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
@@ -569,25 +587,25 @@
         //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
             $(function () {
-                    ui.draggable.css('width', '58px');
-                    ui.draggable.css('height', '90px');
-                    ui.draggable.css('top', '0px');
-                    ui.draggable.css('left', '0px');
-                    ui.draggable.appendTo(drop);
-                    ui.draggable.draggable('disable');
-                    ui.draggable.position({ of: $(drop), my: 'center', at: 'center' });
-                    if ($(drop).children().length > 1) {
-                        ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
-                    }
+                ui.draggable.css('width', '58px');
+                ui.draggable.css('height', '90px');
+                ui.draggable.css('top', '0px');
+                ui.draggable.css('left', '0px');
+                ui.draggable.appendTo(drop);
+                ui.draggable.draggable('disable');
+                ui.draggable.position({ of: $(drop), my: 'center', at: 'center' });
+                if ($(drop).children().length > 1) {
+                    ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
+                }
 
-                    //Partie qui change les données de la mains vers la partie du bas.
-                    var id;
-                    pointsRessources[numeroJoueurActif] -= carteDrag.coutResources;
-                    id = event.target.id.substr(event.target.id.length - 1);
-                    carteBas[numeroJoueurActif][id] = carteDrag;
-                    supprimerCartePrecise(carteDragNumero);
+                //Partie qui change les données de la mains vers la partie du bas.
+                var id;
+                pointsRessources[numeroJoueurActif] -= carteDrag.coutResources;
+                id = event.target.id.substr(event.target.id.length - 1);
+                carteBas[numeroJoueurActif][id] = carteDrag;
+                supprimerCartePrecise(carteDragNumero);
 
-                    //TODO: IF carte peut être empiler au lieu d'être mis.
+                //TODO: IF carte peut être empiler au lieu d'être mis.
             });
         }
 
