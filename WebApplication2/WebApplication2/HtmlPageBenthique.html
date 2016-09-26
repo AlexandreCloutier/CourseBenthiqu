@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body onload="startGame()">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -39,7 +39,7 @@
             //Temporaire.
             nombreJoueur = 4;
             //Temporaire.
-
+            menuPrincipal();
             carteBas = new Array();
             creerFond();
             creerEmplacementsPlateau();
@@ -53,6 +53,22 @@
             updateJeu();
         }
 
+        function menuPrincipal() {
+            var menuPrincipal = document.createElement('div');
+            menuPrincipal.id = 'menuPrincipal';
+            menuPrincipal.className = 'menuPrincipal';
+            menuPrincipal.title = 'Course Benthique';
+            menuPrincipal.innerHTML = '<p><button class="buttonMenuPrincipal">Nouvelle Partie</button></p><p><button class="buttonMenuPrincipal">Charger une partie</button></p><p><button class="buttonMenuPrincipal">Options</button></p>';
+            $('body').append(menuPrincipal);
+            console.log(menuPrincipal.innerHTML);
+            $(function () {
+                $('#menuPrincipal').dialog({
+                    dialogClass: 'no-close'
+                });
+                console.log('WHY');
+            });
+
+        }
         //Fonction qui appelle les fonctions qui instantie les différents tableaux.
         function instantierTableau() {
             instantierTableauJoueur();

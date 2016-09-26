@@ -7,6 +7,19 @@
     user-select: none;
 }
 
+/*  --------------Menu Principal ------------*/
+.menuPrincipal{
+    text-align:center;
+}
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+.buttonMenuPrincipal {
+    width: 250px;
+    height: 50px;
+    font-size: 16px;
+    text-align: center;
+}
 /*  --------------- Zone centre -------------*/
 
 .plateau {
