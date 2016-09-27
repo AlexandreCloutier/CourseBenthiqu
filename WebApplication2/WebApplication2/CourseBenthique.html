@@ -15,6 +15,8 @@
         var mains;
         //Tableau contenant toute les cartes du bas de chaque joueur.
         var carteBas;
+        //Tableau contenant le nombres d'exemplaire de chaque carte.
+        var exemplaireCarteBas;
         //Tableau contenant les points de ressources.
         var pointsRessources;
         //Numero du joueur présentement actif.
@@ -29,10 +31,12 @@
         var carteDrag;
         //Variable du numero de la carte dans la main pour pouvoir le supprimer facilement lorsqu'on le drop à quelque part.
         var carteDragNumero;
-        //Fonction qui contient le nombre de joueur.
+        //Variable qui contient le nombre de joueur.
         var nombreJoueur;
-        //Fonction qui nous dira si c'est le prototype.
+        //Variable qui nous dira si c'est le prototype.
         var prototype = true;
+        //Variable qui nous dira si nous sommes en train d'échanger.
+        var echange = false;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -57,6 +61,21 @@
         function commencerNouvellePartie() {
             $('#menuPrincipal').remove();
             startGame();
+        }
+
+        //Fonction qui fera s'occupera des échanges.
+        function brillanceCarteJoueurActif() {
+            if (echange) {
+                for (var i = 0; i < 10; i++) {
+     
+                }
+                //TODO: Rendre tout les emplacements ou il y a une carte du coté du joueur actif en surbrillance
+            }
+            else {
+                for (var i = 0; i < 10; i++) {
+
+                }
+            }              
         }
 
         //Fonction qui affiche l'écran d'introduction.
@@ -96,6 +115,7 @@
             instantierTableauJoueur();
             instantierTableauEmplacementBas();
             instantierTableauPointsRessources();
+            instantierTableauExemplaire();
         }
 
         //Fonction qui va instantier et remplir le tableau des points de ressources.
@@ -126,6 +146,20 @@
             }
             if (nombreJoueur === 4) {//4 joueurs.
                 mains[3] = new Array(6);
+            }
+        }
+
+        //Fonction qui va instantier le tableau des exemplaire du bas.
+        function instantierTableauExemplaire() {
+            exemplaireCarteBas = new Array(nombreJoueur);
+            exemplaireCarteBas[0] = new Array(6);
+            exemplaireCarteBas[1] = new Array(6);
+
+            if (nombreJoueur >= 3) {
+                exemplaireCarteBas[2] = new Array(6);
+            }
+            if (nombreJoueur === 4) {
+                exemplaireCarteBas[3] = new Array(6);
             }
         }
 
@@ -457,6 +491,7 @@
             var buttonProposerEchange = document.createElement('button');
             buttonProposerEchange.id = 'buttonProposerEchange';
             buttonProposerEchange.className = 'buttonProposerEchange';
+            buttonProposerEchange.setAttribute('onclick', 'onClickButtonEchange()');
             buttonProposerEchange.textContent = 'Proposer un échange';
             document.getElementById('divDroite').appendChild(buttonProposerEchange);
 
@@ -465,6 +500,20 @@
             buttonOption.className = 'buttonOption';
             buttonOption.textContent = 'Options';
             document.getElementById('divDroite').appendChild(buttonOption);
+        }
+
+        //Fonction qui sera appeler lors du clique sur le bouton d'échange.
+        function onClickButtonEchange() {
+            if (!echange) {
+                echange = true;
+                brillanceCarteJoueurActif();
+                document.getElementById('buttonProposerEchange').textContent = "Annuler l'échange";
+            }
+            else {
+                echange = false;
+                brillanceCarteJoueurActif();
+                document.getElementById('buttonProposerEchange').textContent = "Proposer un échange";
+            }              
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
@@ -686,6 +735,10 @@
                 ui.draggable.position({ of: $(drop), my: 'center', at: 'center' });
                 if ($(drop).children().length > 1) {
                     ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
+                    exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = $(drop).children().length;
+                }
+                else {
+                    exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = 1;
                 }
 
                 //Partie qui change les données de la mains vers la partie du bas.
