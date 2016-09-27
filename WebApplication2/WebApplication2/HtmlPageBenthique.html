@@ -52,10 +52,13 @@
             updateJeu();
         }
 
+        //Fonction qui commence la nouvelle partie et efface le menu principal.
         function commencerNouvellePartie() {
             $('#menuPrincipal').remove();
             startGame();
         }
+
+        //Fonction qui affiche l'écran d'introduction.
         function menuPrincipal() {
             var menuPrincipal = document.createElement('div');
             menuPrincipal.id = 'menuPrincipal';
@@ -86,6 +89,7 @@
             buttonOptions.style.bottom = '35px';
             $('#menuPrincipal').append(buttonOptions);
         }
+
         //Fonction qui appelle les fonctions qui instantie les différents tableaux.
         function instantierTableau() {
             instantierTableauJoueur();
