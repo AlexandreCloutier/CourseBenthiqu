@@ -47,18 +47,39 @@
     z-index: 0;
 }
 
+/*  ------------IA--------------------*/
+.divOmbragee {
+    width: 200px;
+    height: 400px;
+    position: absolute;
+    background-color: black;
+    opacity: 0.7;
+}
+
+/* -------- Pop-ups -------- */
+.divErreur {
+    width: 300px;
+    height:150px;
+    display:none;
+
+}
+
+.no-close .ui-dialog-titlebar {
+  display: none;
+}
+
 .emplacementJoueurA {
     float: left;
-    width: 59px;
-    height: 90px;
+    width: 58px;
+    height: 91px;
    /* border: 1px solid blue;*/
     position: absolute;
     border-radius: 5px;
 }
 .emplacementJoueurB {
     float: left;
-    width: 59px;
-    height: 90px;
+    width: 58px;
+    height: 91px;
     /*border: 1px solid pink;*/
     position: absolute;
     border-radius: 5px;
@@ -67,8 +88,8 @@
 
 .emplacementJoueurC {
     float: left;
-    width: 59px;
-    height: 90px;
+    width: 58px;
+    height: 91px;
     /*border: 1px solid green;*/
     position: absolute;
     border-radius: 5px;
@@ -77,8 +98,8 @@
 
 .emplacementJoueurD {
     float: left;
-    width: 59px;
-    height: 90px;
+    width: 58px;
+    height: 91px;
     /*border: 1px solid red;*/
     position: absolute;
     border-radius: 5px;

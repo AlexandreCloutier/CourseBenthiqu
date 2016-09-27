@@ -47,6 +47,7 @@
             creerMain();
             creerPartieDroite();
             instantierTableau();
+            instancierDivErreur();
             remplirMain();
             numeroJoueurActif = 0;
             updateJeu();
@@ -142,6 +143,18 @@
             if (nombreJoueur === 4) {//4 joueurs.
                 carteBas[3] = new Array(10);
             }
+        }
+
+        function instancierDivErreur() {
+            var divErreur = document.createElement('div');
+            divErreur.id = 'divErreur';
+            divErreur.className = 'divErreur';
+            $('#plateau').append(divErreur);
+
+            var divTexteErreur = document.createElement('div');
+            divTexteErreur.id = 'divTexteErreur';
+            divTexteErreur.className = 'divTexteErreur';
+            $('#divErreur').append(divTexteErreur);
         }
 
         //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
@@ -418,7 +431,7 @@
             var divTextePointsRessource = document.createElement('div');
             divTextePointsRessource.id = 'divTextePointsRessource';
             divTextePointsRessource.className = 'divTextePointsRessource';
-            divTextePointsRessource.innerHTML = '<p class=titreRessource><strong>Points de ressources disponibles : 6</strong>';
+            divTextePointsRessource.innerHTML = '<p class=titreRessource><strong>Points de ressources disponibles : 6 </strong>';
             document.getElementById('divDroite').appendChild(divTextePointsRessource);
 
             var divTextePointsJoueurs = document.createElement('div');
@@ -482,15 +495,15 @@
                     var emplacementBasJoueurA = document.createElement('div');
                     emplacementBasJoueurA.id = 'emplacementBasJoueurA' + i;
                     emplacementBasJoueurA.className = 'emplacementJoueurA';
-                    emplacementBasJoueurA.style.left = 115 + 66 * (i + 1) + 'px';
-                    emplacementBasJoueurA.style.bottom = '29px';
+                    emplacementBasJoueurA.style.left = 116 + 66 * (i + 1) + 'px';
+                    emplacementBasJoueurA.style.bottom = '30px';
                     $('#plateau').append(emplacementBasJoueurA);
 
                     var emplacementBasJoueurB = document.createElement('div');
                     emplacementBasJoueurB.id = 'emplacementBasJoueurB' + i;
                     emplacementBasJoueurB.className = 'emplacementJoueurB';
-                    emplacementBasJoueurB.style.left = 115 + 66 * (i + 1) + 'px';
-                    emplacementBasJoueurB.style.top = '29px';
+                    emplacementBasJoueurB.style.left = 116 + 66 * (i + 1) + 'px';
+                    emplacementBasJoueurB.style.top = '30px';
                     $('#plateau').append(emplacementBasJoueurB);
 
                     if (nombreJoueur >= 3) {
@@ -498,7 +511,7 @@
                         emplacementBasJoueurC.id = 'emplacementBasJoueurC' + i;
                         emplacementBasJoueurC.className = 'emplacementJoueurC';
                         emplacementBasJoueurC.style.top = 100 + 66 * (i + 1) + 'px';
-                        emplacementBasJoueurC.style.left = '44px';
+                        emplacementBasJoueurC.style.left = '46px';
                         $('#plateau').append(emplacementBasJoueurC);
                     }
                     if (nombreJoueur === 4) {
@@ -506,7 +519,7 @@
                         emplacementBasJoueurD.id = 'emplacementBasJoueurD' + i;
                         emplacementBasJoueurD.className = 'emplacementJoueurD';
                         emplacementBasJoueurD.style.top = 100 + 66 * (i + 1) + 'px';
-                        emplacementBasJoueurD.style.right = '44px';
+                        emplacementBasJoueurD.style.right = '46px';
                         $('#plateau').append(emplacementBasJoueurD);
                     }
                 }
@@ -514,23 +527,23 @@
                     var emplacementHautJoueurA = document.createElement('div');
                     emplacementHautJoueurA.id = 'emplacementHautJoueurA' + i;
                     emplacementHautJoueurA.className = 'emplacementJoueurA';
-                    emplacementHautJoueurA.style.left = 181 + 66 * (i - 5) + 'px';
+                    emplacementHautJoueurA.style.left = 182 + 66 * (i - 5) + 'px';
                     emplacementHautJoueurA.style.bottom = '131px';
                     $('#plateau').append(emplacementHautJoueurA);
 
                     var emplacementHautJoueurB = document.createElement('div');
                     emplacementHautJoueurB.id = 'emplacementHautJoueurB' + i;
                     emplacementHautJoueurB.className = 'emplacementJoueurB';
-                    emplacementHautJoueurB.style.left = 180 + 66 * (i - 5) + 'px';
-                    emplacementHautJoueurB.style.top = '131px';
+                    emplacementHautJoueurB.style.left = 182 + 66 * (i - 5) + 'px';
+                    emplacementHautJoueurB.style.top = '130px';
                     $('#plateau').append(emplacementHautJoueurB);
 
                     if (nombreJoueur >= 3) {
                         var emplacementHautJoueurC = document.createElement('div');
                         emplacementHautJoueurC.id = 'emplacementHautJoueurC' + i;
                         emplacementHautJoueurC.className = 'emplacementJoueurC';
-                        emplacementHautJoueurC.style.top = 165 + 66 * (i - 5) + 'px';
-                        emplacementHautJoueurC.style.left = '145px'
+                        emplacementHautJoueurC.style.top = 166 + 66 * (i - 5) + 'px';
+                        emplacementHautJoueurC.style.left = '146px'
                         $('#plateau').append(emplacementHautJoueurC);
                     }
 
@@ -538,8 +551,8 @@
                         var emplacementHautJoueurD = document.createElement('div');
                         emplacementHautJoueurD.id = 'emplacementHautJoueurD' + i;
                         emplacementHautJoueurD.className = 'emplacementJoueurD';
-                        emplacementHautJoueurD.style.top = 165 + 66 * (i - 5) + 'px';
-                        emplacementHautJoueurD.style.right = '145px';
+                        emplacementHautJoueurD.style.top = 166 + 66 * (i - 5) + 'px';
+                        emplacementHautJoueurD.style.right = '146px';
                         $('#plateau').append(emplacementHautJoueurD);
                     }
                 }
@@ -576,9 +589,24 @@
                     });
                 });
             });
+
             if (prototype) {
-                $('.emplacementJoueurC').css('background-color', 'grey');
-                $('.emplacementJoueurD').css('background-color', 'grey');
+                //var divOmbrageeC = document.createElement('div');
+                //divOmbrageeC.id = 'divOmbrageeC';
+                //divOmbrageeC.className = 'divOmbragee';
+                //divOmbrageeC.style.right = '25px';
+                //divOmbrageeC.style.top = '175px';
+                //$('#plateau').append(divOmbrageeC);
+
+                //var divOmbrageeD = document.createElement('div');
+                //divOmbrageeD.id = 'divOmbrageeD';
+                //divOmbrageeD.className = 'divOmbragee';
+                //divOmbrageeD.style.left = '25px';
+                //divOmbrageeD.style.top = '175px';
+                //$('#plateau').append(divOmbrageeD);
+
+                $('.emplacementJoueurC, .emplacementJoueurD').css('background-color', 'black');
+                $('.emplacementJoueurC, .emplacementJoueurD').css('opacity', '0.5');
             }
         }
 
@@ -606,7 +634,20 @@
                         return true;
                     }
                     else {
-                        alert('Vous ne respecter pas les conditions nécéssaire.');
+                        $('#divTexteErreur').text('Vous ne respecter pas les conditions nécéssaire.');
+                        $('#divErreur').dialog({
+                            modal: true,
+                            dialogClass: 'no-close',
+                            draggable: false,
+                            resizable: false,
+                            hide: 'slideUp',
+                            show: 'slideDown',
+                            buttons: {
+                                Ok: function () {
+                                    $(this).dialog("close");
+                                }
+                            },
+                        });
                         return false;
                     }
                 }
@@ -615,8 +656,20 @@
                 }
             }
             else {
-                //TODO: message qu'il manque de points ressources.
-                alert('Vous manquer de points ressources pour jouer la carte.');
+                $('#divTexteErreur').text('Vous manquer de points ressources pour jouer la carte.');
+                $('#divErreur').dialog({
+                    modal: true,
+                    dialogClass: 'no-close',
+                    draggable: false,
+                    resizable: false,
+                    hide: 'slideUp',
+                    show: 'slideDown',
+                    buttons: {
+                        Ok: function () {
+                            $(this).dialog("close");
+                        }
+                    },
+                });
                 return false;
             }
         }
@@ -1252,9 +1305,6 @@
                 image.src = 'ressources/simuliidae.png';
                 document.getElementById('emplacementBasJoueurB5').appendChild(image);
             }
-
-            //Sombrer les partie pour montrer que c'est à 2 joueurs le prototype.
-
         }
     </script>
 </body>
