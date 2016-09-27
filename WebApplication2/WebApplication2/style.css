@@ -51,7 +51,11 @@
     float: left;
     width: 59px;
     height: 90px;
+<<<<<<< HEAD
     /*border: 1px solid blue;*/
+=======
+   /* border: 1px solid blue;*/
+>>>>>>> origin/master
     position: absolute;
     border-radius: 5px;
 }
