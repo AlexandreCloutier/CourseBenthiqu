@@ -107,7 +107,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="HtmlPageBenthique.html" />
+    <Content Include="CourseBenthique.html" />
     <Content Include="ressources\accumulation.png" />
     <Content Include="ressources\amenagement.png" />
     <Content Include="ressources\anisoptera.png" />
