@@ -188,6 +188,7 @@
             }
         }
 
+        //Fontion creer la div qui servira pour les pop-ups d'erreur.
         function instancierDivErreur() {
             var divErreur = document.createElement('div');
             divErreur.id = 'divErreur';
@@ -627,18 +628,15 @@
                         drop: function (event, ui) {
                             if (accepterDrop() === true) {
                                 if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
-                                    console.log('drop accepter');
                                     onDrop(event, ui, this);
                                 }//sinon si l'endroit contient une carte ET qu'elle est identique.
                                 else if ($(this).children().length >= 1) {
                                     var id;
                                     id = event.target.id.substr(event.target.id.length - 1);
                                     if (carteDrag.nom === carteBas[numeroJoueurActif][id].nom) {
-                                        console.log('drop accepter');
                                         onDrop(event, ui, this);
                                     }
                                     else {//Sinon, le drop est pas accepter.
-                                        console.log('drop pas accepter');
                                         ui.draggable.draggable({ revert: true });
                                         revertCarte(ui.draggable);
 
@@ -646,7 +644,6 @@
                                 }
                             }
                             else {//Respecte pas les conditions, donc drop pas accepter.
-                                console.log('drop pas accepter');
                                 ui.draggable.draggable({ revert: true });
                                 revertCarte(ui.draggable);
                             }
@@ -1260,6 +1257,7 @@
             return nombreBandeRiveraine;
         }
 
+        //Fonction qui remet les dimensions de la carte à son état original.
         function revertCarte(carte) {
             $(carte).animate({
                 height: 180,
@@ -1278,34 +1276,6 @@
                         image.className = 'imageCarte';
                         image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
                         carteMain.appendChild(image);
-                        $(function () {
-                            $('.imageCarte').draggable({
-                                start: function () {
-                                    $(this).animate({
-                                        height: 90,
-                                        width: 58
-                                    }, 400);
-                                    var id;
-                                    id = event.target.parentNode.id.substr(event.target.id.length - 1);
-
-                                    carteBas[numeroJoueurActif][id] = carteDrag;
-
-                                    //Les if qui vont envoyer l'objet carte dans la variable.
-                                    carteDrag = mains[numeroJoueurActif][id];
-                                    carteDragNumero = id;
-                                },
-                                revert: function (socketObj) {
-                                    if (socketObj === false) {
-                                        revertCarte(this);
-                                        return true;
-                                    }
-                                    else {
-                                        return false;
-                                    }
-                                },
-                                revertDuration: 400
-                            });
-                        });
                     }
                 }
                 else {
@@ -1316,38 +1286,38 @@
                         image.className = 'imageCarte';
                         image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
                         carteMain.appendChild(image);
-                        $(function () {
-                            $('.imageCarte').draggable({
-                                start: function () {
-                                    $(this).animate({
-                                        height: 90,
-                                        width: 58
-                                    }, 400);
-                                    var id;
-                                    id = event.target.parentNode.id.substr(event.target.id.length - 1);
-
-                                    carteBas[numeroJoueurActif][id] = carteDrag;
-
-                                    //Les if qui vont envoyer l'objet carte dans la variable.
-                                    carteDrag = mains[numeroJoueurActif][id];
-                                    carteDragNumero = id;
-                                },
-                                revert: function (socketObj) {
-                                    if (socketObj === false) {
-                                        revertCarte(this);
-                                        return true;
-                                    }
-                                    else {
-                                        return false;
-                                    }
-                                },
-                                revertDuration: 400,
-                                cursorAt: { top: 45, left: 30 }
-                            });
-                        });
                     }
                 }
             }
+            $(function () {
+                $('.imageCarte').draggable({
+                    start: function () {
+                        $(this).animate({
+                            height: 90,
+                            width: 58
+                        }, 400);
+                        var id;
+                        id = event.target.parentNode.id.substr(event.target.id.length - 1);
+
+                        carteBas[numeroJoueurActif][id] = carteDrag;
+
+                        //Les if qui vont envoyer l'objet carte dans la variable.
+                        carteDrag = mains[numeroJoueurActif][id];
+                        carteDragNumero = id;
+                    },
+                    revert: function (socketObj) {
+                        if (socketObj === false) {
+                            revertCarte(this);
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    },
+                    revertDuration: 400
+                });
+            });
+
             $(".imageCarte").click(function () {
                 
             });
