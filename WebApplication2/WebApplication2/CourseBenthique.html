@@ -11,6 +11,7 @@
     <script>
         //Paquet de carte principal.
         var paquetCarte;
+        /*-----------------------------Partie tableau de données---------------*/
         //Tableau contenant les mains.
         var mains;
         //Tableau contenant toute les cartes du bas de chaque joueur.
@@ -19,6 +20,7 @@
         var exemplaireCarteBas;
         //Tableau contenant les points de ressources.
         var pointsRessources;
+
         //Numero du joueur présentement actif.
         var numeroJoueurActif;
         //Variable comptant le nombre de tour.
@@ -35,8 +37,15 @@
         var nombreJoueur;
         //Variable qui nous dira si c'est le prototype.
         var prototype = false;
+        /*--------------------------Partie Échange---------------------------------*/
         //Variable qui nous dira si nous sommes en train d'échanger.
         var echange = false;
+        //Variable qui nous donnera la première carte a échanger.
+        var carteAEchanger1;
+        var positionCarte1;
+        //Variable qui nous donnera la deuxième carte à échanger.
+        var carteAEchanger2;
+        var positionCarte2;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -517,7 +526,7 @@
         }
 
         //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
-        function onClickImage() {
+        function onClickImage(event,ui,drop) {
             if (echange) {
 
             }
@@ -1205,9 +1214,10 @@
                     numeroJoueurActif = 0;
                 }
                 pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
-            }
-            updateJeu();
+            }           
             tour++;
+            remplirMain();
+            updateJeu();
             if (prototype) {
                 simulerIA();
             }
@@ -1339,7 +1349,7 @@
                 }
             }
             $(".imageCarte").click(function () {
-                alert("Handler for .click() called.");
+                
             });
         }
 
