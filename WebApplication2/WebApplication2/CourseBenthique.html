@@ -34,7 +34,7 @@
         //Variable qui contient le nombre de joueur.
         var nombreJoueur;
         //Variable qui nous dira si c'est le prototype.
-        var prototype = true;
+        var prototype = false;
         //Variable qui nous dira si nous sommes en train d'échanger.
         var echange = false;
 
@@ -514,6 +514,13 @@
                 brillanceCarteJoueurActif();
                 document.getElementById('buttonProposerEchange').textContent = "Proposer un échange";
             }              
+        }
+
+        //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
+        function onClickImage() {
+            if (echange) {
+
+            }
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
@@ -1261,7 +1268,6 @@
                         image.className = 'imageCarte';
                         image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
                         carteMain.appendChild(image);
-
                         $(function () {
                             $('.imageCarte').draggable({
                                 start: function () {
@@ -1332,6 +1338,9 @@
                     }
                 }
             }
+            $(".imageCarte").click(function () {
+                alert("Handler for .click() called.");
+            });
         }
 
         //Fonction qui mes des cartes dans le jeu de l'adversaire pour simuler une IA durant la présentation du prototype.
