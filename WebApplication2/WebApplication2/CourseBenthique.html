@@ -40,12 +40,15 @@
         /*--------------------------Partie Échange---------------------------------*/
         //Variable qui nous dira si nous sommes en train d'échanger.
         var echange = false;
+        //Variable qui nous dira si nous sommes rendu à la 2e carte à échanger.
+        var carte2 = false
         //Variable qui nous donnera la première carte a échanger.
-        var carteAEchanger1;
-        var positionCarte1;
+        var carteEchanger1;
+        var positionCarteEchanger1;
         //Variable qui nous donnera la deuxième carte à échanger.
-        var carteAEchanger2;
-        var positionCarte2;
+        var carteEchanger2;
+        var positionCarteEchanger2;
+        var numeroJoueurEchange2;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -76,7 +79,7 @@
         function brillanceCarteJoueurActif() {
             if (echange) {
                 for (var i = 0; i < 10; i++) {
-     
+
                 }
                 //TODO: Rendre tout les emplacements ou il y a une carte du coté du joueur actif en surbrillance
             }
@@ -84,7 +87,7 @@
                 for (var i = 0; i < 10; i++) {
 
                 }
-            }              
+            }
         }
 
         //Fonction qui affiche l'écran d'introduction.
@@ -523,14 +526,75 @@
                 echange = false;
                 brillanceCarteJoueurActif();
                 document.getElementById('buttonProposerEchange').textContent = "Proposer un échange";
-            }              
+                annulerEchange();
+            }
         }
 
-        //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
-        function onClickImage(event,ui,drop) {
-            if (echange) {
+        //Fonction qui annule l'échange en remettant les variables à null.
+        function annulerEchange() {
+            positionCarteEchanger1 = null;
+            positionCarteEchanger2 = null;
+            carteEchanger1 = null;
+            carteEchanger2 = null;
+            numeroJoueurEchange2 = null
+            carte2 = false;
+        }
 
+        /*ALERTE ALERTE ALERTE -- Ajouter le onclick à l'image seulement lorsque l'image est dans le bas ALERTE ALERTE ALERTES */
+        //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
+        function onClickImage(event, ui, carte) {
+            if (echange) {
+                var identification = event.target.id.substr(event.target.id.length - 2)
+                var lettreJoueur = identification.substr(1, 2);
+                var emplacement = identification.substr(identification - 1);
+                var lettreEchange1;
+
+                if (!carte2) {
+                    if (numeroJoueurActif === 0 && lettreJoueur === 'A') {
+                        positionCarteEchanger1 = emplacement;
+                        carteEchanger1 = carteBas[numeroJoueurActif][emplacement];
+                        carte2 = true;
+                        lettreEchange1 = 'A';
+                    }
+                    else if (numeroJoueurActif === 1 && lettreJoueur === 'D') {
+                        positionCarteEchanger1 = emplacement;
+                        carteEchanger1 = carteBas[numeroJoueurActif][emplacement];
+                        carte2 = true;
+                        lettreEchange1 = 'D';
+                    }
+                    else if (numeroJoueurActif === 2 && lettreJoueur === 'B') {
+                        positionCarteEchanger1 = emplacement;
+                        carteEchanger1 = carteBas[numeroJoueurActif][emplacement];
+                        carte2 = true;
+                        lettreEchange1 = 'B';
+                    }
+                    else if (numeroJoueurActif === 3 && lettreJoueur === 'C') {
+                        positionCarteEchanger1 = emplacement;
+                        carteEchanger1 = carteBas[numeroJoueurActif][emplacement];
+                        carte2 = true;
+                        lettreEchange1 = 'C';
+                    }
+                    else {
+                        //TODO: popup qui affiche que le joueur doit d'abord sélectioner une de ses cartes.
+                    }
+                }
+                else if (carte2) {
+                    
+                    if (lettreJoueur != lettreEchange1) {
+                        positionCarteEchanger2 = emplacement;
+                        carteEchanger2 = carteBas[numeroJoueurEchange2][emplacement];
+                        echangerCarte();
+                    }
+                    else {
+                        //TODO: popup qui affiche que le joueur doit désormais sélectionner une cartes d'un adversaire.
+                    }
+                }
             }
+        }
+
+        //Fonction qui fais l'échange des cartes.
+        function echangerCarte() {
+            //TODO: supprimer les 2 images, changer de position les 2 cartes dans les tableaux et reloader les 2 images.
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
@@ -1211,7 +1275,7 @@
                     numeroJoueurActif = 0;
                 }
                 pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
-            }           
+            }
             tour++;
             remplirMain();
             updateJeu();
@@ -1319,7 +1383,7 @@
             });
 
             $(".imageCarte").click(function () {
-                
+
             });
         }
 
