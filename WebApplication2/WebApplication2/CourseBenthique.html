@@ -760,20 +760,7 @@
                         return true;
                     }
                     else {
-                        $('#divTexteErreur').text('Vous ne respecter pas les conditions nécéssaire.');
-                        $('#divErreur').dialog({
-                            modal: true,
-                            dialogClass: 'no-close',
-                            draggable: false,
-                            resizable: false,
-                            hide: 'slideUp',
-                            show: 'slideDown',
-                            buttons: {
-                                Ok: function () {
-                                    $(this).dialog("close");
-                                }
-                            },
-                        });
+                        popUpAvertissement('Vous ne respectez pas les conditions nécéssaires.');
                         return false;
                     }
                 }
@@ -782,20 +769,7 @@
                 }
             }
             else {
-                $('#divTexteErreur').text('Vous manquer de points ressources pour jouer la carte.');
-                $('#divErreur').dialog({
-                    modal: true,
-                    dialogClass: 'no-close',
-                    draggable: false,
-                    resizable: false,
-                    hide: 'slideUp',
-                    show: 'slideDown',
-                    buttons: {
-                        Ok: function () {
-                            $(this).dialog("close");
-                        }
-                    },
-                });
+                popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
                 return false;
             }
         }
@@ -1329,6 +1303,82 @@
             }, 200);
         }
 
+        //Fonction pour appeler le pop-up d'avertissement
+        function popUpErreur(texte) {
+            $('#divTexteErreur').text(texte);
+            $('#divErreur').dialog({
+                classes: {
+                    'ui-dialog': 'no-close ui-state-error ui-corner-all',
+                },
+                draggable: false,
+                resizable: false,
+                height: 80,
+                width: 600,
+                hide: 'fade',
+                show: 'fade',
+                //buttons: {
+                //    Ok: function () {
+                //        $(this).dialog("close");
+                //    }
+                //},
+                open: function () {
+                    var foo = $(this);
+                    setTimeout(function () {
+                        foo.dialog('close');
+                    }, 2000);
+                }
+            });
+        }
+        function popUpAvertissement(texte) {
+            $('#divTexteErreur').text(texte);
+            $('#divErreur').dialog({
+                classes: {
+                    'ui-dialog': 'no-close ui-state-highlight ui-corner-all',
+                },
+                draggable: false,
+                resizable: false,
+                height: 80,
+                width: 600,
+                hide: 'fade',
+                show: 'fade',
+                //buttons: {
+                //    Ok: function () {
+                //        $(this).dialog("close");
+                //    }
+                //},
+                open: function () {
+                    var foo = $(this);
+                    setTimeout(function () {
+                        foo.dialog('close');
+                    }, 2500);
+                }
+            });
+        }
+        function popUpConfirmation(texte) {
+            $('#divTexteErreur').text(texte);
+            $('#divErreur').dialog({
+                classes: {
+                    'ui-dialog': 'no-close popUpConfirmation ui-state-highlight ui-corner-all',
+                },
+                draggable: false,
+                resizable: false,
+                height: 80,
+                width: 600,
+                hide: 'fade',
+                show: 'fade',
+                //buttons: {
+                //    Ok: function () {
+                //        $(this).dialog("close");
+                //    }
+                //},
+                open: function () {
+                    var foo = $(this);
+                    setTimeout(function () {
+                        foo.dialog('close');
+                    }, 2000);
+                }
+            });
+        }
         //Fonction qui "update" le jeu.
         function updateJeu() {
             //Afficher les cartes selon le tableau main[]
