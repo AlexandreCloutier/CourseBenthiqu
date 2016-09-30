@@ -9,6 +9,11 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script>
+        //TODO: les cartes jaunes ne se joue pas à cause qu'elle n'on pas de condition.
+        //TODO: Lorsqu'on essaie de drag une carte différente par dessus une autre carte, afficher le pop-up.
+
+
+
         //Paquet de carte principal.
         var paquetCarte;
         /*-----------------------------Partie tableau de données---------------*/
@@ -43,7 +48,7 @@
         //Variable qui nous dira si nous sommes rendu à la 2e carte à échanger.
         var carte2 = false
         //Variable qui nous donnera la première carte a échanger.
-        var carteEchanger1;
+        var carteEchanger
         var positionCarteEchanger1;
         //Variable qui nous donnera la deuxième carte à échanger.
         var carteEchanger2;
@@ -76,17 +81,45 @@
         }
 
         //Fonction qui fera s'occupera des échanges.
-        function brillanceCarteJoueurActif() {
-            if (echange) {
-                for (var i = 0; i < 10; i++) {
-
+        function brillanceCarteEchange() {
+            var lettreJoueurActif;
+            if (numeroJoueurActif === 0) {
+                lettreJoueurActif = 'A';
+            }
+            else if (numeroJoueurActif === 1) {
+                lettreJoueurActif = 'D';
+            }
+            else if (numeroJoueurActif === 2) {
+                lettreJoueurActif = 'B';
+            }
+            else if (numeroJoueurActif === 3) {
+                lettreJoueurActif = 'C';
+            }
+            
+            if (!carte2) {
+                if (echange) {
+                    for (var i = 0; i < 6; i++) {
+                        if ($('#emplacementBasJoueur' + lettreJoueurActif + i).children().length > 0) {
+                            $('#emplacementBasJoueur' + lettreJoueurActif + i).addClass('ui-echange-highlight');
+                        }
+                    }
+                    for (var i = 6; i < 10; i++) {
+                        if ($('#emplacementHautJoueur' + lettreJoueurActif + i).children().length > 0) {
+                            $('#emplacementHautJoueur' + lettreJoueurActif + i).addClass('ui-echange-highlight');
+                        }
+                    }
                 }
-                //TODO: Rendre tout les emplacements ou il y a une carte du coté du joueur actif en surbrillance
+                else {
+                    for (var i = 0; i < 6; i++) {
+                        $('#emplacementBasJoueur' + lettreJoueurActif + i).removeClass('ui-echange-highlight');
+                    }
+                    for (var i = 6; i < 10; i++) {
+                            $('#emplacementHautJoueur' + lettreJoueurActif + i).removeClass('ui-echange-highlight');
+                    }
+                }
             }
             else {
-                for (var i = 0; i < 10; i++) {
 
-                }
             }
         }
 
@@ -487,13 +520,6 @@
             divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : 100</li><li class=listeEquipe>Équipe B : 100</li><li class=listeEquipe>Équipe C : 100</li><li class=listeEquipe>Équipe D : 100</li></ul>';
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
-            var divTexteMessageJeu = document.createElement('div');
-            divTexteMessageJeu.id = 'divTexteMessageJeu';
-            divTexteMessageJeu.className = 'divTexteMessageJeu';
-            divTexteMessageJeu.innerHTML = '<p class=titreMessage><strong>Messages :</strong><textarea readonly class=zoneMessage>Ceci est une test</textarea>';
-            divTexteMessageJeu.style.width = 280 + 'px';
-            document.getElementById('divDroite').appendChild(divTexteMessageJeu);
-
             var buttonPasserTour = document.createElement('button');
             buttonPasserTour.id = 'buttonPasserTour';
             buttonPasserTour.className = 'buttonPasserTour';
@@ -519,12 +545,12 @@
         function onClickButtonEchange() {
             if (!echange) {
                 echange = true;
-                brillanceCarteJoueurActif();
+                brillanceCarteEchange();
                 document.getElementById('buttonProposerEchange').textContent = "Annuler l'échange";
             }
             else {
                 echange = false;
-                brillanceCarteJoueurActif();
+                brillanceCarteEchange();
                 document.getElementById('buttonProposerEchange').textContent = "Proposer un échange";
                 annulerEchange();
             }
@@ -542,9 +568,10 @@
 
         /*ALERTE ALERTE ALERTE -- Ajouter le onclick à l'image seulement lorsque l'image est dans le bas ALERTE ALERTE ALERTES */
         //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
-        function onClickImage(event, ui, carte) {
+        function onClickImage() {
+            alert('abaluabalu jtune baleine');
             if (echange) {
-                var identification = event.target.id.substr(event.target.id.length - 2)
+                //var identification = //Parentnode;
                 var lettreJoueur = identification.substr(1, 2);
                 var emplacement = identification.substr(identification - 1);
                 var lettreEchange1;
@@ -579,7 +606,7 @@
                     }
                 }
                 else if (carte2) {
-                    
+
                     if (lettreJoueur != lettreEchange1) {
                         positionCarteEchanger2 = emplacement;
                         carteEchanger2 = carteBas[numeroJoueurEchange2][emplacement];
@@ -777,6 +804,7 @@
         //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
             $(function () {
+                $(ui.draggable).click(function () { onClickImage() });
                 ui.draggable.css('width', '58px');
                 ui.draggable.css('height', '90px');
                 ui.draggable.css('top', '0px');

@@ -124,6 +124,12 @@
     box-shadow: 0px 0px 15px 10px #fff;
 }
 
+.ui-echange-highlight{
+    -moz-box-shadow: 0 0 15px 10px #ffdb4d;
+    -webkit-box-shadow: 0 0 15px 10px #ffdb4d;
+    box-shadow: 0px 0px 15px 10px #ffdb4d;
+}
+
 /* -----------------Zone Main--------------------*/
 
 .divMain {
