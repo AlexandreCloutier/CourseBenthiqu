@@ -155,6 +155,11 @@
     border-radius: 5px;
 }
 
+.imageTooltip {
+    height: 270px;
+    width: 177px;
+}
+
 .liMain {
     list-style: none;
     display: inline-block;

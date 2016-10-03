@@ -1498,9 +1498,16 @@
                 if (carteMain.children.length === 0) {
                     if (mains[numeroJoueurActif][i] != null) {
                         var image = document.createElement('img');
+                        var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
                         image.className = 'imageCarte';
                         image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
                         carteMain.appendChild(image);
+                        $(image).tooltip({
+                            items: 'img',
+                            content: cloneImage,
+                            position: { my: "right" },
+                            show: { delay: 1000 }
+                        });
                     }
                 }
                 else {
@@ -1508,9 +1515,16 @@
 
                     if (mains[numeroJoueurActif][i] != null) {
                         var image = document.createElement('img');
+                        var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
                         image.className = 'imageCarte';
                         image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
                         carteMain.appendChild(image);
+                        $(image).tooltip({
+                            items: 'img',
+                            content: cloneImage,
+                            position: { my: "right" },
+                            show: { delay: 1000 }
+                        });
                     }
                 }
             }
@@ -1520,15 +1534,17 @@
                         $(this).animate({
                             height: 90,
                             width: 58
-                        }, 400);
+                        }, 400);                        
                         var id;
                         id = event.target.parentNode.id.substr(event.target.id.length - 1);
-
                         carteBas[numeroJoueurActif][id] = carteDrag;
 
                         //Les if qui vont envoyer l'objet carte dans la variable.
                         carteDrag = mains[numeroJoueurActif][id];
                         carteDragNumero = id;
+                    },
+                    drag: function(){
+                        $('.ui-tooltip').hide();
                     },
                     revert: function (socketObj) {
                         if (socketObj === false) {
@@ -1541,10 +1557,6 @@
                     },
                     revertDuration: 400
                 });
-            });
-
-            $(".imageCarte").click(function () {
-
             });
         }
 
