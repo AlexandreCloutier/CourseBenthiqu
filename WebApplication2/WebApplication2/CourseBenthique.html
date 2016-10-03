@@ -95,7 +95,7 @@
             else if (numeroJoueurActif === 3) {
                 lettreJoueurActif = 'C';
             }
-            
+
             if (!carte2) {
                 if (echange) {
                     for (var i = 0; i < 6; i++) {
@@ -114,7 +114,7 @@
                         $('#emplacementBasJoueur' + lettreJoueurActif + i).removeClass('ui-echange-highlight');
                     }
                     for (var i = 6; i < 10; i++) {
-                            $('#emplacementHautJoueur' + lettreJoueurActif + i).removeClass('ui-echange-highlight');
+                        $('#emplacementHautJoueur' + lettreJoueurActif + i).removeClass('ui-echange-highlight');
                     }
                 }
             }
@@ -179,7 +179,6 @@
 
         //Fonction qui va instantier le tableau bi-dimensionel de mains.
         function instantierTableauJoueur() {
-
             mains = new Array(nombreJoueur);
 
             //Minimum de 2 joueurs.
@@ -541,18 +540,68 @@
             document.getElementById('divDroite').appendChild(buttonOption);
         }
 
-        //Fonction qui sera appeler lors du clique sur le bouton d'échange.
-        function onClickButtonEchange() {
-            if (!echange) {
-                echange = true;
-                brillanceCarteEchange();
-                document.getElementById('buttonProposerEchange').textContent = "Annuler l'échange";
+        //Fonction qui retournera true si il y a des cartes de notre coté et du cotés des autres joueurs pour échanger.
+        function carteAEchanger() {
+            if (numeroJoueurActif === 0) {
+                var joueur1 = 1;
+                var joueur2 = 2;
+                var joueur3 = 3;
+            }
+            else if (numeroJoueurActif === 1) {
+                var joueur1 = 0;
+                var joueur2 = 2;
+                var joueur3 = 3;
+            }
+            else if (numeroJoueurActif === 2) {
+                var joueur1 = 1;
+                var joueur2 = 0;
+                var joueur3 = 3;
+            }
+            else if (numeroJoueurActif === 3) {
+                var joueur1 = 1;
+                var joueur2 = 2;
+                var joueur3 = 0;
+            }
+
+            var carteJoueurActif = false;
+            var carteJoueurEnnemi = false;
+
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroJoueurActif][i] != null) {
+                    carteJoueurActif = true;
+                }
+                else if (carteBas[joueur1][i] != null || carteBas[joueur2][i] != null || carteBas[joueur3][i] != null) {
+                    carteJoueurEnnemi = true;
+                    
+                } 
+            }
+            
+            if (carteJoueurActif && carteJoueurEnnemi) {
+                return true;
             }
             else {
-                echange = false;
-                brillanceCarteEchange();
-                document.getElementById('buttonProposerEchange').textContent = "Proposer un échange";
-                annulerEchange();
+                return false;
+            }
+        }
+
+        //Fonction qui sera appeler lors du clique sur le bouton d'échange.
+        function onClickButtonEchange() {
+            if (carteAEchanger()) {
+                if (!echange) {
+                    popUpConfirmation('Veuillez choisir la carte de votre jeu à échanger.');
+                    echange = true;
+                    brillanceCarteEchange();
+                    document.getElementById('buttonProposerEchange').textContent = "Annuler l'échange";
+                }
+                else {
+                    echange = false;
+                    brillanceCarteEchange();
+                    document.getElementById('buttonProposerEchange').textContent = "Proposer un échange";
+                    annulerEchange();
+                }
+            }
+            else {
+                popUpErreur('Il n\'y a pas de cartes à échanger.');
             }
         }
 
@@ -568,41 +617,51 @@
 
         /*ALERTE ALERTE ALERTE -- Ajouter le onclick à l'image seulement lorsque l'image est dans le bas ALERTE ALERTE ALERTES */
         //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
-        function onClickImage(event,ui) {
+        function onClickImage(event, ui) {
             if (echange) {
                 var identification = event.target.id.substr(event.target.id.length - 2);
-                var lettreJoueur = identification.substr(0,1);
+                var lettreJoueur = identification.substr(0, 1);
                 var emplacement = identification.substr(identification.length - 1);
                 var lettreEchange1;
 
                 if (!carte2) {
+                    popUpConfirmation('Vous devez désormais choisir la carte avec laquelle vous voulez l\'échanger.');
+
                     if (numeroJoueurActif === 0 && lettreJoueur === 'A') {
                         positionCarteEchanger1 = emplacement;
                         carteEchanger1 = carteBas[numeroJoueurActif][emplacement];
-                        carte2 = true;
                         lettreEchange1 = 'A';
+                        echange = false;
                         brillanceCarteEchange();
+                        echange = true;
+                        carte2 = true;
                     }
                     else if (numeroJoueurActif === 1 && lettreJoueur === 'D') {
                         positionCarteEchanger1 = emplacement;
                         carteEchanger1 = carteBas[numeroJoueurActif][emplacement];
-                        carte2 = true;
                         lettreEchange1 = 'D';
+                        echange = false;
                         brillanceCarteEchange();
+                        echange = true;
+                        carte2 = true;
                     }
                     else if (numeroJoueurActif === 2 && lettreJoueur === 'B') {
                         positionCarteEchanger1 = emplacement;
                         carteEchanger1 = carteBas[numeroJoueurActif][emplacement];
-                        carte2 = true;
                         lettreEchange1 = 'B';
+                        echange = false;
                         brillanceCarteEchange();
+                        echange = true;
+                        carte2 = true;
                     }
                     else if (numeroJoueurActif === 3 && lettreJoueur === 'C') {
                         positionCarteEchanger1 = emplacement;
                         carteEchanger1 = carteBas[numeroJoueurActif][emplacement];
-                        carte2 = true;
                         lettreEchange1 = 'C';
+                        echange = false;
                         brillanceCarteEchange();
+                        echange = true;
+                        carte2 = true;
                     }
                     else {
                         popUpAvertissement("Vous devez d'abord sélectionner la carte que vous voulez échanger.");
@@ -628,7 +687,7 @@
                         echangerCarte();
                     }
                     else {
-                        popUpAvertissement("Vous devez désormais sélectionner la carte avec laquelle vous voulez échanegr la votre.");
+                        popUpAvertissement("Vous devez désormais sélectionner la carte avec laquelle vous voulez échanger la votre.");
                     }
                 }
             }
@@ -820,7 +879,7 @@
         //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
             $(function () {
-                $(ui.draggable).click(function () { onClickImage(event,ui) });
+                $(ui.draggable).click(function () { onClickImage(event, ui) });
                 ui.draggable.css('width', '58px');
                 ui.draggable.css('height', '90px');
                 ui.draggable.css('top', '0px');
@@ -1288,6 +1347,9 @@
                         $plateau.css('transform', 'rotate(' + now + 'deg)');
                     }
                 });
+                if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
+                    onClickButtonEchange();
+                }
                 numeroJoueurActif++;
                 if (numeroJoueurActif === nombreJoueur) {
                     numeroJoueurActif = 0;
@@ -1427,6 +1489,7 @@
                 }
             });
         }
+
         //Fonction qui "update" le jeu.
         function updateJeu() {
             //Afficher les cartes selon le tableau main[]
