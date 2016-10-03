@@ -487,7 +487,6 @@
                     paquetCarte[0] = paquetCarte[i];
                     paquetCarte[i] = valeurEnregistrer;
 
-
                     //Retire la carte sur le dessus
                     paquetCarte.shift();
 
@@ -505,7 +504,6 @@
             divNomJoueurs.className = 'divNomJoueurs';
             divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : Toto</li><li class=listeEquipe>Équipe B : Tata</li><li class=listeEquipe>Équipe C : Tyty</li><li class=listeEquipe>Équipe D : Tutu</li></ul>';
             document.getElementById('divDroite').appendChild(divNomJoueurs);
-
 
             var divTextePointsRessource = document.createElement('div');
             divTextePointsRessource.id = 'divTextePointsRessource';
@@ -571,8 +569,7 @@
                     carteJoueurActif = true;
                 }
                 else if (carteBas[joueur1][i] != null || carteBas[joueur2][i] != null || carteBas[joueur3][i] != null) {
-                    carteJoueurEnnemi = true;
-                    
+                    carteJoueurEnnemi = true;                  
                 } 
             }
             
@@ -805,7 +802,6 @@
                                     else {//Sinon, le drop est pas accepter.
                                         ui.draggable.draggable({ revert: true });
                                         revertCarte(ui.draggable);
-
                                     }
                                 }
                             }
@@ -819,20 +815,6 @@
             });
 
             if (prototype) {
-                //var divOmbrageeC = document.createElement('div');
-                //divOmbrageeC.id = 'divOmbrageeC';
-                //divOmbrageeC.className = 'divOmbragee';
-                //divOmbrageeC.style.right = '25px';
-                //divOmbrageeC.style.top = '175px';
-                //$('#plateau').append(divOmbrageeC);
-
-                //var divOmbrageeD = document.createElement('div');
-                //divOmbrageeD.id = 'divOmbrageeD';
-                //divOmbrageeD.className = 'divOmbragee';
-                //divOmbrageeD.style.left = '25px';
-                //divOmbrageeD.style.top = '175px';
-                //$('#plateau').append(divOmbrageeD);
-
                 $('.emplacementJoueurC, .emplacementJoueurD').css('background-color', 'black');
                 $('.emplacementJoueurC, .emplacementJoueurD').css('opacity', '0.5');
             }
@@ -1422,11 +1404,6 @@
                 width: 600,
                 hide: 'fade',
                 show: 'fade',
-                //buttons: {
-                //    Ok: function () {
-                //        $(this).dialog("close");
-                //    }
-                //},
                 open: function () {
                     var foo = $(this);
                     setTimeout(function () {
@@ -1449,11 +1426,6 @@
                 width: 600,
                 hide: 'fade',
                 show: 'fade',
-                //buttons: {
-                //    Ok: function () {
-                //        $(this).dialog("close");
-                //    }
-                //},
                 open: function () {
                     var foo = $(this);
                     setTimeout(function () {
@@ -1476,11 +1448,6 @@
                 width: 600,
                 hide: 'fade',
                 show: 'fade',
-                //buttons: {
-                //    Ok: function () {
-                //        $(this).dialog("close");
-                //    }
-                //},
                 open: function () {
                     var foo = $(this);
                     setTimeout(function () {
