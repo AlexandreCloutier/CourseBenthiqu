@@ -12,8 +12,6 @@
         //TODO: les cartes jaunes ne se joue pas à cause qu'elle n'on pas de condition.
         //TODO: Lorsqu'on essaie de drag une carte différente par dessus une autre carte, afficher le pop-up.
 
-
-
         //Paquet de carte principal.
         var paquetCarte;
         /*-----------------------------Partie tableau de données---------------*/
@@ -83,17 +81,33 @@
         //Fonction qui fera s'occupera des échanges.
         function brillanceCarteEchange() {
             var lettreJoueurActif;
+            var ennemi1;
+            var ennemi2;
+            var ennemi3;
+
             if (numeroJoueurActif === 0) {
                 lettreJoueurActif = 'A';
+                ennemi1 = 'B';
+                ennemi2 = 'C';
+                ennemi3 = 'D';
             }
             else if (numeroJoueurActif === 1) {
                 lettreJoueurActif = 'D';
+                ennemi1 = 'B';
+                ennemi2 = 'C';
+                ennemi3 = 'A';
             }
             else if (numeroJoueurActif === 2) {
                 lettreJoueurActif = 'B';
+                ennemi1 = 'A';
+                ennemi2 = 'C';
+                ennemi3 = 'D';
             }
             else if (numeroJoueurActif === 3) {
                 lettreJoueurActif = 'C';
+                ennemi1 = 'B';
+                ennemi2 = 'A';
+                ennemi3 = 'D';
             }
 
             if (!carte2) {
@@ -118,8 +132,53 @@
                     }
                 }
             }
+            if (carte2) {
+                for (var i = 0; i < 6; i++) {
+                    if ($('#emplacementBasJoueur' + ennemi1 + i).children().length > 0) {
+                        $('#emplacementBasJoueur' + ennemi1 + i).addClass('ui-echange-highlight');
+                    }
+                    if ($('#emplacementBasJoueur' + ennemi2 + i).children().length > 0) {
+                        $('#emplacementBasJoueur' + ennemi2 + i).addClass('ui-echange-highlight');
+                    }
+                    if ($('#emplacementBasJoueur' + ennemi3 + i).children().length > 0) {
+                        $('#emplacementBasJoueur' + ennemi3 + i).addClass('ui-echange-highlight');
+                    }
+                }
+                for (var i = 6; i < 10; i++) {
+                    if ($('#emplacementHautJoueur' + ennemi1 + i).children().length > 0) {
+                        $('#emplacementHautJoueur' + ennemi1 + i).addClass('ui-echange-highlight');
+                    }
+                    if ($('#emplacementHautJoueur' + ennemi2 + i).children().length > 0) {
+                        $('#emplacementHautJoueur' + ennemi2 + i).addClass('ui-echange-highlight');
+                    }
+                    if ($('#emplacementHautJoueur' + ennemi3 + i).children().length > 0) {
+                        $('#emplacementHautJoueur' + ennemi3 + i).addClass('ui-echange-highlight');
+                    }
+                }
+            }
             else {
-
+                for (var i = 0; i < 6; i++) {
+                    if ($('#emplacementBasJoueur' + ennemi1 + i).children().length > 0) {
+                        $('#emplacementBasJoueur' + ennemi1 + i).removeClass('ui-echange-highlight');
+                    }
+                    if ($('#emplacementBasJoueur' + ennemi2 + i).children().length > 0) {
+                        $('#emplacementBasJoueur' + ennemi2 + i).removeClass('ui-echange-highlight');
+                    }
+                    if ($('#emplacementBasJoueur' + ennemi3 + i).children().length > 0) {
+                        $('#emplacementBasJoueur' + ennemi3 + i).removeClass('ui-echange-highlight');
+                    }
+                }
+                for (var i = 6; i < 10; i++) {
+                    if ($('#emplacementHautJoueur' + ennemi1 + i).children().length > 0) {
+                        $('#emplacementHautJoueur' + ennemi1 + i).removeClass('ui-echange-highlight');
+                    }
+                    if ($('#emplacementHautJoueur' + ennemi2 + i).children().length > 0) {
+                        $('#emplacementHautJoueur' + ennemi2 + i).removeClass('ui-echange-highlight');
+                    }
+                    if ($('#emplacementHautJoueur' + ennemi3 + i).children().length > 0) {
+                        $('#emplacementHautJoueur' + ennemi3 + i).removeClass('ui-echange-highlight');
+                    }
+                }
             }
         }
 
@@ -572,10 +631,10 @@
                 }
                 else if (carteBas[joueur1][i] != null || carteBas[joueur2][i] != null || carteBas[joueur3][i] != null) {
                     carteJoueurEnnemi = true;
-                    
-                } 
+
+                }
             }
-            
+
             if (carteJoueurActif && carteJoueurEnnemi) {
                 return true;
             }
@@ -635,6 +694,7 @@
                         brillanceCarteEchange();
                         echange = true;
                         carte2 = true;
+                        brillanceCarteEchange();
                     }
                     else if (numeroJoueurActif === 1 && lettreJoueur === 'D') {
                         positionCarteEchanger1 = emplacement;
@@ -644,6 +704,7 @@
                         brillanceCarteEchange();
                         echange = true;
                         carte2 = true;
+                        brillanceCarteEchange();
                     }
                     else if (numeroJoueurActif === 2 && lettreJoueur === 'B') {
                         positionCarteEchanger1 = emplacement;
@@ -653,6 +714,7 @@
                         brillanceCarteEchange();
                         echange = true;
                         carte2 = true;
+                        brillanceCarteEchange();
                     }
                     else if (numeroJoueurActif === 3 && lettreJoueur === 'C') {
                         positionCarteEchanger1 = emplacement;
@@ -662,6 +724,7 @@
                         brillanceCarteEchange();
                         echange = true;
                         carte2 = true;
+                        brillanceCarteEchange();
                     }
                     else {
                         popUpAvertissement("Vous devez d'abord sélectionner la carte que vous voulez échanger.");
@@ -683,7 +746,9 @@
                         }
 
                         positionCarteEchanger2 = emplacement;
-                        carteEchanger2 = carteBas[numeroJoueurEchange2][emplacement];
+                        carteEchanger2 = carteBas[numeroJoueurEchange2][emplacement];                      
+                        onClickButtonEchange();
+                        brillanceCarteEchange();
                         echangerCarte();
                     }
                     else {
@@ -695,8 +760,9 @@
 
         //Fonction qui fais l'échange des cartes.
         function echangerCarte() {
-            //TODO: supprimer les 2 images, changer de position les 2 cartes dans les tableaux et reloader les 2 images.
-            alert('je change' + carteEchanger1.nom + ' et ' + carteEchanger2.nom);
+            //Change les cartes de positino dans la tableau.
+            carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
+            carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger;
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
@@ -1534,7 +1600,7 @@
                         $(this).animate({
                             height: 90,
                             width: 58
-                        }, 400);                        
+                        }, 400);
                         var id;
                         id = event.target.parentNode.id.substr(event.target.id.length - 1);
                         carteBas[numeroJoueurActif][id] = carteDrag;
@@ -1543,7 +1609,7 @@
                         carteDrag = mains[numeroJoueurActif][id];
                         carteDragNumero = id;
                     },
-                    drag: function(){
+                    drag: function () {
                         $('.ui-tooltip').hide();
                     },
                     revert: function (socketObj) {
