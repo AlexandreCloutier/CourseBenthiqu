@@ -137,6 +137,7 @@
     <Content Include="ressources\galets.png" />
     <Content Include="ressources\glossosomatidae.png" />
     <Content Include="ressources\gravier.png" />
+    <Content Include="ressources\grosPaquet.png" />
     <Content Include="ressources\gyrinidae.png" />
     <Content Include="ressources\habitatAmenageFosse.png" />
     <Content Include="ressources\habitatAmenageGalets.png" />
@@ -149,6 +150,7 @@
     <Content Include="ressources\hydroptilidae.png" />
     <Content Include="ressources\interdiction.png" />
     <Content Include="ressources\logo.png" />
+    <Content Include="ressources\moyenPaquet.png" />
     <Content Include="ressources\naturalisation.png" />
     <Content Include="ressources\nepidae.png" />
     <Content Include="ressources\oligochaeta.png" />
@@ -156,6 +158,7 @@
     <Content Include="ressources\passageToutTerrain.png" />
     <Content Include="ressources\pecheur.png" />
     <Content Include="ressources\perlidae.png" />
+    <Content Include="ressources\petitPaquet.png" />
     <Content Include="ressources\PlateauJeu.jpg" />
     <Content Include="ressources\politique.png" />
     <Content Include="ressources\pollutionOrganique.png" />

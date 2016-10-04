@@ -58,7 +58,7 @@
             //Temporaire, si on crée une nouvelle partie, le joueur devra entrer toutes ces informations.
             nombreJoueur = 4;
             difficulte = 1;
-            //Temporaire.  
+            //Temporaire.
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
             creerElementFond();//Crée touts les éléments du jeu.
             instantierTableaux();//Instantie tout les tableaux.
@@ -804,19 +804,26 @@
             var divMain = document.createElement('div');
             divMain.id = 'divMain';
             divMain.className = 'divMain';
-            document.getElementsByTagName('body')[0].appendChild(divMain);
+            $('body').append(divMain);
 
             //Partie du millieu.
             var plateau = document.createElement('div');
             plateau.id = 'plateau';
             plateau.className = 'plateau';
-            document.getElementsByTagName('body')[0].appendChild(plateau);
+            $('body').append(plateau);
 
             //Partie de droite.
             var divDroite = document.createElement('div');
             divDroite.id = 'divDroite';
             divDroite.className = 'divDroite';
-            document.getElementsByTagName('body')[0].appendChild(divDroite);
+            $('body').append(divDroite);
+
+            //Paquet de charge
+            var paquetCharge = document.createElement('img');
+            paquetCharge.id = 'paquetCharge';
+            paquetCharge.className = 'paquetCharge';
+            paquetCharge.setAttribute('src', 'ressources/grosPaquet.png');
+            $(plateau).append(paquetCharge);
         }
 
         //Fonction qui crée les divers emplacement sur le tableau.
@@ -1073,7 +1080,15 @@
 
         //function pour piger une carte.
         function pigerCarte(paquetCarte) {
-            return paquetCarte.pop();
+            var carte = paquetCarte.pop();
+            if (paquetCarte.length <= 70) {
+                $('#paquetCharge').attr('src', 'ressources/moyenPaquet.png');
+            }
+            if (paquetCarte.length <= 20) {
+                $('#paquetCharge').attr('src', 'ressources/petitPaquet.png')
+            }
+
+            return carte;
         }
 
         //Function qui melange le paquet de carte.
@@ -1565,70 +1580,55 @@
             //Afficher les cartes selon le tableau main[]
             for (i = 0; i < 6; i++) {
                 carteMain = document.getElementById('divCarte' + i)
-                if (carteMain.children.length === 0) {
-                    if (mains[numeroJoueurActif][i] != null) {
-                        var image = document.createElement('img');
-                        var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
-                        image.className = 'imageCarte';
-                        image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
-                        carteMain.appendChild(image);
-                        $(image).tooltip({
-                            items: 'img',
-                            content: cloneImage,
-                            position: { my: "right" },
-                            show: { delay: 1000 }
-                        });
-                    }
-                }
-                else {
+                if (carteMain.children.length != 0) {
                     carteMain.removeChild(carteMain.firstChild);
+                }
 
-                    if (mains[numeroJoueurActif][i] != null) {
-                        var image = document.createElement('img');
-                        var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
-                        image.className = 'imageCarte';
-                        image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
-                        carteMain.appendChild(image);
-                        $(image).tooltip({
-                            items: 'img',
-                            content: cloneImage,
-                            position: { my: "right" },
-                            show: { delay: 1000 }
-                        });
-                    }
+                if (mains[numeroJoueurActif][i] != null) {
+                    var image = document.createElement('img');
+                    var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
+                    image.className = 'imageCarte';
+                    image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
+                    carteMain.appendChild(image);
+                    $(image).tooltip({
+                        items: 'img',
+                        content: cloneImage,
+                        position: { my: "right" },
+                        show: { delay: 1000 }
+                    });
                 }
             }
-            $(function () {
-                $('.imageCarte').draggable({
-                    start: function () {
-                        $(this).animate({
-                            height: 90,
-                            width: 58
-                        }, 400);
-                        var id;
-                        id = event.target.parentNode.id.substr(event.target.id.length - 1);
-                        carteBas[numeroJoueurActif][id] = carteDrag;
-
-                        //Les if qui vont envoyer l'objet carte dans la variable.
-                        carteDrag = mains[numeroJoueurActif][id];
-                        carteDragNumero = id;
-                    },
-                    drag: function () {
-                        $('.ui-tooltip').hide();
-                    },
-                    revert: function (socketObj) {
-                        if (socketObj === false) {
-                            revertCarte(this);
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-                    },
-                    revertDuration: 400
-                });
-            });
         }
+        $(function () {
+            $('.imageCarte').draggable({
+                start: function () {
+                    $(this).animate({
+                        height: 90,
+                        width: 58
+                    }, 400);
+                    var id;
+                    id = event.target.parentNode.id.substr(event.target.id.length - 1);
+                    carteBas[numeroJoueurActif][id] = carteDrag;
+
+                    //Les if qui vont envoyer l'objet carte dans la variable.
+                    carteDrag = mains[numeroJoueurActif][id];
+                    carteDragNumero = id;
+                },
+                drag: function () {
+                    $('.ui-tooltip').hide();
+                },
+                revert: function (socketObj) {
+                    if (socketObj === false) {
+                        revertCarte(this);
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                revertDuration: 400
+            });
+        });
     </script>
 </body>
 </html>
