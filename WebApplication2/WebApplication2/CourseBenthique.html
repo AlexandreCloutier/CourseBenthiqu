@@ -39,6 +39,7 @@
         var nombreJoueur;
         //Variable qui nous dira si c'est le prototype.
         var prototype = false;
+
         /*--------------------------Partie Échange---------------------------------*/
         //Variable qui nous dira si nous sommes en train d'échanger.
         var echange = false;
@@ -893,6 +894,9 @@
                                 ui.draggable.draggable({ revert: true });
                                 revertCarte(ui.draggable);
                             }
+                        },
+                        accept: function () {
+                            //TODO: Juste la zone du bas accepte les cartes.
                         }
                     });
                 });
@@ -1396,6 +1400,7 @@
 
         //Fonction appellé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
+            $('.buttonPasserTour').prop('disabled', true);
             if (!prototype) {
                 facteurRotation += 1;
                 if (facteurRotation > 4) {
@@ -1422,6 +1427,9 @@
                 }
                 pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
             }
+            setTimeout(function () {
+                $('.buttonPasserTour').prop('disabled', false);
+            }, 2000);
             tour++;
             remplirMain();
             updateJeu();
