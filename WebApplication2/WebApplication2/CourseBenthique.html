@@ -58,14 +58,11 @@
             //Temporaire, si on crée une nouvelle partie, le joueur devra entrer toutes ces informations.
             nombreJoueur = 4;
             difficulte = 1;
-<<<<<<< HEAD
-=======
             nomJoueur = new Array();
             nomJoueur[0] = 'alex';
             nomJoueur[1] = 'pue';
             nomJoueur[2] = 'du';
             nomJoueur[3] = 'bat';
->>>>>>> f2628f38c2e94e7c978839ee9e39a0d0b15f0385
             //Temporaire.
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
             creerElementFond();//Crée touts les éléments du jeu.
@@ -1608,8 +1605,7 @@
                     });
                 }
             }
-<<<<<<< HEAD
-=======
+
             $(function () {
                 $('.imageCarte').draggable({
                     start: function () {
@@ -1646,38 +1642,7 @@
         //Fonction qui update après avoir jouer une carte.
         function updatePointsRessources() {
             $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
->>>>>>> f2628f38c2e94e7c978839ee9e39a0d0b15f0385
         }
-        $(function () {
-            $('.imageCarte').draggable({
-                start: function () {
-                    $(this).animate({
-                        height: 90,
-                        width: 58
-                    }, 400);
-                    var id;
-                    id = event.target.parentNode.id.substr(event.target.id.length - 1);
-                    carteBas[numeroJoueurActif][id] = carteDrag;
-
-                    //Les if qui vont envoyer l'objet carte dans la variable.
-                    carteDrag = mains[numeroJoueurActif][id];
-                    carteDragNumero = id;
-                },
-                drag: function () {
-                    $('.ui-tooltip').hide();
-                },
-                revert: function (socketObj) {
-                    if (socketObj === false) {
-                        revertCarte(this);
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                },
-                revertDuration: 400
-            });
-        });
     </script>
 </body>
 </html>
