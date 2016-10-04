@@ -11,7 +11,7 @@
     <script>
         //TODO: les cartes jaunes ne se joue pas à cause qu'elle n'on pas de condition.
         //TODO: Lorsqu'on essaie de drag une carte différente par dessus une autre carte, afficher le pop-up.
-
+        var difficulte;
         //Paquet de carte principal.
         var paquetCarte;
         /*-----------------------------Partie tableau de données---------------*/
@@ -26,24 +26,22 @@
         //Numero du joueur présentement actif.
         var numeroJoueurActif;
         //Variable comptant le nombre de tour.
-        var tour = 0;
+        var tour;
         //Variable content le nb de clic sur le bouton Passer son tour
-        var facteurRotation = 0;
+        var facteurRotation;
         //Variable qui detecte si la souris bouge lors d'un clic
-        var isClick = false;
+        var isClick;
         //Variable de la carte qui sera transférer de la main à la zone du bas, ou ailleurs.
         var carteDrag;
         //Variable du numero de la carte dans la main pour pouvoir le supprimer facilement lorsqu'on le drop à quelque part.
         var carteDragNumero;
         //Variable qui contient le nombre de joueur.
         var nombreJoueur;
-        //Variable qui nous dira si c'est le prototype.
-        var prototype = false;
         /*--------------------------Partie Échange---------------------------------*/
         //Variable qui nous dira si nous sommes en train d'échanger.
-        var echange = false;
+        var echange;
         //Variable qui nous dira si nous sommes rendu à la 2e carte à échanger.
-        var carte2 = false
+        var renduCarte2;
         //Variable qui nous donnera la première carte a échanger.
         var carteEchanger1
         var positionCarteEchanger1;
@@ -56,21 +54,49 @@
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
-            //Temporaire.
+            //Temporaire, si on crée une nouvelle partie, le joueur devra entrer toutes ces informations.
             nombreJoueur = 4;
-            //Temporaire.
-            carteBas = new Array();
+            difficulte = 1;
+            //Temporaire.  
+            valeurDepartVariable();//Donne les valeurs de départs à nos variables.
+            creerElementFond();//Crée touts les éléments du jeu.
+            instantierTableaux();//Instantie tout les tableaux.
+            instantierPaquetCarte();//Crée le paquet de carte de départ.
+            updateJeu();
+        }
+
+        //Fonction qui donne les valeurs de départs à nos variables.
+        function valeurDepartVariable() {
+            numeroJoueurActif = 0;
+            tour = 0;
+            facteurRotation = 0;
+            isClick = false;
+            echange = false;
+            renduCarte2 = false;
+        }
+
+        //Fonction qui va créer les diverse éléments du fond.
+        function creerElementFond() {
             creerFond();
             creerEmplacementsPlateau();
-            paquetCarte = creerPaquetCarte(1);
-            melangerPaquetCarte(paquetCarte);
-            creerMain();
             creerPartieDroite();
-            instantierTableau();
+            creerMain();
             instancierDivErreur();
+        }
+
+        //Fonction qui s'occupe de créer le paquet de carte et de le mélanger au début de la partie.
+        function instantierPaquetCarte() {
+            paquetCarte = creerPaquetCarte(difficulte);
+            melangerPaquetCarte(paquetCarte);
             remplirMain();
-            numeroJoueurActif = 0;
-            updateJeu();
+        }
+
+        //Fonction qui appelle les fonctions qui instantie les différents tableaux.
+        function instantierTableaux() {
+            instantierTableauJoueur();
+            instantierTableauEmplacementBas();
+            instantierTableauPointsRessources();
+            instantierTableauExemplaire();
         }
 
         //Fonction qui commence la nouvelle partie et efface le menu principal.
@@ -111,7 +137,7 @@
                 ennemi3 = 'D';
             }
 
-            if (!carte2) {
+            if (!renduCarte2) {
                 if (echange) {
                     for (var i = 0; i < 6; i++) {
                         if ($('#emplacementBasJoueur' + lettreJoueurActif + i).children().length > 0) {
@@ -133,7 +159,7 @@
                     }
                 }
             }
-            if (carte2) {
+            if (renduCarte2) {
                 for (var i = 0; i < 6; i++) {
                     if ($('#emplacementBasJoueur' + ennemi1 + i).children().length > 0) {
                         $('#emplacementBasJoueur' + ennemi1 + i).addClass('ui-echange-highlight');
@@ -213,14 +239,6 @@
             buttonOptions.innerHTML = 'Options';
             buttonOptions.style.bottom = '35px';
             $('#menuPrincipal').append(buttonOptions);
-        }
-
-        //Fonction qui appelle les fonctions qui instantie les différents tableaux.
-        function instantierTableau() {
-            instantierTableauJoueur();
-            instantierTableauEmplacementBas();
-            instantierTableauPointsRessources();
-            instantierTableauExemplaire();
         }
 
         //Fonction qui va instantier et remplir le tableau des points de ressources.
@@ -669,12 +687,11 @@
             carteEchanger1 = null;
             carteEchanger2 = null;
             numeroJoueurEchange2 = null
-            carte2 = false;
+            renduCarte2 = false;
             emplacementCarte1 = null;
             emplacementCarte2 = null;
         }
 
-        /*ALERTE ALERTE ALERTE -- Ajouter le onclick à l'image seulement lorsque l'image est dans le bas ALERTE ALERTE ALERTES */
         //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
         function onClickImage(event, ui) {
             if (echange) {
@@ -683,7 +700,7 @@
                 var emplacement = identification.substr(identification.length - 1);
                 var lettreEchange1;
 
-                if (!carte2) {
+                if (!renduCarte2) {
                     popUpConfirmation('Vous devez désormais choisir la carte avec laquelle vous voulez l\'échanger.');
                     emplacementCarte1 = event.target.id;
                     if (numeroJoueurActif === 0 && lettreJoueur === 'A') {
@@ -693,7 +710,7 @@
                         echange = false;
                         brillanceCarteEchange();
                         echange = true;
-                        carte2 = true;
+                        renduCarte2 = true;
                         brillanceCarteEchange();
                     }
                     else if (numeroJoueurActif === 1 && lettreJoueur === 'D') {
@@ -703,7 +720,7 @@
                         echange = false;
                         brillanceCarteEchange();
                         echange = true;
-                        carte2 = true;
+                        renduCarte2 = true;
                         brillanceCarteEchange();
                     }
                     else if (numeroJoueurActif === 2 && lettreJoueur === 'B') {
@@ -713,7 +730,7 @@
                         echange = false;
                         brillanceCarteEchange();
                         echange = true;
-                        carte2 = true;
+                        renduCarte2 = true;
                         brillanceCarteEchange();
                     }
                     else if (numeroJoueurActif === 3 && lettreJoueur === 'C') {
@@ -730,7 +747,7 @@
                         popUpAvertissement("Vous devez d'abord sélectionner la carte que vous voulez échanger.");
                     }
                 }
-                else if (carte2) {
+                else if (renduCarte2) {
                     if (lettreJoueur != lettreEchange1) {
                         if (lettreJoueur === 'A') {
                             numeroJoueurEchange2 = 0;
@@ -897,11 +914,6 @@
                     });
                 });
             });
-
-            if (prototype) {
-                $('.emplacementJoueurC, .emplacementJoueurD').css('background-color', 'black');
-                $('.emplacementJoueurC, .emplacementJoueurD').css('opacity', '0.5');
-            }
         }
 
         //Fonction qui crée l'espace de la main.
@@ -1396,38 +1408,34 @@
 
         //Fonction appellé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
-            if (!prototype) {
-                facteurRotation += 1;
-                if (facteurRotation > 4) {
-                    facteurRotation = 1;
-                }
-
-                var angleRotationDebut = (90 * (facteurRotation - 1));
-                var angleRotationFin = (90 * facteurRotation);
-                var $plateau = $('#plateau');
-                $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
-                    duration: 1000,
-                    step: function (now) {
-                        $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
-                        $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
-                        $plateau.css('transform', 'rotate(' + now + 'deg)');
-                    }
-                });
-                if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
-                    onClickButtonEchange();
-                }
-                numeroJoueurActif++;
-                if (numeroJoueurActif === nombreJoueur) {
-                    numeroJoueurActif = 0;
-                }
-                pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
+            facteurRotation += 1;
+            if (facteurRotation > 4) {
+                facteurRotation = 1;
             }
+
+            var angleRotationDebut = (90 * (facteurRotation - 1));
+            var angleRotationFin = (90 * facteurRotation);
+            var $plateau = $('#plateau');
+            $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
+                duration: 1000,
+                step: function (now) {
+                    $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
+                    $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
+                    $plateau.css('transform', 'rotate(' + now + 'deg)');
+                }
+            });
+            if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
+                onClickButtonEchange();
+            }
+            numeroJoueurActif++;
+            if (numeroJoueurActif === nombreJoueur) {
+                numeroJoueurActif = 0;
+            }
+            pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
+
             tour++;
             remplirMain();
             updateJeu();
-            if (prototype) {
-                simulerIA();
-            }
         }
 
         //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
@@ -1609,32 +1617,6 @@
                     revertDuration: 400
                 });
             });
-        }
-
-        //Fonction qui mes des cartes dans le jeu de l'adversaire pour simuler une IA durant la présentation du prototype.
-        function simulerIA() {
-            if (tour === 1) {
-                var image = document.createElement('img');
-                image.className = 'imageCarte';
-                image.src = 'ressources/rapides.png';
-                document.getElementById('emplacementBasJoueurB0').appendChild(image);
-
-                image = document.createElement('img');
-                image.className = 'imageCarte';
-                image.src = 'ressources/oligochaeta.png';
-                document.getElementById('emplacementBasJoueurB4').appendChild(image);
-            }
-            else if (tour === 2) {
-                var image = document.createElement('img');
-                image.className = 'imageCarte';
-                image.src = 'ressources/galets.png';
-                document.getElementById('emplacementBasJoueurB1').appendChild(image);
-
-                image = document.createElement('img');
-                image.className = 'imageCarte';
-                image.src = 'ressources/simuliidae.png';
-                document.getElementById('emplacementBasJoueurB5').appendChild(image);
-            }
         }
     </script>
 </body>
