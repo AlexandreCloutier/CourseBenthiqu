@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script>
-        //TODO: les cartes jaunes ne se joue pas à cause qu'elle n'on pas de condition.
+        var nomJoueur;
         //TODO: Lorsqu'on essaie de drag une carte différente par dessus une autre carte, afficher le pop-up.
         var difficulte;
         //Paquet de carte principal.
@@ -58,6 +58,14 @@
             //Temporaire, si on crée une nouvelle partie, le joueur devra entrer toutes ces informations.
             nombreJoueur = 4;
             difficulte = 1;
+<<<<<<< HEAD
+=======
+            nomJoueur = new Array();
+            nomJoueur[0] = 'alex';
+            nomJoueur[1] = 'pue';
+            nomJoueur[2] = 'du';
+            nomJoueur[3] = 'bat';
+>>>>>>> f2628f38c2e94e7c978839ee9e39a0d0b15f0385
             //Temporaire.
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
             creerElementFond();//Crée touts les éléments du jeu.
@@ -581,7 +589,7 @@
             var divNomJoueurs = document.createElement('div');
             divNomJoueurs.id = 'divNomJoueurs';
             divNomJoueurs.className = 'divNomJoueurs';
-            divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : Toto</li><li class=listeEquipe>Équipe B : Tata</li><li class=listeEquipe>Équipe C : Tyty</li><li class=listeEquipe>Équipe D : Tutu</li></ul>';
+            divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + nomJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + nomJoueur[3] + '</li></ul>';
             document.getElementById('divDroite').appendChild(divNomJoueurs);
 
             var divTextePointsRessource = document.createElement('div');
@@ -911,6 +919,7 @@
                                     else {//Sinon, le drop est pas accepter.
                                         ui.draggable.draggable({ revert: true });
                                         revertCarte(ui.draggable);
+                                        popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                     }
                                 }
                             }
@@ -955,7 +964,7 @@
                         return false;
                     }
                 }
-                else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention') {
+                else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention' || carteDrag.type === 'bandeRiveraine') {
                     return true;
                 }
             }
@@ -987,6 +996,7 @@
                 //Partie qui change les données de la mains vers la partie du bas.
                 var id;
                 pointsRessources[numeroJoueurActif] -= carteDrag.coutResources;
+                updatePointsRessources();
                 id = event.target.id.substr(event.target.id.length - 1);
                 carteBas[numeroJoueurActif][id] = carteDrag;
                 supprimerCartePrecise(carteDragNumero);
@@ -1598,6 +1608,45 @@
                     });
                 }
             }
+<<<<<<< HEAD
+=======
+            $(function () {
+                $('.imageCarte').draggable({
+                    start: function () {
+                        $(this).animate({
+                            height: 90,
+                            width: 58
+                        }, 400);
+                        var id;
+                        id = event.target.parentNode.id.substr(event.target.id.length - 1);
+                        carteBas[numeroJoueurActif][id] = carteDrag;
+
+                        //Les if qui vont envoyer l'objet carte dans la variable.
+                        carteDrag = mains[numeroJoueurActif][id];
+                        carteDragNumero = id;
+                    },
+                    drag: function () {
+                        $('.ui-tooltip').hide();
+                    },
+                    revert: function (socketObj) {
+                        if (socketObj === false) {
+                            revertCarte(this);
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    },
+                    revertDuration: 400
+                });
+            });
+            updatePointsRessources();
+        }
+
+        //Fonction qui update après avoir jouer une carte.
+        function updatePointsRessources() {
+            $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
+>>>>>>> f2628f38c2e94e7c978839ee9e39a0d0b15f0385
         }
         $(function () {
             $('.imageCarte').draggable({
