@@ -120,6 +120,7 @@
     <Content Include="ressources\bandeRiveraineArbuste.png" />
     <Content Include="ressources\bandeRiveraineHerbace.png" />
     <Content Include="ressources\brachycentrus.png" />
+    <Content Include="ressources\cartes.png" />
     <Content Include="ressources\chironomidae.png" />
     <Content Include="ressources\corveNettoyage.png" />
     <Content Include="ressources\corydalidae.png" />

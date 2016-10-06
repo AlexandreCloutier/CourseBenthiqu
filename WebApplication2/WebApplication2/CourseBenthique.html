@@ -59,10 +59,10 @@
             nombreJoueur = 4;
             difficulte = 1;
             nomJoueur = new Array();
-            nomJoueur[0] = 'alex';
-            nomJoueur[1] = 'pue';
-            nomJoueur[2] = 'du';
-            nomJoueur[3] = 'bat';
+            nomJoueur[0] = 'joueur1';
+            nomJoueur[1] = 'joueur2';
+            nomJoueur[2] = 'joueur3';
+            nomJoueur[3] = 'joueur4';
             //Temporaire.
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
             creerElementFond();//Crée touts les éléments du jeu.
@@ -105,10 +105,16 @@
             instantierTableauExemplaire();
         }
 
-        //Fonction qui commence la nouvelle partie et efface le menu principal.
+        //Fonction qui envoie vers les options de création de partie.
         function commencerNouvellePartie() {
-            $('#menuPrincipal').remove();
+            $('#menuCreerPartie').remove();
             startGame();
+        }
+
+        //Fonction qui commence la partie.
+        function lancerOptionPartie() {
+            $('#menuPrincipal').remove();
+            menuCreerPartie();
         }
 
         //Fonction qui fera s'occupera des échanges.
@@ -217,6 +223,7 @@
 
         //Fonction qui affiche l'écran d'introduction.
         function menuPrincipal() {
+            $('#menuCreerPartie').remove();
             var menuPrincipal = document.createElement('div');
             menuPrincipal.id = 'menuPrincipal';
             menuPrincipal.className = 'menuPrincipal';
@@ -228,8 +235,7 @@
             buttonNouvellePartie.className = 'buttonMenuPrincipal';
             buttonNouvellePartie.innerHTML = 'Nouvelle partie';
             buttonNouvellePartie.style.bottom = '155px';
-            buttonNouvellePartie.setAttribute('onclick', commencerNouvellePartie);
-            buttonNouvellePartie.onclick = commencerNouvellePartie;
+            buttonNouvellePartie.onclick = lancerOptionPartie;
             $('#menuPrincipal').append(buttonNouvellePartie);
 
             var buttonChargerPartie = document.createElement('button');
@@ -245,6 +251,80 @@
             buttonOptions.innerHTML = 'Options';
             buttonOptions.style.bottom = '35px';
             $('#menuPrincipal').append(buttonOptions);
+        }
+
+        //Fonction qui affiche l'écran de création de partie.
+        function menuCreerPartie() {
+            var menuCreerPartie = document.createElement('div');
+            menuCreerPartie.id = 'menuCreerPartie';
+            menuCreerPartie.className = 'menuCreerPartie';
+            menuCreerPartie.innerHTML = '<img class="imageMenuPrincipal" src="ressources/cartes.png" />';
+            $('body').append(menuCreerPartie);
+
+            var dropDownIA = document.createElement('select');
+            dropDownIA.id = 'dropDownIA';
+            dropDownIA.className = 'dropDownIA';
+            var option2 = document.createElement("option");
+            option2.value = "Contre vrai joueur";
+            option2.innerHTML = "Contre vrai joueur";
+            dropDownIA.appendChild(option2);
+            var option1 = document.createElement("option");
+            option1.value = "Contre ordinateur";
+            option1.innerHTML = "Contre ordinateur";
+            dropDownIA.appendChild(option1);
+            $('#menuCreerPartie').append(dropDownIA);
+
+            //onkeyup='validateUsers(this.value);
+
+            var textBoxNombreJoueur = document.createElement('input');
+            textBoxNombreJoueur.id = 'textBoxNombreJoueur';
+            textBoxNombreJoueur.className = 'textBoxNombreJoueur';
+            textBoxNombreJoueur.setAttribute('type', 'number');
+            textBoxNombreJoueur.setAttribute('min', '1');
+            textBoxNombreJoueur.setAttribute('max', '4');
+            textBoxNombreJoueur.defaultValue = 1;
+
+
+            ///////////////////////MARCHE PASSSSSSSSSSSSSSSSSSSSSSSSS//////////////////////////////
+            textBoxNombreJoueur.setAttribute('onkeyup',validerValeurNombreJoueur(textBoxNombreJoueur.value));
+            $('#menuCreerPartie').append(textBoxNombreJoueur);
+
+            var dropDownDifficulte = document.createElement('select');
+            dropDownDifficulte.id = 'dropDownDifficulte';
+            dropDownDifficulte.className = 'dropDownDifficulte';
+            var option1 = document.createElement("option");
+            option1.value = "Facile";
+            option1.innerHTML = "Facile";
+            dropDownDifficulte.appendChild(option1);
+            var option2 = document.createElement("option");
+            option2.value = "Moyen";
+            option2.innerHTML = "Moyen";
+            dropDownDifficulte.appendChild(option2);
+            var option3 = document.createElement("option");
+            option3.value = "Difficile";
+            option3.innerHTML = "Difficile";
+            dropDownDifficulte.appendChild(option3);
+            $('#menuCreerPartie').append(dropDownDifficulte);
+
+            var buttonDebuter = document.createElement('button');
+            buttonDebuter.id = 'buttonDebuter';
+            buttonDebuter.className = 'buttonDebuter';
+            buttonDebuter.innerHTML = 'Débuter';
+            buttonDebuter.style.bottom = '95px';
+            buttonDebuter.onclick = commencerNouvellePartie;
+            $('#menuCreerPartie').append(buttonDebuter);
+
+            var buttonRetour = document.createElement('button');
+            buttonRetour.id = 'buttonRetour';
+            buttonRetour.className = 'buttonRetour';
+            buttonRetour.innerHTML = 'Retour';
+            buttonRetour.style.bottom = '35px';
+            buttonRetour.onclick = menuPrincipal;
+            $('#menuCreerPartie').append(buttonRetour);
+        }
+
+        function validerValeurNombreJoueur(nombreJoueur) {
+            alert('boo');
         }
 
         //Fonction qui va instantier et remplir le tableau des points de ressources.
