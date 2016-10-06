@@ -234,23 +234,30 @@
             buttonNouvellePartie.id = 'buttonNouvellePartie';
             buttonNouvellePartie.className = 'buttonMenuPrincipal';
             buttonNouvellePartie.innerHTML = 'Nouvelle partie';
-            buttonNouvellePartie.style.bottom = '155px';
             buttonNouvellePartie.onclick = lancerOptionPartie;
+            buttonNouvellePartie.style.bottom = '215px';
             $('#menuPrincipal').append(buttonNouvellePartie);
 
             var buttonChargerPartie = document.createElement('button');
             buttonChargerPartie.id = 'buttonChargerPartie';
             buttonChargerPartie.className = 'buttonMenuPrincipal';
             buttonChargerPartie.innerHTML = 'Charger une partie';
-            buttonChargerPartie.style.bottom = '95px';
+            buttonChargerPartie.style.bottom = '155px';
             $('#menuPrincipal').append(buttonChargerPartie);
 
             var buttonOptions = document.createElement('button');
             buttonOptions.id = 'buttonOptions';
             buttonOptions.className = 'buttonMenuPrincipal';
             buttonOptions.innerHTML = 'Options';
-            buttonOptions.style.bottom = '35px';
+            buttonOptions.style.bottom = '95px';
             $('#menuPrincipal').append(buttonOptions);
+
+            var buttonCredits = document.createElement('button');
+            buttonCredits.id = 'buttonCredits';
+            buttonCredits.className = 'buttonMenuPrincipal';
+            buttonCredits.innerHTML = 'Crédits';
+            buttonCredits.style.bottom = '35px';
+            $('#menuPrincipal').append(buttonCredits);
         }
 
         //Fonction qui affiche l'écran de création de partie.
