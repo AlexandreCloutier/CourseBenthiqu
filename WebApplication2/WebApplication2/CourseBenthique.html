@@ -239,10 +239,12 @@
             $('#menuPrincipal').append(buttonNouvellePartie);
 
             var buttonChargerPartie = document.createElement('button');
+            //buttonChargerPartie.type = 'file'
             buttonChargerPartie.id = 'buttonChargerPartie';
             buttonChargerPartie.className = 'buttonMenuPrincipal';
             buttonChargerPartie.innerHTML = 'Charger une partie';
             buttonChargerPartie.style.bottom = '155px';
+            //buttonChargerPartie.onclick = chargerPartie;
             $('#menuPrincipal').append(buttonChargerPartie);
 
             var buttonOptions = document.createElement('button');
@@ -328,6 +330,67 @@
             buttonRetour.style.bottom = '35px';
             buttonRetour.onclick = menuPrincipal;
             $('#menuCreerPartie').append(buttonRetour);
+        }
+
+        //function chargerPartie() {
+            //var charger = $('#buttonChargerPartie');
+            //upclick({
+            //    element: charger,
+            //    action: '/',
+            //    onstart: function (filename) {
+            //        alert('Start Upload:' + filename);
+            //    },
+            //    oncomplete: function (response_data) {
+            //        alert(response_data);
+            //    }
+            //});
+        //}
+
+        function ouvrirOptionsEnJeu() {
+            var divOptions = document.createElement('div');
+            divOptions.id = 'divOptions';
+            divOptions.className = 'divOptions';
+            $('#plateau').append(divOptions);
+
+            var labelResolution = document.createElement('label');
+            labelResolution.id = 'labelResolution';
+            labelResolution.className = 'labelResolution';
+            labelResolution.innerHTML = 'Résolution : '
+            divOptions.appendChild(labelResolution);
+
+            var dropDownReso = document.createElement('select');
+            dropDownReso.id = 'dropDownReso';
+            dropDownReso.className = 'dropDownReso';
+            divOptions.appendChild(dropDownReso);
+            var option1 = document.createElement('option');
+            option1.value = '1';
+            option1.innerHTML = '1280 x 720';
+            dropDownReso.appendChild(option1);
+
+            var labelPopUp = document.createElement('label');
+            labelPopUp.id = 'labelPopUp';
+            labelPopUp.className = 'labelPopUp';
+            labelPopUp.innerHTML = 'Activé les pop-ups éducatifs : '
+            divOptions.appendChild(labelPopUp);
+
+            var checkBoxPopUp = document.createElement('input');
+            checkBoxPopUp.type = 'checkbox';
+            checkBoxPopUp.id = 'checkBoxPopUp';
+            checkBoxPopUp.value = 'PopUpActif';
+            checkBoxPopUp.className = 'checkBoxPopUp';
+            divOptions.appendChild(checkBoxPopUp);            
+
+            $(divOptions).dialog({
+                classes: {
+                    'ui-dialog': 'no-close ui-corner-all',
+                },
+                draggable: false,
+                resizable: false,
+                height: 80,
+                width: 600,
+                hide: 'fade',
+                show: 'fade'
+            });
         }
 
         function validerValeurNombreJoueur(nombreJoueur) {
@@ -706,6 +769,7 @@
             buttonOption.id = 'buttonOption';
             buttonOption.className = 'buttonOption';
             buttonOption.textContent = 'Options';
+            buttonOption.setAttribute('onclick', 'ouvrirOptionsEnJeu()');
             document.getElementById('divDroite').appendChild(buttonOption);
         }
 
