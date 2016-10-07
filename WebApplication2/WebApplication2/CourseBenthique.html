@@ -291,13 +291,16 @@
             dropDownIA.appendChild(option1);
             $('#menuCreerPartie').append(dropDownIA);
             $(function () {
-                $('.dropDownNombreJoueur').on({
+                $('.dropDownIA').on({
                     change: function () {
                         if (this.value === 'VJ') {
                             //TODO: si le texte et dropdown du nombre de joueur n'est pas afficher, l'afficher.
+                            $('#divTexteNombreJoueur').show();
+                            $('#dropDownNombreJoueur').show();
                         }
                         else if (this.value === 'IA') {
-                            //TODO: retirer le texte et le drop down du nombre de joueur.
+                            $('#divTexteNombreJoueur').hide();
+                            $('#dropDownNombreJoueur').hide();
                         }
                     }
                 });
@@ -310,8 +313,8 @@
             $('#menuCreerPartie').append(divTexteNombreJoueur);
 
             var dropDownNombreJoueur = document.createElement('select');
-            dropDownNombreJoueur.id = '';
-            dropDownNombreJoueur.className = '';
+            dropDownNombreJoueur.id = 'dropDownNombreJoueur';
+            dropDownNombreJoueur.className = 'dropDownNombreJoueur';
             var option5 = document.createElement('option');
             option5.value = '0';
             option5.innerHTML = '';
@@ -332,21 +335,62 @@
             $(function () {
                 $('.dropDownNombreJoueur').on({
                     change: function () {
-                        if (value === 0) {
-                            //TODO: supprimer les textbox de nom de joueur et d'âge.
+                        if (this.value === '0') {
+                            $('#nomJoueurA').hide();
+                            $('#nomJoueurB').hide();
+                            $('#nomJoueurC').hide();
+                            $('#nomJoueurD').hide();
                         }
-                        else if (value === 2) {
-                            //TODO: Ajouter les textbox de nom de joueur et d'âge.
+                        else if (this.value === '2') {
+                            $('#nomJoueurA').show();
+                            $('#nomJoueurB').show();
+                            $('#nomJoueurC').hide();
+                            $('#nomJoueurD').hide();
                         }
-                        else if (value === 3) {
-                            //TODO: Ajouter les textbox de nom de joueur et d'âge.
+                        else if (this.value === '3') {
+                            $('#nomJoueurA').show();
+                            $('#nomJoueurB').show();
+                            $('#nomJoueurC').show();
+                            $('#nomJoueurD').hide();
                         }
-                        else if (value === 4) {
-                            //TODO: Ajouter les textbox de nom de joueur et d'âge.
+                        else if (this.value === '4') {
+                            $('#nomJoueurA').show();
+                            $('#nomJoueurB').show();
+                            $('#nomJoueurC').show();
+                            $('#nomJoueurD').show();
                         }
                     }
                 });
             });
+
+            var nomJoueurA = document.createElement('input'); 
+            nomJoueurA.type = "text";
+            nomJoueurA.id = 'nomJoueurA';
+            nomJoueurA.className = 'nomJoueurA';
+            $('#menuCreerPartie').append(nomJoueurA);
+
+            var nomJoueurB = document.createElement('input');
+            nomJoueurB.type = "text";
+            nomJoueurB.id = 'nomJoueurB';
+            nomJoueurB.className = 'nomJoueurB';
+            $('#menuCreerPartie').append(nomJoueurB);
+
+            var nomJoueurC = document.createElement('input');
+            nomJoueurC.type = "text";
+            nomJoueurC.id = 'nomJoueurC';
+            nomJoueurC.className = 'nomJoueurC';
+            $('#menuCreerPartie').append(nomJoueurC);
+
+            var nomJoueurD = document.createElement('input');
+            nomJoueurD.type = "text";
+            nomJoueurD.id = 'nomJoueurD';
+            nomJoueurD.className = 'nomJoueurD';
+            $('#menuCreerPartie').append(nomJoueurD);
+
+            $('#nomJoueurA').hide();
+            $('#nomJoueurB').hide();
+            $('#nomJoueurC').hide();
+            $('#nomJoueurD').hide();
 
             var divTexteDifficulte = document.createElement('div');
             divTexteDifficulte.id = 'divTexteDifficulte';
