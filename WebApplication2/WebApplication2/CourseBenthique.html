@@ -107,6 +107,8 @@
 
         //Fonction qui envoie vers les options de création de partie.
         function commencerNouvellePartie() {
+            //TODO: vérifier que tout les champs sont remplie et entre les valeurs dans les bon champs pour ensuite partir la partie.
+
             $('#menuCreerPartie').remove();
             startGame();
         }
@@ -265,36 +267,90 @@
             var menuCreerPartie = document.createElement('div');
             menuCreerPartie.id = 'menuCreerPartie';
             menuCreerPartie.className = 'menuCreerPartie';
-            menuCreerPartie.innerHTML = '<img class="imageMenuPrincipal" src="ressources/cartes.png" />';
+            //menuCreerPartie.innerHTML = '<img class="imageMenuCreerPartie" src="ressources/cartes.png" />';
             $('body').append(menuCreerPartie);
+
+            var divTexteModePartie = document.createElement('div');
+            divTexteModePartie.id = 'divTexteModePartie';
+            divTexteModePartie.className = 'divTexteModePartie';
+            divTexteModePartie.innerHTML = '<p class=modePartie><strong>Mode de jeu: </strong>';
+            $('#menuCreerPartie').append(divTexteModePartie);
 
             var dropDownIA = document.createElement('select');
             dropDownIA.id = 'dropDownIA';
             dropDownIA.className = 'dropDownIA';
             var option2 = document.createElement("option");
-            option2.value = "Contre vrai joueur";
+            option2.value = "VJ";
             option2.innerHTML = "Contre vrai joueur";
             dropDownIA.appendChild(option2);
             var option1 = document.createElement("option");
-            option1.value = "Contre ordinateur";
+            option1.value = "IA";
             option1.innerHTML = "Contre ordinateur";
             dropDownIA.appendChild(option1);
             $('#menuCreerPartie').append(dropDownIA);
+            $(function () {
+                $('.dropDownNombreJoueur').on({
+                    change: function () {
+                        if (this.value === 'VJ') {
+                            //TODO: si le texte et dropdown du nombre de joueur n'est pas afficher, l'afficher.
+                        }
+                        else if (this.value === 'IA') {
+                            //TODO: retirer le texte et le drop down du nombre de joueur.
+                        }
+                    }
+                });
+            });
 
-            //onkeyup='validateUsers(this.value);
+            var divTexteNombreJoueur = document.createElement('div');
+            divTexteNombreJoueur.id = 'divTexteNombreJoueur';
+            divTexteNombreJoueur.className = 'divTexteNombreJoueur';
+            divTexteNombreJoueur.innerHTML = '<p class=nombreJoueur><strong>Nombre de joueur: </strong>';
+            $('#menuCreerPartie').append(divTexteNombreJoueur);
 
-            var textBoxNombreJoueur = document.createElement('input');
-            textBoxNombreJoueur.id = 'textBoxNombreJoueur';
-            textBoxNombreJoueur.className = 'textBoxNombreJoueur';
-            textBoxNombreJoueur.setAttribute('type', 'number');
-            textBoxNombreJoueur.setAttribute('min', '1');
-            textBoxNombreJoueur.setAttribute('max', '4');
-            textBoxNombreJoueur.defaultValue = 1;
+            var dropDownNombreJoueur = document.createElement('select');
+            dropDownNombreJoueur.id = '';
+            dropDownNombreJoueur.className = '';
+            var option5 = document.createElement('option');
+            option5.value = '0';
+            option5.innerHTML = '';
+            dropDownNombreJoueur.appendChild(option5);
+            var option2 = document.createElement('option');
+            option2.value = '2';
+            option2.innerHTML = '2';
+            dropDownNombreJoueur.appendChild(option2);
+            var option3 = document.createElement('option');
+            option3.value = '3';
+            option3.innerHTML = '3';
+            dropDownNombreJoueur.appendChild(option3);
+            var option4 = document.createElement('option');
+            option4.value = '4';
+            option4.innerHTML = '4';
+            dropDownNombreJoueur.appendChild(option4);
+            $('#menuCreerPartie').append(dropDownNombreJoueur);
+            $(function () {
+                $('.dropDownNombreJoueur').on({
+                    change: function () {
+                        if (value === 0) {
+                            //TODO: supprimer les textbox de nom de joueur et d'âge.
+                        }
+                        else if (value === 2) {
+                            //TODO: Ajouter les textbox de nom de joueur et d'âge.
+                        }
+                        else if (value === 3) {
+                            //TODO: Ajouter les textbox de nom de joueur et d'âge.
+                        }
+                        else if (value === 4) {
+                            //TODO: Ajouter les textbox de nom de joueur et d'âge.
+                        }
+                    }
+                });
+            });
 
-
-            ///////////////////////MARCHE PASSSSSSSSSSSSSSSSSSSSSSSSS//////////////////////////////
-            textBoxNombreJoueur.setAttribute('onkeyup',validerValeurNombreJoueur(textBoxNombreJoueur.value));
-            $('#menuCreerPartie').append(textBoxNombreJoueur);
+            var divTexteDifficulte = document.createElement('div');
+            divTexteDifficulte.id = 'divTexteDifficulte';
+            divTexteDifficulte.className = 'divTexteDifficulte';
+            divTexteDifficulte.innerHTML = '<p class=difficulte><strong>Difficulté de la partie: </strong>';
+            $('#menuCreerPartie').append(divTexteDifficulte);
 
             var dropDownDifficulte = document.createElement('select');
             dropDownDifficulte.id = 'dropDownDifficulte';
@@ -315,7 +371,7 @@
 
             var buttonDebuter = document.createElement('button');
             buttonDebuter.id = 'buttonDebuter';
-            buttonDebuter.className = 'buttonDebuter';
+            buttonDebuter.className = 'buttonMenuPrincipal';
             buttonDebuter.innerHTML = 'Débuter';
             buttonDebuter.style.bottom = '95px';
             buttonDebuter.onclick = commencerNouvellePartie;
@@ -323,15 +379,11 @@
 
             var buttonRetour = document.createElement('button');
             buttonRetour.id = 'buttonRetour';
-            buttonRetour.className = 'buttonRetour';
+            buttonRetour.className = 'buttonMenuPrincipal';
             buttonRetour.innerHTML = 'Retour';
             buttonRetour.style.bottom = '35px';
             buttonRetour.onclick = menuPrincipal;
             $('#menuCreerPartie').append(buttonRetour);
-        }
-
-        function validerValeurNombreJoueur(nombreJoueur) {
-            alert('boo');
         }
 
         //Fonction qui va instantier et remplir le tableau des points de ressources.
@@ -1519,6 +1571,22 @@
             return paquetCarte;
         }
 
+        //Fonction qui sera appeler lors du clique sur passer le tour.
+        function enleverBrillance() {
+            for (var i = 0; i < 6; i++) {
+                $('#emplacementBasJoueur' + 'A' + i).removeClass('ui-echange-highlight');
+                $('#emplacementBasJoueur' + 'B' + i).removeClass('ui-echange-highlight');
+                $('#emplacementBasJoueur' + 'C' + i).removeClass('ui-echange-highlight');
+                $('#emplacementBasJoueur' + 'D' + i).removeClass('ui-echange-highlight');
+            }
+            for (var i = 6; i < 10; i++) {
+                $('#emplacementHautJoueur' + 'A' + i).removeClass('ui-echange-highlight');
+                $('#emplacementHautJoueur' + 'B' + i).removeClass('ui-echange-highlight');
+                $('#emplacementHautJoueur' + 'C' + i).removeClass('ui-echange-highlight');
+                $('#emplacementHautJoueur' + 'D' + i).removeClass('ui-echange-highlight');
+            }
+        }
+
         //Fonction appellé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
             $('.buttonPasserTour').prop('disabled', true);
@@ -1541,6 +1609,8 @@
 
             if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
                 onClickButtonEchange();
+                annulerEchange();
+                enleverBrillance();
             }
 
             numeroJoueurActif++;
