@@ -54,15 +54,6 @@
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
-            //Temporaire, si on crée une nouvelle partie, le joueur devra entrer toutes ces informations.
-            nombreJoueur = 4;
-            difficulte = 1;
-            nomJoueur = new Array();
-            nomJoueur[0] = 'joueur1';
-            nomJoueur[1] = 'joueur2';
-            nomJoueur[2] = 'joueur3';
-            nomJoueur[3] = 'joueur4';
-            //Temporaire.
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
             creerElementFond();//Crée touts les éléments du jeu.
             instantierTableaux();//Instantie tout les tableaux.
@@ -182,7 +173,37 @@
 
         //Fonction qui va entrer les valeurs de créations de partie dans les variables.
         function entrerValeurCreationPartie() {
-            //TODO: du travail... encore du travail...
+            nomJoueur = new Array();
+            //TODO: Lorsqu'il y a juste 2 joueurs, ne pas créer 4 emplacement de nom à droite.
+            if ($('#dropDownIA').val() === 'VJ') {
+                difficulte = $('#dropDownDifficulte').val();
+
+                if ($('#dropDownNombreJoueur').val() === '2') {
+                    nombreJoueur = 2;
+                    nomJoueur[0] = $('#nomJoueurA').val();
+                    nomJoueur[1] = $('#nomJoueurB').val();
+                    nomJoueur[2] = '';//TEMPORAIRE
+                    nomJoueur[3] = '';//TEMPORAIRE
+                }
+                else if ($('#dropDownNombreJoueur').val() === '3') {
+                    nombreJoueur = 3;
+                    nomJoueur[0] = $('#nomJoueurA').val();
+                    nomJoueur[1] = $('#nomJoueurB').val();
+                    nomJoueur[2] = $('#nomJoueurC').val();
+                    nomJoueur[3] = '';//TEMPORAIRE
+                }
+                else {
+                    nombreJoueur = 4;
+                    nomJoueur[0] = $('#nomJoueurA').val();
+                    nomJoueur[1] = $('#nomJoueurB').val();
+                    nomJoueur[2] = $('#nomJoueurC').val();
+                    nomJoueur[3] = $('#nomJoueurD').val();
+                }
+            }
+            else {
+                nombreJoueur = 1;
+                difficulte = $('#dropDownDifficulte').val();
+            }
         }
 
         //Fonction qui commence la partie.
@@ -635,15 +656,15 @@
             dropDownDifficulte.id = 'dropDownDifficulte';
             dropDownDifficulte.className = 'dropDownDifficulte';
             var option1 = document.createElement("option");
-            option1.value = "Facile";
+            option1.value = "1";
             option1.innerHTML = "Facile";
             dropDownDifficulte.appendChild(option1);
             var option2 = document.createElement("option");
-            option2.value = "Moyen";
+            option2.value = "2";
             option2.innerHTML = "Moyen";
             dropDownDifficulte.appendChild(option2);
             var option3 = document.createElement("option");
-            option3.value = "Difficile";
+            option3.value = "3";
             option3.innerHTML = "Difficile";
             dropDownDifficulte.appendChild(option3);
             $('#menuCreerPartie').append(dropDownDifficulte);
