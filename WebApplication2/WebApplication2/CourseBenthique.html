@@ -10,7 +10,6 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script>
         var nomJoueur;
-        //TODO: Lorsqu'on essaie de drag une carte différente par dessus une autre carte, afficher le pop-up.
         var difficulte;
         //Paquet de carte principal.
         var paquetCarte;
@@ -107,10 +106,82 @@
 
         //Fonction qui envoie vers les options de création de partie.
         function commencerNouvellePartie() {
-            //TODO: vérifier que tout les champs sont remplie et entre les valeurs dans les bon champs pour ensuite partir la partie.
+            if (verifierConditionCreationPartie()) {
+                $('#menuCreerPartie').remove();
+                startGame();
+            }
+            else {
+                popUpErreur('Veuillez bien remplir chacun des champs.')
+            }
+        }
 
-            $('#menuCreerPartie').remove();
-            startGame();
+        //Fonction qui va vérifier les conditions des champs lors de la création d'une nouvelle partie.
+        function verifierConditionCreationPartie() {
+            //TODO: les textbox vide compte comme un nom de joueurs....
+
+            if ($('#dropDownIA').val() === 'VJ') {
+                if ($('#dropDownNombreJoueur').val() === '2') {
+                    if ($('#nomJoueurA').text != '' && $('#nomJoueurB').text != '') {
+                        if ($('#ageJoueurA').text != '' && $('ageJoueurB').text != '') {
+                            entrerValeurCreationPartie();
+                            return true;
+                        }
+                        else {
+                            popUpErreur("Veuillez entrer l'age de chacun des joueurs.");
+                            return false;
+                        }
+                    }
+                    else {
+                        popUpErreur('Veuillez entrer un nom pour chacun des joueurs.');
+                        return false;
+                    }
+                }
+                else if ($('#dropDownNombreJoueur').val() === '3') {
+                    if ($('#nomJoueurA').text != '' && $('#nomJoueurB').text != '' && $('#nomJoueurC').text != '') {
+                        if ($('#ageJoueurA').text != '' && $('ageJoueurB').text != '' && $('ageJoueurC').text != '') {
+                            entrerValeurCreationPartie();
+                            return true;
+                        }
+                        else {
+                            popUpErreur("Veuillez entrer l'age de chacun des joueurs.");
+                            return false;
+                        }
+                    }
+                    else {
+                        popUpErreur('Veuillez entrer un nom pour chacun des joueurs.');
+                        return false;
+                    }
+                }
+                else if ($('#dropDownNombreJoueur').val() === '4') {
+                    if ($('#nomJoueurA').text != '' && $('#nomJoueurB' && $('#nomJoueurC').text != '' && $('#nomJoueurD').text != '').text != '') {
+                        if ($('#ageJoueurA').text != '' && $('ageJoueurB').text != '' && $('ageJoueurC').text != '' && $('ageJoueurD').text != '') {
+                            entrerValeurCreationPartie();
+                            return true;
+                        }
+                        else {
+                            popUpErreur("Veuillez entrer l'age de chacun des joueurs.");
+                            return false;
+                        }
+                    }
+                    else {
+                        popUpErreur('Veuillez entrer un nom pour chacun des joueurs.');
+                        return false;
+                    }
+                }
+                else {
+                    popUpErreur('Veuillez entrer un nombre de joueur.');
+                    return false;
+                }
+            }
+            else {
+                entrerValeurCreationPartie();
+                return true;
+            }
+        }
+
+        //Fonction qui va entrer les valeurs de créations de partie dans les variables.
+        function entrerValeurCreationPartie() {
+            //TODO: du travail... encore du travail...
         }
 
         //Fonction qui commence la partie.
@@ -294,13 +365,27 @@
                 $('.dropDownIA').on({
                     change: function () {
                         if (this.value === 'VJ') {
-                            //TODO: si le texte et dropdown du nombre de joueur n'est pas afficher, l'afficher.
                             $('#divTexteNombreJoueur').show();
                             $('#dropDownNombreJoueur').show();
                         }
                         else if (this.value === 'IA') {
                             $('#divTexteNombreJoueur').hide();
                             $('#dropDownNombreJoueur').hide();
+
+                            $('#nomJoueurA').hide();
+                            $('#nomJoueurB').hide();
+                            $('#nomJoueurC').hide();
+                            $('#nomJoueurD').hide();
+
+                            $('#ageJoueurA').hide();
+                            $('#ageJoueurB').hide();
+                            $('#ageJoueurC').hide();
+                            $('#ageJoueurD').hide();
+
+                            $('#labelAgeJoueurA').hide();
+                            $('#labelAgeJoueurB').hide();
+                            $('#labelAgeJoueurC').hide();
+                            $('#labelAgeJoueurD').hide();
                         }
                     }
                 });
@@ -340,34 +425,118 @@
                             $('#nomJoueurB').hide();
                             $('#nomJoueurC').hide();
                             $('#nomJoueurD').hide();
+
+                            $('#ageJoueurA').hide();
+                            $('#ageJoueurB').hide();
+                            $('#ageJoueurC').hide();
+                            $('#ageJoueurD').hide();
+
+                            $('#labelNomJoueurA').hide();
+                            $('#labelNomJoueurB').hide();
+                            $('#labelNomJoueurC').hide();
+                            $('#labelNomJoueurD').hide();
+
+                            $('#labelAgeJoueurA').hide();
+                            $('#labelAgeJoueurB').hide();
+                            $('#labelAgeJoueurC').hide();
+                            $('#labelAgeJoueurD').hide();
                         }
                         else if (this.value === '2') {
                             $('#nomJoueurA').show();
                             $('#nomJoueurB').show();
                             $('#nomJoueurC').hide();
                             $('#nomJoueurD').hide();
+
+                            $('#ageJoueurA').show();
+                            $('#ageJoueurB').show();
+                            $('#ageJoueurC').hide();
+                            $('#ageJoueurD').hide();
+
+                            $('#labelNomJoueurA').show();
+                            $('#labelNomJoueurB').show();
+                            $('#labelNomJoueurC').hide();
+                            $('#labelNomJoueurD').hide();
+
+                            $('#labelAgeJoueurA').show();
+                            $('#labelAgeJoueurB').show();
+                            $('#labelAgeJoueurC').hide();
+                            $('#labelAgeJoueurD').hide();
                         }
                         else if (this.value === '3') {
                             $('#nomJoueurA').show();
                             $('#nomJoueurB').show();
                             $('#nomJoueurC').show();
                             $('#nomJoueurD').hide();
+
+                            $('#ageJoueurA').show();
+                            $('#ageJoueurB').show();
+                            $('#ageJoueurC').show();
+                            $('#ageJoueurD').hide();
+
+                            $('#labelNomJoueurA').show();
+                            $('#labelNomJoueurB').show();
+                            $('#labelNomJoueurC').show();
+                            $('#labelNomJoueurD').hide();
+
+                            $('#labelAgeJoueurA').show();
+                            $('#labelAgeJoueurB').show();
+                            $('#labelAgeJoueurC').show();
+                            $('#labelAgeJoueurD').hide();
                         }
                         else if (this.value === '4') {
                             $('#nomJoueurA').show();
                             $('#nomJoueurB').show();
                             $('#nomJoueurC').show();
                             $('#nomJoueurD').show();
+
+                            $('#ageJoueurA').show();
+                            $('#ageJoueurB').show();
+                            $('#ageJoueurC').show();
+                            $('#ageJoueurD').show();
+
+                            $('#labelNomJoueurA').show();
+                            $('#labelNomJoueurB').show();
+                            $('#labelNomJoueurC').show();
+                            $('#labelNomJoueurD').show();
+
+                            $('#labelAgeJoueurA').show();
+                            $('#labelAgeJoueurB').show();
+                            $('#labelAgeJoueurC').show();
+                            $('#labelAgeJoueurD').show();
                         }
                     }
                 });
             });
 
-            var nomJoueurA = document.createElement('input'); 
+            var labelNomJoueurA = document.createElement("Label");
+            labelNomJoueurA.id = 'labelNomJoueurA';
+            labelNomJoueurA.className = 'labelNomJoueurA';
+            labelNomJoueurA.innerHTML = "<p></p><strong>Nom du joueur: </strong>";
+            $('#menuCreerPartie').append(labelNomJoueurA);
+
+            var nomJoueurA = document.createElement('input');
             nomJoueurA.type = "text";
             nomJoueurA.id = 'nomJoueurA';
             nomJoueurA.className = 'nomJoueurA';
             $('#menuCreerPartie').append(nomJoueurA);
+
+            var labelAgeJoueurA = document.createElement("Label");
+            labelAgeJoueurA.id = 'labelAgeJoueurA';
+            labelAgeJoueurA.className = 'labelAgeJoueurA';
+            labelAgeJoueurA.innerHTML = "<p></p><strong>Age du joueur: </strong>";
+            $('#menuCreerPartie').append(labelAgeJoueurA);
+
+            var ageJoueurA = document.createElement('input');
+            ageJoueurA.type = "text";
+            ageJoueurA.id = 'ageJoueurA';
+            ageJoueurA.className = 'ageJoueurA';
+            $('#menuCreerPartie').append(ageJoueurA);
+
+            var labelNomJoueurB = document.createElement("Label");
+            labelNomJoueurB.id = 'labelNomJoueurB';
+            labelNomJoueurB.className = 'labelNomJoueurB';
+            labelNomJoueurB.innerHTML = "<p></p><strong>Nom du joueur: </strong>";
+            $('#menuCreerPartie').append(labelNomJoueurB);
 
             var nomJoueurB = document.createElement('input');
             nomJoueurB.type = "text";
@@ -375,11 +544,47 @@
             nomJoueurB.className = 'nomJoueurB';
             $('#menuCreerPartie').append(nomJoueurB);
 
+            var labelAgeJoueurB = document.createElement("Label");
+            labelAgeJoueurB.id = 'labelAgeJoueurB';
+            labelAgeJoueurB.className = 'labelAgeJoueurB';
+            labelAgeJoueurB.innerHTML = "<p></p><strong>Age du joueur: </strong>";
+            $('#menuCreerPartie').append(labelAgeJoueurB);
+
+            var ageJoueurB = document.createElement('input');
+            ageJoueurB.type = "text";
+            ageJoueurB.id = 'ageJoueurB';
+            ageJoueurB.className = 'ageJoueurB';
+            $('#menuCreerPartie').append(ageJoueurB);
+
+            var labelNomJoueurC = document.createElement("Label");
+            labelNomJoueurC.id = 'labelNomJoueurC';
+            labelNomJoueurC.className = 'labelNomJoueurC';
+            labelNomJoueurC.innerHTML = "<p></p><strong>Nom du joueur: </strong>";
+            $('#menuCreerPartie').append(labelNomJoueurC);
+
             var nomJoueurC = document.createElement('input');
             nomJoueurC.type = "text";
             nomJoueurC.id = 'nomJoueurC';
             nomJoueurC.className = 'nomJoueurC';
             $('#menuCreerPartie').append(nomJoueurC);
+
+            var labelAgeJoueurC = document.createElement("Label");
+            labelAgeJoueurC.id = 'labelAgeJoueurC';
+            labelAgeJoueurC.className = 'labelAgeJoueurC';
+            labelAgeJoueurC.innerHTML = "<p></p><strong>Age du joueur: </strong>";
+            $('#menuCreerPartie').append(labelAgeJoueurC);
+
+            var ageJoueurC = document.createElement('input');
+            ageJoueurC.type = "text";
+            ageJoueurC.id = 'ageJoueurC';
+            ageJoueurC.className = 'ageJoueurC';
+            $('#menuCreerPartie').append(ageJoueurC);
+
+            var labelNomJoueurD = document.createElement("Label");
+            labelNomJoueurD.id = 'labelNomJoueurD';
+            labelNomJoueurD.className = 'labelNomJoueurD';
+            labelNomJoueurD.innerHTML = "<p></p><strong>Nom du joueur: </strong>";
+            $('#menuCreerPartie').append(labelNomJoueurD);
 
             var nomJoueurD = document.createElement('input');
             nomJoueurD.type = "text";
@@ -387,10 +592,37 @@
             nomJoueurD.className = 'nomJoueurD';
             $('#menuCreerPartie').append(nomJoueurD);
 
+            var labelAgeJoueurD = document.createElement("Label");
+            labelAgeJoueurD.id = 'labelAgeJoueurD';
+            labelAgeJoueurD.className = 'labelAgeJoueurD';
+            labelAgeJoueurD.innerHTML = "<p></p><strong>age du joueur: </strong>";
+            $('#menuCreerPartie').append(labelAgeJoueurD);
+
+            var ageJoueurD = document.createElement('input');
+            ageJoueurD.type = "text";
+            ageJoueurD.id = 'ageJoueurD';
+            ageJoueurD.className = 'ageJoueurD';
+            $('#menuCreerPartie').append(ageJoueurD);
+
             $('#nomJoueurA').hide();
             $('#nomJoueurB').hide();
             $('#nomJoueurC').hide();
             $('#nomJoueurD').hide();
+
+            $('#ageJoueurA').hide();
+            $('#ageJoueurB').hide();
+            $('#ageJoueurC').hide();
+            $('#ageJoueurD').hide();
+
+            $('#labelNomJoueurA').hide();
+            $('#labelNomJoueurB').hide();
+            $('#labelNomJoueurC').hide();
+            $('#labelNomJoueurD').hide();
+
+            $('#labelAgeJoueurA').hide();
+            $('#labelAgeJoueurB').hide();
+            $('#labelAgeJoueurC').hide();
+            $('#labelAgeJoueurD').hide();
 
             var divTexteDifficulte = document.createElement('div');
             divTexteDifficulte.id = 'divTexteDifficulte';
@@ -433,17 +665,17 @@
         }
 
         //function chargerPartie() {
-            //var charger = $('#buttonChargerPartie');
-            //upclick({
-            //    element: charger,
-            //    action: '/',
-            //    onstart: function (filename) {
-            //        alert('Start Upload:' + filename);
-            //    },
-            //    oncomplete: function (response_data) {
-            //        alert(response_data);
-            //    }
-            //});
+        //var charger = $('#buttonChargerPartie');
+        //upclick({
+        //    element: charger,
+        //    action: '/',
+        //    onstart: function (filename) {
+        //        alert('Start Upload:' + filename);
+        //    },
+        //    oncomplete: function (response_data) {
+        //        alert(response_data);
+        //    }
+        //});
         //}
 
         function ouvrirOptionsEnJeu() {
@@ -478,7 +710,7 @@
             checkBoxPopUp.id = 'checkBoxPopUp';
             checkBoxPopUp.value = 'PopUpActif';
             checkBoxPopUp.className = 'checkBoxPopUp';
-            divOptions.appendChild(checkBoxPopUp);            
+            divOptions.appendChild(checkBoxPopUp);
 
             $(divOptions).dialog({
                 classes: {
