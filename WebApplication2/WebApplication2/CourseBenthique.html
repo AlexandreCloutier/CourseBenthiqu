@@ -106,76 +106,77 @@
 
         //Fonction qui envoie vers les options de création de partie.
         function commencerNouvellePartie() {
-            if (verifierConditionCreationPartie()) {
+            if (verifierConditionCreationPartie() === '') {
                 $('#menuCreerPartie').remove();
                 startGame();
             }
             else {
-                popUpErreur('Veuillez bien remplir chacun des champs.')
+                $('#labelErreur').css('color','red');
+                $('#labelErreur').html('<p></p>'+verifierConditionCreationPartie());
             }
         }
 
         //Fonction qui va vérifier les conditions des champs lors de la création d'une nouvelle partie.
         function verifierConditionCreationPartie() {
-            //TODO: les textbox vide compte comme un nom de joueurs....
+            var retour;
 
             if ($('#dropDownIA').val() === 'VJ') {
                 if ($('#dropDownNombreJoueur').val() === '2') {
-                    if ($('#nomJoueurA').text != '' && $('#nomJoueurB').text != '') {
-                        if ($('#ageJoueurA').text != '' && $('ageJoueurB').text != '') {
+                    if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '') {
+                        if ($('#ageJoueurA').val() != '' && $('ageJoueurB').val() != '') {
                             entrerValeurCreationPartie();
-                            return true;
+                            return '';
                         }
                         else {
-                            popUpErreur("Veuillez entrer l'age de chacun des joueurs.");
-                            return false;
+                            retour = "Veuillez entrer l'age de chacun des joueurs.";
+                            return retour;
                         }
                     }
                     else {
-                        popUpErreur('Veuillez entrer un nom pour chacun des joueurs.');
-                        return false;
+                        retour = 'Veuillez entrer un nom pour chacun des joueurs.';
+                        return retour;
                     }
                 }
                 else if ($('#dropDownNombreJoueur').val() === '3') {
-                    if ($('#nomJoueurA').text != '' && $('#nomJoueurB').text != '' && $('#nomJoueurC').text != '') {
-                        if ($('#ageJoueurA').text != '' && $('ageJoueurB').text != '' && $('ageJoueurC').text != '') {
+                    if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '' && $('#nomJoueurC').val() != '') {
+                        if ($('#ageJoueurA').val() != '' && $('ageJoueurB').val() != '' && $('ageJoueurC').val() != '') {
                             entrerValeurCreationPartie();
-                            return true;
+                            return '';
                         }
                         else {
-                            popUpErreur("Veuillez entrer l'age de chacun des joueurs.");
-                            return false;
+                            retour = "Veuillez entrer l'age de chacun des joueurs.";
+                            return retour;
                         }
                     }
                     else {
-                        popUpErreur('Veuillez entrer un nom pour chacun des joueurs.');
-                        return false;
+                        retour = 'Veuillez entrer un nom pour chacun des joueurs.';
+                        return retour;
                     }
                 }
                 else if ($('#dropDownNombreJoueur').val() === '4') {
-                    if ($('#nomJoueurA').text != '' && $('#nomJoueurB' && $('#nomJoueurC').text != '' && $('#nomJoueurD').text != '').text != '') {
-                        if ($('#ageJoueurA').text != '' && $('ageJoueurB').text != '' && $('ageJoueurC').text != '' && $('ageJoueurD').text != '') {
+                    if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() && $('#nomJoueurC').val() != '' && $('#nomJoueurD').val() != '') {
+                        if ($('#ageJoueurA').val() != '' && $('ageJoueurB').val() != '' && $('ageJoueurC').val() != '' && $('ageJoueurD').val() != '') {
                             entrerValeurCreationPartie();
-                            return true;
+                            return '';
                         }
                         else {
-                            popUpErreur("Veuillez entrer l'age de chacun des joueurs.");
-                            return false;
+                            retour = "Veuillez entrer l'age de chacun des joueurs.";
+                            return retour;
                         }
                     }
                     else {
-                        popUpErreur('Veuillez entrer un nom pour chacun des joueurs.');
-                        return false;
+                        retour = 'Veuillez entrer un nom pour chacun des joueurs.';
+                        return retour;
                     }
                 }
                 else {
-                    popUpErreur('Veuillez entrer un nombre de joueur.');
-                    return false;
+                    retour = 'Veuillez entrer un nombre de joueur.';
+                    return retour;
                 }
             }
             else {
                 entrerValeurCreationPartie();
-                return true;
+                return '';
             }
         }
 
@@ -187,7 +188,7 @@
         //Fonction qui commence la partie.
         function lancerOptionPartie() {
             $('#menuPrincipal').remove();
-            menuCreerPartie();
+            menuCreerPartie();            
         }
 
         //Fonction qui fera s'occupera des échanges.
@@ -646,6 +647,11 @@
             option3.innerHTML = "Difficile";
             dropDownDifficulte.appendChild(option3);
             $('#menuCreerPartie').append(dropDownDifficulte);
+
+            var labelErreur = document.createElement('label');
+            labelErreur.className = 'labelErreur';
+            labelErreur.id = 'labelErreur';
+            $('#menuCreerPartie').append(labelErreur);
 
             var buttonDebuter = document.createElement('button');
             buttonDebuter.id = 'buttonDebuter';
