@@ -241,13 +241,13 @@
             else if (nombreJoueur === 3) {
                 if (lettreActif === 'A') {
                     ennemi1 = 'B';
-                    ennemi2 = 'D';
+                    ennemi2 = 'C';
                 }
                 else if (lettreActif === 'B') {
                     ennemi1 = 'A';
-                    ennemi2 = 'D';
+                    ennemi2 = 'C';
                 }
-                else if (lettreActif === 'D') {
+                else if (lettreActif === 'C') {
                     ennemi1 = 'A';
                     ennemi2 = 'B';
                 }
@@ -284,7 +284,7 @@
                     }
                     for (var i = 6; i < 10; i++) {
                         if ($('#emplacementHautJoueur' + lettreActif + i).children().length > 0) {
-                            $('#emplacementHautJoueur' + lettreJlettreActifoueurActif + i).addClass('ui-echange-highlight');
+                            $('#emplacementHautJoueur' + lettreActif + i).addClass('ui-echange-highlight');
                         }
                     }
                 }
@@ -1414,17 +1414,38 @@
                 }
                 else if (renduCarte2) {
                     if (lettreJoueur != lettreEchange1) {
-                        if (lettreJoueur === 'A') {
-                            numeroJoueurEchange2 = 0;
+                        if (nombreJoueur === 4) {
+                            if (lettreJoueur === 'A') {
+                                numeroJoueurEchange2 = 0;
+                            }
+                            else if (lettreJoueur === 'B') {
+                                numeroJoueurEchange2 = 2;
+                            }
+                            else if (lettreJoueur === 'C') {
+                                numeroJoueurEchange2 = 3;
+                            }
+                            else if (lettreJoueur === 'D') {
+                                numeroJoueurEchange2 = 1;
+                            }
                         }
-                        else if (lettreJoueur === 'B') {
-                            numeroJoueurEchange2 = 2;
+                        else if (nombreJoueur === 3) {
+                            if (lettreJoueur === 'A') {
+                                numeroJoueurEchange2 = 0;
+                            }
+                            else if (lettreJoueur === 'B') {
+                                numeroJoueurEchange2 = 1;
+                            }
+                            else if (lettreJoueur === 'C') {
+                                numeroJoueurEchange2 = 2;
+                            }
                         }
-                        else if (lettreJoueur === 'C') {
-                            numeroJoueurEchange2 = 3;
-                        }
-                        else if (lettreJoueur === 'D') {
-                            numeroJoueurEchange2 = 1;
+                        else if (nombreJoueur === 2) {
+                            if (lettreJoueur === 'A') {
+                                numeroJoueurEchange2 = 0;
+                            }
+                            else if (lettreJoueur === 'B') {
+                                numeroJoueurEchange2 = 1;
+                            }
                         }
 
                         emplacementCarte2 = event.target.id;
