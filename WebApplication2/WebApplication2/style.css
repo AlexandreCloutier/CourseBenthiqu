@@ -57,7 +57,7 @@
     position: absolute;
     left: 41%;
     border-radius: 10px;
-    border:1px solid #000000;
+    border: 1px solid #000000;
     margin: 2px;
     -moz-box-shadow: inset 0px 0px 0px 3px #ffffff;
     -webkit-box-shadow: inset 0px 0px 0px 3px #ffffff;
@@ -73,7 +73,7 @@
     vertical-align: middle;
     text-align: center;
     text-transform: uppercase;
-    text-decoration:none;
+    text-decoration: none;
     background: #bcbdbf;
     background-image: -webkit-linear-gradient(top, #bcbdbf, #6e6f73);
     background-image: -moz-linear-gradient(top, #bcbdbf, #6e6f73);
@@ -354,26 +354,60 @@
 /*****Les boutons*****/
 #buttonPasserTour {
     position: absolute;
-    bottom: 30px;
+    bottom: 150px;
     height: 50px;
-    width: 150px;
+    width: 250px;
 }
 
 #buttonProposerEchange {
     position: absolute;
     bottom: 90px;
     height: 40px;
-    width: 150px;
+    width: 250px;
 }
 
 #buttonOption {
     position: absolute;
     bottom: 30px;
     height: 40px;
-    width: 75px;
-    left: 240px;
+    width: 250px;
 }
 
 .buttonJeu {
-
+    border-radius: 10px;
+    border: 1px solid #000000;
+    margin: 2px;
+    -moz-box-shadow: inset 0px 0px 0px 3px #ffffff;
+    -webkit-box-shadow: inset 0px 0px 0px 3px #ffffff;
+    box-shadow: inset 0px 0px 0px 3px #ffffff;
+    /*Code fourni par G3E, même couleur et police que les boutons sur le site dans la zone de la course benthique. */
+    /*http://www.bestcssbuttongenerator.com/#/1 */
+    font-size: 14px;
+    padding: 7px 10px;
+    margin: 2px;
+    letter-spacing: 0px;
+    font-weight: bold;
+    color: #ffffff !important;
+    vertical-align: middle;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #bcbdbf;
+    background-image: -webkit-linear-gradient(top, #bcbdbf, #6e6f73);
+    background-image: -moz-linear-gradient(top, #bcbdbf, #6e6f73);
+    background-image: -ms-linear-gradient(top, #bcbdbf, #6e6f73);
+    background-image: -o-linear-gradient(top, #bcbdbf, #6e6f73);
+    background-image: linear-gradient(to bottom, #bcbdbf, #6e6f73);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bcbdbf', endColorstr='#6e6f73',GradientType=0);
 }
+
+    .buttonJeu:hover {
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #6e6f73), color-stop(1, #bcbdbf));
+        background: -moz-linear-gradient(top, #6e6f73 5%, #bcbdbf 100%);
+        background: -webkit-linear-gradient(top, #6e6f73 5%, #bcbdbf 100%);
+        background: -o-linear-gradient(top, #6e6f73 5%, #bcbdbf 100%);
+        background: -ms-linear-gradient(top, #6e6f73 5%, #bcbdbf 100%);
+        background: linear-gradient(to bottom, #6e6f73 5%, #bcbdbf 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6e6f73', endColorstr='#bcbdbf',GradientType=0);
+        background-color: #6e6f73;
+    }

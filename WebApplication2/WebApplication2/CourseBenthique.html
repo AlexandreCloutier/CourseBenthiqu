@@ -13,6 +13,8 @@
         var ageJoueur;
         //Tableau contenant les noms des joueurs.
         var nomJoueur;
+        //Tableau contenant les points des joueurs.
+        var pointsJoueur;
         var difficulte;
         //Paquet de carte principal.
         var paquetCarte;
@@ -178,6 +180,7 @@
         function entrerValeurCreationPartie() {
             nomJoueur = new Array();
             ageJoueur = new Array();
+            pointsJoueur = new Array();
 
             if ($('#dropDownIA').val() === 'VJ') {
                 difficulte = $('#dropDownDifficulte').val();
@@ -188,16 +191,20 @@
                     nomJoueur[1] = $('#nomJoueurB').val();
                     ageJoueur[0] = $('#ageJoueurA').val();
                     ageJoueur[1] = $('#ageJoueurB').val();
+                    pointsJoueur[0] = 0;
+                    pointsJoueur[1] = 0;
                 }
                 if ($('#dropDownNombreJoueur').val() >= '3') {
                     nombreJoueur = 3;
                     nomJoueur[2] = $('#nomJoueurC').val();
                     ageJoueur[2] = $('#ageJoueurC').val();
+                    pointsJoueur[2] = 0;
                 }
                 if ($('#dropDownNombreJoueur').val() >= '4') {
                     nombreJoueur = 4;
                     nomJoueur[3] = $('#nomJoueurD').val();
                     ageJoueur[3] = $('#ageJoueurD').val();
+                    pointsJoueur[3] = 0;
                 }
             }
             else {
@@ -1117,16 +1124,16 @@
             divTextePointsJoueurs.id = 'divTextePointsJoueurs';
             divTextePointsJoueurs.className = 'divTextePointsJoueurs';
             if (nombreJoueur === 4) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : 100</li><li class=listeEquipe>Équipe B : 100</li><li class=listeEquipe>Équipe C : 100</li><li class=listeEquipe>Équipe D : 100</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A :' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
             }
             else if (nombreJoueur === 3) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : 100</li><li class=listeEquipe>Équipe B : 100</li><li class=listeEquipe>Équipe C : 100</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
             }
             else if (nombreJoueur === 2) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : 100</li><li class=listeEquipe>Équipe B : 100</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
             }
             else if (nombreJoueur === 1) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : 100</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
