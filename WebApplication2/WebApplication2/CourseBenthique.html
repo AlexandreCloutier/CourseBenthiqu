@@ -8,7 +8,10 @@
 <body onload="menuPrincipal()">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <script src="scripts/jquery.flip.min.js"></script>
     <script>
+        //TODO: changer ? des macro invertébrer
+        //TODO: points ressources plus clair avec les bandes riveraines
         var nomJoueur;
         //TODO: Lorsqu'on essaie de drag une carte différente par dessus une autre carte, afficher le pop-up.
         var difficulte;
@@ -389,17 +392,17 @@
         }
 
         //function chargerPartie() {
-            //var charger = $('#buttonChargerPartie');
-            //upclick({
-            //    element: charger,
-            //    action: '/',
-            //    onstart: function (filename) {
-            //        alert('Start Upload:' + filename);
-            //    },
-            //    oncomplete: function (response_data) {
-            //        alert(response_data);
-            //    }
-            //});
+        //var charger = $('#buttonChargerPartie');
+        //upclick({
+        //    element: charger,
+        //    action: '/',
+        //    onstart: function (filename) {
+        //        alert('Start Upload:' + filename);
+        //    },
+        //    oncomplete: function (response_data) {
+        //        alert(response_data);
+        //    }
+        //});
         //}
 
         function ouvrirOptionsEnJeu() {
@@ -408,10 +411,16 @@
             divOptions.className = 'divOptions';
             $('#plateau').append(divOptions);
 
+            var divTitreOptions = document.createElement('div');
+            divTitreOptions.id = 'divTitreOptions';
+            divTitreOptions.className = 'divTitreOptions';
+            divTitreOptions.innerHTML = '<p>Options</p>';
+            divOptions.appendChild(divTitreOptions);
+
             var labelResolution = document.createElement('label');
             labelResolution.id = 'labelResolution';
             labelResolution.className = 'labelResolution';
-            labelResolution.innerHTML = 'Résolution : '
+            labelResolution.innerHTML = '<span>Résolution : </span>'
             divOptions.appendChild(labelResolution);
 
             var dropDownReso = document.createElement('select');
@@ -426,7 +435,7 @@
             var labelPopUp = document.createElement('label');
             labelPopUp.id = 'labelPopUp';
             labelPopUp.className = 'labelPopUp';
-            labelPopUp.innerHTML = 'Activé les pop-ups éducatifs : '
+            labelPopUp.innerHTML = '<span>Activé les pop-ups éducatifs : </span>'
             divOptions.appendChild(labelPopUp);
 
             var checkBoxPopUp = document.createElement('input');
@@ -434,7 +443,7 @@
             checkBoxPopUp.id = 'checkBoxPopUp';
             checkBoxPopUp.value = 'PopUpActif';
             checkBoxPopUp.className = 'checkBoxPopUp';
-            divOptions.appendChild(checkBoxPopUp);            
+            divOptions.appendChild(checkBoxPopUp);
 
             $(divOptions).dialog({
                 classes: {
@@ -442,8 +451,13 @@
                 },
                 draggable: false,
                 resizable: false,
-                height: 80,
-                width: 600,
+                buttons: [{
+                    text: 'Valider'
+                }, {
+                    text: 'Annuler'
+                }],
+                height: 300,
+                width: 400,
                 hide: 'fade',
                 show: 'fade'
             });
@@ -693,8 +707,9 @@
             else {
                 //Boucle pour toute les position de la main.
                 for (var i = 0; i < 6; i++) {
+                    console.log(i);
                     if (mains[numeroJoueurActif][i] === null) {
-                        mains[numeroJoueurActif][i] = pigerCarte(paquetCarte);
+                        appelerTimerPigerCarte(i);
                     }
                 }
             }
@@ -758,6 +773,14 @@
 
             return habitatsRetourner;
         }
+
+        //Fonction qui appelle le timer
+        function appelerTimerPigerCarte(i){
+            setTimeout(function () {
+                var carte = pigerCarte(paquetCarte);
+                animationPige(carte, i);
+                mains[numeroJoueurActif][i] = carte;
+            }, 500);}
 
         //Fonction qui permet de chercher une carte en particulier.
         function chercherCarteParticuliere(nomCarte) {
@@ -1027,11 +1050,14 @@
             $('body').append(divDroite);
 
             //Paquet de charge
-            var paquetCharge = document.createElement('img');
+            var paquetCharge = document.createElement('div');
             paquetCharge.id = 'paquetCharge';
             paquetCharge.className = 'paquetCharge';
-            paquetCharge.setAttribute('src', 'ressources/grosPaquet.png');
+            var imagePaquet = document.createElement('img');
+            imagePaquet.className = 'imageCharge'
+            imagePaquet.setAttribute('src', 'ressources/grosPaquet.png');
             $(plateau).append(paquetCharge);
+            $(paquetCharge).append(imagePaquet);
         }
 
         //Fonction qui crée les divers emplacement sur le tableau.
@@ -1292,13 +1318,72 @@
         function pigerCarte(paquetCarte) {
             var carte = paquetCarte.pop();
             if (paquetCarte.length <= 70) {
-                $('#paquetCharge').attr('src', 'ressources/moyenPaquet.png');
+                $('.imageCharge').attr('src', 'ressources/moyenPaquet.png');
             }
             if (paquetCarte.length <= 20) {
-                $('#paquetCharge').attr('src', 'ressources/petitPaquet.png')
+                $('.imageCharge').attr('src', 'ressources/petitPaquet.png')
             }
 
             return carte;
+        }
+
+        function animationPige(carte, position) {
+            var carteMain = 'divCarte' + position;
+
+            var divCarte = document.createElement('div');
+            divCarte.id = 'carte' + position;
+            divCarte.className = 'divAnimee';
+            $('body').append(divCarte);
+            //var divDevant = document.createElement('div');
+            //divDevant.className = 'front';
+            //divDevant.innerHTML = '<img class="imageCarte" src="ressources/carteVerso.png" />';
+            //$(divCarte).append(divDevant);
+            var divDerriere = document.createElement('div');
+            divDerriere.className = 'back';
+            divDerriere.innerHTML = '<img class="imageCarte" src="ressources/' + carte.nomImage + '">';
+            $(divCarte).append(divDerriere);
+
+            var x = $('#' + carteMain).offset().left;
+            var y = $('#' + carteMain).offset().top;
+
+            $('#carte' + position).animate({
+                height: 180,
+                width: 118,
+                left: x,
+                top: y,
+                borderSpacing: 0,
+            }, {
+                step: function (now) {
+                    $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                    $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                    $(this).css('transform', 'rotate(' + now + 'deg)');
+                }
+            }, { duration: 2500 });
+            setTimeout(function () {
+                $('#carte' + position).remove();
+                var image = document.createElement('img');
+                var cloneImage = '<img class="imageTooltip" src="ressources/' + carte.nomImage + '">';
+                image.className = 'imageCarte';
+                image.src = 'ressources/' + carte.nomImage;
+                $('#'+ carteMain).append(image);
+                $(image).tooltip({
+                    items: 'img',
+                    content: cloneImage,
+                    position: { my: "right" },
+                    show: { delay: 1000 }
+                });
+            }, 1500);
+            //var image = document.createElement('img');
+            //var cloneImage = '<img class="imageTooltip" src="ressources/' + carte.nomImage + '">';
+            //image.className = 'imageCarte';
+            //image.src = 'ressources/' + carte.nomImage;
+            //carteMain.appendChild(image);
+            //$(image).tooltip({
+            //    items: 'img',
+            //    content: cloneImage,
+            //    position: { my: "right" },
+            //    show: { delay: 1000 }
+            //});
         }
 
         //Function qui melange le paquet de carte.
@@ -1653,6 +1738,10 @@
 
         //Fonction appellé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
+            if (mains[numeroJoueurActif].length > 4)
+            {
+                   
+            }
             $('.buttonPasserTour').prop('disabled', true);
             facteurRotation += 1;
             if (facteurRotation > 4) {
@@ -1734,7 +1823,7 @@
             $(carte).animate({
                 height: 180,
                 width: 118
-            }, 200);
+            }, { duration: 200, queue: false });
         }
 
         //Fonction pour appeler le pop-up d'erreuré
@@ -1833,7 +1922,8 @@
                         $(this).animate({
                             height: 90,
                             width: 58
-                        }, 400);
+                        }, { duration: 400, queue: false }
+                        );
                         var id;
                         id = event.target.parentNode.id.substr(event.target.id.length - 1);
                         carteBas[numeroJoueurActif][id] = carteDrag;

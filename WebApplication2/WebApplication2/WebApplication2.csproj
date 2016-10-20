@@ -121,6 +121,7 @@
     <Content Include="ressources\bandeRiveraineHerbace.png" />
     <Content Include="ressources\brachycentrus.png" />
     <Content Include="ressources\cartes.png" />
+    <Content Include="ressources\carteVerso.png" />
     <Content Include="ressources\chironomidae.png" />
     <Content Include="ressources\corveNettoyage.png" />
     <Content Include="ressources\corydalidae.png" />
@@ -179,6 +180,7 @@
     <Content Include="scripts\ai.0.15.0-build58334.js" />
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="scripts\jquery-ui.min.js" />
+    <Content Include="scripts\jquery.flip.min.js" />
     <Content Include="style.css" />
     <Content Include="Web.config" />
   </ItemGroup>

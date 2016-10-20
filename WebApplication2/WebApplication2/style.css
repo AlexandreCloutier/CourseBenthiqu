@@ -84,6 +84,31 @@
     transform: rotate(45deg);
 }
 
+.imageCharge{
+    position: absolute;
+    height: inherit;
+    width: inherit;
+}
+
+.divAnimee {
+    position:absolute;
+    width: 66px;
+    height: 100px;
+    top: 340px;
+    left: 685px;
+    transform: rotate(45deg);
+}
+
+.front {
+    height: inherit;
+    width:inherit;
+}
+
+.back {
+    height:inherit;
+    width:inherit;
+}
+
 .emplacementJoueurA {
     float: left;
     width: 58px;
@@ -165,6 +190,38 @@
 }
 .ui-corner-all {
     border-radius: 10px !important;
+}
+
+/* ----------------Option-------------------------*/
+.divOptions label {
+    display: block;
+    margin: 0px 0px 15px 0px;
+}
+
+.divOptions label > span{
+    float: left;
+    padding-top: 8px;
+    padding-right: 5px;
+}
+
+.divTitreOptions {
+    font-size: 30px;
+}
+
+.labelResolution {
+    
+}
+
+.labelPopUp {
+
+}
+
+.dropDownReso {
+    
+}
+
+.checkBoxPopUp {
+
 }
 
 /* -----------------Zone Main--------------------*/
