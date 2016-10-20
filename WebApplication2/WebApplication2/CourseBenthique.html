@@ -1299,6 +1299,7 @@
             renduCarte2 = false;
             emplacementCarte1 = null;
             emplacementCarte2 = null;
+            enleverBrillance();
         }
 
         //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
@@ -1481,6 +1482,8 @@
             //Change les cartes de position dans le tableau.
             carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
             carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
+
+            $('#buttonProposerEchange').prop('disabled', true);
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
@@ -2257,6 +2260,7 @@
             tour++;
             remplirMain();
             updateJeu();
+            $('#buttonProposerEchange').prop('disabled', false);
         }
 
         //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
