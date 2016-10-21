@@ -1336,6 +1336,7 @@
 
                 if (!renduCarte2) {
                     popUpConfirmation('Vous devez choisir la carte avec laquelle vous voulez faire l\'échanger.');
+                    console.log(numeroJoueurActif + lettreJoueur);
                     emplacementCarte1 = event.target.id;
                     if (nombreJoueur === 4) {
                         if (numeroJoueurActif === 0 && lettreJoueur === 'A') {
@@ -1375,7 +1376,7 @@
                             echange = false;
                             brillanceCarteEchange();
                             echange = true;
-                            carte2 = true;
+                            renduCarte2 = true;
                             brillanceCarteEchange();
                         }
                         else {
