@@ -224,7 +224,7 @@
 
         //Fonction qui fera s'occupera des échanges.
         function brillanceCarteEchange() {
-            var lettreActif = lettreJoueurActif();
+            var lettreActif = lettreJoueur(numeroJoueurActif);
             var ennemi1;
             if (nombreJoueur >= 3) {
                 var ennemi2;
@@ -1125,12 +1125,13 @@
         }
 
         //Fonction qui appelle le timer
-        function appelerTimerPigerCarte(i){
+        function appelerTimerPigerCarte(i) {
             setTimeout(function () {
                 var carte = pigerCarte(paquetCarte);
                 animationPige(carte, i);
                 mains[numeroJoueurActif][i] = carte;
-            }, 500);}
+            }, 500);
+        }
 
         //Fonction qui permet de chercher une carte en particulier.
         function chercherCarteParticuliere(nomCarte) {
@@ -1489,24 +1490,53 @@
 
         //Fonction qui fais l'échange des cartes.
         function echangerCarte(positionCarte1, positionCarte2) {
-            document.getElementById(positionCarte1).removeChild(document.getElementById(positionCarte1).firstChild);
-            document.getElementById(positionCarte2).removeChild(document.getElementById(positionCarte2).firstChild);
+            document.getElementById(positionCarte1).removeChild(document.getElementById(positionCarte1).lastChild);
+            document.getElementById(positionCarte2).removeChild(document.getElementById(positionCarte2).lastChild);
 
             var image = document.createElement('img');
             image.className = 'imageCarte';
             image.src = 'ressources/' + carteEchanger2.nomImage;
-            document.getElementById(positionCarte1).appendChild(image);
+
+            if (document.getElementById(positionCarte1).children.length === 0) {
+                document.getElementById(positionCarte1).appendChild(image);
+            }
+            else {
+                document.getElementById(trouverPositionLibre(numeroJoueurActif)).appendChild(image);
+            }
+            //TODO: Ajouter le onclick et toute les autres atributs aà l'image avant de l'append.
 
             var image = document.createElement('img');
             image.className = 'imageCarte';
             image.src = 'ressources/' + carteEchanger1.nomImage;
-            document.getElementById(positionCarte2).appendChild(image);
+
+            if (document.getElementById(positionCarte2).children.length === 0) {
+                document.getElementById(positionCarte2).appendChild(image);
+            }
+            else {
+                document.getElementById(trouverPositionLibre(numeroJoueurEchange2)).appendChild(image);
+            }
 
             //Change les cartes de position dans le tableau.
             carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
             carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
 
             $('#buttonProposerEchange').prop('disabled', true);
+        }
+
+        //Fonction qui retourne le premier emplacement libre ou on peut mettre une carte.
+        function trouverPositionLibre(numero) {
+            var lettreEmplacement = lettreJoueur(numero);
+
+            for (var i = 0; i < 6; i++) {
+                if ($('#emplacementBasJoueur' + lettreEmplacement + i).children.length === 0) {
+                    return '#emplacementBasJoueur' + lettreEmplacement + i;
+                }
+            }
+            for (var i = 6; i < 10; i++) {
+                if ($('#emplacementHautJoueur' + lettreEmplacement + i).children.length === 0) {
+                    return '#emplacementHautJoueur' + lettreEmplacement + i;
+                }
+            }
         }
 
         //Fonction qui ajoute une div avec le plateau en fond d'écran.
@@ -1653,9 +1683,9 @@
                 var identification = event.target.id.substr(event.target.id.length - 2);
                 var lettreEmplacement = identification.substr(0, 1);
 
-                var lettreJoueur = lettreJoueurActif();
+                var lettre = lettreJoueur(numeroJoueurActif);
 
-                if (lettreEmplacement === lettreJoueur) {
+                if (lettreEmplacement === lettre) {
                     return true;
                 }
                 else {
@@ -1668,34 +1698,34 @@
         }
 
         //Fonction qui renvoie la lettre du joueur actif.
-        function lettreJoueurActif() {
+        function lettreJoueur(numero) {
             if (nombreJoueur === 2) {
-                if (numeroJoueurActif === 0) {
+                if (numero === 0) {
                     return 'A';
                 }
-                else if (numeroJoueurActif === 1) {
+                else if (numero === 1) {
                     return 'B';
                 }
             }
             else if (nombreJoueur === 3) {
-                if (numeroJoueurActif === 0) {
+                if (numero === 0) {
                     return 'A';
                 }
-                else if (numeroJoueurActif === 1) {
+                else if (numero === 1) {
                     return 'B';
                 }
-                else if (numeroJoueurActif === 2) {
+                else if (numero === 2) {
                     return 'C';
                 }
             }
             else if (nombreJoueur === 4) {
-                if (numeroJoueurActif === 1) {
+                if (numero === 1) {
                     return 'D';
                 }
-                else if (numeroJoueurActif === 0) {
+                else if (numero === 0) {
                     return 'A'
                 }
-                else if (numeroJoueurActif === 2) {
+                else if (numero === 2) {
                     return 'B';
                 }
                 else {
@@ -1869,6 +1899,7 @@
             return carte;
         }
 
+        //Fonction de l'animation de la pige de carte.
         function animationPige(carte, position) {
             var carteMain = 'divCarte' + position;
 
@@ -1907,7 +1938,7 @@
                 var cloneImage = '<img class="imageTooltip" src="ressources/' + carte.nomImage + '">';
                 image.className = 'imageCarte';
                 image.src = 'ressources/' + carte.nomImage;
-                $('#'+ carteMain).append(image);
+                $('#' + carteMain).append(image);
                 $(image).tooltip({
                     items: 'img',
                     content: cloneImage,
@@ -2290,9 +2321,8 @@
 
         //Fonction appellé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
-            if (mains[numeroJoueurActif].length > 4)
-            {
-                   
+            if (mains[numeroJoueurActif].length > 4) {
+
             }
             $('#buttonPasserTour').prop('disabled', true);
             if (nombreJoueur === 4) {
