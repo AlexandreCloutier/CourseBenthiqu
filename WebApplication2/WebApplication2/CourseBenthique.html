@@ -18,6 +18,7 @@
         var nomJoueur;
         //Tableau contenant les points des joueurs.
         var pointsJoueur;
+
         var difficulte;
         //Paquet de carte principal.
         var paquetCarte;
@@ -29,7 +30,11 @@
         //Tableau contenant le nombres d'exemplaire de chaque carte.
         var exemplaireCarteBas;
         //Tableau contenant les points de ressources.
-        var pointsRessources;
+        var pointsRessourcesBase;
+        var pointsRessourcesSuplementaire;
+        var pointsRessourcesTotal;
+        var pointsRessourcesUtiliser;
+        var pointsRessourcesRestant;
         //Numero du joueur présentement actif.
         var numeroJoueurActif;
         //Variable comptant le nombre de tour.
@@ -815,15 +820,19 @@
 
         //Fonction qui va instantier et remplir le tableau des points de ressources.
         function instantierTableauPointsRessources() {
-            pointsRessources = new Array(4);
-            pointsRessources[0] = 6;
-            pointsRessources[1] = 6;
+            pointsRessourcesBase = new Array(nombreJoueur);
+            pointsRessourcesBase[0] = 6;
+            pointsRessourcesBase[1] = 6;
+            pointsRessourcesRestant = new Array(nombreJoueur);
+            pointsRessourcesSuplementaire = new Array(nombreJoueur);
+            pointsRessourcesTotal = new Array(nombreJoueur);
+            pointsRessourcesUtiliser = new Array(nombreJoueur);
 
             if (nombreJoueur >= 3) {
-                pointsRessources[2] = 6;
+                pointsRessourcesBase[2] = 6;
             }
             if (nombreJoueur === 4) {
-                pointsRessources[3] = 6;
+                pointsRessourcesBase[3] = 6;
             }
         }
 
@@ -889,8 +898,14 @@
         //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
         function verifierCondition(carte) {
             if (carte.condition.length === 1) {
-                if (carte.condition[0] === '') {
-                    return true;
+                if (carte.condition[0] === '?') {
+                    for (var i = 0; i < 10; i++) {
+                        if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
+                            if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                                return true;
+                            }
+                        }
+                    }
                 }
 
                 var condition1 = carte.condition[0];
@@ -1336,7 +1351,6 @@
 
                 if (!renduCarte2) {
                     popUpConfirmation('Vous devez choisir la carte avec laquelle vous voulez faire l\'échanger.');
-                    console.log(numeroJoueurActif + lettreJoueur);
                     emplacementCarte1 = event.target.id;
                     if (nombreJoueur === 4) {
                         if (numeroJoueurActif === 0 && lettreJoueur === 'A') {
@@ -1499,10 +1513,10 @@
             image.src = 'ressources/' + carteEchanger2.nomImage;
 
             if (document.getElementById(positionCarte1).children.length === 0) {
-                document.getElementById(positionCarte1).appendChild(image);
+                $('#' + positionCarte1).append(image);
             }
             else {
-                document.getElementById(trouverPositionLibre(numeroJoueurActif)).appendChild(image);
+                $(trouverPositionLibre(numeroJoueurActif)).append(image);
             }
             //TODO: Ajouter le onclick et toute les autres atributs aà l'image avant de l'append.
 
@@ -1511,10 +1525,10 @@
             image.src = 'ressources/' + carteEchanger1.nomImage;
 
             if (document.getElementById(positionCarte2).children.length === 0) {
-                document.getElementById(positionCarte2).appendChild(image);
+                $('#' + positionCarte2).append(image);
             }
             else {
-                document.getElementById(trouverPositionLibre(numeroJoueurEchange2)).appendChild(image);
+                $(trouverPositionLibre(numeroJoueurEchange2)).append(image);
             }
 
             //Change les cartes de position dans le tableau.
@@ -1529,13 +1543,13 @@
             var lettreEmplacement = lettreJoueur(numero);
 
             for (var i = 0; i < 6; i++) {
-                if ($('#emplacementBasJoueur' + lettreEmplacement + i).children.length === 0) {
-                    return '#emplacementBasJoueur' + lettreEmplacement + i;
+                if ($('#emplacementBasJoueur' + lettreEmplacement + i).length === 1) {
+                    return ('#emplacementBasJoueur' + lettreEmplacement + i);
                 }
             }
             for (var i = 6; i < 10; i++) {
-                if ($('#emplacementHautJoueur' + lettreEmplacement + i).children.length === 0) {
-                    return '#emplacementHautJoueur' + lettreEmplacement + i;
+                if ($('#emplacementHautJoueur' + lettreEmplacement + i).children.length === 1) {
+                    return ('#emplacementHautJoueur' + lettreEmplacement + i);
                 }
             }
         }
@@ -1752,7 +1766,7 @@
 
         //Fonction qui valide si le drop est accepter.
         function accepterDrop() {
-            if (carteDrag.coutResources <= pointsRessources[numeroJoueurActif]) {
+            if (carteDrag.coutResources <= pointsRessourcesRestant[numeroJoueurActif]) {
                 // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
                 if (carteDrag.type === 'macroInvertebre' || carteDrag.type === 'salmonide') {
                     if (verifierCondition(carteDrag)) {
@@ -1794,7 +1808,8 @@
 
                 //Partie qui change les données de la mains vers la partie du bas.
                 var id;
-                pointsRessources[numeroJoueurActif] -= carteDrag.coutResources;
+                pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutResources;
+                pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutResources;
                 updatePointsRessources();
                 id = event.target.id.substr(event.target.id.length - 1);
                 carteBas[numeroJoueurActif][id] = carteDrag;
@@ -2026,7 +2041,7 @@
 
             // ----------------------------MacroInvertebre--------------------------------------------------
 
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.png', 1, { tolerance: 8, taille: 1, typeMacro: 'amelide', condition: [''], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.png', 1, { tolerance: 8, taille: 1, typeMacro: 'amelide', condition: ['?'], predateur: 0 });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
@@ -2037,7 +2052,7 @@
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'chironomidae', 'chironomidae.png', 1, { tolerance: 8, taille: 2, typeMacro: 'diptere', condition: [''], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'chironomidae', 'chironomidae.png', 1, { tolerance: 8, taille: 2, typeMacro: 'diptere', condition: ['?'], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
             paquetCarte.push(carte)
@@ -2073,7 +2088,7 @@
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'prosobranchia', 'prosobranchia.png', 2, { tolerance: 8, taille: 5, typeMacro: 'mollusque', condition: [''], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'prosobranchia', 'prosobranchia.png', 2, { tolerance: 8, taille: 5, typeMacro: 'mollusque', condition: ['?'], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
@@ -2376,7 +2391,6 @@
                 $('#buttonPasserTour').prop('disabled', false);
             }, 2000);
 
-            pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
             tour++;
             remplirMain();
             updateJeu();
@@ -2549,12 +2563,21 @@
                     revertDuration: 400
                 });
             });
+
+            pointsRessourcesBase[numeroJoueurActif] = 6;
+            pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
+            pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
+            pointsRessourcesUtiliser[numeroJoueurActif] = 0;
+            pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif];
+
             updatePointsRessources();
         }
 
         //Fonction qui update après avoir jouer une carte.
         function updatePointsRessources() {
-            $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
+         //   $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
+            //TODO: À clou: reste juste à modifier la partie de droite pour afficher les différentes variables de points ressources et
+            // a update dans cette fonction les text. La fonction est déjà appeler correctement :p
         }
     </script>
 </body>
