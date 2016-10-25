@@ -1509,29 +1509,26 @@
             document.getElementById(positionCarte2).removeChild(document.getElementById(positionCarte2).lastChild);
 
             var image = document.createElement('img');
-            image.className = 'imageCarte';
+            image.className = 'imageCarteJeu';
             image.src = 'ressources/' + carteEchanger2.nomImage;
-            $(function () {
-                $('.imageCarte').on({
-                    click: function (event, ui) {
-                        onClickImage($(this).parent().attr("id"), ui);
-                    }
-                })
-            });
+            $(image).addClass('ui-draggable-disabled');
 
             if (document.getElementById(positionCarte1).children.length === 0) {
                 $('#' + positionCarte1).append(image);
+                
             }
             else { 
                 $(trouverPositionLibre(numeroJoueurActif)).append(image);
             }
 
             var image2 = document.createElement('img');
-            image2.className = 'imageCarte';
+            image2.className = 'imageCarteJeu';
             image2.src = 'ressources/' + carteEchanger1.nomImage;
+            $(image2).addClass('ui-draggable-disabled');
 
             if (document.getElementById(positionCarte2).children.length === 0) {
                 $('#' + positionCarte2).append(image2);
+                
             }
             else {
                 $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
@@ -1542,9 +1539,8 @@
             carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
 
             $('#buttonProposerEchange').prop('disabled', true);
-
             $(function () {
-                $('.imageCarte').on({
+                $('.imageCarteJeu').on({
                     click: function (event, ui) {
                         onClickImage($(this).parent().attr("id"), ui);
                     }
@@ -1809,6 +1805,8 @@
                 ui.draggable.css('height', '90px');
                 ui.draggable.css('top', '0px');
                 ui.draggable.css('left', '0px');
+                ui.draggable.removeClass('imageCarteMains');
+                ui.draggable.addClass('imageCarteJeu');
                 ui.draggable.appendTo(drop);
                 ui.draggable.draggable('disable');
                 ui.draggable.position({ of: $(drop), my: 'center', at: 'center' });
@@ -1937,13 +1935,9 @@
             divCarte.id = 'carte' + position;
             divCarte.className = 'divAnimee';
             $('body').append(divCarte);
-            //var divDevant = document.createElement('div');
-            //divDevant.className = 'front';
-            //divDevant.innerHTML = '<img class="imageCarte" src="ressources/carteVerso.png" />';
-            //$(divCarte).append(divDevant);
             var divDerriere = document.createElement('div');
             divDerriere.className = 'back';
-            divDerriere.innerHTML = '<img class="imageCarte" src="ressources/' + carte.nomImage + '">';
+            divDerriere.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
             $(divCarte).append(divDerriere);
 
             var x = $('#' + carteMain).offset().left;
@@ -1966,7 +1960,7 @@
                 $('#carte' + position).remove();
                 var image = document.createElement('img');
                 var cloneImage = '<img class="imageTooltip" src="ressources/' + carte.nomImage + '">';
-                image.className = 'imageCarte';
+                image.className = 'imageCarteMains';
                 image.src = 'ressources/' + carte.nomImage;
                 $('#' + carteMain).append(image);
                 $(image).tooltip({
@@ -1976,17 +1970,6 @@
                     show: { delay: 1000 }
                 });
             }, 1500);
-            //var image = document.createElement('img');
-            //var cloneImage = '<img class="imageTooltip" src="ressources/' + carte.nomImage + '">';
-            //image.className = 'imageCarte';
-            //image.src = 'ressources/' + carte.nomImage;
-            //carteMain.appendChild(image);
-            //$(image).tooltip({
-            //    items: 'img',
-            //    content: cloneImage,
-            //    position: { my: "right" },
-            //    show: { delay: 1000 }
-            //});
         }
 
         //Function qui melange le paquet de carte.
@@ -2534,7 +2517,7 @@
                 if (mains[numeroJoueurActif][i] != null) {
                     var image = document.createElement('img');
                     var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
-                    image.className = 'imageCarte';
+                    image.className = 'imageCarteMains';
                     image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
                     carteMain.appendChild(image);
                     $(image).tooltip({
@@ -2547,7 +2530,7 @@
             }
 
             $(function () {
-                $('.imageCarte').draggable({
+                $('.imageCarteMains').draggable({
                     start: function () {
                         $(this).animate({
                             height: 90,

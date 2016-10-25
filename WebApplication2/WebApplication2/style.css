@@ -278,7 +278,7 @@
     height: 180px;
 }
 
-.imageCarte {
+.imageCarteMains {
     width: inherit;
     height: inherit;
     z-index: 3;
@@ -286,6 +286,13 @@
     -webkit-box-shadow: 10px 10px 22px -2px rgba(0,0,0,0.75);
     -moz-box-shadow: 10px 10px 22px -2px rgba(0,0,0,0.75);
     box-shadow: 10px 10px 22px -2px rgba(0,0,0,0.75);
+}
+
+.imageCarteJeu {
+    width: inherit;
+    height: inherit;
+    z-index: 3;
+    border-radius: 5px;
 }
 
 .imageTooltip {
