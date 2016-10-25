@@ -118,14 +118,23 @@
     transform: rotate(45deg);
 }
 
-.imageCharge{
+.imageCharge {
     position: absolute;
     height: inherit;
     width: inherit;
 }
 
+.paquetDefausse {
+    position: absolute;
+    width: 58px;
+    height: 91px;
+    top: 376px;
+    right: 298px;
+    transform: rotate(45deg);
+}
+
 .divAnimee {
-    position:absolute;
+    position: absolute;
     width: 66px;
     height: 100px;
     top: 340px;
@@ -135,12 +144,12 @@
 
 .front {
     height: inherit;
-    width:inherit;
+    width: inherit;
 }
 
 .back {
-    height:inherit;
-    width:inherit;
+    height: inherit;
+    width: inherit;
 }
 
 .emplacementJoueurA {
@@ -180,6 +189,16 @@
     position: absolute;
     border-radius: 5px;
     transform: rotate(-90deg);
+}
+
+.zoneGrise {
+    opacity: 0.75;
+    position: relative;
+    height: inherit;
+    width: inherit;
+    background-color: black;
+    box-sizing: border-box;
+    z-index: 10 !important;
 }
 
 .ui-droppable-hover {
@@ -234,30 +253,26 @@
     margin: 0px 0px 15px 0px;
 }
 
-.divOptions label > span{
-    float: left;
-    padding-top: 8px;
-    padding-right: 5px;
-}
+    .divOptions label > span {
+        float: left;
+        padding-top: 8px;
+        padding-right: 5px;
+    }
 
 .divTitreOptions {
     font-size: 30px;
 }
 
 .labelResolution {
-    
 }
 
 .labelPopUp {
-
 }
 
 .dropDownReso {
-    
 }
 
 .checkBoxPopUp {
-
 }
 
 /* -----------------Zone Main--------------------*/
@@ -271,6 +286,13 @@
     float: left;
     position: relative;
     padding: 15px;
+}
+
+.divMainDefausse {
+    border: outset 2px black;
+    -webkit-box-shadow: -15px 11px 14px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: -15px 11px 14px -1px rgba(0,0,0,0.75);
+    box-shadow: -15px 11px 14px -1px rgba(0,0,0,0.75);
 }
 
 .divCarte {
@@ -310,11 +332,10 @@
     background-color: #61933a;
     border: 1px solid black;
     margin-top: 10px;
-    height: 723px;
-    width: 300px;
+    height: 753px;
+    width: 330px;
     float: left;
     position: relative;
-    padding: 15px;
 }
 
 /*****Zone nom des joueurs*****/
@@ -428,6 +449,14 @@
     bottom: 30px;
     height: 40px;
     width: 250px;
+}
+
+#buttonDefausser {
+    position: absolute;
+    top: 87%;
+    left: 30%;
+    width: 125px;
+    height: 50px;
 }
 
 .buttonJeu {

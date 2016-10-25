@@ -21,6 +21,8 @@
         var difficulte;
         //Paquet de carte principal.
         var paquetCarte;
+        //Paquet de carte de la décharge
+        var paquetDecharge;
         /*-----------------------------Partie tableau de données---------------*/
         //Tableau contenant les mains.
         var mains;
@@ -36,8 +38,6 @@
         var tour;
         //Variable content le nb de clic sur le bouton Passer son tour
         var facteurRotation;
-        //Variable qui detecte si la souris bouge lors d'un clic
-        var isClick;
         //Variable de la carte qui sera transférer de la main à la zone du bas, ou ailleurs.
         var carteDrag;
         //Variable du numero de la carte dans la main pour pouvoir le supprimer facilement lorsqu'on le drop à quelque part.
@@ -74,7 +74,6 @@
             numeroJoueurActif = 0;
             tour = 0;
             facteurRotation = 0;
-            isClick = false;
             echange = false;
             renduCarte2 = false;
         }
@@ -101,6 +100,7 @@
             instantierTableauEmplacementBas();
             instantierTableauPointsRessources();
             instantierTableauExemplaire();
+            paquetDecharge = new Array();
         }
 
         //Fonction qui envoie vers les options de création de partie.
@@ -1057,7 +1057,6 @@
             else {
                 //Boucle pour toute les position de la main.
                 for (var i = 0; i < 6; i++) {
-                    console.log(i);
                     if (mains[numeroJoueurActif][i] === null) {
                         appelerTimerPigerCarte(i);
                     }
@@ -1125,12 +1124,13 @@
         }
 
         //Fonction qui appelle le timer
-        function appelerTimerPigerCarte(i){
+        function appelerTimerPigerCarte(i) {
             setTimeout(function () {
                 var carte = pigerCarte(paquetCarte);
                 animationPige(carte, i);
                 mains[numeroJoueurActif][i] = carte;
-            }, 500);}
+            }, 500);
+        }
 
         //Fonction qui permet de chercher une carte en particulier.
         function chercherCarteParticuliere(nomCarte) {
@@ -1538,6 +1538,12 @@
             imagePaquet.setAttribute('src', 'ressources/grosPaquet.png');
             $(plateau).append(paquetCharge);
             $(paquetCharge).append(imagePaquet);
+
+            //Paquet Défausse
+            var paquetDefausse = document.createElement('div');
+            paquetDefausse.id = 'paquetDefausse';
+            paquetDefausse.className = 'paquetDefausse';
+            $(plateau).append(paquetDefausse);
         }
 
         //Fonction qui crée les divers emplacement sur le tableau.
@@ -1869,6 +1875,7 @@
             return carte;
         }
 
+        //Fonction qui anime les cartes du paquet jusqu'à la main.
         function animationPige(carte, position) {
             var carteMain = 'divCarte' + position;
 
@@ -1907,7 +1914,7 @@
                 var cloneImage = '<img class="imageTooltip" src="ressources/' + carte.nomImage + '">';
                 image.className = 'imageCarte';
                 image.src = 'ressources/' + carte.nomImage;
-                $('#'+ carteMain).append(image);
+                $('#' + carteMain).append(image);
                 $(image).tooltip({
                     items: 'img',
                     content: cloneImage,
@@ -1915,17 +1922,6 @@
                     show: { delay: 1000 }
                 });
             }, 1500);
-            //var image = document.createElement('img');
-            //var cloneImage = '<img class="imageTooltip" src="ressources/' + carte.nomImage + '">';
-            //image.className = 'imageCarte';
-            //image.src = 'ressources/' + carte.nomImage;
-            //carteMain.appendChild(image);
-            //$(image).tooltip({
-            //    items: 'img',
-            //    content: cloneImage,
-            //    position: { my: "right" },
-            //    show: { delay: 1000 }
-            //});
         }
 
         //Function qui melange le paquet de carte.
@@ -2288,68 +2284,155 @@
             }
         }
 
-        //Fonction appellé lors d'un clic sur le boutton Passer son tour.
-        function passerTour() {
-            if (mains[numeroJoueurActif].length > 4)
-            {
-                   
-            }
-            $('#buttonPasserTour').prop('disabled', true);
-            if (nombreJoueur === 4) {
-                facteurRotation += 1;
-                if (facteurRotation > 4) {
-                    facteurRotation = 1;
-                }
-            }
-            else if (nombreJoueur === 2) {
-                facteurRotation += 2;
-                if (facteurRotation > 4) {
-                    facteurRotation = 2
-                }
-            }
-            else if (nombreJoueur === 3) {
-                facteurRotation += 1;
-                if (facteurRotation > 4) {
-                    facteurRotation = 1;
-                }
-                if (facteurRotation === 1) {
-                    facteurRotation += 1;
-                }
-            }
+        //Fonction appelé pour défausser les cartes suplémentaires de la main.
+        function defausserCarte() {
+            var cartesDefausse = new Array();
+            var buttonDefausser = document.createElement('button');
+            buttonDefausser.id = 'buttonDefausser';
+            buttonDefausser.className = 'buttonJeu';
+            buttonDefausser.innerHTML = '<p>Défausser</p>';
+            buttonDefausser.onclick = function () {
+                onClickButtonDefausse(cartesDefausse);
+            };
+            $('.divMain').append(buttonDefausser);
 
-            var angleRotationDebut = (90 * (facteurRotation - 1));
-            var angleRotationFin = (90 * facteurRotation);
+            var plateauGrise = document.createElement('div');
+            plateauGrise.id = 'plateauGrise';
+            plateauGrise.className = 'zoneGrise'
+            $('#plateau').append(plateauGrise);
+            var divDroiteGrise = document.createElement('div');
+            divDroiteGrise.id = 'divDroiteGrise';
+            divDroiteGrise.className = 'zoneGrise'
+            $('#divDroite').append(divDroiteGrise);
 
-            var $plateau = $('#plateau');
-            $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
-                duration: 1000,
-                step: function (now) {
-                    $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
-                    $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
-                    $plateau.css('transform', 'rotate(' + now + 'deg)');
-                }
+            $('#divDroite').css('pointer-events', 'none');
+            $('#plateau').css('pointer-events', 'none');
+            $('#divMain').addClass('divMainDefausse');
+            $('.imageCarte').draggable('disable');
+
+            mains[numeroJoueurActif].forEach(function (item, index) {
+                $('#divCarte' + index).click(function () {
+                    $(this).css('-moz-box-shadow', '0 0 15px 10px #fff');
+                    $(this).css('-webkit-box-shadow', '0 0 15px 10px #fff');
+                    $(this).css('box-shadow', '0px 0px 15px 10px #fff');
+                    cartesDefausse[index] = mains[numeroJoueurActif][index];
+                });
             });
 
-            if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
-                onClickButtonEchange();
-                annulerEchange();
-                enleverBrillance();
+        }
+
+        function onClickButtonDefausse(cartesDefausse) {
+            if (cartesDefausse.length != 0) {
+                cartesDefausse.forEach(function (item, index) {
+                    paquetDecharge.push(item);
+                    console.log(paquetDecharge);
+                    var image = $('#divCarte' + index).children();
+                    var x = ($('#paquetDefausse').offset().left) - ($(image).offset().left);
+                    var y = ($('#paquetDefausse').offset().top) - ($(image).offset().top);
+                    $(image).animate({
+                        height: 91,
+                        width: 59,
+                        left: x,
+                        top: y,
+                        borderSpacing: 45
+                    }, {
+                        step: function (now,fx) {
+                            $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('transform', 'rotate(' + now + 'deg)');
+                        }
+                    }, { duration: 2500 });
+                    setTimeout(function() {
+                        $(image).remove();
+                        if ($('#paquetDefausse').children().length > 0) {
+                            $('#paquetDefausse').children().remove();
+                        }
+                        var imageDecharge = document.createElement('img');
+                        imageDecharge.src = 'ressources/' + paquetDecharge[0].nomImage;
+                        imageDecharge.className = 'imageCarteJeu';
+                        $('#paquetDefausse').append(imageDecharge);
+                    },800);
+                });
+                $('#plateauGrise').remove();
+                $('#divDroiteGrise').remove();
+                $('#divDroite').css('pointer-events', 'auto');
+                $('#plateau').css('pointer-events', 'auto');
+                $('.imageCarte').draggable('enable');
+                $('divMain').removeClass('divMainDefausse');
+                mains[numeroJoueurActif].forEach(function (item, index) {
+                    $('#divCarte' + index).removeAttr('style');
+                });
+                $('#buttonDefausser').remove();
             }
-
-            numeroJoueurActif++;
-            if (numeroJoueurActif === nombreJoueur) {
-                numeroJoueurActif = 0;
+            else {
+                popUpAvertissement('Selectionner d\'abord la/les carte(s) à défausser');
             }
+        }
 
-            setTimeout(function () {
-                $('#buttonPasserTour').prop('disabled', false);
-            }, 2000);
+        //Fonction appelé lors d'un clic sur le boutton Passer son tour.
+        function passerTour() {
+            var size = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
+            if (size > 4) {
+                defausserCarte();
+            }
+            else {
+                $('#buttonPasserTour').prop('disabled', true);
+                if (nombreJoueur === 4) {
+                    facteurRotation += 1;
+                    if (facteurRotation > 4) {
+                        facteurRotation = 1;
+                    }
+                }
+                else if (nombreJoueur === 2) {
+                    facteurRotation += 2;
+                    if (facteurRotation > 4) {
+                        facteurRotation = 2
+                    }
+                }
+                else if (nombreJoueur === 3) {
+                    facteurRotation += 1;
+                    if (facteurRotation > 4) {
+                        facteurRotation = 1;
+                    }
+                    if (facteurRotation === 1) {
+                        facteurRotation += 1;
+                    }
+                }
 
-            pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
-            tour++;
-            remplirMain();
-            updateJeu();
-            $('#buttonProposerEchange').prop('disabled', false);
+                var angleRotationDebut = (90 * (facteurRotation - 1));
+                var angleRotationFin = (90 * facteurRotation);
+
+                var $plateau = $('#plateau');
+                $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
+                    duration: 1000,
+                    step: function (now) {
+                        $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
+                        $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
+                        $plateau.css('transform', 'rotate(' + now + 'deg)');
+                    }
+                });
+
+                if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
+                    onClickButtonEchange();
+                    annulerEchange();
+                    enleverBrillance();
+                }
+
+                numeroJoueurActif++;
+                if (numeroJoueurActif === nombreJoueur) {
+                    numeroJoueurActif = 0;
+                }
+
+                setTimeout(function () {
+                    $('#buttonPasserTour').prop('disabled', false);
+                }, 2000);
+
+                pointsRessources[numeroJoueurActif] = 6 + pointsRessourcesAdditionel();
+                tour++;
+                remplirMain();
+                updateJeu();
+                $('#buttonProposerEchange').prop('disabled', false);
+            }
         }
 
         //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
