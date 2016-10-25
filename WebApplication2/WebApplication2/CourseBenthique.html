@@ -1072,7 +1072,6 @@
             else {
                 //Boucle pour toute les position de la main.
                 for (var i = 0; i < 6; i++) {
-                    console.log(i);
                     if (mains[numeroJoueurActif][i] === null) {
                         appelerTimerPigerCarte(i);
                     }
@@ -1344,14 +1343,14 @@
         //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
         function onClickImage(event, ui) {
             if (echange) {
-                var identification = event.target.id.substr(event.target.id.length - 2);
+                var identification = event.substr(event.length - 2);
                 var lettreJoueur = identification.substr(0, 1);
                 var emplacement = identification.substr(identification.length - 1);
                 var lettreEchange1;
 
                 if (!renduCarte2) {
                     popUpConfirmation('Vous devez choisir la carte avec laquelle vous voulez faire l\'échanger.');
-                    emplacementCarte1 = event.target.id;
+                    emplacementCarte1 = event;
                     if (nombreJoueur === 4) {
                         if (numeroJoueurActif === 0 && lettreJoueur === 'A') {
                             positionCarteEchanger1 = emplacement;
@@ -1488,13 +1487,14 @@
                             }
                         }
 
-                        emplacementCarte2 = event.target.id;
-
+                        emplacementCarte2 = event;
+                        
                         positionCarteEchanger2 = emplacement;
                         carteEchanger2 = carteBas[numeroJoueurEchange2][emplacement];
                         echangerCarte(emplacementCarte1, emplacementCarte2);
                         onClickButtonEchange();
                         brillanceCarteEchange();
+                        annulerEchange();
                     }
                     else {
                         popUpAvertissement("Vous devez désormais sélectionner la carte avec laquelle vous voulez échanger la votre.");
@@ -1511,24 +1511,30 @@
             var image = document.createElement('img');
             image.className = 'imageCarte';
             image.src = 'ressources/' + carteEchanger2.nomImage;
+            $(function () {
+                $('.imageCarte').on({
+                    click: function (event, ui) {
+                        onClickImage($(this).parent().attr("id"), ui);
+                    }
+                })
+            });
 
             if (document.getElementById(positionCarte1).children.length === 0) {
                 $('#' + positionCarte1).append(image);
             }
-            else {
+            else { 
                 $(trouverPositionLibre(numeroJoueurActif)).append(image);
             }
-            //TODO: Ajouter le onclick et toute les autres atributs aà l'image avant de l'append.
 
-            var image = document.createElement('img');
-            image.className = 'imageCarte';
-            image.src = 'ressources/' + carteEchanger1.nomImage;
+            var image2 = document.createElement('img');
+            image2.className = 'imageCarte';
+            image2.src = 'ressources/' + carteEchanger1.nomImage;
 
             if (document.getElementById(positionCarte2).children.length === 0) {
-                $('#' + positionCarte2).append(image);
+                $('#' + positionCarte2).append(image2);
             }
             else {
-                $(trouverPositionLibre(numeroJoueurEchange2)).append(image);
+                $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
             }
 
             //Change les cartes de position dans le tableau.
@@ -1536,6 +1542,14 @@
             carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
 
             $('#buttonProposerEchange').prop('disabled', true);
+
+            $(function () {
+                $('.imageCarte').on({
+                    click: function (event, ui) {
+                        onClickImage($(this).parent().attr("id"), ui);
+                    }
+                })
+            });
         }
 
         //Fonction qui retourne le premier emplacement libre ou on peut mettre une carte.
@@ -1790,7 +1804,7 @@
         //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
             $(function () {
-                $(ui.draggable).click(function () { onClickImage(event, ui) });
+                $(ui.draggable).click(function () { onClickImage($(this).parent().attr("id"), ui) });
                 ui.draggable.css('width', '58px');
                 ui.draggable.css('height', '90px');
                 ui.draggable.css('top', '0px');
@@ -2575,7 +2589,7 @@
 
         //Fonction qui update après avoir jouer une carte.
         function updatePointsRessources() {
-         //   $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
+            //   $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
             //TODO: À clou: reste juste à modifier la partie de droite pour afficher les différentes variables de points ressources et
             // a update dans cette fonction les text. La fonction est déjà appeler correctement :p
         }
