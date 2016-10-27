@@ -1516,10 +1516,12 @@
 
             if (document.getElementById(positionCarte1).children.length === 0) {
                 $('#' + positionCarte1).append(image);
+                carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
                 
             }
-            else { 
-                $(trouverPositionLibre(numeroJoueurActif)).append(image);
+            else {
+                carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
+                $(trouverPositionLibre(numeroJoueurActif)).append(image);                
             }
 
             var image2 = document.createElement('img');
@@ -1529,15 +1531,13 @@
 
             if (document.getElementById(positionCarte2).children.length === 0) {
                 $('#' + positionCarte2).append(image2);
+                carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
                 
             }
             else {
+                carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
                 $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
             }
-
-            //Change les cartes de position dans le tableau.
-            carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
-            carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
 
             $('#buttonProposerEchange').prop('disabled', true);
             $(function () {
@@ -1674,7 +1674,7 @@
                     $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         tolerance: 'intersect',
                         drop: function (event, ui) {
-                            if (bonneZoneDrop(event, ui)) {//Si l'endroits que nous voulons droper la carte est notre terrain.
+                            if (bonneZoneDrop(event, ui)) {//Si l'endroits que nous voulons droper est à la bonne place.
                                 if (accepterDrop() === true) {
                                     if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
                                         if (verifierCartePresente() === '') {//Si la carte n'est pas déjà présente.
@@ -1705,7 +1705,13 @@
                             else {
                                 ui.draggable.draggable({ revert: true });
                                 revertCarte(ui.draggable);
-                                popUpErreur('Cette carte est jouable que dans votre zone.');
+
+                                if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide') {
+                                    popUpErreur('Cette carte est jouable que dans votre zone.');
+                                }
+                                else if (carteDrag.type === 'perturbation') {
+                                    popUpErreur('Cette carte est jouable que dans la zone d\'un de vos adversaire.');
+                                }
                             }
                         }
                     });
@@ -1734,13 +1740,13 @@
 
         //Fonction qui validera que c'est la bonne zone pour drope notre carte.
         function bonneZoneDrop(event, ui) {
+            var identification = event.target.id.substr(event.target.id.length - 2);
+            var lettreEmplacement = identification.substr(0, 1);
+
+            var lettre = lettreJoueur(numeroJoueurActif);
+
             //Si c'est un habitats, un macro-invertebrer ou une bande riveraine, la carte se joue seulement sur notre territoire.
-            if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine') {
-                var identification = event.target.id.substr(event.target.id.length - 2);
-                var lettreEmplacement = identification.substr(0, 1);
-
-                var lettre = lettreJoueur(numeroJoueurActif);
-
+            if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide') {
                 if (lettreEmplacement === lettre) {
                     return true;
                 }
@@ -1748,8 +1754,13 @@
                     return false;
                 }
             }
-            else {//Temporairement toute les autres types de carte sont jouable partoue.
-                return true;
+            if (carteDrag.type === 'perturbation') {
+                if (lettreEmplacement === lettre) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
         }
 
@@ -1821,10 +1832,44 @@
                 else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention' || carteDrag.type === 'bandeRiveraine') {
                     return true;
                 }
+                else if (carteDrag.type === 'perturbation') {
+                    var message = verifierConditionPerturbation();
+
+                    if (message === '') {
+                        return true;
+                    }
+                    else {
+                        popUpAvertissement(message);
+                        return false;
+                    }
+                }
             }
             else {
                 popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
                 return false;
+            }
+        }
+
+        //Fonction qui va vérifier si la carte perturbation respecte son emplacement.
+        function verifierConditionPerturbation() {
+            //TODO: Vérifier que les perturbation sont jouer sur la bonne carte à "perturber".
+            if (carteDrag.nom === 'dechets') {
+
+            }
+            else if (carteDrag.nom === 'erosion') {
+
+            }
+            else if (carteDrag.nom === 'passageToutTerrain') {
+
+            }
+            else if (carteDrag.nom === 'artificialisation') {
+
+            }
+            else if (carteDrag.nom === 'pollutionOrganique') {
+
+            }
+            else if (carteDrag.nom === 'deversement') {
+
             }
         }
 
@@ -2195,6 +2240,37 @@
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             //}
+
+
+            //--------------------------perturbation--------------------------------------
+
+            carte = new Carte('perturbation', 'dechets', 'dechets.png', 2, { tempsActif: 0 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'erosion', 'erosion.png', 3, { tempsActif: 0 });
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'passageToutTerrain', 'passageToutTerrain.png', 3, { tempsActif: 1 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'artificialisation', 'artificialisation.png', 3, { tempsActif: 0 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'pollutionOrganique', 'pollutionOrganique.png', 4, { tempsActif: 2 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte('perturbation', 'deversement', 'deversement.png', 2, { tempsActif: 1 });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
             if (difficulte === 2)//Moyen
             {
 
@@ -2212,35 +2288,6 @@
 
                 carte = new Carte('action', 'amenagement', 'amenagement.png', 3);
                 paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                //--------------------------perturbation--------------------------------------
-
-                carte = new Carte('perturbation', 'dechets', 'dechets.png', 2, { tempsActif: 0 });
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('perturbation', 'erosion', 'erosion.png', 3, { tempsActif: 0 });
-                paquetCarte.push(carte);
-
-                carte = new Carte('perturbation', 'passageToutTerrain', 'passageToutTerrain.png', 3, { tempsActif: 1 });
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('perturbation', 'artificialisation', 'artificialisation.png', 3, { tempsActif: 0 });
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('perturbation', 'pollutionOrganique', 'pollutionOrganique.png', 4, { tempsActif: 2 });
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('perturbation', 'deversement', 'deversement.png', 2, { tempsActif: 1 });
                 paquetCarte.push(carte);
                 paquetCarte.push(carte);
 
