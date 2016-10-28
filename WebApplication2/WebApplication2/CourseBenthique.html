@@ -72,6 +72,7 @@
             instantierTableaux();//Instantie tout les tableaux.
             instantierPaquetCarte();//Crée le paquet de carte de départ.
             updateJeu();
+            updateAffichageImage();
         }
 
         //Fonction qui donne les valeurs de départs à nos variables.
@@ -124,10 +125,10 @@
         function verifierConditionCreationPartie() {
             var retour;
 
-            if ($('#dropDownIA').val() === 'VJ') {
+            if ($('#dropDownModePartie').val() === 'VJ') {
                 if ($('#dropDownNombreJoueur').val() === '2') {
                     if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '') {
-                        if ($('#ageJoueurA').val() != '' && $('ageJoueurB').val() != '') {
+                        if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {
                             entrerValeurCreationPartie();
                             return '';
                         }
@@ -143,7 +144,7 @@
                 }
                 else if ($('#dropDownNombreJoueur').val() === '3') {
                     if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '' && $('#nomJoueurC').val() != '') {
-                        if ($('#ageJoueurA').val() != '' && $('ageJoueurB').val() != '' && $('ageJoueurC').val() != '') {
+                        if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '') {
                             entrerValeurCreationPartie();
                             return '';
                         }
@@ -159,7 +160,7 @@
                 }
                 else if ($('#dropDownNombreJoueur').val() === '4') {
                     if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() && $('#nomJoueurC').val() != '' && $('#nomJoueurD').val() != '') {
-                        if ($('#ageJoueurA').val() != '' && $('ageJoueurB').val() != '' && $('ageJoueurC').val() != '' && $('ageJoueurD').val() != '') {
+                        if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '' && $('#ageJoueurD').val() != '') {
                             entrerValeurCreationPartie();
                             return '';
                         }
@@ -190,7 +191,7 @@
             ageJoueur = new Array();
             pointsJoueur = new Array();
 
-            if ($('#dropDownIA').val() === 'VJ') {
+            if ($('#dropDownModePartie').val() === 'VJ') {
                 difficulte = $('#dropDownDifficulte').val();
 
                 if ($('#dropDownNombreJoueur').val() >= '2') {
@@ -420,67 +421,66 @@
             //menuCreerPartie.innerHTML = '<img class="imageMenuCreerPartie" src="ressources/cartes.png" />';
             $('body').append(menuCreerPartie);
 
-            var divTexteModePartie = document.createElement('div');
-            divTexteModePartie.id = 'divTexteModePartie';
-            divTexteModePartie.className = 'divTexteModePartie';
-            divTexteModePartie.innerHTML = '<p class=modePartie><strong>Mode de jeu: </strong>';
-            $('#menuCreerPartie').append(divTexteModePartie);
+            //Section pour la choix du mode de partie
+            var divModePartie = document.createElement('div');
+            divModePartie.id = 'divModePartie';
+            divModePartie.className = 'divModePartie';
+            $(menuCreerPartie).append(divModePartie);
 
-            var dropDownIA = document.createElement('select');
-            dropDownIA.id = 'dropDownIA';
-            dropDownIA.className = 'dropDownIA';
-            var option2 = document.createElement("option");
-            option2.value = "VJ";
-            option2.innerHTML = "Contre vrai joueur";
-            dropDownIA.appendChild(option2);
-            var option1 = document.createElement("option");
-            option1.value = "IA";
-            option1.innerHTML = "Contre ordinateur";
-            dropDownIA.appendChild(option1);
-            $('#menuCreerPartie').append(dropDownIA);
+            var labelTexteModePartie = document.createElement('label');
+            labelTexteModePartie.id = 'labelTexteModePartie';
+            labelTexteModePartie.className = 'labelTexteModePartie';
+            labelTexteModePartie.innerHTML = 'Mode de jeu : ';
+            $(divModePartie).append(labelTexteModePartie);
+
+            var dropDownModePartie = document.createElement('select');
+            dropDownModePartie.id = 'dropDownModePartie';
+            dropDownModePartie.className = 'dropDownModePartie';
+            $(divModePartie).append(dropDownModePartie);
+            var option2 = document.createElement('option');
+            option2.value = 'VJ';
+            option2.innerHTML = 'Contre vrai joueur';
+            dropDownModePartie.appendChild(option2);
+            var option1 = document.createElement('option');
+            option1.value = 'IA';
+            option1.innerHTML = 'Contre ordinateur';
+            dropDownModePartie.appendChild(option1);
+
             $(function () {
-                $('.dropDownIA').on({
+                $(dropDownModePartie).on({
                     change: function () {
                         if (this.value === 'VJ') {
-                            $('#divTexteNombreJoueur').show();
-                            $('#dropDownNombreJoueur').show();
+                            $(divContreIA).hide();
+                            $(divContreVJ).show();
                         }
                         else if (this.value === 'IA') {
-                            $('#divTexteNombreJoueur').hide();
-                            $('#dropDownNombreJoueur').hide();
-
-                            $('#nomJoueurA').hide();
-                            $('#nomJoueurB').hide();
-                            $('#nomJoueurC').hide();
-                            $('#nomJoueurD').hide();
-
-                            $('#ageJoueurA').hide();
-                            $('#ageJoueurB').hide();
-                            $('#ageJoueurC').hide();
-                            $('#ageJoueurD').hide();
-
-                            $('#labelAgeJoueurA').hide();
-                            $('#labelAgeJoueurB').hide();
-                            $('#labelAgeJoueurC').hide();
-                            $('#labelAgeJoueurD').hide();
+                            $(divContreVJ).hide();
+                            $(divContreIA).show();                          
                         }
                     }
                 });
             });
 
-            var divTexteNombreJoueur = document.createElement('div');
-            divTexteNombreJoueur.id = 'divTexteNombreJoueur';
-            divTexteNombreJoueur.className = 'divTexteNombreJoueur';
-            divTexteNombreJoueur.innerHTML = '<p class=nombreJoueur><strong>Nombre de joueur: </strong>';
-            $('#menuCreerPartie').append(divTexteNombreJoueur);
+            //Section contre des vrais joueurs
+            var divContreVJ = document.createElement('div');
+            divContreVJ.id = 'divContreVJ';
+            divContreVJ.className = 'divContreVJ';
+            $(menuCreerPartie).append(divContreVJ);
+
+            var labelTexteNombreJoueur = document.createElement('label');
+            labelTexteNombreJoueur.id = 'labelTexteNombreJoueur';
+            labelTexteNombreJoueur.className = 'labelTexteNombreJoueur';
+            labelTexteNombreJoueur.innerHTML = 'Nombre de joueur : ';
+            $(divContreVJ).append(labelTexteNombreJoueur);
 
             var dropDownNombreJoueur = document.createElement('select');
             dropDownNombreJoueur.id = 'dropDownNombreJoueur';
             dropDownNombreJoueur.className = 'dropDownNombreJoueur';
-            var option5 = document.createElement('option');
-            option5.value = '0';
-            option5.innerHTML = '';
-            dropDownNombreJoueur.appendChild(option5);
+            $(divContreVJ).append(dropDownNombreJoueur);
+            var option1 = document.createElement('option');
+            option1.value = '0';
+            option1.innerHTML = '';
+            dropDownNombreJoueur.appendChild(option1);
             var option2 = document.createElement('option');
             option2.value = '2';
             option2.innerHTML = '2';
@@ -493,241 +493,216 @@
             option4.value = '4';
             option4.innerHTML = '4';
             dropDownNombreJoueur.appendChild(option4);
-            $('#menuCreerPartie').append(dropDownNombreJoueur);
             $(function () {
-                $('.dropDownNombreJoueur').on({
+                $(dropDownNombreJoueur).on({
                     change: function () {
-                        if (this.value === '0') {
-                            $('#nomJoueurA').hide();
-                            $('#nomJoueurB').hide();
-                            $('#nomJoueurC').hide();
-                            $('#nomJoueurD').hide();
+                        $(divJoueurA).hide();
+                        $(divJoueurB).hide();
+                        $(divJoueurC).hide();
+                        $(divJoueurD).hide();
 
-                            $('#ageJoueurA').hide();
-                            $('#ageJoueurB').hide();
-                            $('#ageJoueurC').hide();
-                            $('#ageJoueurD').hide();
-
-                            $('#labelNomJoueurA').hide();
-                            $('#labelNomJoueurB').hide();
-                            $('#labelNomJoueurC').hide();
-                            $('#labelNomJoueurD').hide();
-
-                            $('#labelAgeJoueurA').hide();
-                            $('#labelAgeJoueurB').hide();
-                            $('#labelAgeJoueurC').hide();
-                            $('#labelAgeJoueurD').hide();
-                        }
-                        else if (this.value === '2') {
-                            $('#nomJoueurA').show();
-                            $('#nomJoueurB').show();
-                            $('#nomJoueurC').hide();
-                            $('#nomJoueurD').hide();
-
-                            $('#ageJoueurA').show();
-                            $('#ageJoueurB').show();
-                            $('#ageJoueurC').hide();
-                            $('#ageJoueurD').hide();
-
-                            $('#labelNomJoueurA').show();
-                            $('#labelNomJoueurB').show();
-                            $('#labelNomJoueurC').hide();
-                            $('#labelNomJoueurD').hide();
-
-                            $('#labelAgeJoueurA').show();
-                            $('#labelAgeJoueurB').show();
-                            $('#labelAgeJoueurC').hide();
-                            $('#labelAgeJoueurD').hide();
+                        if (this.value === '2') {
+                            $(divJoueurA).show();
+                            $(divJoueurB).show();
                         }
                         else if (this.value === '3') {
-                            $('#nomJoueurA').show();
-                            $('#nomJoueurB').show();
-                            $('#nomJoueurC').show();
-                            $('#nomJoueurD').hide();
-
-                            $('#ageJoueurA').show();
-                            $('#ageJoueurB').show();
-                            $('#ageJoueurC').show();
-                            $('#ageJoueurD').hide();
-
-                            $('#labelNomJoueurA').show();
-                            $('#labelNomJoueurB').show();
-                            $('#labelNomJoueurC').show();
-                            $('#labelNomJoueurD').hide();
-
-                            $('#labelAgeJoueurA').show();
-                            $('#labelAgeJoueurB').show();
-                            $('#labelAgeJoueurC').show();
-                            $('#labelAgeJoueurD').hide();
+                            $(divJoueurA).show();
+                            $(divJoueurB).show();
+                            $(divJoueurC).show();
                         }
                         else if (this.value === '4') {
-                            $('#nomJoueurA').show();
-                            $('#nomJoueurB').show();
-                            $('#nomJoueurC').show();
-                            $('#nomJoueurD').show();
-
-                            $('#ageJoueurA').show();
-                            $('#ageJoueurB').show();
-                            $('#ageJoueurC').show();
-                            $('#ageJoueurD').show();
-
-                            $('#labelNomJoueurA').show();
-                            $('#labelNomJoueurB').show();
-                            $('#labelNomJoueurC').show();
-                            $('#labelNomJoueurD').show();
-
-                            $('#labelAgeJoueurA').show();
-                            $('#labelAgeJoueurB').show();
-                            $('#labelAgeJoueurC').show();
-                            $('#labelAgeJoueurD').show();
+                            $(divJoueurA).show();
+                            $(divJoueurB).show();
+                            $(divJoueurC).show();
+                            $(divJoueurD).show();
                         }
                     }
                 });
             });
 
-            var labelNomJoueurA = document.createElement("Label");
+            //Div Joueur A
+            var divJoueurA = document.createElement('div');
+            divJoueurA.id = 'divJoueurA';
+            divJoueurA.className = 'divJoueurs';
+            $(divContreVJ).append(divJoueurA);
+
+            var labelJoueurA = document.createElement('label');
+            labelJoueurA.id = 'labelJoueurA';
+            labelJoueurA.className = 'labelTitreJoueur';
+            labelJoueurA.innerHTML = 'Joueur A';
+            $(divJoueurA).append(labelJoueurA);
+
+            var labelNomJoueurA = document.createElement('label');
             labelNomJoueurA.id = 'labelNomJoueurA';
-            labelNomJoueurA.className = 'labelNomJoueurA';
-            labelNomJoueurA.innerHTML = "<p></p><strong>Nom du joueur: </strong>";
-            $('#menuCreerPartie').append(labelNomJoueurA);
+            labelNomJoueurA.className = 'labelJoueur';
+            labelNomJoueurA.innerHTML = 'Nom : ';
+            $(divJoueurA).append(labelNomJoueurA);
 
             var nomJoueurA = document.createElement('input');
-            nomJoueurA.type = "text";
+            nomJoueurA.type = 'text';
             nomJoueurA.id = 'nomJoueurA';
-            nomJoueurA.className = 'nomJoueurA';
-            $('#menuCreerPartie').append(nomJoueurA);
+            nomJoueurA.className = 'textBoxJoueur';
+            $(divJoueurA).append(nomJoueurA);
 
-            var labelAgeJoueurA = document.createElement("Label");
+            var labelAgeJoueurA = document.createElement('label');
             labelAgeJoueurA.id = 'labelAgeJoueurA';
-            labelAgeJoueurA.className = 'labelAgeJoueurA';
-            labelAgeJoueurA.innerHTML = "<p></p><strong>Age du joueur: </strong>";
-            $('#menuCreerPartie').append(labelAgeJoueurA);
+            labelAgeJoueurA.className = 'labelJoueur';
+            labelAgeJoueurA.innerHTML = 'Âge : ';
+            $(divJoueurA).append(labelAgeJoueurA);
 
             var ageJoueurA = document.createElement('input');
-            ageJoueurA.type = "text";
+            ageJoueurA.type = 'text';
             ageJoueurA.id = 'ageJoueurA';
-            ageJoueurA.className = 'ageJoueurA';
-            $('#menuCreerPartie').append(ageJoueurA);
+            ageJoueurA.className = 'textBoxJoueur';
+            $(divJoueurA).append(ageJoueurA);
 
-            var labelNomJoueurB = document.createElement("Label");
+            //Div Joueur B
+            var divJoueurB = document.createElement('div');
+            divJoueurB.id = 'divJoueurB';
+            divJoueurB.className = 'divJoueurs';
+            $(divContreVJ).append(divJoueurB);
+
+            var labelJoueurB = document.createElement('label');
+            labelJoueurB.id = 'labelJoueurB';
+            labelJoueurB.className = 'labelTitreJoueur';
+            labelJoueurB.innerHTML = 'Joueur B';
+            $(divJoueurB).append(labelJoueurB);
+
+            var labelNomJoueurB = document.createElement('label');
             labelNomJoueurB.id = 'labelNomJoueurB';
-            labelNomJoueurB.className = 'labelNomJoueurB';
-            labelNomJoueurB.innerHTML = "<p></p><strong>Nom du joueur: </strong>";
-            $('#menuCreerPartie').append(labelNomJoueurB);
+            labelNomJoueurB.className = 'labelJoueur';
+            labelNomJoueurB.innerHTML = 'Nom : ';
+            $(divJoueurB).append(labelNomJoueurB);
 
             var nomJoueurB = document.createElement('input');
-            nomJoueurB.type = "text";
+            nomJoueurB.type = 'text';
             nomJoueurB.id = 'nomJoueurB';
-            nomJoueurB.className = 'nomJoueurB';
-            $('#menuCreerPartie').append(nomJoueurB);
+            nomJoueurB.className = 'textBoxJoueur';
+            $(divJoueurB).append(nomJoueurB);
 
-            var labelAgeJoueurB = document.createElement("Label");
+            var labelAgeJoueurB = document.createElement('label');
             labelAgeJoueurB.id = 'labelAgeJoueurB';
-            labelAgeJoueurB.className = 'labelAgeJoueurB';
-            labelAgeJoueurB.innerHTML = "<p></p><strong>Age du joueur: </strong>";
-            $('#menuCreerPartie').append(labelAgeJoueurB);
+            labelAgeJoueurB.className = 'labelJoueur';
+            labelAgeJoueurB.innerHTML = 'Âge : ';
+            $(divJoueurB).append(labelAgeJoueurB);
 
             var ageJoueurB = document.createElement('input');
-            ageJoueurB.type = "text";
+            ageJoueurB.type = 'text';
             ageJoueurB.id = 'ageJoueurB';
-            ageJoueurB.className = 'ageJoueurB';
-            $('#menuCreerPartie').append(ageJoueurB);
+            ageJoueurB.className = 'textBoxJoueur';
+            $(divJoueurB).append(ageJoueurB);
 
-            var labelNomJoueurC = document.createElement("Label");
+            //Div Joueur C
+            var divJoueurC = document.createElement('div');
+            divJoueurC.id = 'divJoueurC';
+            divJoueurC.className = 'divJoueurs';
+            $(divContreVJ).append(divJoueurC);
+
+            var labelJoueurC = document.createElement('label');
+            labelJoueurC.id = 'labelJoueurC';
+            labelJoueurC.className = 'labelTitreJoueur';
+            labelJoueurC.innerHTML = 'Joueur C';
+            $(divJoueurC).append(labelJoueurC);
+
+            var labelNomJoueurC = document.createElement('label');
             labelNomJoueurC.id = 'labelNomJoueurC';
-            labelNomJoueurC.className = 'labelNomJoueurC';
-            labelNomJoueurC.innerHTML = "<p></p><strong>Nom du joueur: </strong>";
-            $('#menuCreerPartie').append(labelNomJoueurC);
+            labelNomJoueurC.className = 'labelJoueur';
+            labelNomJoueurC.innerHTML = 'Nom : ';
+            $(divJoueurC).append(labelNomJoueurC);
 
             var nomJoueurC = document.createElement('input');
-            nomJoueurC.type = "text";
+            nomJoueurC.type = 'text';
             nomJoueurC.id = 'nomJoueurC';
-            nomJoueurC.className = 'nomJoueurC';
-            $('#menuCreerPartie').append(nomJoueurC);
+            nomJoueurC.className = 'textBoxJoueur';
+            $(divJoueurC).append(nomJoueurC);
 
-            var labelAgeJoueurC = document.createElement("Label");
+            var labelAgeJoueurC = document.createElement('label');
             labelAgeJoueurC.id = 'labelAgeJoueurC';
-            labelAgeJoueurC.className = 'labelAgeJoueurC';
-            labelAgeJoueurC.innerHTML = "<p></p><strong>Age du joueur: </strong>";
-            $('#menuCreerPartie').append(labelAgeJoueurC);
+            labelAgeJoueurC.className = 'labelJoueur';
+            labelAgeJoueurC.innerHTML = 'Âge : ';
+            $(divJoueurC).append(labelAgeJoueurC);
 
             var ageJoueurC = document.createElement('input');
-            ageJoueurC.type = "text";
+            ageJoueurC.type = 'text';
             ageJoueurC.id = 'ageJoueurC';
-            ageJoueurC.className = 'ageJoueurC';
-            $('#menuCreerPartie').append(ageJoueurC);
+            ageJoueurC.className = 'textBoxJoueur';
+            $(divJoueurC).append(ageJoueurC);
 
-            var labelNomJoueurD = document.createElement("Label");
+            //Div Joueur D
+            var divJoueurD = document.createElement('div');
+            divJoueurD.id = 'divJoueurD';
+            divJoueurD.className = 'divJoueurs';
+            $(divContreVJ).append(divJoueurD);
+
+
+            var labelJoueurD = document.createElement('label');
+            labelJoueurD.id = 'labelJoueurD';
+            labelJoueurD.className = 'labelTitreJoueur';
+            labelJoueurD.innerHTML = 'Joueur D';
+            $(divJoueurD).append(labelJoueurD);
+
+            var labelNomJoueurD = document.createElement('label');
             labelNomJoueurD.id = 'labelNomJoueurD';
-            labelNomJoueurD.className = 'labelNomJoueurD';
-            labelNomJoueurD.innerHTML = "<p></p><strong>Nom du joueur: </strong>";
-            $('#menuCreerPartie').append(labelNomJoueurD);
+            labelNomJoueurD.className = 'labelJoueur';
+            labelNomJoueurD.innerHTML = 'Nom : ';
+            $(divJoueurD).append(labelNomJoueurD);
 
             var nomJoueurD = document.createElement('input');
-            nomJoueurD.type = "text";
+            nomJoueurD.type = 'text';
             nomJoueurD.id = 'nomJoueurD';
-            nomJoueurD.className = 'nomJoueurD';
-            $('#menuCreerPartie').append(nomJoueurD);
+            nomJoueurD.className = 'textBoxJoueur';
+            $(divJoueurD).append(nomJoueurD);
 
-            var labelAgeJoueurD = document.createElement("Label");
+            var labelAgeJoueurD = document.createElement('label');
             labelAgeJoueurD.id = 'labelAgeJoueurD';
-            labelAgeJoueurD.className = 'labelAgeJoueurD';
-            labelAgeJoueurD.innerHTML = "<p></p><strong>age du joueur: </strong>";
-            $('#menuCreerPartie').append(labelAgeJoueurD);
+            labelAgeJoueurD.className = 'labelJoueur';
+            labelAgeJoueurD.innerHTML = 'Âge : ';
+            $(divJoueurD).append(labelAgeJoueurD);
 
             var ageJoueurD = document.createElement('input');
-            ageJoueurD.type = "text";
+            ageJoueurD.type = 'text';
             ageJoueurD.id = 'ageJoueurD';
-            ageJoueurD.className = 'ageJoueurD';
-            $('#menuCreerPartie').append(ageJoueurD);
+            ageJoueurD.className = 'textBoxJoueur';
+            $(divJoueurD).append(ageJoueurD);
 
-            $('#nomJoueurA').hide();
-            $('#nomJoueurB').hide();
-            $('#nomJoueurC').hide();
-            $('#nomJoueurD').hide();
+            $(divJoueurA).hide();
+            $(divJoueurB).hide();
+            $(divJoueurC).hide();
+            $(divJoueurD).hide();
 
-            $('#ageJoueurA').hide();
-            $('#ageJoueurB').hide();
-            $('#ageJoueurC').hide();
-            $('#ageJoueurD').hide();
+            //Zone choix de difficulté
+            var divDifficulte = document.createElement('div');
+            divDifficulte.id = 'divDifficulte';
+            divDifficulte.className = 'divDifficulte';
+            $(menuCreerPartie).append(divDifficulte);
 
-            $('#labelNomJoueurA').hide();
-            $('#labelNomJoueurB').hide();
-            $('#labelNomJoueurC').hide();
-            $('#labelNomJoueurD').hide();
-
-            $('#labelAgeJoueurA').hide();
-            $('#labelAgeJoueurB').hide();
-            $('#labelAgeJoueurC').hide();
-            $('#labelAgeJoueurD').hide();
-
-            var divTexteDifficulte = document.createElement('div');
-            divTexteDifficulte.id = 'divTexteDifficulte';
-            divTexteDifficulte.className = 'divTexteDifficulte';
-            divTexteDifficulte.innerHTML = '<p class=difficulte><strong>Difficulté de la partie: </strong>';
-            $('#menuCreerPartie').append(divTexteDifficulte);
+            var labelTexteDifficulte = document.createElement('label');
+            labelTexteDifficulte.id = 'labelTexteDifficulte';
+            labelTexteDifficulte.className = 'labelTexteDifficulte';
+            labelTexteDifficulte.innerHTML = 'Difficulté de la partie : ';
+            $(divDifficulte).append(labelTexteDifficulte);
 
             var dropDownDifficulte = document.createElement('select');
             dropDownDifficulte.id = 'dropDownDifficulte';
             dropDownDifficulte.className = 'dropDownDifficulte';
-            var option1 = document.createElement("option");
-            option1.value = "1";
-            option1.innerHTML = "Facile";
+            $(divDifficulte).append(dropDownDifficulte);
+            var option1 = document.createElement('option');
+            option1.value = '1';
+            option1.innerHTML = 'Facile';
             dropDownDifficulte.appendChild(option1);
-            var option2 = document.createElement("option");
-            option2.value = "2";
-            option2.innerHTML = "Moyen";
+            var option2 = document.createElement('option');
+            option2.value = '2';
+            option2.innerHTML = 'Moyen';
             dropDownDifficulte.appendChild(option2);
-            var option3 = document.createElement("option");
-            option3.value = "3";
-            option3.innerHTML = "Difficile";
+            var option3 = document.createElement('option');
+            option3.value = '3';
+            option3.innerHTML = 'Difficile';
             dropDownDifficulte.appendChild(option3);
-            $('#menuCreerPartie').append(dropDownDifficulte);
 
             var labelErreur = document.createElement('label');
             labelErreur.className = 'labelErreur';
             labelErreur.id = 'labelErreur';
-            $('#menuCreerPartie').append(labelErreur);
+            $(menuCreerPartie).append(labelErreur);
 
             var buttonDebuter = document.createElement('button');
             buttonDebuter.id = 'buttonDebuter';
@@ -735,7 +710,7 @@
             buttonDebuter.innerHTML = 'Débuter';
             buttonDebuter.style.bottom = '95px';
             buttonDebuter.onclick = commencerNouvellePartie;
-            $('#menuCreerPartie').append(buttonDebuter);
+            $(menuCreerPartie).append(buttonDebuter);
 
             var buttonRetour = document.createElement('button');
             buttonRetour.id = 'buttonRetour';
@@ -743,7 +718,7 @@
             buttonRetour.innerHTML = 'Retour';
             buttonRetour.style.bottom = '35px';
             buttonRetour.onclick = menuPrincipal;
-            $('#menuCreerPartie').append(buttonRetour);
+            $(menuCreerPartie).append(buttonRetour);
         }
 
         //function chargerPartie() {
@@ -1314,7 +1289,7 @@
                     popUpConfirmation('Veuillez choisir la carte de votre jeu à échanger.');
                     echange = true;
                     brillanceCarteEchange();
-                    document.getElementById('buttonProposerEchange').textContent = "Annuler l'échange";
+                    document.getElementById('buttonProposerEchange').textContent = 'Annuler l\'échange';
                 }
                 else {
                     echange = false;
@@ -1961,11 +1936,8 @@
             var divCarte = document.createElement('div');
             divCarte.id = 'carte' + position;
             divCarte.className = 'divAnimee';
+            divCarte.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
             $('body').append(divCarte);
-            var divDerriere = document.createElement('div');
-            divDerriere.className = 'back';
-            divDerriere.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
-            $(divCarte).append(divDerriere);
 
             var x = $('#' + carteMain).offset().left;
             var y = $('#' + carteMain).offset().top;
@@ -1985,17 +1957,7 @@
             }, { duration: 2500 });
             setTimeout(function () {
                 $('#carte' + position).remove();
-                var image = document.createElement('img');
-                var cloneImage = '<img class="imageTooltip" src="ressources/' + carte.nomImage + '">';
-                image.className = 'imageCarteMains';
-                image.src = 'ressources/' + carte.nomImage;
-                $('#' + carteMain).append(image);
-                $(image).tooltip({
-                    items: 'img',
-                    content: cloneImage,
-                    position: { my: "right" },
-                    show: { delay: 1000 }
-                });
+                updateAffichageImage();
             }, 1500);
         }
 
@@ -2383,76 +2345,98 @@
             $('#divDroite').css('pointer-events', 'none');
             $('#plateau').css('pointer-events', 'none');
             $('#divMain').addClass('divMainDefausse');
-            $('.imageCarte').draggable('disable');
+            $('.imageCarteMains').draggable('disable');
 
             mains[numeroJoueurActif].forEach(function (item, index) {
                 $('#divCarte' + index).click(function () {
-                    $(this).css('-moz-box-shadow', '0 0 15px 10px #fff');
-                    $(this).css('-webkit-box-shadow', '0 0 15px 10px #fff');
-                    $(this).css('box-shadow', '0px 0px 15px 10px #fff');
-                    cartesDefausse[index] = mains[numeroJoueurActif][index];
+                    if (cartesDefausse[index] != null) {
+                        cartesDefausse[index] = null;
+                        $(this).removeAttr('style');
+                    }
+                    else {
+                        $(this).css('-moz-box-shadow', '0 0 15px 10px #fff');
+                        $(this).css('-webkit-box-shadow', '0 0 15px 10px #fff');
+                        $(this).css('box-shadow', '0px 0px 15px 10px #fff');
+                        cartesDefausse[index] = mains[numeroJoueurActif][index];
+                    }
                 });
             });
         }
 
         //Fonction appelé lors d'un clic sur le bouton Défausser
         function onClickButtonDefausse(cartesDefausse) {
-            if (cartesDefausse.length != 0) {
-                cartesDefausse.forEach(function (item, index) {
-                    paquetDecharge.push(item);
-                    mains[numeroJoueurActif][index] = null;
-                    var image = $('#divCarte' + index).children();
-                    var x = ($('#paquetDefausse').offset().left) - ($(image).offset().left);
-                    var y = ($('#paquetDefausse').offset().top) - ($(image).offset().top);
-                    $(image).animate({
-                        height: 91,
-                        width: 59,
-                        left: x,
-                        top: y,
-                        borderSpacing: 45
-                    }, {
-                        step: function (now,fx) {
-                            $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                            $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                            $(this).css('transform', 'rotate(' + now + 'deg)');
+            //console.log(((mains[numeroJoueurActif].filter(function (value) { return value !== null }).length) - cartesDefausse.length));
+            sizeMain = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
+            sizeADefausse = cartesDefausse.filter(function (value) { return value !== null }).length;
+            if ((sizeMain - sizeADefausse) === 4) {
+                if (sizeADefausse != 0) {
+                    cartesDefausse.forEach(function (item, index) {
+                        if (item != null) {
+                            paquetDecharge.push(item);
+                            mains[numeroJoueurActif][index] = null;
+                            var image = $('#divCarte' + index).children();
+                            var x = ($('#paquetDefausse').offset().left) - ($(image).offset().left);
+                            var y = ($('#paquetDefausse').offset().top) - ($(image).offset().top);
+                            $(image).animate({
+                                height: 91,
+                                width: 59,
+                                left: x,
+                                top: y,
+                                borderSpacing: 45
+                            }, {
+                                step: function (now, fx) {
+                                    $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                                    $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                                    $(this).css('transform', 'rotate(' + now + 'deg)');
+                                }
+                            }, { duration: 2500 });
+                            setTimeout(function () {
+                                $(image).remove();
+                                if ($('#paquetDefausse').children().length > 0) {
+                                    $('#paquetDefausse').children().remove();
+                                }
+                                var imageDecharge = document.createElement('img');
+                                imageDecharge.src = 'ressources/' + paquetDecharge[paquetDecharge.length - 1].nomImage;
+                                imageDecharge.className = 'imageCarteJeu';
+                                $('#paquetDefausse').append(imageDecharge);
+                            }, 500);
                         }
-                    }, { duration: 2500 });
-                    setTimeout(function() {
-                        $(image).remove();
-                        if ($('#paquetDefausse').children().length > 0) {
-                            $('#paquetDefausse').children().remove();
-                        }
-                        var imageDecharge = document.createElement('img');
-                        imageDecharge.src = 'ressources/' + paquetDecharge[0].nomImage;
-                        imageDecharge.className = 'imageCarteJeu';
-                        $('#paquetDefausse').append(imageDecharge);
-                    },500);
-                });
-                $('#plateauGrise').remove();
-                $('#divDroiteGrise').remove();
-                $('#divDroite').css('pointer-events', 'auto');
-                $('#plateau').css('pointer-events', 'auto');
-                $('.imageCarte').draggable('enable');
-                $('divMain').removeClass('divMainDefausse');
-                mains[numeroJoueurActif].forEach(function (item, index) {
-                    $('#divCarte' + index).removeAttr('style');
-                });
-                $('#buttonDefausser').remove();
+                    });
+                    $('#plateauGrise').remove();
+                    $('#divDroiteGrise').remove();
+                    $('#divDroite').css('pointer-events', 'auto');
+                    $('#plateau').css('pointer-events', 'auto');
+                    $('.imageCarteMains').draggable('enable');
+                    $('divMain').removeClass('divMainDefausse');
+                    mains[numeroJoueurActif].forEach(function (item, index) {
+                        $('#divCarte' + index).removeAttr('style');
+                        $('#divCarte' + index).off('click');
+                    });
+                    $('#buttonDefausser').remove();
+                    setTimeout(function () {
+                        passerTour();
+                    },600);
+                }
+                else {
+                    popUpAvertissement('Selectionner d\'abord la/les carte(s) à défausser');
+                }
+            }
+            else if ((sizeMain - sizeADefausse) > 4) {
+                popUpErreur('Vous n\'avez pas sélectionné assez de cartes à défausser');
             }
             else {
-                popUpAvertissement('Selectionner d\'abord la/les carte(s) à défausser');
+                popUpErreur('Vous avez sélectionné trop de cartes à défausser');
             }
         }
 
         //Fonction appelé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
             var size = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
-            console.log(mains[numeroJoueurActif]);
-            console.log(size);
-            if (size > 4) {
-                defausserCarte();
-            }
-            else {
+
+            //if (size > 4) {
+            //    defausserCarte();
+            //}
+            //else {
                 $('#buttonPasserTour').prop('disabled', true);
                 if (nombreJoueur === 4) {
                     facteurRotation += 1;
@@ -2507,8 +2491,9 @@
                 tour++;
                 remplirMain();
                 updateJeu();
+                updateAffichageImage();
                 $('#buttonProposerEchange').prop('disabled', false);
-            }
+            //}
         }
 
         //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
@@ -2625,6 +2610,18 @@
         //Fonction qui "update" le jeu.
         function updateJeu() {
             //Afficher les cartes selon le tableau main[]
+           
+
+            pointsRessourcesBase[numeroJoueurActif] = 6;
+            pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
+            pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
+            pointsRessourcesUtiliser[numeroJoueurActif] = 0;
+            pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif];
+
+            updatePointsRessources();
+        }
+
+        function updateAffichageImage() {
             for (i = 0; i < 6; i++) {
                 carteMain = document.getElementById('divCarte' + i)
                 if (carteMain.children.length != 0) {
@@ -2677,14 +2674,6 @@
                     revertDuration: 400
                 });
             });
-
-            pointsRessourcesBase[numeroJoueurActif] = 6;
-            pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
-            pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
-            pointsRessourcesUtiliser[numeroJoueurActif] = 0;
-            pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif];
-
-            updatePointsRessources();
         }
 
         //Fonction qui update après avoir jouer une carte.
