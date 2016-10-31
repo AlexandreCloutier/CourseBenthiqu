@@ -10,8 +10,15 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="scripts/jquery.flip.min.js"></script>
     <script>
-        //TODO: changer ? des macro invertébrer
+        //TODO: Dans un des livret de regles, il disent qu'on a 5 points ressources de base et non 6 !
+        //TODO: Les cartes échanger peuvent être en jeu ou en main -_______-
         //TODO: points ressources plus clair avec les bandes riveraines
+        //TODO: Maximum 3 bande riveraine en jeu.
+        //TODO: Maximum de 8 habitats en jeu.
+        //TODO: À la fin du tour, si le joueur ne peut pas restaurer un habitat perturbé, les macro qui s'en servent meurt.
+
+        //Tableau contenant les points des joueurs.
+        var pointsJoueur;
         //Tableau contenant l'âge des joueurs.
         var ageJoueur;
         //Tableau contenant les noms des joueurs.
@@ -107,6 +114,7 @@
             instantierTableauPointsRessources();
             instantierTableauExemplaire();
             paquetDecharge = new Array();
+            pointsJoueur = new Array(6);
         }
 
         //Fonction qui envoie vers les options de création de partie.
@@ -1797,13 +1805,68 @@
             }
         }
 
+        function possibleManger() {
+            var possible = false;
+            var tailleMacro = carteDrag.taille;
+            
+            for (var i = 0; i < 10; i++) {
+                if (numeroJoueurActif != 0) {
+                    if (carteBas[0][i] != null) {
+                        if (carteBas[0][i].taille < tailleMacro) {
+                            possible = true;
+                        }
+                    }
+                }
+                if (numeroJoueurActif != 1) {
+                    if (carteBas[1][i] != null) {
+                        if (carteBas[1][i].taille < tailleMacro) {
+                            possible = true;
+                        }
+                    }
+                }
+                if (numeroJoueurActif != 2) {
+                    if (carteBas[2][i] != null) {
+                        if (carteBas[2][i].taille < tailleMacro) {
+                            possible = true;
+                        }
+                    }
+                }
+                if (numeroJoueurActif != 3) {
+                    if (carteBas[3][i] != null) {
+                        if (carteBas[3][i].taille < tailleMacro) {
+                            possible = true;
+                        }
+                    }
+                }
+            }
+
+            if (possible) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
         //Fonction qui valide si le drop est accepter.
         function accepterDrop(event) {
             if (carteDrag.coutResources <= pointsRessourcesRestant[numeroJoueurActif]) {
                 // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
                 if (carteDrag.type === 'macroInvertebre' || carteDrag.type === 'salmonide') {
                     if (verifierCondition(carteDrag)) {
-                        return true;
+                        if (carteDrag.predateur > 0) {
+                            if (possibleManger()) {
+                                //TODO: appeler une méthode qui se chargera de manger les cartes.
+                                return true;
+                            }
+                            else {
+                                popUpErreur('Un adversaire doit avoir une carte avec une taille inférieur au prédateur pour qu\'il est quelque choses à manger');
+                                return false;
+                            }
+                        }
+                        else {
+                            return true;
+                        }
                     }
                     else {
                         popUpAvertissement('Vous ne respectez pas les conditions nécéssaires.');
@@ -2821,6 +2884,46 @@
             //   $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
             //TODO: À clou: reste juste à modifier la partie de droite pour afficher les différentes variables de points ressources et
             // a update dans cette fonction les text. La fonction est déjà appeler correctement :p
+        }
+
+        //Fonction qui calcule les points de chaque joueurs.
+        function calculerPoints() {
+            //Remes les différents points à 0.
+            pointsJoueur[0] = 0;
+            pointsJoueur[1] = 0;
+            pointsJoueur[2] = 0;
+            pointsJoueur[3] = 0;
+
+            for (var i = 0;i<10;i++){
+                if (carteBas[0][i] != null) {
+                    pointsJoueur[0] += carteBas[0][i].coutResources;
+
+                    if (exemplaireCarteBas[0][i] > 1) {
+                        pointsJoueur[0] += exemplaireCarteBas[0][i] - 1;
+                    }
+                }
+                if (carteBas[1][i] != null) {
+                    pointsJoueur[1] += carteBas[1][i].coutResources;
+
+                    if (exemplaireCarteBas[0][i] > 1) {
+                        pointsJoueur[1] += exemplaireCarteBas[1][i] - 1;
+                    }
+                }
+                if (carteBas[2][i] != null) {
+                    pointsJoueur[2] += carteBas[2][i].coutResources;
+
+                    if (exemplaireCarteBas[2][i] > 1) {
+                        pointsJoueur[2] += exemplaireCarteBas[2][i] - 1;
+                    }
+                }
+                if (carteBas[3][i] != null) {
+                    pointsJoueur[3] += carteBas[3][i].coutResources;
+
+                    if (exemplaireCarteBas[3][i] > 1) {
+                        pointsJoueur[3] += exemplaireCarteBas[3][i] - 1;
+                    }
+                }
+            }
         }
     </script>
 </body>
