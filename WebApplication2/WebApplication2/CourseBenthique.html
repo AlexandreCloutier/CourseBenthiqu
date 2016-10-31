@@ -1659,11 +1659,11 @@
                                             onDrop(event, ui, verifierCartePresente());
                                         }
                                     }//sinon si l'endroit contient une carte ET qu'elle est identique.
-                                    else if ($(this).children().length >= 1) {                                      
-                                        var id;
-                                        id = event.target.id.substr(event.target.id.length - 1);
-                                        
+                                    else if ($(this).children().length >= 1) {                                                                                                                     
                                         if (carteDrag.type != 'perturbation') {
+                                            var id;
+                                            id = event.target.id.substr(event.target.id.length - 1);
+
                                             if (carteDrag.nom === carteBas[numeroJoueurActif][id].nom) {
                                                 onDrop(event, ui, this);
                                             }
