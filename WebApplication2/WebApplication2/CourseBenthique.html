@@ -10,13 +10,14 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="scripts/jquery.flip.min.js"></script>
     <script>
-        //TODO: Dans un des livret de regles, il disent qu'on a 5 points ressources de base et non 6 !
         //TODO: Les cartes échanger peuvent être en jeu ou en main -_______-
         //TODO: points ressources plus clair avec les bandes riveraines
         //TODO: À la fin du tour, si le joueur ne peut pas restaurer un habitat perturbé, les macro qui s'en servent meurt.
         //TODO: Dans la partie de droite, je crois qu'il serais bien d'ajouter le boutons regle.
         //TODO: Lorsque l'on supprime une carte ou échange, modifier le nombre d'exemplaire.
         //TODO: Prendre en compte le nombre d'exemplaire lors du calcul de points de ressources additionel.
+        //TODO: Si le joueur a une riviere et un galet et qu'il échange le galet contre une riviere, il faudrait que la riviere
+        //      s'empille sur l'autre.
 
         //Tableau contenant les points des joueurs.
         var pointsJoueur;
@@ -1532,11 +1533,13 @@
             if (document.getElementById(positionCarte1).children.length === 0) {
                 $('#' + positionCarte1).append(image);
                 carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
+                exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger1] = 1;
 
             }
             else {
                 carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
-                $(trouverPositionLibre(numeroJoueurActif)).append(image);
+                exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
+                $(trouverPositionLibre(numeroJoueurActif)).append(image);               
                 exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
             }
 
@@ -1548,10 +1551,11 @@
             if (document.getElementById(positionCarte2).children.length === 0) {
                 $('#' + positionCarte2).append(image2);
                 carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
-
+                exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger2] = 1;
             }
             else {
                 carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
+                exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
                 $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
                 exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
             }
@@ -1839,6 +1843,7 @@
             }
         }
 
+        //Fonction qui retourne true si il y a un macro-invertébré à manger.
         function possibleManger() {
             var possible = false;
             var tailleMacro = carteDrag.taille;
@@ -1948,6 +1953,7 @@
             }
         }
 
+        //Fonction qui retourne true si le nombre maximum d'habitats n'est pas dépasser.
         function verifierNombreHabitats(numeroJoueur, nombreMax) {
             var nombreHabitats = 0;
 
@@ -1967,6 +1973,7 @@
             }
         }
 
+        //Fonction qui retourne true si le nombre maximum de bande riveraine n'est pas dépasser.
         function verifierNombreBandeRiveraine(numeroJoueur, nombreMax) {
             var nombreBandeRiveraine = 0;
 
@@ -2908,7 +2915,7 @@
 
         //Fonction qui "update" le jeu.
         function updateJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 6;
+            pointsRessourcesBase[numeroJoueurActif] = 5;
             pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
             pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
             pointsRessourcesUtiliser[numeroJoueurActif] = 0;
@@ -2917,6 +2924,7 @@
             updatePointsRessources();
         }
 
+        //Fonction qui "update" l'affichage des images.
         function updateAffichageImage() {
             for (i = 0; i < 6; i++) {
                 carteMain = document.getElementById('divCarte' + i)
