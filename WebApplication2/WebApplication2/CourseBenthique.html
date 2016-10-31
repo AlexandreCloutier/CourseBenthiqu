@@ -13,9 +13,10 @@
         //TODO: Dans un des livret de regles, il disent qu'on a 5 points ressources de base et non 6 !
         //TODO: Les cartes échanger peuvent être en jeu ou en main -_______-
         //TODO: points ressources plus clair avec les bandes riveraines
-        //TODO: Maximum 3 bande riveraine en jeu.
-        //TODO: Maximum de 8 habitats en jeu.
         //TODO: À la fin du tour, si le joueur ne peut pas restaurer un habitat perturbé, les macro qui s'en servent meurt.
+        //TODO: Dans la partie de droite, je crois qu'il serais bien d'ajouter le boutons regle.
+        //TODO: Lorsque l'on supprime une carte ou échange, modifier le nombre d'exemplaire.
+        //TODO: Prendre en compte le nombre d'exemplaire lors du calcul de points de ressources additionel.
 
         //Tableau contenant les points des joueurs.
         var pointsJoueur;
@@ -1475,7 +1476,38 @@
 
                         positionCarteEchanger2 = emplacement;
                         carteEchanger2 = carteBas[numeroJoueurEchange2][emplacement];
-                        echangerCarte(emplacementCarte1, emplacementCarte2);
+
+                        var echangeOk = true;
+
+                        if (carteEchanger1.type === 'habitats') {
+                            if (!verifierNombreHabitats(numeroJoueurEchange2, 9)) {
+                                echangeOk = false;
+                                popUpErreur('Le joueur a trop d\'habitats, il n\'est pas possible d\'en avoir plus que 8 !');
+                            }
+                        }
+                        else if (carteEchanger1.type === 'bandeRiveraine') {
+                            if (!verifierNombreBandeRiveraine(numeroJoueurEchange2, 4)) {
+                                echangeOk = false;
+                                popUpErreur('Le joueur a trop de bande riveraine, il n\'est pas possible d\'en avoir plus que 3 !');
+                            }
+                        }
+                        if (carteEchanger2.type === 'habitats') {
+                            if (!verifierNombreHabitats(numeroJoueurActif, 9)) {
+                                echangeOk = false;
+                                popUpErreur('Vous avez trop d\'habitats, il n\'est pas possible d\'en avoir plus que 8 !');
+                            }
+                        }
+                        else if (carteEchanger2.type === 'bandeRiveraine') {
+                            if (!verifierNombreBandeRiveraine(numeroJoueurActif, 4)) {
+                                echangeOk = false;
+                                popUpErreur('Vous avez trop de bande riveraine, il n\'est pas possible d\'en avoir plus que 3 !');
+                            }
+                        }
+
+                        if (echangeOk) {
+                            echangerCarte(emplacementCarte1, emplacementCarte2);
+                        }
+                       
                         onClickButtonEchange();
                         brillanceCarteEchange();
                         annulerEchange();
@@ -1505,6 +1537,7 @@
             else {
                 carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
                 $(trouverPositionLibre(numeroJoueurActif)).append(image);
+                exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
             }
 
             var image2 = document.createElement('img');
@@ -1520,6 +1553,7 @@
             else {
                 carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
                 $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
+                exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
             }
 
             $('#buttonProposerEchange').prop('disabled', true);
@@ -1874,7 +1908,27 @@
                     }
                 }
                 else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention' || carteDrag.type === 'bandeRiveraine') {
-                    return true;
+                    if (carteDrag.type === 'habitats') {
+                        if (verifierNombreHabitats(numeroJoueurActif, 8)) {
+                            return true;
+                        }
+                        else {
+                            popUpAvertissement('Vous ne pouvez pas avoir plus de 8 habitats en jeu.');
+                            return false;
+                        }
+                    }
+                    else if (carteDrag.type === 'bandeRiveraine') {
+                        if (verifierNombreBandeRiveraine(numeroJoueurActif, 3)) {
+                            return true;
+                        }
+                        else {
+                            popUpAvertissement('Vous ne pouvez pas avoir plus de 3 bande riveraine en jeu.');
+                            return false;
+                        }
+                    }
+                    else if (carteDrag.type === 'intervention') {
+                        return true;
+                    }
                 }
                 else if (carteDrag.type === 'perturbation') {
                     var message = verifierConditionPerturbation(event);
@@ -1891,6 +1945,44 @@
             else {
                 popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
                 return false;
+            }
+        }
+
+        function verifierNombreHabitats(numeroJoueur, nombreMax) {
+            var nombreHabitats = 0;
+
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroJoueur][i] != null) {
+                    if (carteBas[numeroJoueur][i].type === 'habitats') {
+                        nombreHabitats += exemplaireCarteBas[numeroJoueur][i];
+                    }
+                }
+            }
+
+            if (nombreHabitats >= nombreMax) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        function verifierNombreBandeRiveraine(numeroJoueur, nombreMax) {
+            var nombreBandeRiveraine = 0;
+
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroJoueur][i] != null) {
+                    if (carteBas[numeroJoueur][i].type === 'bandeRiveraine') {
+                        nombreBandeRiveraine += exemplaireCarteBas[numeroJoueur][i];
+                    }
+                }
+            }
+
+            if (nombreBandeRiveraine >= nombreMax) {
+                return false;
+            }
+            else {
+                return true;
             }
         }
 
