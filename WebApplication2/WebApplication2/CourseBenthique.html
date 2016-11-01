@@ -287,20 +287,24 @@
                     for (var i = 0; i < 6; i++) {
                         if ($('#emplacementBasJoueur' + lettreActif + i).children().length > 0) {
                             $('#emplacementBasJoueur' + lettreActif + i).addClass('ui-echange-highlight');
+                            $('#emplacementBasJoueur' + lettreActif + i).addClass('carteCliquable');
                         }
                     }
                     for (var i = 6; i < 10; i++) {
                         if ($('#emplacementHautJoueur' + lettreActif + i).children().length > 0) {
                             $('#emplacementHautJoueur' + lettreActif + i).addClass('ui-echange-highlight');
+                            $('#emplacementHautJoueur' + lettreActif + i).addClass('carteCliquable');
                         }
                     }
                 }
                 else {
                     for (var i = 0; i < 6; i++) {
                         $('#emplacementBasJoueur' + lettreActif + i).removeClass('ui-echange-highlight');
+                        $('#emplacementBasJoueur' + lettreActif + i).removeClass('carteCliquable');
                     }
                     for (var i = 6; i < 10; i++) {
                         $('#emplacementHautJoueur' + lettreActif + i).removeClass('ui-echange-highlight');
+                        $('#emplacementHautJoueur' + lettreActif + i).removeClass('carteCliquable');
                     }
                 }
             }
@@ -308,30 +312,36 @@
                 for (var i = 0; i < 6; i++) {
                     if ($('#emplacementBasJoueur' + ennemi1 + i).children().length > 0) {
                         $('#emplacementBasJoueur' + ennemi1 + i).addClass('ui-echange-highlight');
+                        $('#emplacementBasJoueur' + ennemi1 + i).addClass('carteCliquable');
                     }
                     if (nombreJoueur >= 3) {
                         if ($('#emplacementBasJoueur' + ennemi2 + i).children().length > 0) {
                             $('#emplacementBasJoueur' + ennemi2 + i).addClass('ui-echange-highlight');
+                            $('#emplacementBasJoueur' + ennemi2 + i).addClass('carteCliquable');
                         }
                     }
                     if (nombreJoueur === 4) {
                         if ($('#emplacementBasJoueur' + ennemi3 + i).children().length > 0) {
                             $('#emplacementBasJoueur' + ennemi3 + i).addClass('ui-echange-highlight');
+                            $('#emplacementBasJoueur' + ennemi3 + i).addClass('carteCliquable');
                         }
                     }
                 }
                 for (var i = 6; i < 10; i++) {
                     if ($('#emplacementHautJoueur' + ennemi1 + i).children().length > 0) {
                         $('#emplacementHautJoueur' + ennemi1 + i).addClass('ui-echange-highlight');
+                        $('#emplacementHautJoueur' + ennemi1 + i).addClass('carteCliquable');
                     }
                     if (nombreJoueur >= 3) {
                         if ($('#emplacementHautJoueur' + ennemi2 + i).children().length > 0) {
                             $('#emplacementHautJoueur' + ennemi2 + i).addClass('ui-echange-highlight');
+                            $('#emplacementHautJoueur' + ennemi2 + i).addClass('carteCliquable');
                         }
                     }
                     if (nombreJoueur === 4) {
                         if ($('#emplacementHautJoueur' + ennemi3 + i).children().length > 0) {
                             $('#emplacementHautJoueur' + ennemi3 + i).addClass('ui-echange-highlight');
+                            $('#emplacementHautJoueur' + ennemi3 + i).addClass('carteCliquable');
                         }
                     }
                 }
@@ -340,30 +350,36 @@
                 for (var i = 0; i < 6; i++) {
                     if ($('#emplacementBasJoueur' + ennemi1 + i).children().length > 0) {
                         $('#emplacementBasJoueur' + ennemi1 + i).removeClass('ui-echange-highlight');
+                        $('#emplacementBasJoueur' + ennemi1 + i).removeClass('carteCliquable');
                     }
                     if (nombreJoueur >= 3) {
                         if ($('#emplacementBasJoueur' + ennemi2 + i).children().length > 0) {
                             $('#emplacementBasJoueur' + ennemi2 + i).removeClass('ui-echange-highlight');
+                            $('#emplacementBasJoueur' + ennemi2 + i).removeClass('carteCliquable');
                         }
                     }
                     if (nombreJoueur === 4) {
                         if ($('#emplacementBasJoueur' + ennemi3 + i).children().length > 0) {
                             $('#emplacementBasJoueur' + ennemi3 + i).removeClass('ui-echange-highlight');
+                            $('#emplacementBasJoueur' + ennemi3 + i).removeClass('carteCliquable');
                         }
                     }
                 }
                 for (var i = 6; i < 10; i++) {
                     if ($('#emplacementHautJoueur' + ennemi1 + i).children().length > 0) {
                         $('#emplacementHautJoueur' + ennemi1 + i).removeClass('ui-echange-highlight');
+                        $('#emplacementHautJoueur' + ennemi1 + i).removeClass('carteCliquable');
                     }
                     if (nombreJoueur >= 3) {
                         if ($('#emplacementHautJoueur' + ennemi2 + i).children().length > 0) {
                             $('#emplacementHautJoueur' + ennemi2 + i).removeClass('ui-echange-highlight');
+                            $('#emplacementHautJoueur' + ennemi2 + i).removeClass('carteCliquable');
                         }
                     }
                     if (nombreJoueur === 4) {
                         if ($('#emplacementHautJoueur' + ennemi3 + i).children().length > 0) {
                             $('#emplacementHautJoueur' + ennemi3 + i).removeClass('ui-echange-highlight');
+                            $('#emplacementHautJoueur' + ennemi3 + i).removeClass('carteCliquable');
                         }
                     }
                 }
@@ -433,7 +449,7 @@
 
             var dropDownNombreJoueur = document.createElement('select');
             dropDownNombreJoueur.id = 'dropDownNombreJoueur';
-            dropDownNombreJoueur.className = 'dropDownNombreJoueur';
+            dropDownNombreJoueur.className = 'dropDown';
             $(divContreVJ).append(dropDownNombreJoueur);
             var option1 = document.createElement('option');
             option1.value = '0';
@@ -642,7 +658,7 @@
 
             var dropDownDifficulte = document.createElement('select');
             dropDownDifficulte.id = 'dropDownDifficulte';
-            dropDownDifficulte.className = 'dropDownDifficulte';
+            dropDownDifficulte.className = 'dropDown';
             $(divDifficulte).append(dropDownDifficulte);
             var option1 = document.createElement('option');
             option1.value = '1';
@@ -1686,6 +1702,9 @@
                                 else if (carteDrag.type === 'perturbation') {
                                     popUpErreur('Cette carte est jouable que dans la zone d\'un de vos adversaire.');
                                 }
+                                else if (carteDrag.type === 'action' || carteDrag.type === 'speciale') {
+                                    popUpErreur('Cette carte doit être jouer directement dans la défausse.');
+                                }
                             }
                         }
                     });
@@ -1728,12 +1747,28 @@
                     return false;
                 }
             }
-            if (carteDrag.type === 'perturbation') {
+            else if (carteDrag.type === 'perturbation') {
                 if (lettreEmplacement === lettre) {
                     return false;
                 }
                 else {
                     return true;
+                }
+            }
+            else if (carteDrag.type === 'action') {
+                if (identification === 'se') {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else if (carteDrag.type === 'speciale') {
+                if (identification === 'se') {
+                    return true;
+                }
+                else {
+                    return false;
                 }
             }
         }
@@ -1894,6 +1929,12 @@
                     }
                 }
                 else if (carteDrag.type === 'reglementation') {
+                    return true;
+                }
+                else if (carteDrag.type === 'action') {
+                    return true;
+                }
+                else if (carteDrag.type === 'speciale') {
                     return true;
                 }
             }
@@ -2561,23 +2602,31 @@
             for (var i = 0; i < 6; i++) {
                 $('#emplacementBasJoueur' + 'A' + i).removeClass('ui-echange-highlight');
                 $('#emplacementBasJoueur' + 'B' + i).removeClass('ui-echange-highlight');
+                $('#emplacementBasJoueur' + 'A' + i).removeClass('carteCliquable');
+                $('#emplacementBasJoueur' + 'B' + i).removeClass('carteCliquable');
 
                 if (nombreJoueur >= 3) {
                     $('#emplacementBasJoueur' + 'C' + i).removeClass('ui-echange-highlight');
+                    $('#emplacementBasJoueur' + 'C' + i).removeClass('carteCliquable');
                 }
                 if (nombreJoueur === 4) {
                     $('#emplacementBasJoueur' + 'D' + i).removeClass('ui-echange-highlight');
+                    $('#emplacementBasJoueur' + 'D' + i).removeClass('carteCliquable');
                 }
             }
             for (var i = 6; i < 10; i++) {
                 $('#emplacementHautJoueur' + 'A' + i).removeClass('ui-echange-highlight');
                 $('#emplacementHautJoueur' + 'B' + i).removeClass('ui-echange-highlight');
+                $('#emplacementHautJoueur' + 'A' + i).removeClass('carteCliquable');
+                $('#emplacementHautJoueur' + 'B' + i).removeClass('carteCliquable');
 
                 if (nombreJoueur >= 3) {
                     $('#emplacementHautJoueur' + 'C' + i).removeClass('ui-echange-highlight');
+                    $('#emplacementHautJoueur' + 'C' + i).removeClass('carteCliquable');
                 }
                 if (nombreJoueur === 4) {
                     $('#emplacementHautJoueur' + 'D' + i).removeClass('ui-echange-highlight');
+                    $('#emplacementHautJoueur' + 'D' + i).removeClass('carteCliquable');
                 }
             }
         }
