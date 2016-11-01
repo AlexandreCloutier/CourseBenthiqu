@@ -1568,6 +1568,8 @@
                     }
                 })
             });
+            calculerPoints();
+            updateZonePoints();
         }
 
         //Fonction qui retourne le premier emplacement libre ou on peut mettre une carte.
@@ -1773,7 +1775,7 @@
             var lettre = lettreJoueur(numeroJoueurActif);
 
             //Si c'est un habitats, un macro-invertebrer ou une bande riveraine, la carte se joue seulement sur notre territoire.
-            if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide') {
+            if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide' || carteDrag.type ==='reglementation') {
                 if (lettreEmplacement === lettre) {
                     return true;
                 }
@@ -1945,6 +1947,9 @@
                         popUpAvertissement(message);
                         return false;
                     }
+                }
+                else if (carteDrag.type === 'reglementation') {
+                    return true;
                 }
             }
             else {
@@ -2135,6 +2140,8 @@
                 var id = drop.id.substr(drop.id.length - 1);
                 carteBas[numeroJoueurActif][id] = carteDrag;
                 supprimerCartePrecise(carteDragNumero);
+                calculerPoints();
+                updateZonePoints();
             });
         }
 
@@ -2259,11 +2266,11 @@
                     $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
                     $(this).css('transform', 'rotate(' + now + 'deg)');
                 }
-            }, { duration: 2500 });
+            }, { duration: 500 });
             setTimeout(function () {
                 $('#carte' + position).remove();
                 updateAffichageImage();
-            }, 1500);
+            }, 500);
         }
 
         //Function qui melange le paquet de carte.
@@ -2493,6 +2500,18 @@
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
+
+            //--------------------------------reglementation----------------------------------------------
+
+            carte = new Carte('reglementation', 'assainissement', 'assainissement.png', 3);
+            paquetCarte.push(carte);
+
+            carte = new Carte('reglementation', 'interdiction', 'interdiction.png', 3);
+            paquetCarte.push(carte);
+
+            carte = new Carte('reglementation', 'politique', 'politique.png', 3);
+            paquetCarte.push(carte);
+
             if (difficulte === 2)//Moyen
             {
 
@@ -2511,17 +2530,6 @@
                 carte = new Carte('action', 'amenagement', 'amenagement.png', 3);
                 paquetCarte.push(carte);
                 paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                //--------------------------------reglementation----------------------------------------------
-
-                carte = new Carte('reglementation', 'assainissement', 'assainissement.png', 3);
-                paquetCarte.push(carte);
-
-                carte = new Carte('reglementation', 'interdiction', 'interdiction.png', 3);
-                paquetCarte.push(carte);
-
-                carte = new Carte('reglementation', 'politique', 'politique.png', 3);
                 paquetCarte.push(carte);
 
                 //---------------------------------intervention------------------------------
@@ -2915,7 +2923,7 @@
 
         //Fonction qui "update" le jeu.
         function updateJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 5;
+            pointsRessourcesBase[numeroJoueurActif] = 20;
             pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
             pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
             pointsRessourcesUtiliser[numeroJoueurActif] = 0;
@@ -3002,27 +3010,49 @@
                         pointsJoueur[0] += exemplaireCarteBas[0][i] - 1;
                     }
                 }
-                if (carteBas[1][i] != null) {
-                    pointsJoueur[1] += carteBas[1][i].coutResources;
+                if (nombreJoueur >= 2) {
+                    if (carteBas[1][i] != null) {
+                        pointsJoueur[1] += carteBas[1][i].coutResources;
 
-                    if (exemplaireCarteBas[0][i] > 1) {
-                        pointsJoueur[1] += exemplaireCarteBas[1][i] - 1;
+                        if (exemplaireCarteBas[0][i] > 1) {
+                            pointsJoueur[1] += exemplaireCarteBas[1][i] - 1;
+                        }
+                    }
+                    if (nombreJoueur >= 3) {
+                        if (carteBas[2][i] != null) {
+                            pointsJoueur[2] += carteBas[2][i].coutResources;
+
+                            if (exemplaireCarteBas[2][i] > 1) {
+                                pointsJoueur[2] += exemplaireCarteBas[2][i] - 1;
+                            }
+                        }
+                        if (nombreJoueur >= 4) {
+                            if (carteBas[3][i] != null) {
+                                pointsJoueur[3] += carteBas[3][i].coutResources;
+
+                                if (exemplaireCarteBas[3][i] > 1) {
+                                    pointsJoueur[3] += exemplaireCarteBas[3][i] - 1;
+                                }
+                            }
+                        }
                     }
                 }
-                if (carteBas[2][i] != null) {
-                    pointsJoueur[2] += carteBas[2][i].coutResources;
+            }
+        }
 
-                    if (exemplaireCarteBas[2][i] > 1) {
-                        pointsJoueur[2] += exemplaireCarteBas[2][i] - 1;
-                    }
-                }
-                if (carteBas[3][i] != null) {
-                    pointsJoueur[3] += carteBas[3][i].coutResources;
-
-                    if (exemplaireCarteBas[3][i] > 1) {
-                        pointsJoueur[3] += exemplaireCarteBas[3][i] - 1;
-                    }
-                }
+        //fonction qui va update les points des joueurs.
+        function updateZonePoints() {
+            if (nombreJoueur === 4) {
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A :' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
+            }
+            else if (nombreJoueur === 3) {
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
+            }
+            else if (nombreJoueur === 2) {
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
+            }
+            else if (nombreJoueur === 1) {
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
             }
         }
     </script>

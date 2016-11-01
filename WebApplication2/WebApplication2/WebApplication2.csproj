@@ -114,7 +114,7 @@
     <Content Include="ressources\arbres.png" />
     <Content Include="ressources\arbustes.png" />
     <Content Include="ressources\artificialisation.png" />
-    <Content Include="ressources\attestation.png" />
+    <None Include="ressources\assainissement" />
     <Content Include="ressources\baetidae.png" />
     <Content Include="ressources\bandeRiveraineArbre.png" />
     <Content Include="ressources\bandeRiveraineArbuste.png" />
