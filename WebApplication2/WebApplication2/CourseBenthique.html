@@ -1263,11 +1263,13 @@
                     popUpConfirmation('Veuillez choisir la carte de votre jeu à échanger.');
                     echange = true;
                     brillanceCarteEchange();
+                    $('.imageCarteJeu').tooltip({disabled : true});
                     document.getElementById('buttonProposerEchange').textContent = 'Annuler l\'échange';
                 }
                 else {
                     echange = false;
                     brillanceCarteEchange();
+                    console.log('banane');
                     document.getElementById('buttonProposerEchange').textContent = "Proposer un échange";
                     annulerEchange();
                 }
@@ -1472,10 +1474,10 @@
                         if (echangeOk) {
                             echangerCarte(emplacementCarte1, emplacementCarte2);
                         }
-                       
-                        onClickButtonEchange();
+
                         brillanceCarteEchange();
                         annulerEchange();
+                        onClickButtonEchange();
                     }
                     else {
                         popUpAvertissement("Vous devez désormais sélectionner la carte avec laquelle vous voulez échanger la votre.");
@@ -1492,7 +1494,14 @@
             var image = document.createElement('img');
             image.className = 'imageCarteJeu';
             image.src = 'ressources/' + carteEchanger2.nomImage;
-            $(image).addClass('ui-draggable-disabled');
+            var cloneImage = '<img class="imageTooltip" src="ressources/' + carteEchanger2.nomImage + '">';
+            $(image).tooltip({
+                items: 'img',
+                content: cloneImage,
+                position: { my: "right" },
+                show: { delay: 1000 }
+            });
+
 
             if (document.getElementById(positionCarte1).children.length === 0) {
                 $('#' + positionCarte1).append(image);
@@ -1510,7 +1519,13 @@
             var image2 = document.createElement('img');
             image2.className = 'imageCarteJeu';
             image2.src = 'ressources/' + carteEchanger1.nomImage;
-            $(image2).addClass('ui-draggable-disabled');
+            var cloneImage2 = '<img class="imageTooltip" src="ressources/' + carteEchanger1.nomImage + '">';
+            $(image2).tooltip({
+                items: 'img',
+                content: cloneImage2,
+                position: { my: "right" },
+                show: { delay: 1000 }
+            });
 
             if (document.getElementById(positionCarte2).children.length === 0) {
                 $('#' + positionCarte2).append(image2);
@@ -2959,7 +2974,6 @@
                     });
                 }
             }
-
             $(function () {
                 $('.imageCarteMains').draggable({
                     start: function () {
