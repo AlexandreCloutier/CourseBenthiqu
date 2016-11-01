@@ -1698,7 +1698,7 @@
                         tolerance: 'intersect',
                         drop: function (event, ui) {
                             if (bonneZoneDrop(event, ui)) {//Si l'endroits que nous voulons droper est à la bonne place.
-                                if (accepterDrop(event) === true) {
+                                if (accepterDrop(event)) {
                                     if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
                                         if (verifierCartePresente() === '') {//Si la carte n'est pas déjà présente.
                                             onDrop(event, ui, this);
@@ -2116,7 +2116,9 @@
         //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
             $(function () {
+                if(carteDrag.type != 'perturbation') {
                 $(ui.draggable).click(function () { onClickImage($(this).parent().attr("id"), ui) });
+                  }
                 ui.draggable.appendTo(drop);
                 ui.draggable.addClass('imageCarteJeu');
                 ui.draggable.removeClass('imageCarteMains');
@@ -2125,7 +2127,6 @@
                 ui.draggable.css('top', '0px');
                 ui.draggable.css('left', '0px');                              
                 ui.draggable.draggable('disable');
-                ui.draggable.position({ of: $(drop), my: 'center', at: 'center' });
                 if ($(drop).children().length > 1) {
                     ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
                     exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = $(drop).children().length;

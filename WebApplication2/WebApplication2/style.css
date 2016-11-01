@@ -343,6 +343,7 @@
 .imageCarteMains {
     width: inherit;
     height: inherit;
+    position:absolute;
     z-index: 3;
     border-radius: 5px;
     -webkit-box-shadow: 10px 10px 22px -2px rgba(0,0,0,0.75);
@@ -353,6 +354,7 @@
 .imageCarteJeu {
     width: inherit;
     height: inherit;
+    position: absolute;
     z-index: 3;
     border-radius: 5px;
 }
@@ -370,7 +372,6 @@
     table-layout: fixed;
     width: 118px;
     height: 180px;
-    text-align: center;
 }
 
 /* ------------------Zone droite------------------ */
