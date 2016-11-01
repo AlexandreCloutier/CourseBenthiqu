@@ -41,24 +41,25 @@
 .divJoueurs {
     border: 2px solid black;
     border-radius: 5px;
-    margin:5px;
+    margin: 5px;
 }
 
 .labelTitreJoueur {
     float: left;
-    font-size:medium;
+    font-size: medium;
     font-weight: 600;
     padding: 5px;
 }
 
 .labelJoueur {
     margin: 5px;
-    padding: 5px;   
+    padding: 5px;
 }
 
 .textBoxJoueur {
-    margin:3px;
+    margin: 3px;
 }
+
 #ageJoueurA, #ageJoueurB, #ageJoueurC, #ageJoueurD {
     width: 25px;
 }
@@ -68,8 +69,9 @@
     width: 35%;
     padding: 5px;
 }
+
 .labelTexteDifficulte {
-    font-size:medium;
+    font-size: medium;
     padding: 5px;
 }
 
@@ -89,6 +91,11 @@
     position: absolute;
     top: 10px;
     left: 22%;
+}
+
+.dropDown:hover {
+    cursor: pointer;
+    cursor: hand;
 }
 
 .buttonMenuPrincipal {
@@ -132,6 +139,8 @@
         background: linear-gradient(to bottom, #6e6f73 5%, #bcbdbf 100%);
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6e6f73', endColorstr='#bcbdbf',GradientType=0);
         background-color: #6e6f73;
+        cursor: pointer;
+        cursor: hand;
     }
 
 
@@ -315,6 +324,11 @@
 .checkBoxPopUp {
 }
 
+.carteCliquable{
+    cursor:pointer;
+    cursor:hand;
+}
+
 /* -----------------Zone Main--------------------*/
 
 .divMain {
@@ -343,13 +357,18 @@
 .imageCarteMains {
     width: inherit;
     height: inherit;
-    position:absolute;
+    position: absolute;
     z-index: 3;
     border-radius: 5px;
     -webkit-box-shadow: 10px 10px 22px -2px rgba(0,0,0,0.75);
     -moz-box-shadow: 10px 10px 22px -2px rgba(0,0,0,0.75);
     box-shadow: 10px 10px 22px -2px rgba(0,0,0,0.75);
 }
+
+    .imageCarteMains:hover {
+        cursor: grab;
+        cursor: -webkit-grab;
+    }
 
 .imageCarteJeu {
     width: inherit;
@@ -544,4 +563,6 @@
         background: linear-gradient(to bottom, #6e6f73 5%, #bcbdbf 100%);
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6e6f73', endColorstr='#bcbdbf',GradientType=0);
         background-color: #6e6f73;
+        cursor: pointer;
+        cursor: hand;
     }
