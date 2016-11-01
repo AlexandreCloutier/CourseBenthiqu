@@ -135,7 +135,6 @@
         function verifierConditionCreationPartie() {
             var retour;
 
-            if ($('#dropDownModePartie').val() === 'VJ') {
                 if ($('#dropDownNombreJoueur').val() === '2') {
                     if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '') {
                         if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {
@@ -188,11 +187,6 @@
                     retour = 'Veuillez entrer un nombre de joueur.';
                     return retour;
                 }
-            }
-            else {
-                entrerValeurCreationPartie();
-                return '';
-            }
         }
 
         //Fonction qui va entrer les valeurs de créations de partie dans les variables.
@@ -201,7 +195,6 @@
             ageJoueur = new Array();
             pointsJoueur = new Array();
 
-            if ($('#dropDownModePartie').val() === 'VJ') {
                 difficulte = $('#dropDownDifficulte').val();
 
                 if ($('#dropDownNombreJoueur').val() >= '2') {
@@ -225,11 +218,6 @@
                     ageJoueur[3] = $('#ageJoueurD').val();
                     pointsJoueur[3] = 0;
                 }
-            }
-            else {
-                nombreJoueur = 1;
-                difficulte = $('#dropDownDifficulte').val();
-            }
         }
 
         //Fonction qui commence la partie.
@@ -430,46 +418,6 @@
             menuCreerPartie.className = 'menuCreerPartie';
             //menuCreerPartie.innerHTML = '<img class="imageMenuCreerPartie" src="ressources/cartes.png" />';
             $('body').append(menuCreerPartie);
-
-            //Section pour la choix du mode de partie
-            var divModePartie = document.createElement('div');
-            divModePartie.id = 'divModePartie';
-            divModePartie.className = 'divModePartie';
-            $(menuCreerPartie).append(divModePartie);
-
-            var labelTexteModePartie = document.createElement('label');
-            labelTexteModePartie.id = 'labelTexteModePartie';
-            labelTexteModePartie.className = 'labelTexteModePartie';
-            labelTexteModePartie.innerHTML = 'Mode de jeu : ';
-            $(divModePartie).append(labelTexteModePartie);
-
-            var dropDownModePartie = document.createElement('select');
-            dropDownModePartie.id = 'dropDownModePartie';
-            dropDownModePartie.className = 'dropDownModePartie';
-            $(divModePartie).append(dropDownModePartie);
-            var option2 = document.createElement('option');
-            option2.value = 'VJ';
-            option2.innerHTML = 'Contre vrai joueur';
-            dropDownModePartie.appendChild(option2);
-            var option1 = document.createElement('option');
-            option1.value = 'IA';
-            option1.innerHTML = 'Contre ordinateur';
-            dropDownModePartie.appendChild(option1);
-
-            $(function () {
-                $(dropDownModePartie).on({
-                    change: function () {
-                        if (this.value === 'VJ') {
-                            $(divContreIA).hide();
-                            $(divContreVJ).show();
-                        }
-                        else if (this.value === 'IA') {
-                            $(divContreVJ).hide();
-                            $(divContreIA).show();                          
-                        }
-                    }
-                });
-            });
 
             //Section contre des vrais joueurs
             var divContreVJ = document.createElement('div');
@@ -1716,8 +1664,7 @@
                                                 onDrop(event, ui, this);
                                             }
                                             else {//Sinon, le drop est pas accepter.
-                                                ui.draggable.draggable({ revert: true });
-                                                revertCarte(ui.draggable);
+                                                ui.draggable.draggable({ revert: function () { return revertCarte(ui.draggable, false) } });
                                                 popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                             }
                                         }
@@ -1727,13 +1674,11 @@
                                     }
                                 }
                                 else {//Respecte pas les conditions, donc drop pas accepter.
-                                    ui.draggable.draggable({ revert: true });
-                                    revertCarte(ui.draggable);
+                                    ui.draggable.draggable({ revert: function () { return revertCarte(ui.draggable, false) } });
                                 }
                             }
                             else {
-                                ui.draggable.draggable({ revert: true });
-                                revertCarte(ui.draggable);
+                                ui.draggable.draggable({ revert: function () { return revertCarte(ui.draggable, false) } });
 
                                 if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide') {
                                     popUpErreur('Cette carte est jouable que dans votre zone.');
@@ -2849,11 +2794,21 @@
         }
 
         //Fonction qui remet les dimensions de la carte à son état original.
-        function revertCarte(carte) {
-            $(carte).animate({
-                height: 180,
-                width: 118
-            }, { duration: 200, queue: false });
+        function revertCarte(carte, socketObj) {
+            console.log(carte);
+            console.log(socketObj);
+            if (socketObj === false) {
+                $(carte).stop();
+                $(carte).animate({
+                    height: 180,
+                    width: 118
+                }, { duration: 200, queue: false });
+                return true;
+            }
+            else {
+                return false;
+            }
+
         }
 
         //Fonction pour appeler le pop-up d'erreuré
@@ -2975,15 +2930,10 @@
                         $('.ui-tooltip').hide();
                     },
                     revert: function (socketObj) {
-                        if (socketObj === false) {
-                            revertCarte(this);
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                        return revertCarte(this, socketObj);
                     },
-                    revertDuration: 400
+                    revertDuration: 400,
+                    cursorAt: { top: 45, left: 29 }
                 });
             });
         }
