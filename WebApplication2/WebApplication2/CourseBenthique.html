@@ -135,58 +135,58 @@
         function verifierConditionCreationPartie() {
             var retour;
 
-                if ($('#dropDownNombreJoueur').val() === '2') {
-                    if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '') {
-                        if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {
-                            entrerValeurCreationPartie();
-                            return '';
-                        }
-                        else {
-                            retour = "Veuillez entrer l'age de chacun des joueurs.";
-                            return retour;
-                        }
+            if ($('#dropDownNombreJoueur').val() === '2') {
+                if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '') {
+                    if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {
+                        entrerValeurCreationPartie();
+                        return '';
                     }
                     else {
-                        retour = 'Veuillez entrer un nom pour chacun des joueurs.';
-                        return retour;
-                    }
-                }
-                else if ($('#dropDownNombreJoueur').val() === '3') {
-                    if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '' && $('#nomJoueurC').val() != '') {
-                        if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '') {
-                            entrerValeurCreationPartie();
-                            return '';
-                        }
-                        else {
-                            retour = "Veuillez entrer l'age de chacun des joueurs.";
-                            return retour;
-                        }
-                    }
-                    else {
-                        retour = 'Veuillez entrer un nom pour chacun des joueurs.';
-                        return retour;
-                    }
-                }
-                else if ($('#dropDownNombreJoueur').val() === '4') {
-                    if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() && $('#nomJoueurC').val() != '' && $('#nomJoueurD').val() != '') {
-                        if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '' && $('#ageJoueurD').val() != '') {
-                            entrerValeurCreationPartie();
-                            return '';
-                        }
-                        else {
-                            retour = "Veuillez entrer l'age de chacun des joueurs.";
-                            return retour;
-                        }
-                    }
-                    else {
-                        retour = 'Veuillez entrer un nom pour chacun des joueurs.';
+                        retour = "Veuillez entrer l'age de chacun des joueurs.";
                         return retour;
                     }
                 }
                 else {
-                    retour = 'Veuillez entrer un nombre de joueur.';
+                    retour = 'Veuillez entrer un nom pour chacun des joueurs.';
                     return retour;
                 }
+            }
+            else if ($('#dropDownNombreJoueur').val() === '3') {
+                if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '' && $('#nomJoueurC').val() != '') {
+                    if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '') {
+                        entrerValeurCreationPartie();
+                        return '';
+                    }
+                    else {
+                        retour = "Veuillez entrer l'age de chacun des joueurs.";
+                        return retour;
+                    }
+                }
+                else {
+                    retour = 'Veuillez entrer un nom pour chacun des joueurs.';
+                    return retour;
+                }
+            }
+            else if ($('#dropDownNombreJoueur').val() === '4') {
+                if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() && $('#nomJoueurC').val() != '' && $('#nomJoueurD').val() != '') {
+                    if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '' && $('#ageJoueurD').val() != '') {
+                        entrerValeurCreationPartie();
+                        return '';
+                    }
+                    else {
+                        retour = "Veuillez entrer l'age de chacun des joueurs.";
+                        return retour;
+                    }
+                }
+                else {
+                    retour = 'Veuillez entrer un nom pour chacun des joueurs.';
+                    return retour;
+                }
+            }
+            else {
+                retour = 'Veuillez entrer un nombre de joueur.';
+                return retour;
+            }
         }
 
         //Fonction qui va entrer les valeurs de créations de partie dans les variables.
@@ -195,29 +195,29 @@
             ageJoueur = new Array();
             pointsJoueur = new Array();
 
-                difficulte = $('#dropDownDifficulte').val();
+            difficulte = $('#dropDownDifficulte').val();
 
-                if ($('#dropDownNombreJoueur').val() >= '2') {
-                    nombreJoueur = 2;
-                    nomJoueur[0] = $('#nomJoueurA').val();
-                    nomJoueur[1] = $('#nomJoueurB').val();
-                    ageJoueur[0] = $('#ageJoueurA').val();
-                    ageJoueur[1] = $('#ageJoueurB').val();
-                    pointsJoueur[0] = 0;
-                    pointsJoueur[1] = 0;
-                }
-                if ($('#dropDownNombreJoueur').val() >= '3') {
-                    nombreJoueur = 3;
-                    nomJoueur[2] = $('#nomJoueurC').val();
-                    ageJoueur[2] = $('#ageJoueurC').val();
-                    pointsJoueur[2] = 0;
-                }
-                if ($('#dropDownNombreJoueur').val() >= '4') {
-                    nombreJoueur = 4;
-                    nomJoueur[3] = $('#nomJoueurD').val();
-                    ageJoueur[3] = $('#ageJoueurD').val();
-                    pointsJoueur[3] = 0;
-                }
+            if ($('#dropDownNombreJoueur').val() >= '2') {
+                nombreJoueur = 2;
+                nomJoueur[0] = $('#nomJoueurA').val();
+                nomJoueur[1] = $('#nomJoueurB').val();
+                ageJoueur[0] = $('#ageJoueurA').val();
+                ageJoueur[1] = $('#ageJoueurB').val();
+                pointsJoueur[0] = 0;
+                pointsJoueur[1] = 0;
+            }
+            if ($('#dropDownNombreJoueur').val() >= '3') {
+                nombreJoueur = 3;
+                nomJoueur[2] = $('#nomJoueurC').val();
+                ageJoueur[2] = $('#ageJoueurC').val();
+                pointsJoueur[2] = 0;
+            }
+            if ($('#dropDownNombreJoueur').val() >= '4') {
+                nombreJoueur = 4;
+                nomJoueur[3] = $('#nomJoueurD').val();
+                ageJoueur[3] = $('#ageJoueurD').val();
+                pointsJoueur[3] = 0;
+            }
         }
 
         //Fonction qui commence la partie.
@@ -1263,7 +1263,7 @@
                     popUpConfirmation('Veuillez choisir la carte de votre jeu à échanger.');
                     echange = true;
                     brillanceCarteEchange();
-                    $('.imageCarteJeu').tooltip({disabled : true});
+                    $('.imageCarteJeu').tooltip({ disabled: true });
                     document.getElementById('buttonProposerEchange').textContent = 'Annuler l\'échange';
                 }
                 else {
@@ -1502,18 +1502,20 @@
                 show: { delay: 1000 }
             });
 
+            if (cartePasPresente()) {
+                if (document.getElementById(positionCarte1).children.length === 0) {
+                    $('#' + positionCarte1).append(image);
+                    carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
+                    exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger1] = 1;
 
-            if (document.getElementById(positionCarte1).children.length === 0) {
-                $('#' + positionCarte1).append(image);
-                carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
-                exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger1] = 1;
-
-            }
-            else {
-                carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
-                exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
-                $(trouverPositionLibre(numeroJoueurActif)).append(image);               
-                exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
+                } else {
+                    carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
+                    exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
+                    $(trouverPositionLibre(numeroJoueurActif)).append(image);
+                    exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
+                }
+            } else {
+                //TODO: Mettre la carte sur la position de la carte déjà présente.
             }
 
             var image2 = document.createElement('img');
@@ -1527,16 +1529,19 @@
                 show: { delay: 1000 }
             });
 
-            if (document.getElementById(positionCarte2).children.length === 0) {
-                $('#' + positionCarte2).append(image2);
-                carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
-                exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger2] = 1;
-            }
-            else {
-                carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
-                exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
-                $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
-                exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
+            if (cartePasPresente()) {
+                if (document.getElementById(positionCarte2).children.length === 0) {
+                    $('#' + positionCarte2).append(image2);
+                    carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
+                    exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger2] = 1;
+                } else {
+                    carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
+                    exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
+                    $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
+                    exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
+                }
+            } else {
+                //TODO: Mettre la carte sur la position de la carte déjà présente.
             }
 
             $('#buttonProposerEchange').prop('disabled', true);
@@ -1686,7 +1691,7 @@
                                             onDrop(event, ui, verifierCartePresente());
                                         }
                                     }//sinon si l'endroit contient une carte ET qu'elle est identique.
-                                    else if ($(this).children().length >= 1) {                                                                                                                     
+                                    else if ($(this).children().length >= 1) {
                                         if (carteDrag.type != 'perturbation') {
                                             var id;
                                             id = event.target.id.substr(event.target.id.length - 1);
@@ -1754,7 +1759,7 @@
             var lettre = lettreJoueur(numeroJoueurActif);
 
             //Si c'est un habitats, un macro-invertebrer ou une bande riveraine, la carte se joue seulement sur notre territoire.
-            if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide' || carteDrag.type ==='reglementation') {
+            if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide' || carteDrag.type === 'reglementation') {
                 if (lettreEmplacement === lettre) {
                     return true;
                 }
@@ -1844,7 +1849,7 @@
         function possibleManger() {
             var possible = false;
             var tailleMacro = carteDrag.taille;
-            
+
             for (var i = 0; i < 10; i++) {
                 if (numeroJoueurActif != 0) {
                     if (carteBas[0][i] != null) {
@@ -2004,7 +2009,7 @@
             var position = event.target.id.substr(event.target.id.length - 2);
             var numeroPositionEmplacement = position.substr(position.length - 1);
             var lettrePositionJoueur = position.substr(0, 1);
-            var numeroPositionJoueur;          
+            var numeroPositionJoueur;
 
             if (nombreJoueur === 4) {
                 if (lettrePositionJoueur === 'A') {
@@ -2117,16 +2122,16 @@
         //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
             $(function () {
-                if(carteDrag.type != 'perturbation') {
-                $(ui.draggable).click(function () { onClickImage($(this).parent().attr("id"), ui) });
-                  }
+                if (carteDrag.type != 'perturbation') {
+                    $(ui.draggable).click(function () { onClickImage($(this).parent().attr("id"), ui) });
+                }
                 ui.draggable.appendTo(drop);
                 ui.draggable.addClass('imageCarteJeu');
                 ui.draggable.removeClass('imageCarteMains');
                 ui.draggable.css('width', '58px');
                 ui.draggable.css('height', '90px');
                 ui.draggable.css('top', '0px');
-                ui.draggable.css('left', '0px');                              
+                ui.draggable.css('left', '0px');
                 ui.draggable.draggable('disable');
                 if ($(drop).children().length > 1) {
                     ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
@@ -2739,7 +2744,7 @@
                     $('#buttonDefausser').remove();
                     setTimeout(function () {
                         passerTour();
-                    },600);
+                    }, 600);
                 }
                 else {
                     popUpAvertissement('Selectionner d\'abord la/les carte(s) à défausser');
@@ -2761,62 +2766,62 @@
             //    defausserCarte();
             //}
             //else {
-                $('#buttonPasserTour').prop('disabled', true);
-                if (nombreJoueur === 4) {
+            $('#buttonPasserTour').prop('disabled', true);
+            if (nombreJoueur === 4) {
+                facteurRotation += 1;
+                if (facteurRotation > 4) {
+                    facteurRotation = 1;
+                }
+            }
+            else if (nombreJoueur === 2) {
+                facteurRotation += 2;
+                if (facteurRotation > 4) {
+                    facteurRotation = 2
+                }
+            }
+            else if (nombreJoueur === 3) {
+                facteurRotation += 1;
+                if (facteurRotation > 4) {
+                    facteurRotation = 1;
+                }
+                if (facteurRotation === 1) {
                     facteurRotation += 1;
-                    if (facteurRotation > 4) {
-                        facteurRotation = 1;
-                    }
                 }
-                else if (nombreJoueur === 2) {
-                    facteurRotation += 2;
-                    if (facteurRotation > 4) {
-                        facteurRotation = 2
-                    }
+            }
+
+            var angleRotationDebut = (90 * (facteurRotation - 1));
+            var angleRotationFin = (90 * facteurRotation);
+
+            var $plateau = $('#plateau');
+            $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
+                duration: 1000,
+                step: function (now) {
+                    $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
+                    $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
+                    $plateau.css('transform', 'rotate(' + now + 'deg)');
                 }
-                else if (nombreJoueur === 3) {
-                    facteurRotation += 1;
-                    if (facteurRotation > 4) {
-                        facteurRotation = 1;
-                    }
-                    if (facteurRotation === 1) {
-                        facteurRotation += 1;
-                    }
-                }
+            });
 
-                var angleRotationDebut = (90 * (facteurRotation - 1));
-                var angleRotationFin = (90 * facteurRotation);
+            if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
+                onClickButtonEchange();
+                annulerEchange();
+                enleverBrillance();
+            }
 
-                var $plateau = $('#plateau');
-                $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
-                    duration: 1000,
-                    step: function (now) {
-                        $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
-                        $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
-                        $plateau.css('transform', 'rotate(' + now + 'deg)');
-                    }
-                });
+            numeroJoueurActif++;
+            if (numeroJoueurActif === nombreJoueur) {
+                numeroJoueurActif = 0;
+            }
 
-                if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
-                    onClickButtonEchange();
-                    annulerEchange();
-                    enleverBrillance();
-                }
+            setTimeout(function () {
+                $('#buttonPasserTour').prop('disabled', false);
+            }, 2000);
 
-                numeroJoueurActif++;
-                if (numeroJoueurActif === nombreJoueur) {
-                    numeroJoueurActif = 0;
-                }
-
-                setTimeout(function () {
-                    $('#buttonPasserTour').prop('disabled', false);
-                }, 2000);
-
-                tour++;
-                remplirMain();
-                updateJeu();
-                updateAffichageImage();
-                $('#buttonProposerEchange').prop('disabled', false);
+            tour++;
+            remplirMain();
+            updateJeu();
+            updateAffichageImage();
+            $('#buttonProposerEchange').prop('disabled', false);
             //}
         }
 
@@ -3016,7 +3021,7 @@
             pointsJoueur[2] = 0;
             pointsJoueur[3] = 0;
 
-            for (var i = 0;i<10;i++){
+            for (var i = 0; i < 10; i++) {
                 if (carteBas[0][i] != null) {
                     pointsJoueur[0] += carteBas[0][i].coutResources;
 
