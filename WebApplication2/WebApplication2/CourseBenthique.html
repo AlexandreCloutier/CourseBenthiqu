@@ -1491,9 +1491,13 @@
             document.getElementById(positionCarte1).removeChild(document.getElementById(positionCarte1).lastChild);
             document.getElementById(positionCarte2).removeChild(document.getElementById(positionCarte2).lastChild);
 
+            var positionLibre;
+            var positionLibre2;
+
             var image = document.createElement('img');
-            image.className = 'imageCarteJeu';
+            image.className = 'imageCarteJeuEchange imageCarteJeu';
             image.src = 'ressources/' + carteEchanger2.nomImage;
+            
             var cloneImage = '<img class="imageTooltip" src="ressources/' + carteEchanger2.nomImage + '">';
             $(image).tooltip({
                 items: 'img',
@@ -1504,6 +1508,7 @@
 
             if (/*cartePasPresente()*/ true) {
                 if (document.getElementById(positionCarte1).children.length === 0) {
+                    positionLibre = $('#' + positionCarte1);
                     $('#' + positionCarte1).append(image);
                     carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
                     exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger1] = 1;
@@ -1511,7 +1516,8 @@
                 } else {
                     carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
                     exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
-                    $(trouverPositionLibre(numeroJoueurActif)).append(image);
+                    positionLibre = $(trouverPositionLibre(numeroJoueurEchange1));
+                    positionLibre.append(image1);
                     exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
                 }
             } else {
@@ -1519,7 +1525,7 @@
             }
 
             var image2 = document.createElement('img');
-            image2.className = 'imageCarteJeu';
+            image2.className = 'imageCarteJeuEchange imageCarteJeu';
             image2.src = 'ressources/' + carteEchanger1.nomImage;
             var cloneImage2 = '<img class="imageTooltip" src="ressources/' + carteEchanger1.nomImage + '">';
             $(image2).tooltip({
@@ -1531,13 +1537,15 @@
 
             if (/*cartePasPresente()*/ true) {
                 if (document.getElementById(positionCarte2).children.length === 0) {
+                    positionLibre2 = $('#' + positionCarte2);
                     $('#' + positionCarte2).append(image2);
                     carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
                     exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger2] = 1;
                 } else {
                     carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
                     exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
-                    $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
+                    positionLibre2 = $(trouverPositionLibre(numeroJoueurEchange2));
+                    positionLibre2.append(image2);
                     exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
                 }
             } else {
@@ -1546,12 +1554,15 @@
 
             $('#buttonProposerEchange').prop('disabled', true);
             $(function () {
-                $('.imageCarteJeu').on({
+                $('.imageCarteJeuEchange').on({
                     click: function (event, ui) {
                         onClickImage($(this).parent().attr("id"), ui);
                     }
                 })
             });
+            positionLibre.children().removeClass('imageCarteJeuEchange');
+            positionLibre2.children().removeClass('imageCarteJeuEchange');
+
             calculerPoints();
             updateZonePoints();
         }
