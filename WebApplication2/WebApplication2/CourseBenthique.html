@@ -1502,7 +1502,7 @@
                 show: { delay: 1000 }
             });
 
-            if (cartePasPresente()) {
+            if (/*cartePasPresente()*/ true) {
                 if (document.getElementById(positionCarte1).children.length === 0) {
                     $('#' + positionCarte1).append(image);
                     carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
@@ -1529,7 +1529,7 @@
                 show: { delay: 1000 }
             });
 
-            if (cartePasPresente()) {
+            if (/*cartePasPresente()*/ true) {
                 if (document.getElementById(positionCarte2).children.length === 0) {
                     $('#' + positionCarte2).append(image2);
                     carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
