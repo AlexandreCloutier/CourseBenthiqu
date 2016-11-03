@@ -1269,7 +1269,7 @@
                 else {
                     echange = false;
                     brillanceCarteEchange();
-                    console.log('banane');
+                    $('.imageCarteJeu').tooltip({ disabled: false });
                     document.getElementById('buttonProposerEchange').textContent = "Proposer un échange";
                     annulerEchange();
                 }
@@ -1289,6 +1289,7 @@
             renduCarte2 = false;
             emplacementCarte1 = null;
             emplacementCarte2 = null;
+            brillanceCarteEchange();
             enleverBrillance();
         }
 
@@ -1450,34 +1451,42 @@
                             if (!verifierNombreHabitats(numeroJoueurEchange2, 9)) {
                                 echangeOk = false;
                                 popUpErreur('Le joueur a trop d\'habitats, il n\'est pas possible d\'en avoir plus que 8 !');
+                                brillanceCarteEchange();
+                                annulerEchange();
+                                onClickButtonEchange();
                             }
                         }
                         else if (carteEchanger1.type === 'bandeRiveraine') {
                             if (!verifierNombreBandeRiveraine(numeroJoueurEchange2, 4)) {
                                 echangeOk = false;
                                 popUpErreur('Le joueur a trop de bande riveraine, il n\'est pas possible d\'en avoir plus que 3 !');
+                                brillanceCarteEchange();
+                                annulerEchange();
+                                onClickButtonEchange();
                             }
                         }
                         if (carteEchanger2.type === 'habitats') {
                             if (!verifierNombreHabitats(numeroJoueurActif, 9)) {
                                 echangeOk = false;
                                 popUpErreur('Vous avez trop d\'habitats, il n\'est pas possible d\'en avoir plus que 8 !');
+                                brillanceCarteEchange();
+                                annulerEchange();
+                                onClickButtonEchange();
                             }
                         }
                         else if (carteEchanger2.type === 'bandeRiveraine') {
                             if (!verifierNombreBandeRiveraine(numeroJoueurActif, 4)) {
                                 echangeOk = false;
                                 popUpErreur('Vous avez trop de bande riveraine, il n\'est pas possible d\'en avoir plus que 3 !');
+                                brillanceCarteEchange();
+                                annulerEchange();
+                                onClickButtonEchange();
                             }
                         }
 
                         if (echangeOk) {
                             echangerCarte(emplacementCarte1, emplacementCarte2);
                         }
-
-                        brillanceCarteEchange();
-                        annulerEchange();
-                        onClickButtonEchange();
                     }
                     else {
                         popUpAvertissement("Vous devez désormais sélectionner la carte avec laquelle vous voulez échanger la votre.");
@@ -1488,12 +1497,41 @@
 
         //Fonction qui fais l'échange des cartes.
         function echangerCarte(positionCarte1, positionCarte2) {
-            document.getElementById(positionCarte1).removeChild(document.getElementById(positionCarte1).lastChild);
-            document.getElementById(positionCarte2).removeChild(document.getElementById(positionCarte2).lastChild);
+            var carte1 = $('#' + positionCarte1);
+            var carte2 = $('#' + positionCarte2);
+            carte1.children().last().remove();
+            carte2.children().last().remove();
 
             var image = document.createElement('img');
             image.className = 'imageCarteJeu';
             image.src = 'ressources/' + carteEchanger2.nomImage;
+            $(image).animate({
+                left: (carte2.offset().left) - (carte1.offset().left),
+                top: (carte2.offset().top) - (carte1.offset().top),
+                borderSpacing: 0,
+            }, {
+                step: function (now) {
+                    $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                    $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                    $(this).css('transform', 'rotate(' + now + 'deg)');
+                },
+                complete: function () {
+                    if (document.getElementById(positionCarte1).children.length === 0) {
+                        carte1.append(image);
+                        image.style.left = '0px';
+                        image.style.top = '0px';
+                        carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
+                        exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger1] = 1;
+                        console.log(image);
+                    }
+                    else {
+                        carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
+                        exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
+                        $(trouverPositionLibre(numeroJoueurActif)).append(image);
+                        exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
+                    }
+                }
+            }, { duration: 500 });
             var cloneImage = '<img class="imageTooltip" src="ressources/' + carteEchanger2.nomImage + '">';
             $(image).tooltip({
                 items: 'img',
@@ -1502,23 +1540,41 @@
                 show: { delay: 1000 }
             });
 
-
-            if (document.getElementById(positionCarte1).children.length === 0) {
-                $('#' + positionCarte1).append(image);
-                carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
-                exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger1] = 1;
-
-            }
-            else {
-                carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
-                exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
-                $(trouverPositionLibre(numeroJoueurActif)).append(image);               
-                exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
-            }
-
             var image2 = document.createElement('img');
             image2.className = 'imageCarteJeu';
             image2.src = 'ressources/' + carteEchanger1.nomImage;
+            console.log(carteEchanger1);
+            $(image2).animate({
+                left: (carte1.offset().left) - (carte2.offset().left),
+                top: (carte1.offset().top) - (carte2.offset().top),
+                borderSpacing: 0,
+            }, {
+                step: function (now) {
+                    $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                    $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                    $(this).css('transform', 'rotate(' + now + 'deg)');
+                },
+                complete: function () {
+                    if (document.getElementById(positionCarte2).children.length === 0) {
+                        carte2.append(image2);
+                        image2.style.left = '0px';
+                        image2.style.top = '0px';
+                        carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
+                        exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger2] = 1;
+                        console.log(image2);
+                    }
+                    else {
+                        carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
+                        exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
+                        $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
+                        exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
+                    }
+
+                    brillanceCarteEchange();
+                    annulerEchange();
+                    onClickButtonEchange();
+                }
+            }, { duration: 500 });
             var cloneImage2 = '<img class="imageTooltip" src="ressources/' + carteEchanger1.nomImage + '">';
             $(image2).tooltip({
                 items: 'img',
@@ -1526,18 +1582,6 @@
                 position: { my: "right" },
                 show: { delay: 1000 }
             });
-
-            if (document.getElementById(positionCarte2).children.length === 0) {
-                $('#' + positionCarte2).append(image2);
-                carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
-                exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger2] = 1;
-            }
-            else {
-                carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
-                exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
-                $(trouverPositionLibre(numeroJoueurEchange2)).append(image2);
-                exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
-            }
 
             $('#buttonProposerEchange').prop('disabled', true);
             $(function () {
@@ -2800,7 +2844,8 @@
                 if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
                     onClickButtonEchange();
                     annulerEchange();
-                    enleverBrillance();
+                    brillanceCarteEchange();
+                   enleverBrillance();
                 }
 
                 numeroJoueurActif++;
@@ -2859,8 +2904,6 @@
 
         //Fonction qui remet les dimensions de la carte à son état original.
         function revertCarte(carte, socketObj) {
-            console.log(carte);
-            console.log(socketObj);
             if (socketObj === false) {
                 $(carte).stop();
                 $(carte).animate({
