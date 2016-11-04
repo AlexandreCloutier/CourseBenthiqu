@@ -1499,18 +1499,39 @@
         function echangerCarte(positionCarte1, positionCarte2) {
             var carte1 = $('#' + positionCarte1);
             var carte2 = $('#' + positionCarte2);
+            var positionLibre;
+            var positionLibre2;
             carte1.children().last().remove();
             carte2.children().last().remove();
 
-            var positionLibre;
-            var positionLibre2;
+            if (/*cartePasPresente()*/ true) {
+                if (carte1.children().length === 0) {
+                    positionLibre = carte1;
+                } else {
+                    positionLibre = $(trouverPositionLibre(numeroJoueurActif));
+                }
+            }
+            else {
+                //TODO: Mettre la carte sur la position de la carte déjà présente.
+            }
+
+            if (/*cartePasPresente()*/ true) {
+                if (carte2.children().length === 0) {
+                    positionLibre2 = carte2;
+                } else {
+                    positionLibre2 = $(trouverPositionLibre(numeroJoueurEchange2));
+                }
+            }
+            else {
+                //TODO: Mettre la carte sur la position de la carte déjà présente.
+            }
 
             var image = document.createElement('img');
             image.className = 'imageCarteJeuEchange imageCarteJeu';
             image.src = 'ressources/' + carteEchanger2.nomImage;
-            carte1.append(image);
-            image.style.left = (carte2.offset().left) - (carte1.offset().left) + 'px';
-            image.style.top = (carte2.offset().top) - (carte1.offset().top) + 'px';
+            positionLibre.append(image);
+            image.style.left = (positionLibre2.offset().left) - (positionLibre.offset().left) + 'px';
+            image.style.top = (positionLibre2.offset().top) - (positionLibre.offset().top) + 'px';
             $(image).animate({
                 left:0,
                 top:0
@@ -1518,7 +1539,6 @@
                 complete: function () {
                     if (/*cartePasPresente()*/ true) {
                         if (document.getElementById(positionCarte1).children.length === 2) {
-                            positionLibre = $('#' + positionCarte1);
                             positionLibre.append(image);
                             image.style.left = '0px';
                             image.style.top = '0px';
@@ -1528,8 +1548,9 @@
                         else {
                             carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
                             exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
-                            positionLibre = $(trouverPositionLibre(numeroJoueurEchange1));
-                            positionLibre.append(image1);
+                            positionLibre.append(image);
+                            image.style.left = '0px';
+                            image.style.top = '0px';
                             exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
                         }
                     }
@@ -1551,15 +1572,14 @@
             var image2 = document.createElement('img');
             image2.className = 'imageCarteJeuEchange imageCarteJeu';
             image2.src = 'ressources/' + carteEchanger1.nomImage;
-            carte1.append(image2);
+            positionLibre.append(image2);
             $(image2).animate({
-                left: (carte2.offset().left) - (carte1.offset().left),
-                top: (carte2.offset().top) - (carte1.offset().top),
+                left: (positionLibre2.offset().left) - (positionLibre.offset().left),
+                top: (positionLibre2.offset().top) - (positionLibre.offset().top),
             }, {
                 complete: function () {
                     if (/*cartePasPresente()*/ true) {
                         if (document.getElementById(positionCarte2).children.length === 0) {
-                            positionLibre2 = $('#' + positionCarte2);
                             positionLibre2.append(image2);
                             image2.style.left = '0px';
                             image2.style.top = '0px';
@@ -1569,8 +1589,9 @@
                         else {
                             carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
                             exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
-                            positionLibre2 = $(trouverPositionLibre(numeroJoueurEchange2));
                             positionLibre2.append(image2);
+                            image2.style.left = '0px';
+                            image2.style.top = '0px';
                             exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
                         }
                     }
@@ -1611,12 +1632,12 @@
             var lettreEmplacement = lettreJoueur(numero);
 
             for (var i = 0; i < 6; i++) {
-                if ($('#emplacementBasJoueur' + lettreEmplacement + i).length === 1) {
+                if ($('#emplacementBasJoueur' + lettreEmplacement + i).children().length === 0) {
                     return ('#emplacementBasJoueur' + lettreEmplacement + i);
                 }
             }
             for (var i = 6; i < 10; i++) {
-                if ($('#emplacementHautJoueur' + lettreEmplacement + i).children.length === 1) {
+                if ($('#emplacementHautJoueur' + lettreEmplacement + i).children().length === 0) {
                     return ('#emplacementHautJoueur' + lettreEmplacement + i);
                 }
             }
