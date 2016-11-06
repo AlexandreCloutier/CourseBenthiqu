@@ -1520,26 +1520,24 @@
             carte1.children().last().remove();
             carte2.children().last().remove();
 
-            if (/*cartePasPresente()*/ true) {
+            if (verifierCartePresenteEchange(carteEchanger2.nomImage, numeroJoueurActif) === '') {
                 if (carte1.children().length === 0) {
                     positionLibre = carte1;
                 } else {
                     positionLibre = $(trouverPositionLibre(numeroJoueurActif));
                 }
-            }
-            else {
-                //TODO: Mettre la carte sur la position de la carte déjà présente.
+            } else {
+                positionLibre = $(verifierCartePresenteEchange(carteEchanger2.nomImage, numeroJoueurActif));
             }
 
-            if (/*cartePasPresente()*/ true) {
+            if (verifierCartePresenteEchange(carteEchanger1.nomImage, numeroJoueurEchange2) === '') {
                 if (carte2.children().length === 0) {
                     positionLibre2 = carte2;
                 } else {
                     positionLibre2 = $(trouverPositionLibre(numeroJoueurEchange2));
                 }
-            }
-            else {
-                //TODO: Mettre la carte sur la position de la carte déjà présente.
+            } else {
+                positionLibre2 = $(verifierCartePresenteEchange(carteEchanger1.nomImage, numeroJoueurEchange2));
             }
 
             var image = document.createElement('img');
@@ -1549,29 +1547,25 @@
             image.style.left = (positionLibre2.offset().left) - (positionLibre.offset().left) + 'px';
             image.style.top = (positionLibre2.offset().top) - (positionLibre.offset().top) + 'px';
             $(image).animate({
-                left:0,
-                top:0
+                left: 0,
+                top: 0
             }, {
                 complete: function () {
-                    if (/*cartePasPresente()*/ true) {
-                        if (document.getElementById(positionCarte1).children.length === 2) {
-                            positionLibre.append(image);
-                            image.style.left = '0px';
-                            image.style.top = '0px';
-                            carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
-                            exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger1] = 1;
-                        }
-                        else {
-                            carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
-                            exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
-                            positionLibre.append(image);
-                            image.style.left = '0px';
-                            image.style.top = '0px';
-                            exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
-                        }
+                    if (document.getElementById(positionCarte1).children.length === 2) {
+                        positionLibre.append(image);
+                        image.style.left = '0px';
+                        image.style.top = ((positionLibre.children().lenght * 10) + 'px');
+                        //TODO: le code n'est plus bon car la position n.est plus bonne.
+                        carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
+                        exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger1] = 1;
                     }
                     else {
-                        //TODO: Mettre la carte sur la position de la carte déjà présente.
+                        carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
+                        exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
+                        positionLibre.append(image);
+                        image.style.left = '0px';
+                        image.style.top = '0px';
+                        exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
                     }
                 },
                 duration: 500
@@ -1594,25 +1588,21 @@
                 top: (positionLibre2.offset().top) - (positionLibre.offset().top),
             }, {
                 complete: function () {
-                    if (/*cartePasPresente()*/ true) {
-                        if (document.getElementById(positionCarte2).children.length === 0) {
-                            positionLibre2.append(image2);
-                            image2.style.left = '0px';
-                            image2.style.top = '0px';
-                            carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
-                            exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger2] = 1;
-                        }
-                        else {
-                            carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
-                            exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
-                            positionLibre2.append(image2);
-                            image2.style.left = '0px';
-                            image2.style.top = '0px';
-                            exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
-                        }
+                    if (document.getElementById(positionCarte2).children.length === 0) {
+                        positionLibre2.append(image2);
+                        image2.style.left = '0px';
+                        image2.style.top = (((positionLibre2.children().length - 1) * 10) + 'px');
+                        //TODO: le code n'est plus bon car la position n.est plus bonne.
+                        carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
+                        exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger2] = 1;
                     }
                     else {
-                        //TODO: Mettre la carte sur la position de la carte déjà présente.
+                        carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
+                        exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
+                        positionLibre2.append(image2);
+                        image2.style.left = '0px';
+                        image2.style.top = '0px';
+                        exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
                     }
 
                     brillanceCarteEchange();
@@ -1771,7 +1761,7 @@
                             if (bonneZoneDrop(event, ui)) {//Si l'endroits que nous voulons droper est à la bonne place.
                                 if (accepterDrop(event)) {
                                     if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
-                                        if (verifierCartePresente() === '') {//Si la carte n'est pas déjà présente.
+                                        if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
                                             if (carteDrag.type === 'macroInvertebre') {
                                                 if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
                                                     taillePredateur = carteDrag.taille;
@@ -1789,15 +1779,15 @@
                                             if (carteDrag.type === 'macroInvertebre') {
                                                 if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
                                                     taillePredateur = carteDrag.taille;
-                                                    onDrop(event, ui, verifierCartePresente());
+                                                    onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
                                                     onMangeAtableCeSoir = true;
                                                     popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
                                                     brillanceCarteMangeable(true);
                                                 } else {//Sinon, mes simplement la carte.
-                                                    onDrop(event, ui, verifierCartePresente());
+                                                    onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
                                                 }
                                             } else {//Sinon, mes simplement la carte.
-                                                onDrop(event, ui, verifierCartePresente());
+                                                onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
                                             }
                                         }//sinon si l'endroit contient une carte ET qu'elle est identique.
                                     } else if ($(this).children().length >= 1) {
@@ -1839,15 +1829,32 @@
         }
 
         //Fonction qui vérifie si une carte pareil est déjà présente sur le jeu. Si elle est la, retourne la position.
-        function verifierCartePresente() {
+        function verifierCartePresente(nomCarte) {
             var lettreActif = lettreJoueur(numeroJoueurActif);
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
-                    if (carteBas[numeroJoueurActif][i].nomImage === carteDrag.nomImage) {
+                    if (carteBas[numeroJoueurActif][i].nomImage === nomCarte) {
                         if (i < 6) {
                             return document.getElementById('emplacementBasJoueur' + lettreActif + i);
                         } else {
                             return document.getElementById('emplacementHautJoueur' + lettreActif + i);
+                        }
+                    }
+                }
+            }
+
+            return '';
+        }
+
+        function verifierCartePresenteEchange(nomCarte, numero) {
+            var lettreActif = lettreJoueur(numero);
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numero][i] != null) {
+                    if (carteBas[numero][i].nomImage === nomCarte) {
+                        if (i < 6) {
+                            return ('#emplacementBasJoueur' + lettreActif + i);
+                        } else {
+                            return ('#emplacementHautJoueur' + lettreActif + i);
                         }
                     }
                 }
