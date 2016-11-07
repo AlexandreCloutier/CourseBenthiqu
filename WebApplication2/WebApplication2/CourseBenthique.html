@@ -1846,6 +1846,7 @@
             return '';
         }
 
+        //Fonction qui vérifie si une carte pareil est déjà présente sur le jeu du joueur avec le numero. Si elle est la, retourne la position.
         function verifierCartePresenteEchange(nomCarte, numero) {
             var lettreActif = lettreJoueur(numero);
             for (var i = 0; i < 10; i++) {
@@ -2281,52 +2282,47 @@
                 this.habitats = params.habitats;
                 this.coutResources = coutResources;
                 this.nomImage = nomImage;
-            }
-            else if (type === 'salmonide') {
+                this.perturber = false;
+            } else if (type === 'salmonide') {
                 this.nom = nom;
                 this.type = type;
                 this.coutResources = coutResources;
                 this.condition = params.condition;
                 this.nomImage = nomImage;
-            }
-            else if (type === 'bandeRiveraine') {
+                this.perturber = false;
+            } else if (type === 'bandeRiveraine') {
                 this.nom = nom;
                 this.type = type;
                 this.coutResources = coutResources;
                 this.nomImage = nomImage;
-            }
-            else if (type === 'speciale') {
+                this.perturber = false;
+            } else if (type === 'speciale') {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
                 this.coutResources = coutResources;
-            }
-            else if (type === 'speciale') {
+            } else if (type === 'speciale') {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
                 this.coutResources = coutResources;
-            }
-            else if (type === 'action') {
+            } else if (type === 'action') {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
                 this.coutResources = coutResources;
-            }
-            else if (type === 'perturbation') {
+            } else if (type === 'perturbation') {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
                 this.coutResources = coutResources;
                 this.tempsActif = params.tempsActif;
-            }
-            else if (type === 'reglementation') {
+            } else if (type === 'reglementation') {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
                 this.coutResources = coutResources;
-            }
-            else if (type === 'macroInvertebre') {
+            } else if (type === 'macroInvertebre') {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
@@ -2336,14 +2332,8 @@
                 this.predateur = params.predateur;
                 this.typeMacro = params.typeMacro;
                 this.condition = params.condition;
-            }
-            else if (type === 'bandeRiveraine') {
-                this.nom = nom;
-                this.type = type;
-                this.nomImage = nomImage;
-                this.coutResources = coutResources;
-            }
-            else if (type === 'intervention') {
+                this.perturber = false;
+            } else if (type === 'intervention') {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
