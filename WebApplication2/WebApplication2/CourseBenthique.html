@@ -1802,6 +1802,7 @@
                                                 popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                             }
                                         } else {
+                                            rendrePerturber(event);
                                             onDrop(event, ui, this);
                                         }
                                     }
@@ -1823,6 +1824,50 @@
                     });
                 });
             });
+        }
+
+        //Fonction qui va mettre la variable perturber à true.
+        function rendrePerturber(event) {
+            var position = event.target.id.substr(event.target.id.length - 2);
+            var lettrePositionJoueur = position.substr(0, 1);
+            var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);
+            var numeroPosition = position.substr(position.length - 1);
+
+            if (carteDrag.nom === 'dechets' || carteDrag.nom === 'artificialisation') {
+                carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
+                carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 10;
+                console.log(carteBas[numeroPositionJoueur][numeroPosition]);
+            } else if (carteDrag.nom === 'passageToutTerrain') {
+                carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
+                carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 1;
+            }
+        }
+
+        //Fonction qui enleverais 1 tour au temps de perturbation et si le temps est désormais rendu à 0, retire la carte perturbation et l'état perturber.
+        function debutTourDeperturber() {
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroJoueurActif][i] != null) {
+                    if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
+                        if (carteBas[numeroJoueurActif][i].tempsPerturber != 10 && carteBas[numeroJoueurActif][i].tempsPerturber > 0) {
+                            carteBas[numeroJoueurActif][i].tempsPerturber--;
+                            if (carteBas[numeroJoueurActif][i].tempsPerturber = 0) {
+                                carteBas[numeroJoueurActif][i].perturber = false;
+                                verifierCartePerturbation(numeroJoueurActif);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //Fonction qui va vérifier chaque carte perturbation et les retirer si sont enfants n'est plus perturber.
+        function verifierConditionPerturbation(numero){
+            //TODO: si on retire la carte, faire reempillerCartePasPerturber();
+        }
+
+        //Fonction qui va re-empiller la carte qui viens de ne plus être perturber.
+        function reempillerCartePasPerturber() {
+
         }
 
         //Fonction qui mes en brillances les trucs qui sont mangeable.
@@ -1908,7 +1953,7 @@
             }
         }
 
-        //Fonction qui renvoie la lettre du joueur actif.
+        //Fonction qui renvoie la lettre du joueur voulu
         function lettreJoueur(numero) {
             if (nombreJoueur === 2) {
                 if (numero === 0) {
@@ -1937,7 +1982,7 @@
             }
         }
 
-        //Fonction qui renvoie le numero du joueur actif.
+        //Fonction qui renvoie le numero du joueur voulu.
         function numeroJoueur(lettre) {
             if (nombreJoueur === 4) {
                 if (lettre === 'A') {
@@ -2319,6 +2364,7 @@
                 this.coutResources = coutResources;
                 this.nomImage = nomImage;
                 this.perturber = false;
+                this.tempsPerturber = 0;
             } else if (type === 'salmonide') {
                 this.nom = nom;
                 this.type = type;
@@ -2326,12 +2372,14 @@
                 this.condition = params.condition;
                 this.nomImage = nomImage;
                 this.perturber = false;
+                this.tempsPerturber = 0;
             } else if (type === 'bandeRiveraine') {
                 this.nom = nom;
                 this.type = type;
                 this.coutResources = coutResources;
                 this.nomImage = nomImage;
                 this.perturber = false;
+                this.tempsPerturber = 0;
             } else if (type === 'speciale') {
                 this.nom = nom;
                 this.type = type;
@@ -2369,6 +2417,7 @@
                 this.typeMacro = params.typeMacro;
                 this.condition = params.condition;
                 this.perturber = false;
+                this.tempsPerturber = 0;
             } else if (type === 'intervention') {
                 this.nom = nom;
                 this.type = type;
@@ -3203,14 +3252,11 @@
         function updateZonePoints() {
             if (nombreJoueur === 4) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A :' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
-            }
-            else if (nombreJoueur === 3) {
+            } else if (nombreJoueur === 3) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
-            }
-            else if (nombreJoueur === 2) {
+            } else if (nombreJoueur === 2) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
-            }
-            else if (nombreJoueur === 1) {
+            } else if (nombreJoueur === 1) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
             }
         }
