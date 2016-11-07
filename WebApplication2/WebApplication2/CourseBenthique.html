@@ -101,7 +101,8 @@
             creerEmplacementsPlateau();
             creerPartieDroite();
             creerMain();
-            instancierDivErreur();
+            instantierDivErreur();
+            instantierDivDebutTour();
         }
 
         //Fonction qui s'occupe de créer le paquet de carte et de le mélanger au début de la partie.
@@ -834,8 +835,8 @@
             }
         }
 
-        //Fontion creer la div qui servira pour les pop-ups d'erreur.
-        function instancierDivErreur() {
+        //Fonction qui creer la div qui servira pour les pop-ups d'erreur.
+        function instantierDivErreur() {
             var divErreur = document.createElement('div');
             divErreur.id = 'divErreur';
             divErreur.className = 'divErreur';
@@ -845,6 +846,19 @@
             divTexteErreur.id = 'divTexteErreur';
             divTexteErreur.className = 'divTexteErreur';
             $('#divErreur').append(divTexteErreur);
+        }
+
+        //Fonction qui creer la div qui servira pour les pop-ups de début de tour
+        function instantierDivDebutTour() {
+            var divDebutTour = document.createElement('div');
+            divDebutTour.id = 'divDebutTour';
+            divDebutTour.className = 'divDebutTour';
+            $('#plateau').append(divDebutTour);
+
+            var divTexteDebutTour = document.createElement('div');
+            divTexteDebutTour.id = 'divTexteDebutTour';
+            divTexteDebutTour.className = 'divTexteDebutTour';
+            $('#divDebutTour').append(divTexteDebutTour);
         }
 
         //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
@@ -1755,8 +1769,8 @@
                     $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         tolerance: 'pointer',
                         drop: function (event, ui) {
-                            if (bonneZoneDrop(event, ui)) {//Si l'endroits que nous voulons droper est à la bonne place.
-                                if (accepterDrop(event)) {
+                            if (bonneZoneDrop(event.target, ui)) {//Si l'endroits que nous voulons droper est à la bonne place.
+                                if (accepterDrop(event.target)) {
                                     if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
                                         if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
                                             if (carteDrag.type === 'macroInvertebre') {
@@ -1795,7 +1809,7 @@
                                             if (carteDrag.nom === carteBas[numeroJoueurActif][id].nom) {
                                                 onDrop(event, ui, this);
                                             } else {//Sinon, le drop est pas accepter.
-                                                ui.draggable.draggable({ revert: function (socketObj) { return revertCarte(ui.draggable, socketObj) } });
+                                                ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui) } });
                                                 popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                             }
                                         } else {
@@ -1804,10 +1818,10 @@
                                         }
                                     }
                                 } else {//Respecte pas les conditions, donc drop pas accepter.
-                                    ui.draggable.draggable({ revert: function (socketObj) { return revertCarte(ui.draggable, socketObj) } });
+                                    ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui) } });
                                 }
                             } else {
-                                ui.draggable.draggable({ revert: function (socketObj) { return revertCarte(ui.draggable, socketObj) } });
+                                ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui) } });
 
                                 if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide') {
                                     popUpErreur('Cette carte est jouable que dans votre zone.');
@@ -1819,7 +1833,7 @@
                             }
                         },
                         over: function (event, ui) {
-                            if (bonneZoneDrop(event, ui)) {
+                            if (bonneZoneDrop(event.target, ui)) {
                                 $(event.target).addClass('droppable-hover');
                             }
                         },
@@ -1866,7 +1880,7 @@
         }
 
         //Fonction qui va vérifier chaque carte perturbation et les retirer si sont enfants n'est plus perturber.
-        function verifierConditionPerturbation(numero){
+        function verifierConditionPerturbation(numero) {
             //TODO: si on retire la carte, faire reempillerCartePasPerturber();
         }
 
@@ -1918,7 +1932,8 @@
 
         //Fonction qui validera que c'est la bonne zone pour drope notre carte.
         function bonneZoneDrop(event, ui) {
-            var identification = event.target.id.substr(event.target.id.length - 2);
+            console.log(event);
+            var identification = $(event).attr('id').substr($(event).attr('id').length - 2);
             var lettreEmplacement = identification.substr(0, 1);
 
             var lettre = lettreJoueur(numeroJoueurActif);
@@ -2173,7 +2188,7 @@
 
         //Fonction qui vérifie si il y a la présence d'une réglementation qui empècherais la mise en place d'une carte perturbation.
         function presenceReglementation(nomReglementation, event) {
-            var position = event.target.id.substr(event.target.id.length - 2);
+            var position = $(event).attr('id').substr($(event).attr('id').length - 2);
             var lettrePositionJoueur = position.substr(0, 1);
             var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);
 
@@ -2209,7 +2224,7 @@
 
         //Fonction qui va vérifier si la carte perturbation respecte son emplacement.
         function verifierConditionPerturbation(event, ui) {
-            var position = event.target.id.substr(event.target.id.length - 2);
+            var position = $(event).attr('id').substr($(event).attr('id').length - 2);
             var numeroPositionEmplacement = position.substr(position.length - 1);
             var lettrePositionJoueur = position.substr(0, 1);
             var numeroPositionJoueur;
@@ -3018,6 +3033,7 @@
             updateJeu();
             updateAffichageImage();
             $('#buttonProposerEchange').prop('disabled', false);
+            popUpDebutTour(numeroJoueurActif);
             //}
         }
 
@@ -3059,33 +3075,72 @@
         }
 
         //Fonction qui remet les dimensions de la carte à son état original.
-        function revertCarte(carte, socketObj) {
+        function revertCarte(event, ui) {
             lettre = lettreJoueur(numeroJoueurActif);
             $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').removeClass('droppable-hover');
-            if (socketObj != false) {
-                lettreDiv = ($(socketObj).attr('id').substr($(socketObj).attr('id').length - 2)).substr(0, 1);
+            if (bonneZoneDrop(event, ui)) {
+                if (accepterDrop(event)) {
+                    return false;
+                } else {
+                    $(ui.draggable).stop();
+                    $(ui.draggable).animate({
+                        height: 180,
+                        width: 118
+                    }, { duration: 200, queue: false });
 
-                if (carteDrag.type != 'perturbation') {
-                    if (lettreDiv === lettre) {
-                        return false;
-                    } else {
-                        $(carte).stop();
-                        $(carte).animate({
-                            height: 180,
-                            width: 118
-                        }, { duration: 200, queue: false });
-
-                        return true;
-                    }
+                    return true;
                 }
             } else {
-                $(carte).stop();
-                $(carte).animate({
+                $(ui.draggable).stop();
+                $(ui.draggable).animate({
                     height: 180,
                     width: 118
                 }, { duration: 200, queue: false });
+
                 return true;
             }
+            //if (socketObj != false) {
+            //    lettreDiv = ($(socketObj).attr('id').substr($(socketObj).attr('id').length - 2)).substr(0, 1);
+            //    console.log(lettreDiv);
+
+            //    if (carteDrag.type != 'perturbation') {
+            //        if (lettreDiv === lettre) {
+            //            return false;
+            //        } else {
+            //            $(carte).stop();
+            //            $(carte).animate({
+            //                height: 180,
+            //                width: 118
+            //            }, { duration: 200, queue: false });
+
+            //            return true;
+            //        }
+            //    }
+            //    else {
+            //        if (lettreDiv != lettre) {
+            //            if (accepterDrop(socketObj)) {
+            //                return false;
+            //            } else {
+            //                return true;
+            //            }
+            //        } else {
+            //            $(carte).stop();
+            //            $(carte).animate({
+            //                height: 180,
+            //                width: 118
+            //            }, { duration: 200, queue: false });
+
+            //            return true;
+            //        }
+            //    }
+            //} else {
+            //    $(carte).stop();
+            //    $(carte).animate({
+            //        height: 180,
+            //        width: 118
+            //    }, { duration: 200, queue: false });
+            //    return true;
+            //}
 
 
         }
@@ -3156,6 +3211,29 @@
             });
         }
 
+        //Fonction qui appelle un pop-up qui indique le debut du tour d'un joueur
+        function popUpDebutTour(numeroJoueur) {
+            joueur = nomJoueur[numeroJoueur];
+            $('#divTexteDebutTour').text('Début du tour de ' + joueur + '.');
+            $('#divDebutTour').dialog({
+                classes: {
+                    'ui-dialog': 'no-close popUpDebutTour ui-corner-all',
+                },
+                draggable: false,
+                resizable: false,
+                height: 80,
+                width: 400,
+                hide: 'fade',
+                show: 'fade',
+                open: function () {
+                    var foo = $(this);
+                    setTimeout(function () {
+                        foo.dialog('close');
+                    }, 2000);
+                }
+            });
+        }
+
         //Fonction qui "update" le jeu.
         function updateJeu() {
             pointsRessourcesBase[numeroJoueurActif] = 20;
@@ -3208,7 +3286,7 @@
                         $('.ui-tooltip').hide();
                     },
                     revert: function (socketObj) {
-                        return revertCarte(this, socketObj);
+                        return revertCarte(socketObj, this);
                     },
                     revertDuration: 400,
                     cursorAt: { top: 45, left: 29 }

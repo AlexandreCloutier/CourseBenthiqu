@@ -278,6 +278,18 @@
     display: none;
 }
 
+.divDebutTour {
+    width: 300px;
+    height: 150px;
+    display: none;
+}
+
+.popUpDebutTour {
+    background: #3892ba !important;
+    border: 3px white solid !important;
+    font-size: 28px !important;
+}
+
 .no-close .ui-dialog-titlebar {
     display: none;
 }
