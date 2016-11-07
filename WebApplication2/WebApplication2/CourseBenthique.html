@@ -1801,6 +1801,8 @@
                                                 ui.draggable.draggable({ revert: function () { return revertCarte(ui.draggable, false) } });
                                                 popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                             }
+                                        } else {
+                                            onDrop(event, ui, this);
                                         }
                                     }
                                 } else {//Respecte pas les conditions, donc drop pas accepter.
@@ -2062,6 +2064,23 @@
                         return true;
                     }
                 } else if (carteDrag.type === 'perturbation') {
+                    if (carteDrag.nom === 'dechets') {
+                        if (presenceReglementation('interdiction', event)) {
+                            popUpAvertissement('Il y a une interdiction de jeter des ordures pour cet écosystèmes.');
+                            return false;
+                        }
+                    } else if (carteDrag.nom === 'artificialisation') {
+                        if (presenceReglementation('politique', event)) {
+                            popUpAvertissement('Il y a une politique de protection pour cet écosystème.');
+                            return false;
+                        }
+                    } else if (carteDrag.nom === 'deversement') {
+                        if (presenceReglementation('attestation', event)) {
+                            popUpAvertissement('Il y a un attestation d\'assainnissement pour cet écosystèmes.');
+                            return false;
+                        }
+                    }
+
                     var message = verifierConditionPerturbation(event);
 
                     if (message === 'ok') {
@@ -2100,6 +2119,23 @@
             } else {
                 return true;
             }
+        }
+
+        //Fonction qui vérifie si il y a la présence d'une réglementation qui empècherais la mise en place d'une carte perturbation.
+        function presenceReglementation(nomReglementation, event) {
+            var position = event.target.id.substr(event.target.id.length - 2);
+            var lettrePositionJoueur = position.substr(0, 1);
+            var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);
+
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroPositionJoueur][i] != null) {
+                    if (carteBas[numeroPositionJoueur][i].nom === nomReglementation) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         //Fonction qui retourne true si le nombre maximum de bande riveraine n'est pas dépasser.
