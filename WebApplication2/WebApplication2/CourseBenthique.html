@@ -1060,128 +1060,6 @@
             }
         }
 
-        //Fonction qui fais l'échange des cartes.
-        function echangerCarte(positionCarte1, positionCarte2) {
-            var carte1 = $('#' + positionCarte1);
-            var carte2 = $('#' + positionCarte2);
-            var positionLibre;
-            var positionLibre2;
-            carte1.children().last().remove();
-            carte2.children().last().remove();
-
-            if (verifierCartePresenteEchange(carteEchanger2.nomImage, numeroJoueurActif) === '') {
-                if (carte1.children().length === 0) {
-                    positionLibre = carte1;
-                } else {
-                    positionLibre = $(trouverPositionLibre(numeroJoueurActif));
-                }
-            } else {
-                positionLibre = $(verifierCartePresenteEchange(carteEchanger2.nomImage, numeroJoueurActif));
-            }
-
-            if (verifierCartePresenteEchange(carteEchanger1.nomImage, numeroJoueurEchange2) === '') {
-                if (carte2.children().length === 0) {
-                    positionLibre2 = carte2;
-                } else {
-                    positionLibre2 = $(trouverPositionLibre(numeroJoueurEchange2));
-                }
-            } else {
-                positionLibre2 = $(verifierCartePresenteEchange(carteEchanger1.nomImage, numeroJoueurEchange2));
-            }
-
-            var image = document.createElement('img');
-            image.className = 'imageCarteJeuEchange imageCarteJeu';
-            image.src = 'ressources/' + carteEchanger2.nomImage;
-            positionLibre.append(image);
-            image.style.left = (positionLibre2.offset().left) - (positionLibre.offset().left) + 'px';
-            image.style.top = (positionLibre2.offset().top) - (positionLibre.offset().top) + 'px';
-            $(image).animate({
-                left: 0,
-                top: 0
-            }, {
-                complete: function () {
-                    if (document.getElementById(positionCarte1).children.length === 2) {
-                        positionLibre.append(image);
-                        image.style.left = '0px';
-                        image.style.top = ((positionLibre.children().lenght * 10) + 'px');
-                        //TODO: le code n'est plus bon car la position n.est plus bonne.
-                        carteBas[numeroJoueurActif][positionCarteEchanger1] = carteEchanger2;
-                        exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger1] = 1;
-                    }
-                    else {
-                        carteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = carteEchanger2;
-                        exemplaireCarteBas[numeroJoueurActif][trouverPositionLibre(numeroJoueurActif)] = 1;
-                        positionLibre.append(image);
-                        image.style.left = '0px';
-                        image.style.top = '0px';
-                        exemplaireCarteBas[numeroJoueurActif][positionCarte1] -= 1;
-                    }
-                },
-                duration: 500
-            });
-
-            var cloneImage = '<img class="imageTooltip" src="ressources/' + carteEchanger2.nomImage + '">';
-            $(image).tooltip({
-                items: 'img',
-                content: cloneImage,
-                position: { my: 'right' },
-                show: { delay: 1000 }
-            });
-
-            var image2 = document.createElement('img');
-            image2.className = 'imageCarteJeuEchange imageCarteJeu';
-            image2.src = 'ressources/' + carteEchanger1.nomImage;
-            positionLibre.append(image2);
-            $(image2).animate({
-                left: (positionLibre2.offset().left) - (positionLibre.offset().left),
-                top: (positionLibre2.offset().top) - (positionLibre.offset().top),
-            }, {
-                complete: function () {
-                    if (document.getElementById(positionCarte2).children.length === 0) {
-                        positionLibre2.append(image2);
-                        image2.style.left = '0px';
-                        image2.style.top = (((positionLibre2.children().length - 1) * 10) + 'px');
-                        //TODO: le code n'est plus bon car la position n.est plus bonne.
-                        carteBas[numeroJoueurEchange2][positionCarteEchanger2] = carteEchanger1;
-                        exemplaireCarteBas[numeroJoueurActif][positionCarteEchanger2] = 1;
-                    }
-                    else {
-                        carteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = carteEchanger1;
-                        exemplaireCarteBas[numeroJoueurEchange2][trouverPositionLibre(numeroJoueurEchange2)] = 1;
-                        positionLibre2.append(image2);
-                        image2.style.left = '0px';
-                        image2.style.top = '0px';
-                        exemplaireCarteBas[numeroJoueurActif][positionCarte2] -= 1;
-                    }
-
-                    brillanceCarteEchange();
-                    annulerEchange();
-                    onClickButtonEchange();
-                    $('#buttonProposerEchange').prop('disabled', true);
-                    $(function () {
-                        $('.imageCarteJeuEchange').on({
-                            click: function (event, ui) {
-                                onClickImage($(this).parent().attr("id"), ui);
-                            }
-                        })
-                    });
-                    positionLibre.children().removeClass('imageCarteJeuEchange');
-                    positionLibre2.children().removeClass('imageCarteJeuEchange');
-                },
-                duration: 500
-            });
-            var cloneImage2 = '<img class="imageTooltip" src="ressources/' + carteEchanger1.nomImage + '">';
-            $(image2).tooltip({
-                items: 'img',
-                content: cloneImage2,
-                position: { my: "right" },
-                show: { delay: 1000 }
-            });
-
-            calculerPoints();
-            updateZonePoints();
-        }
-
         //Fonction qui retourne le premier emplacement libre ou on peut mettre une carte.
         function trouverPositionLibre(numero) {
             var lettreEmplacement = lettreJoueur(numero);
@@ -1442,24 +1320,6 @@
                             return document.getElementById('emplacementBasJoueur' + lettreActif + i);
                         } else {
                             return document.getElementById('emplacementHautJoueur' + lettreActif + i);
-                        }
-                    }
-                }
-            }
-
-            return '';
-        }
-
-        //Fonction qui vérifie si une carte pareil est déjà présente sur le jeu du joueur avec le numero. Si elle est la, retourne la position.
-        function verifierCartePresenteEchange(nomCarte, numero) {
-            var lettreActif = lettreJoueur(numero);
-            for (var i = 0; i < 10; i++) {
-                if (carteBas[numero][i] != null) {
-                    if (carteBas[numero][i].nomImage === nomCarte) {
-                        if (i < 6) {
-                            return ('#emplacementBasJoueur' + lettreActif + i);
-                        } else {
-                            return ('#emplacementHautJoueur' + lettreActif + i);
                         }
                     }
                 }
@@ -2366,40 +2226,6 @@
             return paquetCarte;
         }
 
-        //Fonction qui sera appeler lors du clique sur passer le tour.
-        function enleverBrillance() {
-            for (var i = 0; i < 6; i++) {
-                $('#emplacementBasJoueur' + 'A' + i).removeClass('ui-echange-highlight');
-                $('#emplacementBasJoueur' + 'B' + i).removeClass('ui-echange-highlight');
-                $('#emplacementBasJoueur' + 'A' + i).removeClass('carteCliquable');
-                $('#emplacementBasJoueur' + 'B' + i).removeClass('carteCliquable');
-
-                if (nombreJoueur >= 3) {
-                    $('#emplacementBasJoueur' + 'C' + i).removeClass('ui-echange-highlight');
-                    $('#emplacementBasJoueur' + 'C' + i).removeClass('carteCliquable');
-                }
-                if (nombreJoueur === 4) {
-                    $('#emplacementBasJoueur' + 'D' + i).removeClass('ui-echange-highlight');
-                    $('#emplacementBasJoueur' + 'D' + i).removeClass('carteCliquable');
-                }
-            }
-            for (var i = 6; i < 10; i++) {
-                $('#emplacementHautJoueur' + 'A' + i).removeClass('ui-echange-highlight');
-                $('#emplacementHautJoueur' + 'B' + i).removeClass('ui-echange-highlight');
-                $('#emplacementHautJoueur' + 'A' + i).removeClass('carteCliquable');
-                $('#emplacementHautJoueur' + 'B' + i).removeClass('carteCliquable');
-
-                if (nombreJoueur >= 3) {
-                    $('#emplacementHautJoueur' + 'C' + i).removeClass('ui-echange-highlight');
-                    $('#emplacementHautJoueur' + 'C' + i).removeClass('carteCliquable');
-                }
-                if (nombreJoueur === 4) {
-                    $('#emplacementHautJoueur' + 'D' + i).removeClass('ui-echange-highlight');
-                    $('#emplacementHautJoueur' + 'D' + i).removeClass('carteCliquable');
-                }
-            }
-        }
-
         //Fonction appelé pour défausser les cartes suplémentaires de la main.
         function defausserCarte() {
             var cartesDefausse = new Array();
@@ -2550,12 +2376,6 @@
                     $plateau.css('transform', 'rotate(' + now + 'deg)');
                 }
             });
-
-            if (echange) {//SI on passe le tour et qu'on est en échange, on simule un clique sur echange.
-                onClickButtonEchange();
-                annulerEchange();
-                enleverBrillance();
-            }
 
             numeroJoueurActif++;
             if (numeroJoueurActif === nombreJoueur) {
