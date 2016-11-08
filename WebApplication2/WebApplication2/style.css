@@ -290,6 +290,12 @@
     font-size: 28px !important;
 }
 
+.divChoixMultiple {
+    background: #3892ba !important;
+    border: 3px white solid !important;
+    font-size: 28px !important;
+}
+
 .no-close .ui-dialog-titlebar {
     display: none;
 }

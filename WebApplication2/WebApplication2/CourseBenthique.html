@@ -15,7 +15,7 @@
         //TODO: À la fin du tour, si le joueur ne peut pas restaurer un habitat perturbé, les macro qui s'en servent meurt.
         //TODO: Dans la partie de droite, je crois qu'il serais bien d'ajouter le boutons regle.
         //TODO: Lorsque l'on supprime une carte ou échange, modifier le nombre d'exemplaire.
-        //TODO: Ajout bouton règle. 
+        //TODO: Ajout bouton règle.
 
         //Tableau contenant les points des joueurs.
         var pointsJoueur;
@@ -88,6 +88,7 @@
             creerMain();
             instantierDivErreur();
             instantierDivDebutTour();
+            instantierDivChoixMultiple();
         }
 
         //Fonction qui s'occupe de créer le paquet de carte et de le mélanger au début de la partie.
@@ -585,9 +586,12 @@
                 draggable: false,
                 resizable: false,
                 buttons: [{
-                    text: 'Valider'
+                    text: 'Valider',
                 }, {
-                    text: 'Annuler'
+                    text: 'Annuler',
+                    click: function () {
+                        $(this).dialog('close');
+                    }
                 }],
                 height: 300,
                 width: 400,
@@ -673,7 +677,7 @@
             $('#divErreur').append(divTexteErreur);
         }
 
-        //Fonction qui creer la div qui servira pour les pop-ups de début de tour
+        //Fonction qui creer la div qui servira pour les pop-ups de début de tour.
         function instantierDivDebutTour() {
             var divDebutTour = document.createElement('div');
             divDebutTour.id = 'divDebutTour';
@@ -684,6 +688,19 @@
             divTexteDebutTour.id = 'divTexteDebutTour';
             divTexteDebutTour.className = 'divTexteDebutTour';
             $('#divDebutTour').append(divTexteDebutTour);
+        }
+
+        //Fonction qui creer la div qui servira pour les pop-ups de choix multiples.
+        function instantierDivChoixMultiple() {
+            var divChoixMultiple = document.createElement('div');
+            divChoixMultiple.id = 'divChoixMultiple';
+            divChoixMultiple.className = 'divChoixMultiple';
+            $('#plateau').append(divChoixMultiple);
+
+            var divTexteChoixMultiple = document.createElement('div');
+            divTexteChoixMultiple.id = 'divTexteChoixMultiple';
+            divTexteChoixMultiple.className = 'divTexteChoixMultiple';
+            $('#divChoixMultiple').append(divTexteChoixMultiple);
         }
 
         //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
@@ -1090,6 +1107,23 @@
             plateau.id = 'plateau';
             plateau.className = 'plateau';
             $('body').append(plateau);
+            $(plateau).droppable({
+                tolerance: 'pointer',
+                drop: function (event, ui) {
+                    if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
+                        if (accepterDrop(event.target)) {
+                        }
+                    }
+                },
+                over: function (event, ui) {
+                    if (bonneZoneDrop(event.target)) {
+                        $(event.target).addClass('droppable-hover');
+                    }
+                },
+                out: function (event, ui) {
+                    $(event.target).removeClass('droppable-hover');
+                }
+            });
 
             //Partie de droite.
             var divDroite = document.createElement('div');
@@ -2497,20 +2531,14 @@
             $('#divTexteErreur').text(texte);
             $('#divErreur').dialog({
                 classes: {
-                    'ui-dialog': 'no-close ui-state-error ui-corner-all',
+                    'ui-dialog': 'ui-state-error ui-corner-all',
                 },
                 draggable: false,
                 resizable: false,
                 height: 80,
                 width: 600,
                 hide: 'fade',
-                show: 'fade',
-                open: function () {
-                    var foo = $(this);
-                    setTimeout(function () {
-                        foo.dialog('close');
-                    }, 2000);
-                }
+                show: 'fade'
             });
         }
 
@@ -2519,20 +2547,14 @@
             $('#divTexteErreur').text(texte);
             $('#divErreur').dialog({
                 classes: {
-                    'ui-dialog': 'no-close ui-state-highlight ui-corner-all',
+                    'ui-dialog': 'ui-state-highlight ui-corner-all',
                 },
                 draggable: false,
                 resizable: false,
                 height: 80,
                 width: 600,
                 hide: 'fade',
-                show: 'fade',
-                open: function () {
-                    var foo = $(this);
-                    setTimeout(function () {
-                        foo.dialog('close');
-                    }, 2500);
-                }
+                show: 'fade'
             });
         }
 
@@ -2541,20 +2563,14 @@
             $('#divTexteErreur').text(texte);
             $('#divErreur').dialog({
                 classes: {
-                    'ui-dialog': 'no-close popUpConfirmation ui-state-highlight ui-corner-all',
+                    'ui-dialog': 'popUpConfirmation ui-state-highlight ui-corner-all',
                 },
                 draggable: false,
                 resizable: false,
                 height: 80,
                 width: 600,
                 hide: 'fade',
-                show: 'fade',
-                open: function () {
-                    var foo = $(this);
-                    setTimeout(function () {
-                        foo.dialog('close');
-                    }, 2000);
-                }
+                show: 'fade'
             });
         }
 
@@ -2564,20 +2580,35 @@
             $('#divTexteDebutTour').text('Début du tour de ' + joueur + '.');
             $('#divDebutTour').dialog({
                 classes: {
-                    'ui-dialog': 'no-close popUpDebutTour ui-corner-all',
+                    'ui-dialog': 'popUpDebutTour ui-corner-all',
                 },
                 draggable: false,
                 resizable: false,
                 height: 80,
                 width: 400,
                 hide: 'fade',
+                show: 'fade'
+            });
+        }
+
+        //Fonction qui appelle un pop-up qui permet au joueur de choisir parmis plusieurs options
+        function popUpChoixMultiple(tableauBouton) {
+            $('#divTexteChoixMultiple').text('Début du tour de ' + joueur + '.');
+            var tabButtons = new Array(tableauBouton.length);
+            tabButtons.forEach(function (item, index) {
+                tabButtons[index].item = { text: tableauBouton[index][0].item, click: tableauBouton[index][1].item }
+            });
+            $('#divChoixMultiple').dialog({
+                classes: {
+                    'ui-dialog': 'popUpDebutTour ui-corner-all',
+                },
+                draggable: false,
+                resizable: false,
+                height: 150,
+                width: 400,
+                hide: 'fade',
                 show: 'fade',
-                open: function () {
-                    var foo = $(this);
-                    setTimeout(function () {
-                        foo.dialog('close');
-                    }, 2000);
-                }
+                buttons: tabButtons
             });
         }
 
