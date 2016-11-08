@@ -15,6 +15,7 @@
         //TODO: À la fin du tour, si le joueur ne peut pas restaurer un habitat perturbé, les macro qui s'en servent meurt.
         //TODO: Dans la partie de droite, je crois qu'il serais bien d'ajouter le boutons regle.
         //TODO: Lorsque l'on supprime une carte ou échange, modifier le nombre d'exemplaire.
+        //TODO: Mettre les cartes perturbation inutile dans la décharge.
         //TODO: Ajout bouton règle.
 
         //Tableau contenant les points des joueurs.
@@ -56,11 +57,14 @@
         var carteDragNumero;
         //Variable qui contient le nombre de joueur.
         var nombreJoueur;
-
         //Variable qui nous dira si nous sommes en train de manger.
         var onMangeAtableCeSoir;
         //Variable qui stock la taille.
         var taillePredateur;
+        //Vairable qui dits si un déversement va avoir lieu.
+        var deversement;
+        var tempsDeversement;
+        var numeroJoueurDeversement;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -78,6 +82,7 @@
             tour = 0;
             facteurRotation = 0;
             onMangeAtableCeSoir = false;
+            deversement = false;
         }
 
         //Fonction qui va créer les diverse éléments du fond.
@@ -1308,7 +1313,7 @@
                 carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 10;
             } else if (carteDrag.nom === 'passageToutTerrain') {
                 carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
-                carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 1;
+                carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 2;
             }
         }
 
@@ -1317,9 +1322,12 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
+                        console.log('A');
                         if (carteBas[numeroJoueurActif][i].tempsPerturber != 10 && carteBas[numeroJoueurActif][i].tempsPerturber > 0) {
+                            console.log('B');
                             carteBas[numeroJoueurActif][i].tempsPerturber--;
-                            if (carteBas[numeroJoueurActif][i].tempsPerturber = 0) {
+                            if (carteBas[numeroJoueurActif][i].tempsPerturber === 0) {
+                                console.log('C');
                                 carteBas[numeroJoueurActif][i].perturber = false;
                                 verifierCartePerturbation(numeroJoueurActif, i);
                             }
@@ -1329,14 +1337,15 @@
             }
         }
 
-        //Fonction qui va vérifier chaque carte perturbation et les retirer si sont enfants n'est plus perturber.
+        //Fonction qui va enlever la carte de perturbation de dessus la carte.
         function verifierCartePerturbation(numeroActif, positionCarte) {
-            //TODO: si on retire la carte, faire reempillerCartePasPerturber();
             var lettreActif = lettreJoueur(numeroActif);
             if (positionCarte > 6) {
-                $('#emplacementBasJoueur' + lettreActif + positionCarte);
+                $('#emplacementHautJoueur' + lettreActif + positionCarte).children().last().remove();
+                reempillerCartePasPerturber(numeroActif, positionCarte);
             } else {
-
+                $('#emplacementBasJoueur' + lettreActif + positionCarte).children().last().remove();
+                reempillerCartePasPerturber(numeroActif, positionCarte);
             }
         }
 
@@ -1348,6 +1357,90 @@
         //Fonction qui mes en brillances les trucs qui sont mangeable.
         function brillanceCarteMangeable(brille) {
 
+        }
+
+        //Fonction qui tue les macro-invertébré de tolérance inférieure à 6.
+        function tuerDeversement() {
+            if (!possedeAssainissement(0)) {
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[0][i] != null) {
+                        if (carteBas[0][i].type === 'macroInvertebre') {
+                            if (carteBas[0][i].tolerance < 6) {
+                                carteBas[0][i] = null;
+                                if (i > 6) {
+                                    var lettre = lettreJoueur(0);
+                                    $('#emplacementHautJoueur' + lettre + i).children().remove();
+                                } else {
+                                    $('#emplacementBasJoueur' + lettre + i).children().remove();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (!possedeAssainissement(1)) {
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[1][i] != null) {
+                        if (carteBas[1][i].type === 'macroInvertebre') {
+                            if (carteBas[1][i].tolerance < 6) {
+                                carteBas[1][i] = null;
+                                if (i > 6) {
+                                    var lettre = lettreJoueur(1);
+                                    $('#emplacementHautJoueur' + lettre + i).children().remove();
+                                } else {
+                                    $('#emplacementBasJoueur' + lettre + i).children().remove();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (!possedeAssainissement(2)) {
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[2][i] != null) {
+                        if (carteBas[2][i].type === 'macroInvertebre') {
+                            if (carteBas[2][i].tolerance < 6) {
+                                carteBas[2][i] = null;
+                                if (i > 6) {
+                                    var lettre = lettreJoueur(2);
+                                    $('#emplacementHautJoueur' + lettre + i).children().remove();
+                                } else {
+                                    $('#emplacementBasJoueur' + lettre + i).children().remove();
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            if (!possedeAssainissement(3)) {
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[3][i] != null) {
+                        if (carteBas[3][i].type === 'macroInvertebre') {
+                            if (carteBas[3][i].tolerance < 6) {
+                                carteBas[3][i] = null;
+                                if (i > 6) {
+                                    var lettre = lettreJoueur(3);
+                                    $('#emplacementHautJoueur' + lettre + i).children().remove();
+                                } else {
+                                    $('#emplacementBasJoueur' + lettre + i).children().remove();
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        //Fonction qui retourne true si le joueur possede un certificat d'assainissement.
+        function possedeAssainissement(numero) {
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numero][i].nom === 'assainissement') {
+                    return true;
+                }
+            }
+            return false;
         }
 
         //Fonction qui vérifie si une carte pareil est déjà présente sur le jeu. Si elle est la, retourne la position.
@@ -2378,8 +2471,7 @@
 
             //if (size > 4) {
             //    defausserCarte();
-            //}
-            //else {
+            //} else {
             $('#buttonPasserTour').prop('disabled', true);
             if (nombreJoueur === 4) {
                 facteurRotation += 1;
@@ -2416,6 +2508,15 @@
                 }
             });
 
+            if (deversement) {
+                if (numeroJoueurActif === numeroJoueurDeversement) {
+                    tempsDeversement--;
+                    if (tempsDeversement === 0) {
+                        tuerDeversement();
+                    }
+                }
+            }
+
             numeroJoueurActif++;
             if (numeroJoueurActif === nombreJoueur) {
                 numeroJoueurActif = 0;
@@ -2429,8 +2530,9 @@
             remplirMain();
             updateJeu();
             updateAffichageImage();
-            $('#buttonProposerEchange').prop('disabled', false);
             popUpDebutTour(numeroJoueurActif);
+            debutTourDeperturber();
+
             //}
         }
 
