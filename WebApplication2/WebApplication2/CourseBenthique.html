@@ -1186,7 +1186,7 @@
                     $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         tolerance: 'pointer',
                         drop: function (event, ui) {
-                            if (bonneZoneDrop(event.target, ui)) {//Si l'endroits que nous voulons droper est à la bonne place.
+                            if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
                                 if (accepterDrop(event.target)) {
                                     if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
                                         if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
@@ -1226,7 +1226,7 @@
                                             if (carteDrag.nom === carteBas[numeroJoueurActif][id].nom) {
                                                 onDrop(event, ui, this);
                                             } else {//Sinon, le drop est pas accepter.
-                                                ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui) } });
+                                                ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                                 popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                             }
                                         } else {
@@ -1235,10 +1235,10 @@
                                         }
                                     }
                                 } else {//Respecte pas les conditions, donc drop pas accepter.
-                                    ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui) } });
+                                    ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                 }
                             } else {
-                                ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui) } });
+                                ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
 
                                 if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide') {
                                     popUpErreur('Cette carte est jouable que dans votre zone.');
@@ -1250,7 +1250,7 @@
                             }
                         },
                         over: function (event, ui) {
-                            if (bonneZoneDrop(event.target, ui)) {
+                            if (bonneZoneDrop(event.target)) {
                                 $(event.target).addClass('droppable-hover');
                             }
                         },
@@ -1272,7 +1272,6 @@
             if (carteDrag.nom === 'dechets' || carteDrag.nom === 'artificialisation') {
                 carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
                 carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 10;
-                console.log(carteBas[numeroPositionJoueur][numeroPosition]);
             } else if (carteDrag.nom === 'passageToutTerrain') {
                 carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
                 carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 1;
@@ -1336,8 +1335,7 @@
         }
 
         //Fonction qui validera que c'est la bonne zone pour drope notre carte.
-        function bonneZoneDrop(event, ui) {
-            console.log(event);
+        function bonneZoneDrop(event) {
             var identification = $(event).attr('id').substr($(event).attr('id').length - 2);
             var lettreEmplacement = identification.substr(0, 1);
 
@@ -2441,14 +2439,43 @@
 
         //Fonction qui remet les dimensions de la carte à son état original.
         function revertCarte(event, ui) {
-            lettre = lettreJoueur(numeroJoueurActif);
             $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').removeClass('droppable-hover');
-            if (bonneZoneDrop(event, ui)) {
-                if (accepterDrop(event)) {
-                    return false;
+            if (event != false) {
+                var id;
+                console.log(event);
+                id = $(event).attr('id').substr($(event).attr('id').length - 1);
+                if (bonneZoneDrop(event)) {
+                    if (accepterDrop(event)) {
+                        if ($(event).children().length >= 1) {
+                            console.log(carteDrag.nom);
+                            console.log(carteBas[numeroJoueurActif][id].nom)
+                            if (carteDrag.nom != carteBas[numeroJoueurActif][id].nom) {
+                                $(ui).stop();
+                                $(ui).animate({
+                                    height: 180,
+                                    width: 118
+                                }, { duration: 200, queue: false });
+
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                        else {
+                            return false;
+                        }
+                    } else {
+                        $(ui).stop();
+                        $(ui).animate({
+                            height: 180,
+                            width: 118
+                        }, { duration: 200, queue: false });
+
+                        return true;
+                    }
                 } else {
-                    $(ui.draggable).stop();
-                    $(ui.draggable).animate({
+                    $(ui).stop();
+                    $(ui).animate({
                         height: 180,
                         width: 118
                     }, { duration: 200, queue: false });
@@ -2456,58 +2483,13 @@
                     return true;
                 }
             } else {
-                $(ui.draggable).stop();
-                $(ui.draggable).animate({
+                $(ui).stop();
+                $(ui).animate({
                     height: 180,
                     width: 118
                 }, { duration: 200, queue: false });
-
                 return true;
             }
-            //if (socketObj != false) {
-            //    lettreDiv = ($(socketObj).attr('id').substr($(socketObj).attr('id').length - 2)).substr(0, 1);
-            //    console.log(lettreDiv);
-
-            //    if (carteDrag.type != 'perturbation') {
-            //        if (lettreDiv === lettre) {
-            //            return false;
-            //        } else {
-            //            $(carte).stop();
-            //            $(carte).animate({
-            //                height: 180,
-            //                width: 118
-            //            }, { duration: 200, queue: false });
-
-            //            return true;
-            //        }
-            //    }
-            //    else {
-            //        if (lettreDiv != lettre) {
-            //            if (accepterDrop(socketObj)) {
-            //                return false;
-            //            } else {
-            //                return true;
-            //            }
-            //        } else {
-            //            $(carte).stop();
-            //            $(carte).animate({
-            //                height: 180,
-            //                width: 118
-            //            }, { duration: 200, queue: false });
-
-            //            return true;
-            //        }
-            //    }
-            //} else {
-            //    $(carte).stop();
-            //    $(carte).animate({
-            //        height: 180,
-            //        width: 118
-            //    }, { duration: 200, queue: false });
-            //    return true;
-            //}
-
-
         }
 
         //Fonction pour appeler le pop-up d'erreur.
