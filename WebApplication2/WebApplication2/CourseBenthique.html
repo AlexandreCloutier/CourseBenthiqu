@@ -18,14 +18,14 @@
         //TODO: Mettre les cartes perturbation inutile dans la décharge.
         //TODO: Ajout bouton règle.
 
-        //Tableau contenant les points des joueurs.
-        var pointsJoueur;
         //Tableau contenant l'âge des joueurs.
         var ageJoueur;
         //Tableau contenant les noms des joueurs.
         var nomJoueur;
         //Tableau contenant les points des joueurs.
         var pointsJoueur;
+        //Tableau contenant les effets de Pris sur le fait.
+        var tableauProtege;
         //Niveau de difficulté de la partie
         var difficulte;
         //Paquet de carte principal.
@@ -113,6 +113,7 @@
             instantierTableauExemplaire();
             paquetDecharge = new Array();
             pointsJoueur = new Array(6);
+            tableauProtege = new Array(4);
         }
 
         //Fonction qui envoie vers les options de création de partie.
@@ -1488,12 +1489,15 @@
                     else {
                         return false;
                     }
-                }
-                if (lettreEmplacement === lettre) {
-                    return false;
-                }
-                else {
-                    return true;
+                } else {
+                    if (lettreEmplacement === lettre) {
+                        return false;
+                    } else if(identification === 'au'){
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
                 }
             }
             else if (carteDrag.type === 'action') {
@@ -1713,19 +1717,23 @@
                     else if (carteDrag.nom === 'predation') {
                         for (i = 0; i < carteBas[numeroJoueurActif].length; i++) {
                             var carteJoueur = carteBas[numeroJoueurActif][i];
-                            if (carteJoueur.type === 'macroInvertebre' || carteJoueur.type === 'salmonide') {
-                                if (carteJoueur.predateur > 0) {
-                                    for (j = 0; j < nombreJoueur; j++) {
-                                        if (j !== numeroJoueurActif) {
-                                            for (k = 0; k < carteBas[j].length; k++) {
-                                                if (carteBas[j][k].type === 'macroInvertebre') {
-                                                    return true;
+                            if (carteJoueur != null) {
+                                if (carteJoueur.type === 'macroInvertebre' || carteJoueur.type === 'salmonide') {
+                                    if (carteJoueur.predateur > 0) {
+                                        for (j = 0; j < nombreJoueur; j++) {
+                                            if (j !== numeroJoueurActif) {
+                                                for (k = 0; k < carteBas[j].length; k++) {
+                                                    if (carteBas[j][k] != null) {
+                                                        if (carteBas[j][k].type === 'macroInvertebre') {
+                                                            return true;
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
+                                        popUpAvertissement('Aucun adversaire ne possède de macroinvertébrés.');
+                                        return false;
                                     }
-                                    popUpAvertissement('Aucun adversaire ne possède de macroinvertébrés.');
-                                    return false;
                                 }
                             }
                         }
@@ -1751,7 +1759,11 @@
                         return false;
                     }
                     else if (carteDrag.nom === 'prisSurFait') {
-
+                        if (tableauProtege[numeroJoueurActif] === true) {
+                            popUpAvertissement('Une carte Pris sur le fait est déjà active sur votre jeu');
+                            return false;
+                        }
+                        return true;
                     }
                     else if (carteDrag.nom === 'accumulation') {
 
@@ -1759,9 +1771,11 @@
                     else if (carteDrag.nom === 'emergence') {
                         for (i = 0; i > nombreJoueur; i++) {
                             for (j = 0; j < carteBas[i].length; j++) {
-                                if (carteBas[i][j].type === 'maroinvertebre') {
-                                    if (carteBas[i][j].typeMacro === 'ephemeroptere' || carteBas[i][j].typeMacro === 'trichoptere' || carteBas[i][j].typeMacro === 'plecoptere' || carteBas[i][j].typeMacro === 'odonate' || carteBas[i][j].typeMacro === 'diptere') {
-                                        return true;
+                                if (carteBas[i][j] != null) {
+                                    if (carteBas[i][j].type === 'maroinvertebre') {
+                                        if (carteBas[i][j].typeMacro === 'ephemeroptere' || carteBas[i][j].typeMacro === 'trichoptere' || carteBas[i][j].typeMacro === 'plecoptere' || carteBas[i][j].typeMacro === 'odonate' || carteBas[i][j].typeMacro === 'diptere') {
+                                            return true;
+                                        }
                                     }
                                 }
                             }
@@ -1773,11 +1787,13 @@
                         var option1 = false;
                         var option2 = false;
 
-                        for (i = 0; i < numeroJoueur; i++) {
-                            if (i != numeroJoueur) {
+                        for (i = 0; i < nombreJoueur; i++) {
+                            if (i != numeroJoueurActif) {
                                 for (j = 0; j < carteBas[i].length; j++) {
-                                    if (carteBas[i][j].type === 'salmonide') {
-                                        option1 = true;
+                                    if (carteBas[i][j] != null) {
+                                        if (carteBas[i][j].type === 'salmonide') {
+                                            option1 = true;
+                                        }
                                     }
                                 }
                             }
@@ -1796,18 +1812,22 @@
                     }
                     else if (carteDrag.nom === 'zonage') {
                         for (i = 0; i < carteBas[numeroJoueurActif].length; i++) {
-                            if (carteBas[numeroJoueurActif][i].type === 'habitat') {
-                                for (j = 0; j < nombreJoueur; j++) {
-                                    if (j !== numeroJoueurActif) {
-                                        for (k = 0; k < carteBas[j].length; k++) {
-                                            if (carteBas[j][k].type === 'habitat') {
-                                                return true;
+                            if (carteBas[numeroJoueurActif][i] != null) {
+                                if (carteBas[numeroJoueurActif][i].type === 'habitat') {
+                                    for (j = 0; j < nombreJoueur; j++) {
+                                        if (j !== numeroJoueurActif) {
+                                            for (k = 0; k < carteBas[j].length; k++) {
+                                                if (carteBas[j][k] != null) {
+                                                    if (carteBas[j][k].type === 'habitat') {
+                                                        return true;
+                                                    }
+                                                }
                                             }
                                         }
                                     }
+                                    popUpAvertissement('Aucun adversaire ne possède d\'habitat.');
+                                    return false;
                                 }
-                                popUpAvertissement('Aucun adversaire ne possède d\'habitat.');
-                                return false;
                             }
 
                         }
@@ -1819,7 +1839,6 @@
                 popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
                 return false;
             }
-            
         }
 
         //Fonction qui retourne true si le nombre maximum d'habitats n'est pas dépasser.
@@ -2700,7 +2719,7 @@
 
         //Fonction qui remet les dimensions de la carte à son état original.
         function revertCarte(event, ui) {
-            $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').removeClass('droppable-hover');
+            $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD, .plateau').removeClass('droppable-hover');
             if (event != false) {
                 var id;
                 id = $(event).attr('id').substr($(event).attr('id').length - 1);
