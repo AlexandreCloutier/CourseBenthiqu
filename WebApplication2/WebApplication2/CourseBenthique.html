@@ -1230,52 +1230,62 @@
                         drop: function (event, ui) {
                             if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
                                 if (accepterDrop(event.target)) {
-                                    if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
-                                        if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
-                                            if (carteDrag.type === 'macroInvertebre') {
-                                                if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
-                                                    taillePredateur = carteDrag.taille;
-                                                    onDrop(event, ui, this);
-                                                    onMangeAtableCeSoir = true;
-                                                    popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
-                                                    brillanceCarteMangeable(true);
+                                    if (carteDrag.nom != 'deversement' && carteDrag.nom != 'erosion' && carteDrag.nom != 'pollutionOrganique' && carteDrag.type != 'speciale' && carteDrag.type != 'action') {
+                                        if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
+                                            if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
+                                                if (carteDrag.type === 'macroInvertebre') {
+                                                    if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
+                                                        taillePredateur = carteDrag.taille;
+                                                        onDrop(event, ui, this);
+                                                        onMangeAtableCeSoir = true;
+                                                        popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
+                                                        brillanceCarteMangeable(true);
+                                                    } else {//Sinon, met simplement la carte.
+                                                        onDrop(event, ui, this);
+                                                    }
                                                 } else {//Sinon, met simplement la carte.
                                                     onDrop(event, ui, this);
                                                 }
-                                            } else {//Sinon, met simplement la carte.
-                                                onDrop(event, ui, this);
-                                            }
-                                        } else {
-                                            if (carteDrag.type === 'macroInvertebre') {
-                                                if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
-                                                    taillePredateur = carteDrag.taille;
-                                                    onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
-                                                    onMangeAtableCeSoir = true;
-                                                    popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
-                                                    brillanceCarteMangeable(true);
+                                            } else {
+                                                if (carteDrag.type === 'macroInvertebre') {
+                                                    if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
+                                                        taillePredateur = carteDrag.taille;
+                                                        onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
+                                                        onMangeAtableCeSoir = true;
+                                                        popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
+                                                        brillanceCarteMangeable(true);
+                                                    } else {//Sinon, mes simplement la carte.
+                                                        onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
+                                                    }
                                                 } else {//Sinon, mes simplement la carte.
                                                     onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
                                                 }
-                                            } else {//Sinon, mes simplement la carte.
-                                                onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
                                             }
-                                        }//sinon si l'endroit contient une carte ET qu'elle est identique.
-                                    } else if ($(this).children().length >= 1) {
-                                        if (carteDrag.type != 'perturbation') {
-                                            var id;
-                                            id = event.target.id.substr(event.target.id.length - 1);
+                                            //sinon si l'endroit contient une carte ET qu'elle est identique.
+                                        } else if ($(this).children().length >= 1) {
+                                            if (carteDrag.type != 'perturbation') {
+                                                var id;
+                                                id = event.target.id.substr(event.target.id.length - 1);
 
-                                            if (carteDrag.nom === carteBas[numeroJoueurActif][id].nom) {
+                                                if (carteDrag.nom === carteBas[numeroJoueurActif][id].nom) {
+                                                    onDrop(event, ui, this);
+                                                } else {//Sinon, le drop est pas accepter.
+                                                    ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
+                                                    popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
+                                                }
+                                            } else {
+                                                rendrePerturber(event);
                                                 onDrop(event, ui, this);
-                                            } else {//Sinon, le drop est pas accepter.
-                                                ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
-                                                popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                             }
-                                        } else {
-                                            rendrePerturber(event);
-                                            onDrop(event, ui, this);
                                         }
                                     }
+                                    else if (carteDrag.nom === 'deversement') {
+                                        paquetDecharge.push(carteDrag);
+                                        deversement = true;
+                                        tempsDeversement = 2;
+                                        numeroJoueurDeversement = numeroJoueurActif;
+                                    }
+
                                 } else {//Respecte pas les conditions, donc drop pas accepter.
                                     ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                 }
@@ -1285,7 +1295,7 @@
                                 if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide') {
                                     popUpErreur('Cette carte est jouable que dans votre zone.');
                                 } else if (carteDrag.type === 'perturbation') {
-                                    popUpErreur('Cette carte est jouable que dans la zone d\'un de vos adversaire.');
+                                    popUpErreur('Cette carte est jouable que dans la zone d\'un de vos adversaire ou directement sur le plateau.');
                                 } else if (carteDrag.type === 'action' || carteDrag.type === 'speciale') {
                                     popUpErreur('Cette carte doit être jouer directement dans la défausse.');
                                 }
@@ -1325,12 +1335,9 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
-                        console.log('A');
                         if (carteBas[numeroJoueurActif][i].tempsPerturber != 10 && carteBas[numeroJoueurActif][i].tempsPerturber > 0) {
-                            console.log('B');
                             carteBas[numeroJoueurActif][i].tempsPerturber--;
                             if (carteBas[numeroJoueurActif][i].tempsPerturber === 0) {
-                                console.log('C');
                                 carteBas[numeroJoueurActif][i].perturber = false;
                                 verifierCartePerturbation(numeroJoueurActif, i);
                             }
@@ -1369,6 +1376,7 @@
                     if (carteBas[0][i] != null) {
                         if (carteBas[0][i].type === 'macroInvertebre') {
                             if (carteBas[0][i].tolerance < 6) {
+                                paquetDecharge.push(carteBas[0][i]);
                                 carteBas[0][i] = null;
                                 if (i > 6) {
                                     var lettre = lettreJoueur(0);
@@ -1386,6 +1394,7 @@
                     if (carteBas[1][i] != null) {
                         if (carteBas[1][i].type === 'macroInvertebre') {
                             if (carteBas[1][i].tolerance < 6) {
+                                paquetDecharge.push(carteBas[1][i]);
                                 carteBas[1][i] = null;
                                 if (i > 6) {
                                     var lettre = lettreJoueur(1);
@@ -1398,39 +1407,45 @@
                     }
                 }
             }
-            if (!possedeAssainissement(2)) {
-                for (var i = 0; i < 10; i++) {
-                    if (carteBas[2][i] != null) {
-                        if (carteBas[2][i].type === 'macroInvertebre') {
-                            if (carteBas[2][i].tolerance < 6) {
-                                carteBas[2][i] = null;
-                                if (i > 6) {
-                                    var lettre = lettreJoueur(2);
-                                    $('#emplacementHautJoueur' + lettre + i).children().remove();
-                                } else {
-                                    $('#emplacementBasJoueur' + lettre + i).children().remove();
+            if (nombreJoueur > 2) {
+                if (!possedeAssainissement(2)) {
+                    for (var i = 0; i < 10; i++) {
+                        if (carteBas[2][i] != null) {
+                            if (carteBas[2][i].type === 'macroInvertebre') {
+                                if (carteBas[2][i].tolerance < 6) {
+                                    paquetDecharge.push(carteBas[2][i]);
+                                    carteBas[2][i] = null;
+                                    if (i > 6) {
+                                        var lettre = lettreJoueur(2);
+                                        $('#emplacementHautJoueur' + lettre + i).children().remove();
+                                    } else {
+                                        $('#emplacementBasJoueur' + lettre + i).children().remove();
+                                    }
                                 }
                             }
                         }
-                    }
 
+                    }
                 }
             }
-            if (!possedeAssainissement(3)) {
-                for (var i = 0; i < 10; i++) {
-                    if (carteBas[3][i] != null) {
-                        if (carteBas[3][i].type === 'macroInvertebre') {
-                            if (carteBas[3][i].tolerance < 6) {
-                                carteBas[3][i] = null;
-                                if (i > 6) {
-                                    var lettre = lettreJoueur(3);
-                                    $('#emplacementHautJoueur' + lettre + i).children().remove();
-                                } else {
-                                    $('#emplacementBasJoueur' + lettre + i).children().remove();
+            if (nombreJoueur > 3) {
+                if (!possedeAssainissement(3)) {
+                    for (var i = 0; i < 10; i++) {
+                        if (carteBas[3][i] != null) {
+                            if (carteBas[3][i].type === 'macroInvertebre') {
+                                if (carteBas[3][i].tolerance < 6) {
+                                    paquetDecharge.push(carteBas[3][i]);
+                                    carteBas[3][i] = null;
+                                    if (i > 6) {
+                                        var lettre = lettreJoueur(3);
+                                        $('#emplacementHautJoueur' + lettre + i).children().remove();
+                                    } else {
+                                        $('#emplacementBasJoueur' + lettre + i).children().remove();
+                                    }
                                 }
                             }
-                        }
 
+                        }
                     }
                 }
             }
@@ -1482,14 +1497,14 @@
             }
             else if (carteDrag.type === 'perturbation') {
                 if (carteDrag.nom === 'deversement' || carteDrag.nom === 'erosion' || carteDrag.nom === 'pollutionOrganique') {
-                    if (identification === 'au') {
+                    if (identification === 'au') {//Si c'est dropper sur le plateau.
                         return true;
                     }
                     else {
                         return false;
                     }
                 }
-                if (lettreEmplacement === lettre) {
+                if (lettreEmplacement === lettre) {// Si c'est droper sur notre zone, retourne false, sinon retourne true.
                     return false;
                 }
                 else {
@@ -1680,6 +1695,13 @@
                             popUpAvertissement('Il y a une politique de protection pour cet écosystème.');
                             return false;
                         }
+                    } else if (carteDrag === 'deversement') {
+                        if (deversement === false) {
+                            return true;
+                        } else {
+                            popUpAvertissement('Un déversement aura déjà lieu à la fin du tour du joueur: ' + numeroJoueurDeversement + '.');
+                            return false;
+                        }
                     }
 
                     var message = verifierConditionPerturbation(event);
@@ -1819,7 +1841,7 @@
                 popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
                 return false;
             }
-            
+
         }
 
         //Fonction qui retourne true si le nombre maximum d'habitats n'est pas dépasser.
@@ -2633,20 +2655,23 @@
                 }
             });
 
-            if (deversement) {
-                if (numeroJoueurActif === numeroJoueurDeversement) {
+            if (deversement) {//Si un déversement est en cour.
+                if (numeroJoueurActif === numeroJoueurDeversement) {//Si c'est la fin du tour du joueur qui a déverser.
                     tempsDeversement--;
-                    if (tempsDeversement === 0) {
+                    if (tempsDeversement === 0) {//Si le temps de déverseent est écouler, tue les macro et rends déversement à false.
                         tuerDeversement();
+                        deversement = false;
                     }
                 }
             }
 
+            //Partie qui augmente le nombre de joueurs.
             numeroJoueurActif++;
             if (numeroJoueurActif === nombreJoueur) {
                 numeroJoueurActif = 0;
             }
 
+            //Rends le bouton passer tour inactif lorsuq'on clique dessus pour éviter de "spam" le bouton.
             setTimeout(function () {
                 $('#buttonPasserTour').prop('disabled', false);
             }, 2000);
