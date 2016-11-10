@@ -1814,11 +1814,12 @@
                         popUpAvertissement('Vous ne possédez pas d\'habitat');
                         return false;
                     }
-                } else {
-                    popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
-                    return false;
                 }
+            } else {
+                popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
+                return false;
             }
+            
         }
 
         //Fonction qui retourne true si le nombre maximum d'habitats n'est pas dépasser.
