@@ -1279,8 +1279,7 @@
                                                 onDrop(event, ui, this);
                                             }
                                         }
-                                    }
-                                    else if (carteDrag.nom === 'deversement') {
+                                    } else if (carteDrag.nom === 'deversement') {
                                         paquetDecharge.push(carteDrag);
                                         deversement = true;
                                         tempsDeversement = 2;
@@ -2011,19 +2010,6 @@
                 }
                 else {
                     return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
-                }
-            }
-            else if (carteDrag.nom === 'pollutionOrganique') {
-                if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
-                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
-                        return 'ok';
-                    }
-                    else {
-                        return 'La carte "Pollution organique" doit être jouer sur un habitats et il vous sera ensuite demander les 2 autres habitats que vous vouler rendre inutilisable.';
-                    }
-                }
-                else {
-                    return 'La carte "Pollution organique" doit être jouer sur un habitats et il vous sera ensuite demander les 2 autres habitats que vous vouler rendre inutilisable.';
                 }
             }
             else if (carteDrag.nom === 'deversement') {
