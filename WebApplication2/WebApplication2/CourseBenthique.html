@@ -1117,6 +1117,7 @@
                 drop: function (event, ui) {
                     if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
                         if (accepterDrop(event.target)) {
+
                         }
                     }
                 },
@@ -1478,6 +1479,14 @@
                 }
             }
             else if (carteDrag.type === 'perturbation') {
+                if (carteDrag.nom === 'deversement' || carteDrag.nom === 'erosion' || carteDrag.nom === 'pollutionOrganique') {
+                    if (identification === 'au') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
                 if (lettreEmplacement === lettre) {
                     return false;
                 }
@@ -1486,7 +1495,7 @@
                 }
             }
             else if (carteDrag.type === 'action') {
-                if (identification === 'se') {
+                if (identification === 'au') {
                     return true;
                 }
                 else {
@@ -1494,7 +1503,7 @@
                 }
             }
             else if (carteDrag.type === 'speciale') {
-                if (identification === 'se') {
+                if (identification === 'au') {
                     return true;
                 }
                 else {
@@ -1669,11 +1678,6 @@
                             popUpAvertissement('Il y a une politique de protection pour cet écosystème.');
                             return false;
                         }
-                    } else if (carteDrag.nom === 'deversement') {
-                        if (presenceReglementation('attestation', event)) {
-                            popUpAvertissement('Il y a un attestation d\'assainnissement pour cet écosystèmes.');
-                            return false;
-                        }
                     }
 
                     var message = verifierConditionPerturbation(event);
@@ -1687,918 +1691,1042 @@
                 } else if (carteDrag.type === 'reglementation') {
                     return true;
                 } else if (carteDrag.type === 'action') {
+                    if (carteDrag.nom === 'corveNettoyage') {
+
+                    }
+                    else if (carteDrag.nom === 'naturalistion') {
+
+                    }
+                    else if (carteDrag.nom === 'amenagement') {
+
+                    }
                     return true;
                 } else if (carteDrag.type === 'speciale') {
-                    return true;
-                }
-            } else {
-                popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
-                return false;
-            }
-        }
-
-        //Fonction qui retourne true si le nombre maximum d'habitats n'est pas dépasser.
-        function verifierNombreHabitats(numeroJoueur, nombreMax) {
-            var nombreHabitats = 0;
-
-            for (var i = 0; i < 10; i++) {
-                if (carteBas[numeroJoueur][i] != null) {
-                    if (carteBas[numeroJoueur][i].type === 'habitats') {
-                        nombreHabitats += exemplaireCarteBas[numeroJoueur][i];
+                    if (carteDrag.nom === 'retention') {
+                        if (pointsRessourcesRestant[numeroJoueurActif] === 0) {
+                            popUpAvertissement('Vous n\'avez plus de points ressources à garder.');
+                            return false;
+                        }
                     }
-                }
-            }
+                    else if (carteDrag.nom === 'predation') {
+                        for (i = 0; i < carteBas[numeroJoueurActif].length; i++) {
+                            var carteJoueur = carteBas[numeroJoueurActif][i];
+                            if (carteJoueur.type === 'macroInvertebre' || carteJoueur.type === 'salmonide') {
+                                if (carteJoueur.predateur > 0) {
+                                    for (j = 0; j < nombreJoueur; j++) {
+                                        if (j !== numeroJoueurActif) {
+                                            for (k = 0; k < carteBas[j].length; k++) {
+                                                if (carteBas[j][k].type === 'macroInvertebre') {
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    popUpAvertissement('Aucun adversaire ne possède de macroinvertébrés.');
+                                    return false;
+                                }
+                            }
+                        }
+                        popUpAvertissement('Vous ne possédez pas de prédateur sur votre jeu.');
+                        return false;
+                    }
+                    else if (carteDrag.nom === 'derivation') {
+                        if (mains[numeroJoueurActif].filter(function (value) { return value !== null }).length < 0) {
+                            var compteur = 0;
+                            for (i = 0; i < nombreJoueur; i++) {
+                                if (i !== numeroJoueurActif) {
+                                    if (mains[i].filter(function (value) { return value !== null }).length < 0) {
+                                        compteur++;
+                                    }
+                                }
+                            }
+                            if (compteur != 0) {
+                                return true;
+                            }
+                            popUpAvertissement('Les mains de tout vos adversaires sont vide.');
+                            return false;
+                        }
+                        popUpAvertissement('Vous ne pouvez pas échanger votre main si elle est vide.');
+                        return false;
+                    }
+                    else if (carteDrag.nom === 'prisSurFait') {
 
-            if (nombreHabitats >= nombreMax) {
-                return false;
-            } else {
-                return true;
-            }
-        }
+                    }
+                    else if (carteDrag.nom === 'accumulation') {
 
-        //Fonction qui vérifie si il y a la présence d'une réglementation qui empècherais la mise en place d'une carte perturbation.
-        function presenceReglementation(nomReglementation, event) {
-            var position = $(event).attr('id').substr($(event).attr('id').length - 2);
-            var lettrePositionJoueur = position.substr(0, 1);
-            var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);
+                    }
+                    else if (carteDrag.nom === 'emergence') {
+                        for(i = 0; i > nombreJoueur; i++){
+                            for (j = 0; j < carteBas[i].length; j++) {
+                                if (carteBas[i][j].type === 'maroinvertebre') {
+                                    if (carteBas[i][j].typeMacro === 'ephemeroptere' || carteBas[i][j].typeMacro === 'trichoptere' || carteBas[i][j].typeMacro === 'plecoptere' || carteBas[i][j].typeMacro === 'odonate' || carteBas[i][j].typeMacro === 'diptere') {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        popUpAvertissement('Il n\'y a aucun macroinvetébrés d\'un des ordres spécifiés sur le jeu');
+                        return false;
+                    }
+                    else if (carteDrag.nom === 'pecheur') {
+                        var option1 = false;
+                        var option2 = false;
 
-            for (var i = 0; i < 10; i++) {
-                if (carteBas[numeroPositionJoueur][i] != null) {
-                    if (carteBas[numeroPositionJoueur][i].nom === nomReglementation) {
+                        for (i = 0; i < numeroJoueur; i++) {
+                            if (i != numeroJoueur) {
+                                for (j = 0; j < carteBas[i].length; j++) {
+                                    if (carteBas[i][j].type === 'salmonide') {
+                                        option1 = true;
+                                    }
+                                }
+                            }
+                        }
+                        if (paquetDecharge.filter(function (value) { return value !== null }).length != 0) {
+                            option2 = true;
+                        }
+                        if (!option1 && !option2) {
+                            popUpAvertissement('La carte Salmonidé n\'est pas en jeu et la décharge est vide');
+                            return false;
+                        }
                         return true;
                     }
+                    else if (carteDrag.nom === 'crueSoudaine') {
+
+                    }
+                    else if (carteDrag.nom === 'zonage') {
+                        for (i = 0; i < carteBas[numeroJoueurActif].length; i++) {
+                            if (carteBas[numeroJoueurActif][i].type === 'habitat') {
+                                for (j = 0; j < nombreJoueur; j++) {
+                                    if (j !== numeroJoueurActif) {
+                                        for (k = 0; k < carteBas[j].length; k++) {
+                                            if (carteBas[j][k].type === 'habitat') {
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                }
+                                popUpAvertissement('Aucun adversaire ne possède d\'habitat.');
+                                return false;
+                            }
+
+                        }
+                        popUpAvertissement('Vous ne possédez pas d\'habitat');
+                        return false;
+                    }
+                } else {
+                    popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
+                    return false;
                 }
             }
 
-            return false;
-        }
+            //Fonction qui retourne true si le nombre maximum d'habitats n'est pas dépasser.
+            function verifierNombreHabitats(numeroJoueur, nombreMax) {
+                var nombreHabitats = 0;
 
-        //Fonction qui retourne true si le nombre maximum de bande riveraine n'est pas dépasser.
-        function verifierNombreBandeRiveraine(numeroJoueur, nombreMax) {
-            var nombreBandeRiveraine = 0;
-
-            for (var i = 0; i < 10; i++) {
-                if (carteBas[numeroJoueur][i] != null) {
-                    if (carteBas[numeroJoueur][i].type === 'bandeRiveraine') {
-                        nombreBandeRiveraine += exemplaireCarteBas[numeroJoueur][i];
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[numeroJoueur][i] != null) {
+                        if (carteBas[numeroJoueur][i].type === 'habitats') {
+                            nombreHabitats += exemplaireCarteBas[numeroJoueur][i];
+                        }
                     }
                 }
+
+                if (nombreHabitats >= nombreMax) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
 
-            if (nombreBandeRiveraine >= nombreMax) {
+            //Fonction qui vérifie si il y a la présence d'une réglementation qui empècherais la mise en place d'une carte perturbation.
+            function presenceReglementation(nomReglementation, event) {
+                var position = $(event).attr('id').substr($(event).attr('id').length - 2);
+                var lettrePositionJoueur = position.substr(0, 1);
+                var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);
+
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[numeroPositionJoueur][i] != null) {
+                        if (carteBas[numeroPositionJoueur][i].nom === nomReglementation) {
+                            return true;
+                        }
+                    }
+                }
+
                 return false;
-            } else {
-                return true;
             }
-        }
 
-        //Fonction qui va vérifier si la carte perturbation respecte son emplacement.
-        function verifierConditionPerturbation(event, ui) {
-            var position = $(event).attr('id').substr($(event).attr('id').length - 2);
-            var numeroPositionEmplacement = position.substr(position.length - 1);
-            var lettrePositionJoueur = position.substr(0, 1);
-            var numeroPositionJoueur;
+            //Fonction qui retourne true si le nombre maximum de bande riveraine n'est pas dépasser.
+            function verifierNombreBandeRiveraine(numeroJoueur, nombreMax) {
+                var nombreBandeRiveraine = 0;
 
-            if (nombreJoueur === 4) {
-                if (lettrePositionJoueur === 'A') {
-                    numeroPositionJoueur = 0;
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[numeroJoueur][i] != null) {
+                        if (carteBas[numeroJoueur][i].type === 'bandeRiveraine') {
+                            nombreBandeRiveraine += exemplaireCarteBas[numeroJoueur][i];
+                        }
+                    }
                 }
-                else if (lettrePositionJoueur === 'D') {
-                    numeroPositionJoueur = 1;
-                }
-                else if (lettrePositionJoueur === 'B') {
-                    numeroPositionJoueur = 2;
-                }
-                else if (lettrePositionJoueur === 'C') {
-                    numeroPositionJoueur = 3;
-                }
-            }
-            else if (nombreJoueur === 3) {
-                if (lettrePositionJoueur === 'A') {
-                    numeroPositionJoueur = 0;
-                }
-                else if (lettrePositionJoueur === 'B') {
-                    numeroPositionJoueur = 1;
-                }
-                else if (lettrePositionJoueur === 'C') {
-                    numeroPositionJoueur = 2;
-                }
-            }
-            else if (nombreJoueur === 2) {
-                if (lettrePositionJoueur === 'A') {
-                    numeroPositionJoueur = 0;
-                }
-                else if (lettrePositionJoueur === 'C') {
-                    numeroPositionJoueur = 1;
+
+                if (nombreBandeRiveraine >= nombreMax) {
+                    return false;
+                } else {
+                    return true;
                 }
             }
 
-            if (carteDrag.nom === 'dechets') {
-                if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
-                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
-                        return 'ok';
+            //Fonction qui va vérifier si la carte perturbation respecte son emplacement.
+            function verifierConditionPerturbation(event, ui) {
+                var position = $(event).attr('id').substr($(event).attr('id').length - 2);
+                var numeroPositionEmplacement = position.substr(position.length - 1);
+                var lettrePositionJoueur = position.substr(0, 1);
+                var numeroPositionJoueur;
+
+                if (nombreJoueur === 4) {
+                    if (lettrePositionJoueur === 'A') {
+                        numeroPositionJoueur = 0;
+                    }
+                    else if (lettrePositionJoueur === 'D') {
+                        numeroPositionJoueur = 1;
+                    }
+                    else if (lettrePositionJoueur === 'B') {
+                        numeroPositionJoueur = 2;
+                    }
+                    else if (lettrePositionJoueur === 'C') {
+                        numeroPositionJoueur = 3;
+                    }
+                }
+                else if (nombreJoueur === 3) {
+                    if (lettrePositionJoueur === 'A') {
+                        numeroPositionJoueur = 0;
+                    }
+                    else if (lettrePositionJoueur === 'B') {
+                        numeroPositionJoueur = 1;
+                    }
+                    else if (lettrePositionJoueur === 'C') {
+                        numeroPositionJoueur = 2;
+                    }
+                }
+                else if (nombreJoueur === 2) {
+                    if (lettrePositionJoueur === 'A') {
+                        numeroPositionJoueur = 0;
+                    }
+                    else if (lettrePositionJoueur === 'C') {
+                        numeroPositionJoueur = 1;
+                    }
+                }
+
+                if (carteDrag.nom === 'dechets') {
+                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
+                        if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
+                            return 'ok';
+                        }
+                        else {
+                            return 'La carte "Déchets" doit être jouer sur un habitat.';
+                        }
                     }
                     else {
                         return 'La carte "Déchets" doit être jouer sur un habitat.';
                     }
                 }
-                else {
-                    return 'La carte "Déchets" doit être jouer sur un habitat.';
-                }
-            }
-            else if (carteDrag.nom === 'erosion') {
-                if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
-                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'bandeRiveraine') {
-                        return 'ok';
+                else if (carteDrag.nom === 'erosion') {
+                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
+                        if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'bandeRiveraine') {
+                            return 'ok';
+                        }
+                        else {
+                            return 'La carte "Érosion" doit être jouer sur une bande riveraine.';
+                        }
                     }
                     else {
                         return 'La carte "Érosion" doit être jouer sur une bande riveraine.';
                     }
                 }
-                else {
-                    return 'La carte "Érosion" doit être jouer sur une bande riveraine.';
-                }
-            }
-            else if (carteDrag.nom === 'passageToutTerrain') {
-                if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
-                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
-                        return 'ok';
+                else if (carteDrag.nom === 'passageToutTerrain') {
+                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
+                        if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
+                            return 'ok';
+                        }
+                        else {
+                            return 'La carte "Passage de tout-terrain" doit être jouer sur un habitat.';
+                        }
                     }
                     else {
                         return 'La carte "Passage de tout-terrain" doit être jouer sur un habitat.';
                     }
                 }
-                else {
-                    return 'La carte "Passage de tout-terrain" doit être jouer sur un habitat.';
-                }
-            }
-            else if (carteDrag.nom === 'artificialisation') {
-                if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
-                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'bandeRiveraine') {
-                        return 'ok';
+                else if (carteDrag.nom === 'artificialisation') {
+                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
+                        if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'bandeRiveraine') {
+                            return 'ok';
+                        }
+                        else {
+                            return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
+                        }
                     }
                     else {
                         return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
                     }
                 }
-                else {
-                    return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
-                }
-            }
-            else if (carteDrag.nom === 'pollutionOrganique') {
-                if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
-                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
-                        return 'ok';
+                else if (carteDrag.nom === 'pollutionOrganique') {
+                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
+                        if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
+                            return 'ok';
+                        }
+                        else {
+                            return 'La carte "Pollution organique" doit être jouer sur un habitats et il vous sera ensuite demander les 2 autres habitats que vous vouler rendre inutilisable.';
+                        }
                     }
                     else {
                         return 'La carte "Pollution organique" doit être jouer sur un habitats et il vous sera ensuite demander les 2 autres habitats que vous vouler rendre inutilisable.';
                     }
                 }
-                else {
-                    return 'La carte "Pollution organique" doit être jouer sur un habitats et il vous sera ensuite demander les 2 autres habitats que vous vouler rendre inutilisable.';
-                }
-            }
-            else if (carteDrag.nom === 'deversement') {
-                return 'ok';
-                //TODO: la carte déversement se joue n'importe ou, ce serais donc le fun que le plateau entier se highlithts.
-            }
-            else {
-                return 'Vous ne pouvez pas mettre une carte perturbation sur un emplacement vide.';
-            }
-        }
-
-        //Fonction qui se produit lorsque l'on drop.
-        function onDrop(event, ui, drop) {
-            $(function () {
-                if (carteDrag.type != 'perturbation') {
-                    $(ui.draggable).click(function () { onClickImage($(this).parent().attr('id'), ui) });
-                }
-                ui.draggable.appendTo(drop);
-                ui.draggable.addClass('imageCarteJeu');
-                ui.draggable.removeClass('imageCarteMains');
-                ui.draggable.css('width', '58px');
-                ui.draggable.css('height', '90px');
-                ui.draggable.css('top', '0px');
-                ui.draggable.css('left', '0px');
-                ui.draggable.draggable('disable');
-                if ($(drop).children().length > 1) {
-                    ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
-                    exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = $(drop).children().length;
+                else if (carteDrag.nom === 'deversement') {
+                    return 'ok';
+                    //TODO: la carte déversement se joue n'importe ou, ce serais donc le fun que le plateau entier se highlithts.
                 }
                 else {
-                    exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = 1;
+                    return 'Vous ne pouvez pas mettre une carte perturbation sur un emplacement vide.';
                 }
-                //Partie qui change les données de la mains vers la partie du bas.
-                pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutResources;
-                pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutResources;
-                updatePointsRessources();
-                var id = drop.id.substr(drop.id.length - 1);
-                carteBas[numeroJoueurActif][id] = carteDrag;
-                supprimerCartePrecise(carteDragNumero);
-                calculerPoints();
-                updateZonePoints();
-            });
-        }
-
-        //Fonction qui va supprimer une carte de la main, appeler lors du drop dans la zone du bas.
-        function supprimerCartePrecise(positionCarte) {
-            mains[numeroJoueurActif][positionCarte] = null;
-        }
-
-        //Définition de la classe.
-        function Carte(type, nom, nomImage, coutResources, params) {
-            if (type === 'habitats') {
-                this.nom = nom;
-                this.type = type;
-                this.habitats = params.habitats;
-                this.coutResources = coutResources;
-                this.nomImage = nomImage;
-                this.perturber = false;
-                this.tempsPerturber = 0;
-            } else if (type === 'salmonide') {
-                this.nom = nom;
-                this.type = type;
-                this.coutResources = coutResources;
-                this.condition = params.condition;
-                this.nomImage = nomImage;
-                this.perturber = false;
-                this.tempsPerturber = 0;
-            } else if (type === 'bandeRiveraine') {
-                this.nom = nom;
-                this.type = type;
-                this.coutResources = coutResources;
-                this.nomImage = nomImage;
-                this.perturber = false;
-                this.tempsPerturber = 0;
-            } else if (type === 'speciale') {
-                this.nom = nom;
-                this.type = type;
-                this.nomImage = nomImage;
-                this.coutResources = coutResources;
-            } else if (type === 'speciale') {
-                this.nom = nom;
-                this.type = type;
-                this.nomImage = nomImage;
-                this.coutResources = coutResources;
-            } else if (type === 'action') {
-                this.nom = nom;
-                this.type = type;
-                this.nomImage = nomImage;
-                this.coutResources = coutResources;
-            } else if (type === 'perturbation') {
-                this.nom = nom;
-                this.type = type;
-                this.nomImage = nomImage;
-                this.coutResources = coutResources;
-                this.tempsActif = params.tempsActif;
-            } else if (type === 'reglementation') {
-                this.nom = nom;
-                this.type = type;
-                this.nomImage = nomImage;
-                this.coutResources = coutResources;
-            } else if (type === 'macroInvertebre') {
-                this.nom = nom;
-                this.type = type;
-                this.nomImage = nomImage;
-                this.coutResources = coutResources;
-                this.tolerance = params.tolerance;
-                this.taille = params.taille;
-                this.predateur = params.predateur;
-                this.typeMacro = params.typeMacro;
-                this.condition = params.condition;
-                this.perturber = false;
-                this.tempsPerturber = 0;
-            } else if (type === 'intervention') {
-                this.nom = nom;
-                this.type = type;
-                this.nomImage = nomImage;
-                this.coutResources = coutResources;
-            }
-        }
-
-        //function pour piger une carte.
-        function pigerCarte(paquetCarte) {
-            var carte = paquetCarte.pop();
-            if (paquetCarte.length <= 70) {
-                $('.imageCharge').attr('src', 'ressources/moyenPaquet.png');
-            }
-            if (paquetCarte.length <= 20) {
-                $('.imageCharge').attr('src', 'ressources/petitPaquet.png')
             }
 
-            return carte;
-        }
-
-        //Fonction qui anime les cartes du paquet jusqu'à la main.
-        function animationPige(carte, position) {
-            var carteMain = 'divCarte' + position;
-
-            var divCarte = document.createElement('div');
-            divCarte.id = 'carte' + position;
-            divCarte.className = 'divAnimee';
-            divCarte.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
-            $('body').append(divCarte);
-
-            var x = $('#' + carteMain).offset().left;
-            var y = $('#' + carteMain).offset().top;
-
-            $('#carte' + position).animate({
-                height: 180,
-                width: 118,
-                left: x,
-                top: y,
-                borderSpacing: 0,
-            }, {
-                step: function (now) {
-                    $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                    $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                    $(this).css('transform', 'rotate(' + now + 'deg)');
-                }
-            }, { duration: 500 });
-            setTimeout(function () {
-                $('#carte' + position).remove();
-                updateAffichageImage();
-            }, 500);
-        }
-
-        //Function qui melange le paquet de carte.
-        function melangerPaquetCarte(paquetCarte) {
-            var currentIndex = paquetCarte.length, temporaryValue, randomIndex;
-
-            // While there remain elements to shuffle...
-            while (0 !== currentIndex) {
-
-                // Pick a remaining element...
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex -= 1;
-
-                // And swap it with the current element.
-                temporaryValue = paquetCarte[currentIndex];
-                paquetCarte[currentIndex] = paquetCarte[randomIndex];
-                paquetCarte[randomIndex] = temporaryValue;
-            }
-        }
-
-        //function qui crée le paquet de carte.
-        function creerPaquetCarte(difficulte) {
-            var carte;
-            var paquetCarte = new Array();
-
-            //Dépendant du niveau de la partie, il n'y aura pas les mêmes cartes  dans le deck.
-            //if (tour == 1) {
-            //----------------------------------habitats-----------------------------------
-
-            carte = new Carte('habitats', 'fosse', 'fosse.png', 1, { habitats: 'fosse' });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('habitats', 'sable', 'sable.png', 1, { habitats: 'sable' });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('habitats', 'gravier', 'gravier.png', 2, { habitats: 'gravier' });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('habitats', 'rapides', 'rapides.png', 3, { habitats: 'rapides' });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('habitats', 'galets', 'galets.png', 3, { habitats: 'galets' });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            // ----------------------------MacroInvertebre--------------------------------------------------
-
-            carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.png', 1, { tolerance: 8, taille: 1, typeMacro: 'amelide', condition: ['?'], predateur: 0 });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('macroInvertebre', 'simuliidae', 'simuliidae.png', 1, { tolerance: 6, taille: 2, typeMacro: 'diptere', condition: ['rapides', 'galets'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'chironomidae', 'chironomidae.png', 1, { tolerance: 8, taille: 2, typeMacro: 'diptere', condition: ['?'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'psephenidae', 'psephenidae.png', 2, { tolerance: 3, taille: 4, typeMacro: 'coleoptere', condition: ['rapides', 'galets'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'hydropsychidae', 'hydropsychidae.png', 2, { tolerance: 5, taille: 4, typeMacro: 'trichoptere', condition: ['rapides'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'elmidae', 'elmidae.png', 2, { tolerance: 3, taille: 3, typeMacro: 'coleoptere', condition: ['rapides'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'baetidae', 'baetidae.png', 2, { tolerance: 5, taille: 3, typeMacro: 'ephemeroptere', condition: ['rapides'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'hydroptilidae', 'hydroptilidae.png', 2, { tolerance: 4, taille: 2, typeMacro: 'trichoptere', condition: ['rapides', 'sable', 'galets'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'ephemeridae', 'ephemeridae.png', 2, { tolerance: 3, taille: 5, typeMacro: 'ephemeroptere', condition: ['sable'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'prosobranchia', 'prosobranchia.png', 2, { tolerance: 8, taille: 5, typeMacro: 'mollusque', condition: ['?'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'sphaeridae', 'sphaeridae.png', 2, { tolerance: 5, taille: 3, typeMacro: 'mollusque', condition: ['rapides', 'gravier'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'anisoptera', 'anisoptera.png', 3, { tolerance: 5, taille: 6, typeMacro: 'odonate', condition: ['rapides'], predateur: 1 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'glossosomatidae', 'glossosomatidae.png', 3, { tolerance: 0, taille: 5, typeMacro: 'trichoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'heptageniidae', 'heptageniidae.png', 3, { tolerance: 2, taille: 4, typeMacro: 'ephemeroptere', condition: ['rapides', 'galets'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'ephemerellidae', 'ephemerellidae.png', 3, { tolerance: 1, taille: 4, typeMacro: 'ephemeroptere', condition: ['rapides', 'gravier'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'brachycentrus', 'brachycentrus.png', 3, { tolerance: 3, taille: 4, typeMacro: 'trichoptere', condition: ['rapides', 'galets'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'rhyacophilidae', 'rhyacophilidae.png', 4, { tolerance: 0, taille: 4, typeMacro: 'trichoptere', condition: ['rapides'], predateur: 1 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'tipulidae', 'tipulidae.png', 4, { tolerance: 3, taille: 8, typeMacro: 'diptere', condition: ['fosse'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'gyrinidae', 'gyrinidae.png', 4, { tolerance: 4, taille: 5, typeMacro: 'coleoptere', condition: ['fosse'], predateur: 1 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'perlidae', 'perlidae.png', 4, { tolerance: 1, taille: 5, typeMacro: 'plecoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 1 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'corydalidae', 'corydalidae.png', 5, { tolerance: 0, taille: 8, typeMacro: 'megaloptere', condition: ['rapides', 'gravier', 'galets'], predateur: 1 });
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'nepidae', 'nepidae.png', 6, { tolerance: 6, taille: 9, typeMacro: 'hemiptere', condition: ['fosse'], predateur: 1 });
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'decapoda', 'decapoda.png', 6, { tolerance: 5, taille: 10, typeMacro: 'crustace', condition: ['galets'], predateur: 0 });
-            paquetCarte.push(carte);
-
-            carte = new Carte('macroInvertebre', 'pteronarcyidae', 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: 'plecoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 0 });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            //}
-
-            //if (tour == 5) {
-            //---------------------------------salmonide---------------------------------
-
-            carte = new Carte('salmonide', 'ombleFontaine', 'ombleFontaine.png', 10, { tolerance: 4, condition: ['fosse', 'rapides', 'gravier', 'galets'], predateur: 2 });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            //---------------------------------bandeRiveraine----------------------------
-
-            carte = new Carte('bandeRiveraine', 'herbaceesNaturelles', 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('bandeRiveraine', 'arbustes', 'arbustes.png', 2);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('bandeRiveraine', 'arbres', 'arbres.png', 3);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            //}
-
-
-            //--------------------------perturbation--------------------------------------
-
-            carte = new Carte('perturbation', 'dechets', 'dechets.png', 2, { tempsActif: 0 });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('perturbation', 'erosion', 'erosion.png', 3, { tempsActif: 0 });
-            paquetCarte.push(carte);
-
-            carte = new Carte('perturbation', 'passageToutTerrain', 'passageToutTerrain.png', 3, { tempsActif: 1 });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('perturbation', 'artificialisation', 'artificialisation.png', 3, { tempsActif: 0 });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('perturbation', 'pollutionOrganique', 'pollutionOrganique.png', 4, { tempsActif: 2 });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('perturbation', 'deversement', 'deversement.png', 2, { tempsActif: 1 });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-
-            //--------------------------------reglementation----------------------------------------------
-
-            carte = new Carte('reglementation', 'assainissement', 'assainissement.png', 3);
-            paquetCarte.push(carte);
-
-            carte = new Carte('reglementation', 'interdiction', 'interdiction.png', 3);
-            paquetCarte.push(carte);
-
-            carte = new Carte('reglementation', 'politique', 'politique.png', 3);
-            paquetCarte.push(carte);
-
-            if (difficulte === 2)//Moyen
-            {
-
-                //---------------------------action--------------------------------------
-
-                carte = new Carte('action', 'corveNettoyage', 'corveNettoyage.png', 1);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('action', 'naturalisation', 'naturalisation.png', 2);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('action', 'amenagement', 'amenagement.png', 3);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                //---------------------------------intervention------------------------------
-
-                carte = new Carte('intervention', 'habitatAmenageSable', 'habitatAmenageSable.png', 1, { habitats: 'sable' });
-                paquetCarte.push(carte);
-
-                carte = new Carte('intervention', 'habitatAmenageRapides', 'habitatAmenageRapides.png', 1, { habitats: 'rapides' });
-                paquetCarte.push(carte);
-
-                carte = new Carte('intervention', 'habitatAmenageFosse', 'habitatAmenageFosse.png', 1, { habitats: 'fosse' });
-                paquetCarte.push(carte);
-
-                carte = new Carte('intervention', 'habitatAmenageGalets', 'habitatAmenageGalets.png', 1, { habitats: 'galets' });
-                paquetCarte.push(carte);
-
-                carte = new Carte('intervention', 'habitatAmenageGravier', 'habitatAmenageGravier.png', 1, { habitats: 'gravier' });
-                paquetCarte.push(carte);
-
-                carte = new Carte('intervention', 'bandeRiveraineHerbace', 'bandeRiveraineHerbace.png', 1);
-                paquetCarte.push(carte);
-
-                carte = new Carte('intervention', 'bandeRiveraineArbustes', 'bandeRiveraineArbuste.png', 2);
-                paquetCarte.push(carte);
-
-                carte = new Carte('intervention', 'bandeRiveraineArbres', 'bandeRiveraineArbre.png', 3);
-                paquetCarte.push(carte);
-            }
-
-            if (difficulte >= 3)//Difficile
-            {
-                //-----------------------------------speciale--------------------------------
-
-                carte = new Carte('speciale', 'prisSurFait', 'prisSurFait.png', 0);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('speciale', 'pecheur', 'pecheur.png', 0);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('speciale', 'crueSoudaine', 'crueSoudaine.png', 0);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('speciale', 'zonage', 'zonage.png', 0);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('speciale', 'retention', 'retention.png', 0);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('speciale', 'emergence', 'emergence.png', 0);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('speciale', 'derivation', 'derivation.png', 0);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('speciale', 'accumulation', 'accumulation.png', 0);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-
-                carte = new Carte('speciale', 'predation', 'predation.png', 0);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-                paquetCarte.push(carte);
-            }
-            return paquetCarte;
-        }
-
-        //Fonction appelé pour défausser les cartes suplémentaires de la main.
-        function defausserCarte() {
-            var cartesDefausse = new Array();
-            var buttonDefausser = document.createElement('button');
-            buttonDefausser.id = 'buttonDefausser';
-            buttonDefausser.className = 'buttonJeu';
-            buttonDefausser.innerHTML = '<p>Défausser</p>';
-            buttonDefausser.onclick = function () {
-                onClickButtonDefausse(cartesDefausse);
-            };
-            $('.divMain').append(buttonDefausser);
-
-            var plateauGrise = document.createElement('div');
-            plateauGrise.id = 'plateauGrise';
-            plateauGrise.className = 'zoneGrise'
-            $('#plateau').append(plateauGrise);
-            var divDroiteGrise = document.createElement('div');
-            divDroiteGrise.id = 'divDroiteGrise';
-            divDroiteGrise.className = 'zoneGrise'
-            $('#divDroite').append(divDroiteGrise);
-
-            $('#divDroite').css('pointer-events', 'none');
-            $('#plateau').css('pointer-events', 'none');
-            $('#divMain').addClass('divMainDefausse');
-            $('.imageCarteMains').draggable('disable');
-
-            mains[numeroJoueurActif].forEach(function (item, index) {
-                $('#divCarte' + index).click(function () {
-                    if (cartesDefausse[index] != null) {
-                        cartesDefausse[index] = null;
-                        $(this).removeAttr('style');
+            //Fonction qui se produit lorsque l'on drop.
+            function onDrop(event, ui, drop) {
+                $(function () {
+                    if (carteDrag.type != 'perturbation') {
+                        $(ui.draggable).click(function () { onClickImage($(this).parent().attr('id'), ui) });
+                    }
+                    ui.draggable.appendTo(drop);
+                    ui.draggable.addClass('imageCarteJeu');
+                    ui.draggable.removeClass('imageCarteMains');
+                    ui.draggable.css('width', '58px');
+                    ui.draggable.css('height', '90px');
+                    ui.draggable.css('top', '0px');
+                    ui.draggable.css('left', '0px');
+                    ui.draggable.draggable('disable');
+                    if ($(drop).children().length > 1) {
+                        ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
+                        exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = $(drop).children().length;
                     }
                     else {
-                        $(this).css('-moz-box-shadow', '0 0 15px 10px #fff');
-                        $(this).css('-webkit-box-shadow', '0 0 15px 10px #fff');
-                        $(this).css('box-shadow', '0px 0px 15px 10px #fff');
-                        cartesDefausse[index] = mains[numeroJoueurActif][index];
+                        exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = 1;
                     }
+                    //Partie qui change les données de la mains vers la partie du bas.
+                    pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutResources;
+                    pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutResources;
+                    updatePointsRessources();
+                    var id = drop.id.substr(drop.id.length - 1);
+                    carteBas[numeroJoueurActif][id] = carteDrag;
+                    supprimerCartePrecise(carteDragNumero);
+                    calculerPoints();
+                    updateZonePoints();
                 });
-            });
-        }
+            }
 
-        //Fonction appelé lors d'un clic sur le bouton Défausser.
-        function onClickButtonDefausse(cartesDefausse) {
-            sizeMain = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
-            sizeADefausse = cartesDefausse.filter(function (value) { return value !== null }).length;
-            if ((sizeMain - sizeADefausse) === 4) {
-                if (sizeADefausse != 0) {
-                    cartesDefausse.forEach(function (item, index) {
-                        if (item != null) {
-                            paquetDecharge.push(item);
-                            mains[numeroJoueurActif][index] = null;
-                            var image = $('#divCarte' + index).children();
-                            var x = ($('#paquetDefausse').offset().left) - ($(image).offset().left);
-                            var y = ($('#paquetDefausse').offset().top) - ($(image).offset().top);
-                            $(image).animate({
-                                height: 91,
-                                width: 59,
-                                left: x,
-                                top: y,
-                                borderSpacing: 45
-                            }, {
-                                step: function (now, fx) {
-                                    $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                                    $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                                    $(this).css('transform', 'rotate(' + now + 'deg)');
-                                }
-                            }, { duration: 500 });
-                            setTimeout(function () {
-                                $(image).remove();
-                                if ($('#paquetDefausse').children().length > 0) {
-                                    $('#paquetDefausse').children().remove();
-                                }
-                                var imageDecharge = document.createElement('img');
-                                imageDecharge.src = 'ressources/' + paquetDecharge[paquetDecharge.length - 1].nomImage;
-                                imageDecharge.className = 'imageCarteJeu';
-                                $('#paquetDefausse').append(imageDecharge);
-                            }, 500);
-                        }
-                    });
-                    $('#plateauGrise').remove();
-                    $('#divDroiteGrise').remove();
-                    $('#divDroite').css('pointer-events', 'auto');
-                    $('#plateau').css('pointer-events', 'auto');
-                    $('.imageCarteMains').draggable('enable');
-                    $('divMain').removeClass('divMainDefausse');
-                    mains[numeroJoueurActif].forEach(function (item, index) {
-                        $('#divCarte' + index).removeAttr('style');
-                        $('#divCarte' + index).off('click');
-                    });
-                    $('#buttonDefausser').remove();
-                    setTimeout(function () {
-                        passerTour();
-                    }, 600);
-                }
-                else {
-                    popUpAvertissement('Selectionner d\'abord la/les carte(s) à défausser');
-                }
+            //Fonction qui va supprimer une carte de la main, appeler lors du drop dans la zone du bas.
+            function supprimerCartePrecise(positionCarte) {
+                mains[numeroJoueurActif][positionCarte] = null;
             }
-            else if ((sizeMain - sizeADefausse) > 4) {
-                popUpErreur('Vous n\'avez pas sélectionné assez de cartes à défausser');
-            }
-            else {
-                popUpErreur('Vous avez sélectionné trop de cartes à défausser');
-            }
-        }
 
-        //Fonction appelé lors d'un clic sur le boutton Passer son tour.
-        function passerTour() {
-            var size = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
-
-            //if (size > 4) {
-            //    defausserCarte();
-            //} else {
-            $('#buttonPasserTour').prop('disabled', true);
-            if (nombreJoueur === 4) {
-                facteurRotation += 1;
-                if (facteurRotation > 4) {
-                    facteurRotation = 1;
-                }
-            }
-            else if (nombreJoueur === 2) {
-                facteurRotation += 2;
-                if (facteurRotation > 4) {
-                    facteurRotation = 2
-                }
-            }
-            else if (nombreJoueur === 3) {
-                facteurRotation += 1;
-                if (facteurRotation > 4) {
-                    facteurRotation = 1;
-                }
-                if (facteurRotation === 1) {
-                    facteurRotation += 1;
+            //Définition de la classe.
+            function Carte(type, nom, nomImage, coutResources, params) {
+                if (type === 'habitats') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.habitats = params.habitats;
+                    this.coutResources = coutResources;
+                    this.nomImage = nomImage;
+                    this.perturber = false;
+                    this.tempsPerturber = 0;
+                } else if (type === 'salmonide') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.coutResources = coutResources;
+                    this.condition = params.condition;
+                    this.nomImage = nomImage;
+                    this.perturber = false;
+                    this.tempsPerturber = 0;
+                } else if (type === 'bandeRiveraine') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.coutResources = coutResources;
+                    this.nomImage = nomImage;
+                    this.perturber = false;
+                    this.tempsPerturber = 0;
+                } else if (type === 'speciale') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.nomImage = nomImage;
+                    this.coutResources = coutResources;
+                } else if (type === 'speciale') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.nomImage = nomImage;
+                    this.coutResources = coutResources;
+                } else if (type === 'action') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.nomImage = nomImage;
+                    this.coutResources = coutResources;
+                } else if (type === 'perturbation') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.nomImage = nomImage;
+                    this.coutResources = coutResources;
+                    this.tempsActif = params.tempsActif;
+                } else if (type === 'reglementation') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.nomImage = nomImage;
+                    this.coutResources = coutResources;
+                } else if (type === 'macroInvertebre') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.nomImage = nomImage;
+                    this.coutResources = coutResources;
+                    this.tolerance = params.tolerance;
+                    this.taille = params.taille;
+                    this.predateur = params.predateur;
+                    this.typeMacro = params.typeMacro;
+                    this.condition = params.condition;
+                    this.perturber = false;
+                    this.tempsPerturber = 0;
+                } else if (type === 'intervention') {
+                    this.nom = nom;
+                    this.type = type;
+                    this.nomImage = nomImage;
+                    this.coutResources = coutResources;
                 }
             }
 
-            var angleRotationDebut = (90 * (facteurRotation - 1));
-            var angleRotationFin = (90 * facteurRotation);
-
-            var $plateau = $('#plateau');
-            $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
-                duration: 1000,
-                step: function (now) {
-                    $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
-                    $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
-                    $plateau.css('transform', 'rotate(' + now + 'deg)');
+            //function pour piger une carte.
+            function pigerCarte(paquetCarte) {
+                var carte = paquetCarte.pop();
+                if (paquetCarte.length <= 70) {
+                    $('.imageCharge').attr('src', 'ressources/moyenPaquet.png');
                 }
-            });
+                if (paquetCarte.length <= 20) {
+                    $('.imageCharge').attr('src', 'ressources/petitPaquet.png')
+                }
 
-            if (deversement) {
-                if (numeroJoueurActif === numeroJoueurDeversement) {
-                    tempsDeversement--;
-                    if (tempsDeversement === 0) {
-                        tuerDeversement();
+                return carte;
+            }
+
+            //Fonction qui anime les cartes du paquet jusqu'à la main.
+            function animationPige(carte, position) {
+                var carteMain = 'divCarte' + position;
+
+                var divCarte = document.createElement('div');
+                divCarte.id = 'carte' + position;
+                divCarte.className = 'divAnimee';
+                divCarte.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
+                $('body').append(divCarte);
+
+                var x = $('#' + carteMain).offset().left;
+                var y = $('#' + carteMain).offset().top;
+
+                $('#carte' + position).animate({
+                    height: 180,
+                    width: 118,
+                    left: x,
+                    top: y,
+                    borderSpacing: 0,
+                }, {
+                    step: function (now) {
+                        $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                        $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
                     }
+                }, { duration: 500 });
+                setTimeout(function () {
+                    $('#carte' + position).remove();
+                    updateAffichageImage();
+                }, 500);
+            }
+
+            //Function qui melange le paquet de carte.
+            function melangerPaquetCarte(paquetCarte) {
+                var currentIndex = paquetCarte.length, temporaryValue, randomIndex;
+
+                // While there remain elements to shuffle...
+                while (0 !== currentIndex) {
+
+                    // Pick a remaining element...
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex -= 1;
+
+                    // And swap it with the current element.
+                    temporaryValue = paquetCarte[currentIndex];
+                    paquetCarte[currentIndex] = paquetCarte[randomIndex];
+                    paquetCarte[randomIndex] = temporaryValue;
                 }
             }
 
-            numeroJoueurActif++;
-            if (numeroJoueurActif === nombreJoueur) {
-                numeroJoueurActif = 0;
-            }
+            //function qui crée le paquet de carte.
+            function creerPaquetCarte(difficulte) {
+                var carte;
+                var paquetCarte = new Array();
 
-            setTimeout(function () {
-                $('#buttonPasserTour').prop('disabled', false);
-            }, 2000);
+                //Dépendant du niveau de la partie, il n'y aura pas les mêmes cartes  dans le deck.
+                //if (tour == 1) {
+                //----------------------------------habitats-----------------------------------
 
-            tour++;
-            remplirMain();
-            updateJeu();
-            updateAffichageImage();
-            popUpDebutTour(numeroJoueurActif);
-            debutTourDeperturber();
+                carte = new Carte('habitats', 'fosse', 'fosse.png', 1, { habitats: 'fosse' });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
 
-            //}
-        }
+                carte = new Carte('habitats', 'sable', 'sable.png', 1, { habitats: 'sable' });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
 
-        //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
-        function pointsRessourcesAdditionel() {
-            //Variable qui contiendra le nombre de bande riveraine.
-            var nombreBandeRiveraine = 0;
-            //Variable des bandes riveraine différente si chacune est présente.
-            var arbres = 0;
-            var arbustes = 0;
-            var herbace = 0;
+                carte = new Carte('habitats', 'gravier', 'gravier.png', 2, { habitats: 'gravier' });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
 
-            for (var i = 0; i < 10; i++) {
-                if (carteBas[numeroJoueurActif][i] != null) {
-                    if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
-                        nombreBandeRiveraine++;
+                carte = new Carte('habitats', 'rapides', 'rapides.png', 3, { habitats: 'rapides' });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
 
-                        if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
-                            herbace = 1;
-                        }
-                        else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
-                            arbuste = 1;
-                        }
-                        else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
-                            arbres = 1;
-                        }
-                    }
+                carte = new Carte('habitats', 'galets', 'galets.png', 3, { habitats: 'galets' });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+                // ----------------------------MacroInvertebre--------------------------------------------------
+
+                carte = new Carte('macroInvertebre', 'oligochaeta', 'oligochaeta.png', 1, { tolerance: 8, taille: 1, typeMacro: 'amelide', condition: ['?'], predateur: 0 });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+                carte = new Carte('macroInvertebre', 'simuliidae', 'simuliidae.png', 1, { tolerance: 6, taille: 2, typeMacro: 'diptere', condition: ['rapides', 'galets'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'chironomidae', 'chironomidae.png', 1, { tolerance: 8, taille: 2, typeMacro: 'diptere', condition: ['?'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'psephenidae', 'psephenidae.png', 2, { tolerance: 3, taille: 4, typeMacro: 'coleoptere', condition: ['rapides', 'galets'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'hydropsychidae', 'hydropsychidae.png', 2, { tolerance: 5, taille: 4, typeMacro: 'trichoptere', condition: ['rapides'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'elmidae', 'elmidae.png', 2, { tolerance: 3, taille: 3, typeMacro: 'coleoptere', condition: ['rapides'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'baetidae', 'baetidae.png', 2, { tolerance: 5, taille: 3, typeMacro: 'ephemeroptere', condition: ['rapides'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'hydroptilidae', 'hydroptilidae.png', 2, { tolerance: 4, taille: 2, typeMacro: 'trichoptere', condition: ['rapides', 'sable', 'galets'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'ephemeridae', 'ephemeridae.png', 2, { tolerance: 3, taille: 5, typeMacro: 'ephemeroptere', condition: ['sable'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'prosobranchia', 'prosobranchia.png', 2, { tolerance: 8, taille: 5, typeMacro: 'mollusque', condition: ['?'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'sphaeridae', 'sphaeridae.png', 2, { tolerance: 5, taille: 3, typeMacro: 'mollusque', condition: ['rapides', 'gravier'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'anisoptera', 'anisoptera.png', 3, { tolerance: 5, taille: 6, typeMacro: 'odonate', condition: ['rapides'], predateur: 1 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'glossosomatidae', 'glossosomatidae.png', 3, { tolerance: 0, taille: 5, typeMacro: 'trichoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'heptageniidae', 'heptageniidae.png', 3, { tolerance: 2, taille: 4, typeMacro: 'ephemeroptere', condition: ['rapides', 'galets'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'ephemerellidae', 'ephemerellidae.png', 3, { tolerance: 1, taille: 4, typeMacro: 'ephemeroptere', condition: ['rapides', 'gravier'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'brachycentrus', 'brachycentrus.png', 3, { tolerance: 3, taille: 4, typeMacro: 'trichoptere', condition: ['rapides', 'galets'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'rhyacophilidae', 'rhyacophilidae.png', 4, { tolerance: 0, taille: 4, typeMacro: 'trichoptere', condition: ['rapides'], predateur: 1 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'tipulidae', 'tipulidae.png', 4, { tolerance: 3, taille: 8, typeMacro: 'diptere', condition: ['fosse'], predateur: 0 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'gyrinidae', 'gyrinidae.png', 4, { tolerance: 4, taille: 5, typeMacro: 'coleoptere', condition: ['fosse'], predateur: 1 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'perlidae', 'perlidae.png', 4, { tolerance: 1, taille: 5, typeMacro: 'plecoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 1 });
+                paquetCarte.push(carte)
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'corydalidae', 'corydalidae.png', 5, { tolerance: 0, taille: 8, typeMacro: 'megaloptere', condition: ['rapides', 'gravier', 'galets'], predateur: 1 });
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'nepidae', 'nepidae.png', 6, { tolerance: 6, taille: 9, typeMacro: 'hemiptere', condition: ['fosse'], predateur: 1 });
+                paquetCarte.push(carte)
+
+                carte = new Carte('macroInvertebre', 'decapoda', 'decapoda.png', 6, { tolerance: 5, taille: 10, typeMacro: 'crustace', condition: ['galets'], predateur: 0 });
+                paquetCarte.push(carte);
+
+                carte = new Carte('macroInvertebre', 'pteronarcyidae', 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: 'plecoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 0 });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                //}
+
+                //if (tour == 5) {
+                //---------------------------------salmonide---------------------------------
+
+                carte = new Carte('salmonide', 'ombleFontaine', 'ombleFontaine.png', 10, { tolerance: 4, condition: ['fosse', 'rapides', 'gravier', 'galets'], predateur: 2 });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+                //---------------------------------bandeRiveraine----------------------------
+
+                carte = new Carte('bandeRiveraine', 'herbaceesNaturelles', 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+                carte = new Carte('bandeRiveraine', 'arbustes', 'arbustes.png', 2);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+                carte = new Carte('bandeRiveraine', 'arbres', 'arbres.png', 3);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                //}
+
+
+                //--------------------------perturbation--------------------------------------
+
+                carte = new Carte('perturbation', 'dechets', 'dechets.png', 2, { tempsActif: 0 });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+                carte = new Carte('perturbation', 'erosion', 'erosion.png', 3, { tempsActif: 0 });
+                paquetCarte.push(carte);
+
+                carte = new Carte('perturbation', 'passageToutTerrain', 'passageToutTerrain.png', 3, { tempsActif: 1 });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+                carte = new Carte('perturbation', 'artificialisation', 'artificialisation.png', 3, { tempsActif: 0 });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+                carte = new Carte('perturbation', 'pollutionOrganique', 'pollutionOrganique.png', 4, { tempsActif: 2 });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+                carte = new Carte('perturbation', 'deversement', 'deversement.png', 2, { tempsActif: 1 });
+                paquetCarte.push(carte);
+                paquetCarte.push(carte);
+
+
+                //--------------------------------reglementation----------------------------------------------
+
+                carte = new Carte('reglementation', 'assainissement', 'assainissement.png', 3);
+                paquetCarte.push(carte);
+
+                carte = new Carte('reglementation', 'interdiction', 'interdiction.png', 3);
+                paquetCarte.push(carte);
+
+                carte = new Carte('reglementation', 'politique', 'politique.png', 3);
+                paquetCarte.push(carte);
+
+                if (difficulte === 2)//Moyen
+                {
+
+                    //---------------------------action--------------------------------------
+
+                    carte = new Carte('action', 'corveNettoyage', 'corveNettoyage.png', 1);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('action', 'naturalisation', 'naturalisation.png', 2);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('action', 'amenagement', 'amenagement.png', 3);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    //---------------------------------intervention------------------------------
+
+                    carte = new Carte('intervention', 'habitatAmenageSable', 'habitatAmenageSable.png', 1, { habitats: 'sable' });
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('intervention', 'habitatAmenageRapides', 'habitatAmenageRapides.png', 1, { habitats: 'rapides' });
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('intervention', 'habitatAmenageFosse', 'habitatAmenageFosse.png', 1, { habitats: 'fosse' });
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('intervention', 'habitatAmenageGalets', 'habitatAmenageGalets.png', 1, { habitats: 'galets' });
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('intervention', 'habitatAmenageGravier', 'habitatAmenageGravier.png', 1, { habitats: 'gravier' });
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('intervention', 'bandeRiveraineHerbace', 'bandeRiveraineHerbace.png', 1);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('intervention', 'bandeRiveraineArbustes', 'bandeRiveraineArbuste.png', 2);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('intervention', 'bandeRiveraineArbres', 'bandeRiveraineArbre.png', 3);
+                    paquetCarte.push(carte);
                 }
+
+                if (difficulte >= 3)//Difficile
+                {
+                    //-----------------------------------speciale--------------------------------
+
+                    carte = new Carte('speciale', 'prisSurFait', 'prisSurFait.png', 0);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('speciale', 'pecheur', 'pecheur.png', 0);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('speciale', 'crueSoudaine', 'crueSoudaine.png', 0);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('speciale', 'zonage', 'zonage.png', 0);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('speciale', 'retention', 'retention.png', 0);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('speciale', 'emergence', 'emergence.png', 0);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('speciale', 'derivation', 'derivation.png', 0);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('speciale', 'accumulation', 'accumulation.png', 0);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+
+                    carte = new Carte('speciale', 'predation', 'predation.png', 0);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                    paquetCarte.push(carte);
+                }
+                return paquetCarte;
             }
 
-            if (nombreBandeRiveraine > 3) {
-                nombreBandeRiveraine = 3;
-            }
-            if (arbres === 1 && arbustes === 1 && herbace === 1) {
-                nombreBandeRiveraine = 5;
-            }
+            //Fonction appelé pour défausser les cartes suplémentaires de la main.
+            function defausserCarte() {
+                var cartesDefausse = new Array();
+                var buttonDefausser = document.createElement('button');
+                buttonDefausser.id = 'buttonDefausser';
+                buttonDefausser.className = 'buttonJeu';
+                buttonDefausser.innerHTML = '<p>Défausser</p>';
+                buttonDefausser.onclick = function () {
+                    onClickButtonDefausse(cartesDefausse);
+                };
+                $('.divMain').append(buttonDefausser);
 
-            return nombreBandeRiveraine;
-        }
+                var plateauGrise = document.createElement('div');
+                plateauGrise.id = 'plateauGrise';
+                plateauGrise.className = 'zoneGrise'
+                $('#plateau').append(plateauGrise);
+                var divDroiteGrise = document.createElement('div');
+                divDroiteGrise.id = 'divDroiteGrise';
+                divDroiteGrise.className = 'zoneGrise'
+                $('#divDroite').append(divDroiteGrise);
 
-        //Fonction qui remet les dimensions de la carte à son état original.
-        function revertCarte(event, ui) {
-            $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').removeClass('droppable-hover');
-            if (event != false) {
-                var id;
-                console.log(event);
-                id = $(event).attr('id').substr($(event).attr('id').length - 1);
-                if (bonneZoneDrop(event)) {
-                    if (accepterDrop(event)) {
-                        if ($(event).children().length >= 1) {
-                            console.log(carteDrag.nom);
-                            console.log(carteBas[numeroJoueurActif][id].nom)
-                            if (carteDrag.nom != carteBas[numeroJoueurActif][id].nom) {
-                                $(ui).stop();
-                                $(ui).animate({
-                                    height: 180,
-                                    width: 118
-                                }, { duration: 200, queue: false });
+                $('#divDroite').css('pointer-events', 'none');
+                $('#plateau').css('pointer-events', 'none');
+                $('#divMain').addClass('divMainDefausse');
+                $('.imageCarteMains').draggable('disable');
 
-                                return true;
-                            } else {
-                                return false;
-                            }
+                mains[numeroJoueurActif].forEach(function (item, index) {
+                    $('#divCarte' + index).click(function () {
+                        if (cartesDefausse[index] != null) {
+                            cartesDefausse[index] = null;
+                            $(this).removeAttr('style');
                         }
                         else {
-                            return false;
+                            $(this).css('-moz-box-shadow', '0 0 15px 10px #fff');
+                            $(this).css('-webkit-box-shadow', '0 0 15px 10px #fff');
+                            $(this).css('box-shadow', '0px 0px 15px 10px #fff');
+                            cartesDefausse[index] = mains[numeroJoueurActif][index];
+                        }
+                    });
+                });
+            }
+
+            //Fonction appelé lors d'un clic sur le bouton Défausser.
+            function onClickButtonDefausse(cartesDefausse) {
+                sizeMain = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
+                sizeADefausse = cartesDefausse.filter(function (value) { return value !== null }).length;
+                if ((sizeMain - sizeADefausse) === 4) {
+                    if (sizeADefausse != 0) {
+                        cartesDefausse.forEach(function (item, index) {
+                            if (item != null) {
+                                paquetDecharge.push(item);
+                                mains[numeroJoueurActif][index] = null;
+                                var image = $('#divCarte' + index).children();
+                                var x = ($('#paquetDefausse').offset().left) - ($(image).offset().left);
+                                var y = ($('#paquetDefausse').offset().top) - ($(image).offset().top);
+                                $(image).animate({
+                                    height: 91,
+                                    width: 59,
+                                    left: x,
+                                    top: y,
+                                    borderSpacing: 45
+                                }, {
+                                    step: function (now, fx) {
+                                        $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                                        $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                                    }
+                                }, { duration: 500 });
+                                setTimeout(function () {
+                                    $(image).remove();
+                                    if ($('#paquetDefausse').children().length > 0) {
+                                        $('#paquetDefausse').children().remove();
+                                    }
+                                    var imageDecharge = document.createElement('img');
+                                    imageDecharge.src = 'ressources/' + paquetDecharge[paquetDecharge.length - 1].nomImage;
+                                    imageDecharge.className = 'imageCarteJeu';
+                                    $('#paquetDefausse').append(imageDecharge);
+                                }, 500);
+                            }
+                        });
+                        $('#plateauGrise').remove();
+                        $('#divDroiteGrise').remove();
+                        $('#divDroite').css('pointer-events', 'auto');
+                        $('#plateau').css('pointer-events', 'auto');
+                        $('.imageCarteMains').draggable('enable');
+                        $('divMain').removeClass('divMainDefausse');
+                        mains[numeroJoueurActif].forEach(function (item, index) {
+                            $('#divCarte' + index).removeAttr('style');
+                            $('#divCarte' + index).off('click');
+                        });
+                        $('#buttonDefausser').remove();
+                        setTimeout(function () {
+                            passerTour();
+                        }, 600);
+                    }
+                    else {
+                        popUpAvertissement('Selectionner d\'abord la/les carte(s) à défausser');
+                    }
+                }
+                else if ((sizeMain - sizeADefausse) > 4) {
+                    popUpErreur('Vous n\'avez pas sélectionné assez de cartes à défausser');
+                }
+                else {
+                    popUpErreur('Vous avez sélectionné trop de cartes à défausser');
+                }
+            }
+
+            //Fonction appelé lors d'un clic sur le boutton Passer son tour.
+            function passerTour() {
+                var size = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
+
+                //if (size > 4) {
+                //    defausserCarte();
+                //} else {
+                $('#buttonPasserTour').prop('disabled', true);
+                if (nombreJoueur === 4) {
+                    facteurRotation += 1;
+                    if (facteurRotation > 4) {
+                        facteurRotation = 1;
+                    }
+                }
+                else if (nombreJoueur === 2) {
+                    facteurRotation += 2;
+                    if (facteurRotation > 4) {
+                        facteurRotation = 2
+                    }
+                }
+                else if (nombreJoueur === 3) {
+                    facteurRotation += 1;
+                    if (facteurRotation > 4) {
+                        facteurRotation = 1;
+                    }
+                    if (facteurRotation === 1) {
+                        facteurRotation += 1;
+                    }
+                }
+
+                var angleRotationDebut = (90 * (facteurRotation - 1));
+                var angleRotationFin = (90 * facteurRotation);
+
+                var $plateau = $('#plateau');
+                $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
+                    duration: 1000,
+                    step: function (now) {
+                        $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
+                        $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
+                        $plateau.css('transform', 'rotate(' + now + 'deg)');
+                    }
+                });
+
+                if (deversement) {
+                    if (numeroJoueurActif === numeroJoueurDeversement) {
+                        tempsDeversement--;
+                        if (tempsDeversement === 0) {
+                            tuerDeversement();
+                        }
+                    }
+                }
+
+                numeroJoueurActif++;
+                if (numeroJoueurActif === nombreJoueur) {
+                    numeroJoueurActif = 0;
+                }
+
+                setTimeout(function () {
+                    $('#buttonPasserTour').prop('disabled', false);
+                }, 2000);
+
+                tour++;
+                remplirMain();
+                updateJeu();
+                updateAffichageImage();
+                popUpDebutTour(numeroJoueurActif);
+                debutTourDeperturber();
+
+                //}
+            }
+
+            //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
+            function pointsRessourcesAdditionel() {
+                //Variable qui contiendra le nombre de bande riveraine.
+                var nombreBandeRiveraine = 0;
+                //Variable des bandes riveraine différente si chacune est présente.
+                var arbres = 0;
+                var arbustes = 0;
+                var herbace = 0;
+
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[numeroJoueurActif][i] != null) {
+                        if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
+                            nombreBandeRiveraine++;
+
+                            if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
+                                herbace = 1;
+                            }
+                            else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
+                                arbuste = 1;
+                            }
+                            else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
+                                arbres = 1;
+                            }
+                        }
+                    }
+                }
+
+                if (nombreBandeRiveraine > 3) {
+                    nombreBandeRiveraine = 3;
+                }
+                if (arbres === 1 && arbustes === 1 && herbace === 1) {
+                    nombreBandeRiveraine = 5;
+                }
+
+                return nombreBandeRiveraine;
+            }
+
+            //Fonction qui remet les dimensions de la carte à son état original.
+            function revertCarte(event, ui) {
+                $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').removeClass('droppable-hover');
+                if (event != false) {
+                    var id;
+                    id = $(event).attr('id').substr($(event).attr('id').length - 1);
+                    if (bonneZoneDrop(event)) {
+                        if (accepterDrop(event)) {
+                            if ($(event).children().length >= 1) {
+                                if (carteDrag.nom != carteBas[numeroJoueurActif][id].nom) {
+                                    $(ui).stop();
+                                    $(ui).animate({
+                                        height: 180,
+                                        width: 118
+                                    }, { duration: 200, queue: false });
+
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            }
+                            else {
+                                return false;
+                            }
+                        } else {
+                            $(ui).stop();
+                            $(ui).animate({
+                                height: 180,
+                                width: 118
+                            }, { duration: 200, queue: false });
+
+                            return true;
                         }
                     } else {
                         $(ui).stop();
@@ -2615,230 +2743,221 @@
                         height: 180,
                         width: 118
                     }, { duration: 200, queue: false });
-
                     return true;
                 }
-            } else {
-                $(ui).stop();
-                $(ui).animate({
-                    height: 180,
-                    width: 118
-                }, { duration: 200, queue: false });
-                return true;
             }
-        }
 
-        //Fonction pour appeler le pop-up d'erreur.
-        function popUpErreur(texte) {
-            $('#divTexteErreur').text(texte);
-            $('#divErreur').dialog({
-                classes: {
-                    'ui-dialog': 'ui-state-error ui-corner-all',
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 600,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        //Fonction pour appeler le pop-up d'avertissement.
-        function popUpAvertissement(texte) {
-            $('#divTexteErreur').text(texte);
-            $('#divErreur').dialog({
-                classes: {
-                    'ui-dialog': 'ui-state-highlight ui-corner-all',
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 600,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        //Fonction pour appeler le pop-up de confirmation.
-        function popUpConfirmation(texte) {
-            $('#divTexteErreur').text(texte);
-            $('#divErreur').dialog({
-                classes: {
-                    'ui-dialog': 'popUpConfirmation ui-state-highlight ui-corner-all',
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 600,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        //Fonction qui appelle un pop-up qui indique le debut du tour d'un joueur
-        function popUpDebutTour(numeroJoueur) {
-            joueur = nomJoueur[numeroJoueur];
-            $('#divTexteDebutTour').text('Début du tour de ' + joueur + '.');
-            $('#divDebutTour').dialog({
-                classes: {
-                    'ui-dialog': 'popUpDebutTour ui-corner-all',
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 400,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        //Fonction qui appelle un pop-up qui permet au joueur de choisir parmis plusieurs options
-        function popUpChoixMultiple(tableauBouton) {
-            $('#divTexteChoixMultiple').text('Début du tour de ' + joueur + '.');
-            var tabButtons = new Array(tableauBouton.length);
-            tabButtons.forEach(function (item, index) {
-                tabButtons[index].item = { text: tableauBouton[index][0].item, click: tableauBouton[index][1].item }
-            });
-            $('#divChoixMultiple').dialog({
-                classes: {
-                    'ui-dialog': 'popUpDebutTour ui-corner-all',
-                },
-                draggable: false,
-                resizable: false,
-                height: 150,
-                width: 400,
-                hide: 'fade',
-                show: 'fade',
-                buttons: tabButtons
-            });
-        }
-
-        //Fonction qui "update" le jeu.
-        function updateJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 20;
-            pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
-            pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
-            pointsRessourcesUtiliser[numeroJoueurActif] = 0;
-            pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif];
-
-            updatePointsRessources();
-        }
-
-        //Fonction qui "update" l'affichage des images.
-        function updateAffichageImage() {
-            for (i = 0; i < 6; i++) {
-                carteMain = document.getElementById('divCarte' + i)
-                if (carteMain.children.length != 0) {
-                    carteMain.removeChild(carteMain.firstChild);
-                }
-
-                if (mains[numeroJoueurActif][i] != null) {
-                    var image = document.createElement('img');
-                    var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
-                    image.className = 'imageCarteMains';
-                    image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
-                    carteMain.appendChild(image);
-                    $(image).tooltip({
-                        items: 'img',
-                        content: cloneImage,
-                        position: { my: "right" },
-                        show: { delay: 1000 }
-                    });
-                }
-            }
-            $(function () {
-                $('.imageCarteMains').draggable({
-                    start: function () {
-                        $(this).animate({
-                            height: 90,
-                            width: 58
-                        }, { duration: 400, queue: false }
-                        );
-                        var id;
-                        id = event.target.parentNode.id.substr(event.target.id.length - 1);
-
-                        //Les if qui vont envoyer l'objet carte dans la variable.
-                        carteDrag = mains[numeroJoueurActif][id];
-                        carteDragNumero = id;
+            //Fonction pour appeler le pop-up d'erreur.
+            function popUpErreur(texte) {
+                $('#divTexteErreur').text(texte);
+                $('#divErreur').dialog({
+                    classes: {
+                        'ui-dialog': 'ui-state-error ui-corner-all',
                     },
-                    drag: function () {
-                        $('.ui-tooltip').hide();
-                    },
-                    revert: function (socketObj) {
-                        return revertCarte(socketObj, this);
-                    },
-                    revertDuration: 400,
-                    cursorAt: { top: 45, left: 29 }
+                    draggable: false,
+                    resizable: false,
+                    height: 80,
+                    width: 600,
+                    hide: 'fade',
+                    show: 'fade'
                 });
-            });
-        }
+            }
 
-        //Fonction qui update après avoir jouer une carte.
-        function updatePointsRessources() {
-            //   $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
-            //TODO: À clou: reste juste à modifier la partie de droite pour afficher les différentes variables de points ressources et
-            // a update dans cette fonction les text. La fonction est déjà appeler correctement :p
-        }
+            //Fonction pour appeler le pop-up d'avertissement.
+            function popUpAvertissement(texte) {
+                $('#divTexteErreur').text(texte);
+                $('#divErreur').dialog({
+                    classes: {
+                        'ui-dialog': 'ui-state-highlight ui-corner-all',
+                    },
+                    draggable: false,
+                    resizable: false,
+                    height: 80,
+                    width: 600,
+                    hide: 'fade',
+                    show: 'fade'
+                });
+            }
 
-        //Fonction qui calcule les points de chaque joueurs.
-        function calculerPoints() {
-            //Remes les différents points à 0.
-            pointsJoueur[0] = 0;
-            pointsJoueur[1] = 0;
-            pointsJoueur[2] = 0;
-            pointsJoueur[3] = 0;
+            //Fonction pour appeler le pop-up de confirmation.
+            function popUpConfirmation(texte) {
+                $('#divTexteErreur').text(texte);
+                $('#divErreur').dialog({
+                    classes: {
+                        'ui-dialog': 'popUpConfirmation ui-state-highlight ui-corner-all',
+                    },
+                    draggable: false,
+                    resizable: false,
+                    height: 80,
+                    width: 600,
+                    hide: 'fade',
+                    show: 'fade'
+                });
+            }
 
-            for (var i = 0; i < 10; i++) {
-                if (carteBas[0][i] != null) {
-                    pointsJoueur[0] += carteBas[0][i].coutResources;
+            //Fonction qui appelle un pop-up qui indique le debut du tour d'un joueur
+            function popUpDebutTour(numeroJoueur) {
+                joueur = nomJoueur[numeroJoueur];
+                $('#divTexteDebutTour').text('Début du tour de ' + joueur + '.');
+                $('#divDebutTour').dialog({
+                    classes: {
+                        'ui-dialog': 'popUpDebutTour ui-corner-all',
+                    },
+                    draggable: false,
+                    resizable: false,
+                    height: 80,
+                    width: 400,
+                    hide: 'fade',
+                    show: 'fade'
+                });
+            }
 
-                    if (exemplaireCarteBas[0][i] > 1) {
-                        pointsJoueur[0] += exemplaireCarteBas[0][i] - 1;
+            //Fonction qui appelle un pop-up qui permet au joueur de choisir parmis plusieurs options
+            function popUpChoixMultiple(tableauBouton) {
+                $('#divTexteChoixMultiple').text('Début du tour de ' + joueur + '.');
+                var tabButtons = new Array(tableauBouton.length);
+                tabButtons.forEach(function (item, index) {
+                    tabButtons[index].item = { text: tableauBouton[index][0].item, click: tableauBouton[index][1].item }
+                });
+                $('#divChoixMultiple').dialog({
+                    classes: {
+                        'ui-dialog': 'popUpDebutTour ui-corner-all',
+                    },
+                    draggable: false,
+                    resizable: false,
+                    height: 150,
+                    width: 400,
+                    hide: 'fade',
+                    show: 'fade',
+                    buttons: tabButtons
+                });
+            }
+
+            //Fonction qui "update" le jeu.
+            function updateJeu() {
+                pointsRessourcesBase[numeroJoueurActif] = 20;
+                pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
+                pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
+                pointsRessourcesUtiliser[numeroJoueurActif] = 0;
+                pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif];
+
+                updatePointsRessources();
+            }
+
+            //Fonction qui "update" l'affichage des images.
+            function updateAffichageImage() {
+                for (i = 0; i < 6; i++) {
+                    carteMain = document.getElementById('divCarte' + i)
+                    if (carteMain.children.length != 0) {
+                        carteMain.removeChild(carteMain.firstChild);
+                    }
+
+                    if (mains[numeroJoueurActif][i] != null) {
+                        var image = document.createElement('img');
+                        var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
+                        image.className = 'imageCarteMains';
+                        image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
+                        carteMain.appendChild(image);
+                        $(image).tooltip({
+                            items: 'img',
+                            content: cloneImage,
+                            position: { my: "right" },
+                            show: { delay: 1000 }
+                        });
                     }
                 }
-                if (nombreJoueur >= 2) {
-                    if (carteBas[1][i] != null) {
-                        pointsJoueur[1] += carteBas[1][i].coutResources;
+                $(function () {
+                    $('.imageCarteMains').draggable({
+                        start: function () {
+                            $(this).animate({
+                                height: 90,
+                                width: 58
+                            }, { duration: 400, queue: false }
+                            );
+                            var id;
+                            id = event.target.parentNode.id.substr(event.target.id.length - 1);
+
+                            //Les if qui vont envoyer l'objet carte dans la variable.
+                            carteDrag = mains[numeroJoueurActif][id];
+                            carteDragNumero = id;
+                        },
+                        drag: function () {
+                            $('.ui-tooltip').hide();
+                        },
+                        revert: function (socketObj) {
+                            return revertCarte(socketObj, this);
+                        },
+                        revertDuration: 400,
+                        cursorAt: { top: 45, left: 29 }
+                    });
+                });
+            }
+
+            //Fonction qui update après avoir jouer une carte.
+            function updatePointsRessources() {
+                //   $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
+                //TODO: À clou: reste juste à modifier la partie de droite pour afficher les différentes variables de points ressources et
+                // a update dans cette fonction les text. La fonction est déjà appeler correctement :p
+            }
+
+            //Fonction qui calcule les points de chaque joueurs.
+            function calculerPoints() {
+                //Remes les différents points à 0.
+                pointsJoueur[0] = 0;
+                pointsJoueur[1] = 0;
+                pointsJoueur[2] = 0;
+                pointsJoueur[3] = 0;
+
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[0][i] != null) {
+                        pointsJoueur[0] += carteBas[0][i].coutResources;
 
                         if (exemplaireCarteBas[0][i] > 1) {
-                            pointsJoueur[1] += exemplaireCarteBas[1][i] - 1;
+                            pointsJoueur[0] += exemplaireCarteBas[0][i] - 1;
                         }
                     }
-                    if (nombreJoueur >= 3) {
-                        if (carteBas[2][i] != null) {
-                            pointsJoueur[2] += carteBas[2][i].coutResources;
+                    if (nombreJoueur >= 2) {
+                        if (carteBas[1][i] != null) {
+                            pointsJoueur[1] += carteBas[1][i].coutResources;
 
-                            if (exemplaireCarteBas[2][i] > 1) {
-                                pointsJoueur[2] += exemplaireCarteBas[2][i] - 1;
+                            if (exemplaireCarteBas[0][i] > 1) {
+                                pointsJoueur[1] += exemplaireCarteBas[1][i] - 1;
                             }
                         }
-                        if (nombreJoueur >= 4) {
-                            if (carteBas[3][i] != null) {
-                                pointsJoueur[3] += carteBas[3][i].coutResources;
+                        if (nombreJoueur >= 3) {
+                            if (carteBas[2][i] != null) {
+                                pointsJoueur[2] += carteBas[2][i].coutResources;
 
-                                if (exemplaireCarteBas[3][i] > 1) {
-                                    pointsJoueur[3] += exemplaireCarteBas[3][i] - 1;
+                                if (exemplaireCarteBas[2][i] > 1) {
+                                    pointsJoueur[2] += exemplaireCarteBas[2][i] - 1;
+                                }
+                            }
+                            if (nombreJoueur >= 4) {
+                                if (carteBas[3][i] != null) {
+                                    pointsJoueur[3] += carteBas[3][i].coutResources;
+
+                                    if (exemplaireCarteBas[3][i] > 1) {
+                                        pointsJoueur[3] += exemplaireCarteBas[3][i] - 1;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
 
-        //fonction qui va update les points des joueurs.
-        function updateZonePoints() {
-            if (nombreJoueur === 4) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A :' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
-            } else if (nombreJoueur === 3) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
-            } else if (nombreJoueur === 2) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
-            } else if (nombreJoueur === 1) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
+            //fonction qui va update les points des joueurs.
+            function updateZonePoints() {
+                if (nombreJoueur === 4) {
+                    divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A :' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
+                } else if (nombreJoueur === 3) {
+                    divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
+                } else if (nombreJoueur === 2) {
+                    divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
+                } else if (nombreJoueur === 1) {
+                    divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
+                }
             }
-        }
     </script>
 </body>
 </html>
