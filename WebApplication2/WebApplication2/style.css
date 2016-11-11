@@ -284,10 +284,17 @@
     display: none;
 }
 
+
 .popUpDebutTour {
     background: #3892ba !important;
     border: 3px white solid !important;
     font-size: 28px !important;
+}
+
+.divRegle {
+    width: 575px;
+    height: 1050px;
+    display:none;
 }
 
 .divChoixMultiple {
@@ -296,8 +303,12 @@
     font-size: 28px !important;
 }
 
-.no-close .ui-dialog-titlebar {
+.no-close .ui-dialog-title {
     display: none;
+}
+.no-header {
+    background: none !important;
+    border: none !important;
 }
 
 .popUpConfirmation.ui-state-highlight {
@@ -307,9 +318,12 @@
 .ui-dialog {
     text-align: center;
     font-size: 22px !important;
-    font-family: 'Harlow Solid' !important;
+    font-family: 'Arial' !important;
+    float: none;
 }
-
+.ui-dialog .ui-dialog-content {
+    height:auto !important;
+}
 .ui-corner-all {
     border-radius: 10px !important;
 }
@@ -478,10 +492,9 @@
 .divTextePointsRessource {
     border: groove 3px black;
     width: 278px;
-    height: 40px;
+    height: 128px;
     margin: 5px;
     padding: 2px;
-    text-align: center;
     position: absolute;
     top: 215px;
 }
@@ -517,16 +530,18 @@
 /*****Les boutons*****/
 #buttonPasserTour {
     position: absolute;
-    bottom: 150px;
+    bottom: 90px;
     height: 50px;
     width: 250px;
+    left: 11%;
 }
 
-#buttonProposerEchange {
+#buttonRegle {
     position: absolute;
-    bottom: 90px;
+    bottom: 150px;
     height: 40px;
     width: 250px;
+    left: 11%
 }
 
 #buttonOption {
@@ -534,6 +549,7 @@
     bottom: 30px;
     height: 40px;
     width: 250px;
+    left: 11%;
 }
 
 #buttonDefausser {

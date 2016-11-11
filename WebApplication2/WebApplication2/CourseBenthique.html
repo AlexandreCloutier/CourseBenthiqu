@@ -10,13 +10,11 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="scripts/jquery.flip.min.js"></script>
     <script>
-        //TODO: Les cartes échanger peuvent être en jeu ou en main -_______-
-        //TODO: points ressources plus clair
+        //TODO: points ressources additionnel erreur voir fonction
         //TODO: À la fin du tour, si le joueur ne peut pas restaurer un habitat perturbé, les macro qui s'en servent meurt.
         //TODO: Dans la partie de droite, je crois qu'il serais bien d'ajouter le boutons regle.
         //TODO: Lorsque l'on supprime une carte ou échange, modifier le nombre d'exemplaire.
         //TODO: Mettre les cartes perturbation inutile dans la décharge.
-        //TODO: Ajout bouton règle.
 
         //Tableau contenant l'âge des joueurs.
         var ageJoueur;
@@ -71,10 +69,10 @@
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
-            creerElementFond();//Crée touts les éléments du jeu.
             instantierTableaux();//Instantie tout les tableaux.
             instantierPaquetCarte();//Crée le paquet de carte de départ.
             updateJeu();
+            creerElementFond();//Crée touts les éléments du jeu.
             updateAffichageImage();
         }
 
@@ -91,6 +89,7 @@
         function creerElementFond() {
             creerFond();
             creerEmplacementsPlateau();
+            calculerPoints();
             creerPartieDroite();
             creerMain();
             instantierDivErreur();
@@ -1011,14 +1010,14 @@
             var divTextePointsRessource = document.createElement('div');
             divTextePointsRessource.id = 'divTextePointsRessource';
             divTextePointsRessource.className = 'divTextePointsRessource';
-            divTextePointsRessource.innerHTML = '<p class=titreRessource><strong>Points de ressources disponibles : 6 </strong>';
+            divTextePointsRessource.innerHTML = '<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
             document.getElementById('divDroite').appendChild(divTextePointsRessource);
 
             var divTextePointsJoueurs = document.createElement('div');
             divTextePointsJoueurs.id = 'divTextePointsJoueurs';
             divTextePointsJoueurs.className = 'divTextePointsJoueurs';
             if (nombreJoueur === 4) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A :' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
             }
             else if (nombreJoueur === 3) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
@@ -1030,6 +1029,13 @@
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
+            
+            var buttonRegle = document.createElement('button');
+            buttonRegle.id = 'buttonRegle';
+            buttonRegle.className = 'buttonJeu';
+            buttonRegle.setAttribute('onclick', 'popUpRegle()');
+            buttonRegle.textContent = 'Voir les règles';
+            $('#divDroite').append(buttonRegle);
 
             var buttonPasserTour = document.createElement('button');
             buttonPasserTour.id = 'buttonPasserTour';
@@ -2706,7 +2712,6 @@
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
                         nombreBandeRiveraine++;
-
                         if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
                             herbace = 1;
                         }
@@ -2724,6 +2729,7 @@
                 nombreBandeRiveraine = 3;
             }
             if (arbres === 1 && arbustes === 1 && herbace === 1) {
+                //TODO: probleme d'affiche meme si les 2 sont present ne retourne pas 5.
                 nombreBandeRiveraine = 5;
             }
 
@@ -2791,7 +2797,8 @@
             $('#divTexteErreur').text(texte);
             $('#divErreur').dialog({
                 classes: {
-                    'ui-dialog': 'ui-state-error ui-corner-all',
+                    'ui-dialog': 'ui-state-error no-close ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header'
                 },
                 draggable: false,
                 resizable: false,
@@ -2807,7 +2814,8 @@
             $('#divTexteErreur').text(texte);
             $('#divErreur').dialog({
                 classes: {
-                    'ui-dialog': 'ui-state-highlight ui-corner-all',
+                    'ui-dialog': 'ui-state-highlight no-close ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header'
                 },
                 draggable: false,
                 resizable: false,
@@ -2823,7 +2831,8 @@
             $('#divTexteErreur').text(texte);
             $('#divErreur').dialog({
                 classes: {
-                    'ui-dialog': 'popUpConfirmation ui-state-highlight ui-corner-all',
+                    'ui-dialog': 'popUpConfirmation no-close ui-state-highlight ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header'
                 },
                 draggable: false,
                 resizable: false,
@@ -2840,7 +2849,8 @@
             $('#divTexteDebutTour').text('Début du tour de ' + joueur + '.');
             $('#divDebutTour').dialog({
                 classes: {
-                    'ui-dialog': 'popUpDebutTour ui-corner-all',
+                    'ui-dialog': 'popUpDebutTour no-close ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header'
                 },
                 draggable: false,
                 resizable: false,
@@ -2860,7 +2870,8 @@
             });
             $('#divChoixMultiple').dialog({
                 classes: {
-                    'ui-dialog': 'popUpDebutTour ui-corner-all',
+                    'ui-dialog': 'popUpDebutTour no-close ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header'
                 },
                 draggable: false,
                 resizable: false,
@@ -2869,6 +2880,27 @@
                 hide: 'fade',
                 show: 'fade',
                 buttons: tabButtons
+            });
+        }
+
+        //Function qui affiche un popUp contenant les règles du jeu.
+        function popUpRegle() {
+            var divRegle = document.createElement('div');
+            divRegle.id = 'divRegle';
+            divRegle.className = 'divRegle';
+            $('body').append(divRegle);
+
+            $(divRegle).dialog({
+                classes: {
+                    'ui-dialog': 'popUpRegle no-close ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header'
+                },
+                draggable: false,
+                resizable: false,
+                height: 575,
+                width: 1050,
+                hide: 'fade',
+                show: 'fade'
             });
         }
 
@@ -2934,9 +2966,10 @@
 
         //Fonction qui update après avoir jouer une carte.
         function updatePointsRessources() {
-            //   $('.divTextePointsRessource').html('<p class=titreRessource><strong>Points de ressources disponibles : ' + pointsRessources[numeroJoueurActif] + ' </strong>');
+            $('.divTextePointsRessource').html('<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
             //TODO: À clou: reste juste à modifier la partie de droite pour afficher les différentes variables de points ressources et
             // a update dans cette fonction les text. La fonction est déjà appeler correctement :p
+
         }
 
         //Fonction qui calcule les points de chaque joueurs.
@@ -2988,7 +3021,7 @@
         //fonction qui va update les points des joueurs.
         function updateZonePoints() {
             if (nombreJoueur === 4) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A :' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
             } else if (nombreJoueur === 3) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
             } else if (nombreJoueur === 2) {
