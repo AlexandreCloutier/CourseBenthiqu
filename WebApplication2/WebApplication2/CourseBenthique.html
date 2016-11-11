@@ -1372,11 +1372,67 @@
             if (brille) {
                 for (var i = 0; i < 10; i++) {
                     if (numeroJoueurActif != 0) {
+                        lettre = lettreJoueur(0);
 
+                        if (carteBas[0][i] != null) {
+                            if (carteBas[0][1].type === 'macroInvertebre') {
+                                if (carteBas[0][1].taille < taillePredateur) {
+                                    $('#emplacementJoueur' + lettre + i).addClass('ui-echange-hightlight');
+                                }
+                            }
+                        }
                     }
                     if (numeroJoueurActif != 1) {
+                        lettre = lettreJoueur(1);
 
+                        if (carteBas[1][i] != null) {
+                            if (carteBas[1][1].type === 'macroInvertebre') {
+                                if (carteBas[1][1].taille < taillePredateur) {
+                                    $('#emplacementJoueur' + lettre + i).addClass('ui-echange-hightlight');
+                                }
+                            }
+                        }
                     }
+                    if (numeroJoueurActif != 2) {
+                        if (nombreJoueur > 2) {
+                            lettre = lettreJoueur(2);
+
+                            if (carteBas[2][i] != null) {
+                                if (carteBas[2][1].type === 'macroInvertebre') {
+                                    if (carteBas[2][1].taille < taillePredateur) {
+                                        $('#emplacementJoueur' + lettre + i).addClass('ui-echange-hightlight');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (numeroJoueurActif != 3) {
+                        if (nombreJoueur > 3) {
+                            lettre = lettreJoueur(3);
+
+                            if (carteBas[3][i] != null) {
+                                if (carteBas[3][1].type === 'macroInvertebre') {
+                                    if (carteBas[3][1].taille < taillePredateur) {
+                                        $('#emplacementJoueur' + lettre + i).addClass('ui-echange-hightlight');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (!brille) {
+                for (var i = 0; i < 10; i++) {
+                    if (nombreJoueur === 2) {
+                        $('#emplacementJoueurA').removeClass('ui-echange-highlithgt');
+                        $('#emplacementJoueurB').removeClass('ui-echange-highlithgt');
+                    }
+                    if (nombreJoueur > 2) {
+
+                        $('#emplacementJoueurC').removeClass('ui-echange-highlithgt');
+                    }
+                    if (nombreJoueur === 3) {
+                        $('#emplacementJoueurD').removeClass('ui-echange-highlithgt');
+                    }                 
                 }
             }
         }
