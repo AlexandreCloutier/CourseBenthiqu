@@ -65,6 +65,9 @@
         var deversement;
         var tempsDeversement;
         var numeroJoueurDeversement;
+        //Variable qui dits si on est en pleine pollution organique.
+        var onPollu;
+        var nombrePolluer;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -1077,6 +1080,8 @@
                 } else {
                     popUpAvertissement('Vous devez sélectionner un macro-invertebrer à manger.')
                 }
+            } else if (onPollu) {
+                //TODO: Pour pollution organique, reste juste à augmenter le nombre de carte polluer et à rendre la carte habitats pollue.
             }
         }
 
@@ -1117,9 +1122,13 @@
                                         numeroJoueurDeversement = numeroJoueurActif;
                                         ui.draggable.remove();
                                     } else if (carteDrag.nom === 'erosion') {
-
+                                        
                                     } else if (carteDrag.nom === 'pollutionOrganique') {
-
+                                        paquetDecharge.push(carteDrag);
+                                        brillanceHabitatsEnnemi(true);
+                                        ui.draggable.remove();
+                                        onPollu = true;
+                                        nombrePolluer = 0;
                                     } else if (carteDrag.nom === 'PrisSurFait') {
                                         //tableauProtege[numeroJoueurActif] = true;
                                     }
@@ -1319,11 +1328,13 @@
             var numeroPosition = position.substr(position.length - 1);
 
             if (carteDrag.nom === 'dechets' || carteDrag.nom === 'artificialisation') {
-                carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
+                carteBas[numeroPositionJoueur][numeroPosition].perturber = true;              
                 carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 10;
+                cartePerturbation[numeroPositionJoueur][numeroPosition] = carteDrag;
             } else if (carteDrag.nom === 'passageToutTerrain') {
                 carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
                 carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 2;
+                cartePerturbation[numeroPositionJoueur][numeroPosition] = carteDrag;
             }
         }
 
@@ -1411,6 +1422,63 @@
                     }
                 }
             } else if (!brille) {
+                for (var i = 0; i < 10; i++) {
+                    $('#emplacementJoueurA' + i).removeClass('ui-echange-highlight');
+                    $('#emplacementJoueurB' + i).removeClass('ui-echange-highlight');
+
+                    if (nombreJoueur > 2) {
+
+                        $('#emplacementJoueurC' + i).removeClass('ui-echange-highlight');
+                    }
+                    if (nombreJoueur === 3) {
+                        $('#emplacementJoueurD' + i).removeClass('ui-echange-highlight');
+                    }
+                }
+            }
+        }
+
+        //Fonction qui rends touts les habitats ennemi brillant.
+        function brillanceHabitatsEnnemi(brille) {
+            if (brille) {
+                for (var i = 0; i < 10; i++) {
+                    if (numeroJoueurActif != 0) {
+                        lettre = lettreJoueur(0);
+
+                        if (carteBas[0][i] != null) {
+                            if (carteBas[0][i].type === 'habitats') {
+                                    $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                            }
+                        }
+                    }
+                    if (numeroJoueurActif != 1) {
+                        lettre = lettreJoueur(1);
+
+                        if (carteBas[1][i] != null) {
+                            if (carteBas[1][i].type === 'habitats') {
+                                $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                            }
+                        }
+                    }
+                    if (numeroJoueurActif != 2) {
+                        lettre = lettreJoueur(2);
+
+                        if (carteBas[2][i] != null) {
+                            if (carteBas[2][i].type === 'habitats') {
+                                $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                            }
+                        }
+                    }
+                    if (numeroJoueurActif != 3) {
+                        lettre = lettreJoueur(3);
+
+                        if (carteBas[3][i] != null) {
+                            if (carteBas[3][i].type === 'habitats') {
+                                $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                            }
+                        }
+                    }
+                }
+            } else {
                 for (var i = 0; i < 10; i++) {
                     $('#emplacementJoueurA' + i).removeClass('ui-echange-highlight');
                     $('#emplacementJoueurB' + i).removeClass('ui-echange-highlight');
@@ -2068,7 +2136,11 @@
                 pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutResources;
                 updatePointsRessources();
                 var id = drop.id.substr(drop.id.length - 1);
-                carteBas[numeroJoueurActif][id] = carteDrag;
+
+                if (carteDrag.type != 'perturbation') {//Si c'est une perturbation, ne l'ajoute pas.
+                    carteBas[numeroJoueurActif][id] = carteDrag;
+                }
+
                 supprimerCartePrecise(carteDragNumero);
                 calculerPoints();
                 updateZonePoints();
