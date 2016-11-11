@@ -1121,24 +1121,6 @@
             plateau.id = 'plateau';
             plateau.className = 'plateau';
             $('body').append(plateau);
-            $(plateau).droppable({
-                tolerance: 'pointer',
-                drop: function (event, ui) {
-                    if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
-                        if (accepterDrop(event.target)) {
-
-                        }
-                    }
-                },
-                over: function (event, ui) {
-                    if (bonneZoneDrop(event.target)) {
-                        $(event.target).addClass('droppable-hover');
-                    }
-                },
-                out: function (event, ui) {
-                    $(event.target).removeClass('droppable-hover');
-                }
-            });
 
             //Partie de droite.
             var divDroite = document.createElement('div');
@@ -1232,14 +1214,14 @@
                     }
                 }
                 $(function () {
-                    $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
+                    $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD, .plateau').droppable({
                         tolerance: 'pointer',
                         drop: function (event, ui) {
                             if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
                                 if (accepterDrop(event.target)) {
                                     if (carteDrag.nom != 'deversement' && carteDrag.nom != 'erosion' && carteDrag.nom != 'pollutionOrganique' && carteDrag.type != 'speciale' && carteDrag.type != 'action') {
                                         if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
-                                            if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
+                                            console.log('b'); if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
                                                 if (carteDrag.type === 'macroInvertebre') {
                                                     if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
                                                         taillePredateur = carteDrag.taille;
@@ -1259,7 +1241,7 @@
                                                         taillePredateur = carteDrag.taille;
                                                         onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
                                                         onMangeAtableCeSoir = true;
-                                                        popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
+                                                        popUpConfirmation('Vous devez sélectionnez un macro-invertébré de taille inférieur à manger.');
                                                         brillanceCarteMangeable(true);
                                                     } else {//Sinon, mes simplement la carte.
                                                         onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
@@ -1290,6 +1272,11 @@
                                         deversement = true;
                                         tempsDeversement = 2;
                                         numeroJoueurDeversement = numeroJoueurActif;
+                                        ui.draggable.remove;
+                                    } else if (carteDrag.nom === 'erosion') {
+
+                                    } else if (carteDrag.nom === 'pollutionOrganique') {
+
                                     }
 
                                 } else {//Respecte pas les conditions, donc drop pas accepter.
@@ -1345,7 +1332,7 @@
                             carteBas[numeroJoueurActif][i].tempsPerturber--;
                             if (carteBas[numeroJoueurActif][i].tempsPerturber === 0) {
                                 carteBas[numeroJoueurActif][i].perturber = false;
-                                verifierCartePerturbation(numeroJoueurActif, i);
+                                retirerCartePerturbation(numeroJoueurActif, i);
                             }
                         }
                     }
@@ -1354,12 +1341,14 @@
         }
 
         //Fonction qui va enlever la carte de perturbation de dessus la carte.
-        function verifierCartePerturbation(numeroActif, positionCarte) {
+        function retirerCartePerturbation(numeroActif, positionCarte) {
             var lettreActif = lettreJoueur(numeroActif);
             if (positionCarte > 6) {
+                //TODO: Ajouter au cimetière.
                 $('#emplacementHautJoueur' + lettreActif + positionCarte).children().last().remove();
                 reempillerCartePasPerturber(numeroActif, positionCarte);
             } else {
+                //TODO: Ajouter au cimetière.
                 $('#emplacementBasJoueur' + lettreActif + positionCarte).children().last().remove();
                 reempillerCartePasPerturber(numeroActif, positionCarte);
             }
@@ -1372,7 +1361,9 @@
 
         //Fonction qui mes en brillances les trucs qui sont mangeable.
         function brillanceCarteMangeable(brille) {
+            if (brille) {
 
+            }
         }
 
         //Fonction qui tue les macro-invertébré de tolérance inférieure à 6.
