@@ -1096,14 +1096,9 @@
         function trouverPositionLibre(numero) {
             var lettreEmplacement = lettreJoueur(numero);
 
-            for (var i = 0; i < 6; i++) {
-                if ($('#emplacementBasJoueur' + lettreEmplacement + i).children().length === 0) {
-                    return ('#emplacementBasJoueur' + lettreEmplacement + i);
-                }
-            }
-            for (var i = 6; i < 10; i++) {
-                if ($('#emplacementHautJoueur' + lettreEmplacement + i).children().length === 0) {
-                    return ('#emplacementHautJoueur' + lettreEmplacement + i);
+            for (var i = 0; i < 10; i++) {
+                if ($('#emplacementJoueur' + lettreEmplacement + i).children().length === 0) {
+                    return ('#emplacementJoueur' + lettreEmplacement + i);
                 }
             }
         }
@@ -1137,6 +1132,8 @@
 
                                 } else if (carteDrag.nom === 'pollutionOrganique') {
 
+                                }else if (carteDrag.nom === 'PrisSurFait'){
+                                    //tableauProtege[numeroJoueurActif] = true;                                  
                                 }
                             }
                         }
@@ -1179,68 +1176,68 @@
         function creerEmplacementsPlateau() {
             $(function () {
                 for (i = 0; i < 6; i++) {
-                    var emplacementBasJoueurA = document.createElement('div');
-                    emplacementBasJoueurA.id = 'emplacementBasJoueurA' + i;
-                    emplacementBasJoueurA.className = 'emplacementJoueurA';
-                    emplacementBasJoueurA.style.left = 116 + 66 * (i + 1) + 'px';
-                    emplacementBasJoueurA.style.bottom = '30px';
-                    $('#plateau').append(emplacementBasJoueurA);
+                    var emplacementJoueurA = document.createElement('div');
+                    emplacementJoueurA.id = 'emplacementJoueurA' + i;
+                    emplacementJoueurA.className = 'emplacementJoueurA';
+                    emplacementJoueurA.style.left = 116 + 66 * (i + 1) + 'px';
+                    emplacementJoueurA.style.bottom = '30px';
+                    $('#plateau').append(emplacementJoueurA);
 
-                    var emplacementBasJoueurB = document.createElement('div');
-                    emplacementBasJoueurB.id = 'emplacementBasJoueurB' + i;
-                    emplacementBasJoueurB.className = 'emplacementJoueurB';
-                    emplacementBasJoueurB.style.left = 116 + 66 * (i + 1) + 'px';
-                    emplacementBasJoueurB.style.top = '30px';
-                    $('#plateau').append(emplacementBasJoueurB);
+                    var emplacementJoueurB = document.createElement('div');
+                    emplacementJoueurB.id = 'emplacementJoueurB' + i;
+                    emplacementJoueurB.className = 'emplacementJoueurB';
+                    emplacementJoueurB.style.left = 116 + 66 * (i + 1) + 'px';
+                    emplacementJoueurB.style.top = '30px';
+                    $('#plateau').append(emplacementJoueurB);
 
                     if (nombreJoueur >= 3) {
-                        var emplacementBasJoueurC = document.createElement('div');
-                        emplacementBasJoueurC.id = 'emplacementBasJoueurC' + i;
-                        emplacementBasJoueurC.className = 'emplacementJoueurC';
-                        emplacementBasJoueurC.style.top = 100 + 66 * (i + 1) + 'px';
-                        emplacementBasJoueurC.style.left = '46px';
-                        $('#plateau').append(emplacementBasJoueurC);
+                        var emplacementJoueurC = document.createElement('div');
+                        emplacementJoueurC.id = 'emplacementJoueurC' + i;
+                        emplacementJoueurC.className = 'emplacementJoueurC';
+                        emplacementJoueurC.style.top = 100 + 66 * (i + 1) + 'px';
+                        emplacementJoueurC.style.left = '46px';
+                        $('#plateau').append(emplacementJoueurC);
                     }
                     if (nombreJoueur === 4) {
-                        var emplacementBasJoueurD = document.createElement('div');
-                        emplacementBasJoueurD.id = 'emplacementBasJoueurD' + i;
-                        emplacementBasJoueurD.className = 'emplacementJoueurD';
-                        emplacementBasJoueurD.style.top = 100 + 66 * (i + 1) + 'px';
-                        emplacementBasJoueurD.style.right = '46px';
-                        $('#plateau').append(emplacementBasJoueurD);
+                        var emplacementJoueurD = document.createElement('div');
+                        emplacementJoueurD.id = 'emplacementJoueurD' + i;
+                        emplacementJoueurD.className = 'emplacementJoueurD';
+                        emplacementJoueurD.style.top = 100 + 66 * (i + 1) + 'px';
+                        emplacementJoueurD.style.right = '46px';
+                        $('#plateau').append(emplacementJoueurD);
                     }
                 }
                 for (i = 6; i < 10; i++) {
-                    var emplacementHautJoueurA = document.createElement('div');
-                    emplacementHautJoueurA.id = 'emplacementHautJoueurA' + i;
-                    emplacementHautJoueurA.className = 'emplacementJoueurA';
-                    emplacementHautJoueurA.style.left = 182 + 66 * (i - 5) + 'px';
-                    emplacementHautJoueurA.style.bottom = '131px';
-                    $('#plateau').append(emplacementHautJoueurA);
+                    var emplacementJoueurA = document.createElement('div');
+                    emplacementJoueurA.id = 'emplacementJoueurA' + i;
+                    emplacementJoueurA.className = 'emplacementJoueurA';
+                    emplacementJoueurA.style.left = 182 + 66 * (i - 5) + 'px';
+                    emplacementJoueurA.style.bottom = '131px';
+                    $('#plateau').append(emplacementJoueurA);
 
-                    var emplacementHautJoueurB = document.createElement('div');
-                    emplacementHautJoueurB.id = 'emplacementHautJoueurB' + i;
-                    emplacementHautJoueurB.className = 'emplacementJoueurB';
-                    emplacementHautJoueurB.style.left = 182 + 66 * (i - 5) + 'px';
-                    emplacementHautJoueurB.style.top = '130px';
-                    $('#plateau').append(emplacementHautJoueurB);
+                    var emplacementJoueurB = document.createElement('div');
+                    emplacementJoueurB.id = 'emplacementJoueurB' + i;
+                    emplacementJoueurB.className = 'emplacementJoueurB';
+                    emplacementJoueurB.style.left = 182 + 66 * (i - 5) + 'px';
+                    emplacementJoueurB.style.top = '130px';
+                    $('#plateau').append(emplacementJoueurB);
 
                     if (nombreJoueur >= 3) {
-                        var emplacementHautJoueurC = document.createElement('div');
-                        emplacementHautJoueurC.id = 'emplacementHautJoueurC' + i;
-                        emplacementHautJoueurC.className = 'emplacementJoueurC';
-                        emplacementHautJoueurC.style.top = 166 + 66 * (i - 5) + 'px';
-                        emplacementHautJoueurC.style.left = '146px'
-                        $('#plateau').append(emplacementHautJoueurC);
+                        var emplacementJoueurC = document.createElement('div');
+                        emplacementJoueurC.id = 'emplacementJoueurC' + i;
+                        emplacementJoueurC.className = 'emplacementJoueurC';
+                        emplacementJoueurC.style.top = 166 + 66 * (i - 5) + 'px';
+                        emplacementJoueurC.style.left = '146px'
+                        $('#plateau').append(emplacementJoueurC);
                     }
 
                     if (nombreJoueur === 4) {
-                        var emplacementHautJoueurD = document.createElement('div');
-                        emplacementHautJoueurD.id = 'emplacementHautJoueurD' + i;
-                        emplacementHautJoueurD.className = 'emplacementJoueurD';
-                        emplacementHautJoueurD.style.top = 166 + 66 * (i - 5) + 'px';
-                        emplacementHautJoueurD.style.right = '146px';
-                        $('#plateau').append(emplacementHautJoueurD);
+                        var emplacementJoueurD = document.createElement('div');
+                        emplacementJoueurD.id = 'emplacementJoueurD' + i;
+                        emplacementJoueurD.className = 'emplacementJoueurD';
+                        emplacementJoueurD.style.top = 166 + 66 * (i - 5) + 'px';
+                        emplacementJoueurD.style.right = '146px';
+                        $('#plateau').append(emplacementJoueurD);
                     }
                 }
                 $(function () {
@@ -1360,15 +1357,9 @@
         //Fonction qui va enlever la carte de perturbation de dessus la carte.
         function retirerCartePerturbation(numeroActif, positionCarte) {
             var lettreActif = lettreJoueur(numeroActif);
-            if (positionCarte > 6) {
                 //TODO: Ajouter au cimetière.
-                $('#emplacementHautJoueur' + lettreActif + positionCarte).children().last().remove();
+                $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
                 reempillerCartePasPerturber(numeroActif, positionCarte);
-            } else {
-                //TODO: Ajouter au cimetière.
-                $('#emplacementBasJoueur' + lettreActif + positionCarte).children().last().remove();
-                reempillerCartePasPerturber(numeroActif, positionCarte);
-            }
         }
 
         //Fonction qui va re-empiller la carte qui viens de ne plus être perturber.
@@ -1399,12 +1390,8 @@
                             if (carteBas[0][i].tolerance < 6) {
                                 paquetDecharge.push(carteBas[0][i]);
                                 carteBas[0][i] = null;
-                                if (i > 6) {
                                     var lettre = lettreJoueur(0);
-                                    $('#emplacementHautJoueur' + lettre + i).children().remove();
-                                } else {
-                                    $('#emplacementBasJoueur' + lettre + i).children().remove();
-                                }
+                                    $('#emplacementJoueur' + lettre + i).children().remove();
                             }
                         }
                     }
@@ -1417,12 +1404,8 @@
                             if (carteBas[1][i].tolerance < 6) {
                                 paquetDecharge.push(carteBas[1][i]);
                                 carteBas[1][i] = null;
-                                if (i > 6) {
                                     var lettre = lettreJoueur(1);
-                                    $('#emplacementHautJoueur' + lettre + i).children().remove();
-                                } else {
-                                    $('#emplacementBasJoueur' + lettre + i).children().remove();
-                                }
+                                    $('#emplacementJoueur' + lettre + i).children().remove();
                             }
                         }
                     }
@@ -1436,12 +1419,8 @@
                                 if (carteBas[2][i].tolerance < 6) {
                                     paquetDecharge.push(carteBas[2][i]);
                                     carteBas[2][i] = null;
-                                    if (i > 6) {
                                         var lettre = lettreJoueur(2);
-                                        $('#emplacementHautJoueur' + lettre + i).children().remove();
-                                    } else {
-                                        $('#emplacementBasJoueur' + lettre + i).children().remove();
-                                    }
+                                        $('#emplacementJoueur' + lettre + i).children().remove();
                                 }
                             }
                         }
@@ -1457,12 +1436,8 @@
                                 if (carteBas[3][i].tolerance < 6) {
                                     paquetDecharge.push(carteBas[3][i]);
                                     carteBas[3][i] = null;
-                                    if (i > 6) {
                                         var lettre = lettreJoueur(3);
-                                        $('#emplacementHautJoueur' + lettre + i).children().remove();
-                                    } else {
-                                        $('#emplacementBasJoueur' + lettre + i).children().remove();
-                                    }
+                                        $('#emplacementJoueur' + lettre + i).children().remove();
                                 }
                             }
 
@@ -1488,11 +1463,7 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].nomImage === nomCarte) {
-                        if (i < 6) {
-                            return document.getElementById('emplacementBasJoueur' + lettreActif + i);
-                        } else {
-                            return document.getElementById('emplacementHautJoueur' + lettreActif + i);
-                        }
+                            return document.getElementById('emplacementJoueur' + lettreActif + i);
                     }
                 }
             }
