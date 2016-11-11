@@ -1251,7 +1251,7 @@
                                 if (accepterDrop(event.target)) {
                                     if (carteDrag.nom != 'deversement' && carteDrag.nom != 'erosion' && carteDrag.nom != 'pollutionOrganique' && carteDrag.type != 'speciale' && carteDrag.type != 'action') {
                                         if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
-                                            console.log('b'); if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
+                                            if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
                                                 if (carteDrag.type === 'macroInvertebre') {
                                                     if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
                                                         taillePredateur = carteDrag.taille;
@@ -1986,30 +1986,14 @@
                 else {
                     return 'La carte "Déchets" doit être jouer sur un habitat.';
                 }
-            }
-            else if (carteDrag.nom === 'erosion') {
-                if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
-                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'bandeRiveraine') {
-                        return 'ok';
-                    }
-                    else {
-                        return 'La carte "Érosion" doit être jouer sur une bande riveraine.';
-                    }
-                }
-                else {
-                    return 'La carte "Érosion" doit être jouer sur une bande riveraine.';
-                }
-            }
-            else if (carteDrag.nom === 'passageToutTerrain') {
+            } else if (carteDrag.nom === 'passageToutTerrain') {
                 if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
                     if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
                         return 'ok';
-                    }
-                    else {
+                    } else {
                         return 'La carte "Passage de tout-terrain" doit être jouer sur un habitat.';
                     }
-                }
-                else {
+                } else {
                     return 'La carte "Passage de tout-terrain" doit être jouer sur un habitat.';
                 }
             }
