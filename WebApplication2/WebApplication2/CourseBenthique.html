@@ -1010,7 +1010,7 @@
             var divTextePointsRessource = document.createElement('div');
             divTextePointsRessource.id = 'divTextePointsRessource';
             divTextePointsRessource.className = 'divTextePointsRessource';
-            divTextePointsRessource.innerHTML = '<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
+            divTextePointsRessource.innerHTML = '<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources utilisés : ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
             document.getElementById('divDroite').appendChild(divTextePointsRessource);
 
             var divTextePointsJoueurs = document.createElement('div');
@@ -1029,7 +1029,7 @@
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
-            
+
             var buttonRegle = document.createElement('button');
             buttonRegle.id = 'buttonRegle';
             buttonRegle.className = 'buttonJeu';
@@ -1121,6 +1121,36 @@
             plateau.id = 'plateau';
             plateau.className = 'plateau';
             $('body').append(plateau);
+            $(plateau).droppable({
+                tolerance: 'pointer',
+                drop: function (event, ui) {
+                    if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
+                        if (accepterDrop(event.target)) {
+                            if (carteDrag.nom === 'deversement' || carteDrag.nom === 'erosion' || carteDrag.nom === 'pollutionOrganique' || carteDrag.type === 'speciale' || carteDrag.type === 'action') {
+                                if (carteDrag.nom === 'deversement') {
+                                    paquetDecharge.push(carteDrag);
+                                    deversement = true;
+                                    tempsDeversement = 2;
+                                    numeroJoueurDeversement = numeroJoueurActif;
+                                    ui.draggable.remove();
+                                } else if (carteDrag.nom === 'erosion') {
+
+                                } else if (carteDrag.nom === 'pollutionOrganique') {
+
+                                }
+                            }
+                        }
+                    }
+                },
+                over: function (event, ui) {
+                    if (bonneZoneDrop(event.target)) {
+                        $(event.target).addClass('droppable-hover');
+                    }
+                },
+                out: function (event, ui) {
+                    $(event.target).removeClass('droppable-hover');
+                }
+            });
 
             //Partie de droite.
             var divDroite = document.createElement('div');
@@ -1214,7 +1244,7 @@
                     }
                 }
                 $(function () {
-                    $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD, .plateau').droppable({
+                    $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         tolerance: 'pointer',
                         drop: function (event, ui) {
                             if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
@@ -1267,18 +1297,7 @@
                                                 onDrop(event, ui, this);
                                             }
                                         }
-                                    } else if (carteDrag.nom === 'deversement') {
-                                        paquetDecharge.push(carteDrag);
-                                        deversement = true;
-                                        tempsDeversement = 2;
-                                        numeroJoueurDeversement = numeroJoueurActif;
-                                        ui.draggable.remove;
-                                    } else if (carteDrag.nom === 'erosion') {
-
-                                    } else if (carteDrag.nom === 'pollutionOrganique') {
-
                                     }
-
                                 } else {//Respecte pas les conditions, donc drop pas accepter.
                                     ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                 }
@@ -1289,8 +1308,6 @@
                                     popUpErreur('Cette carte est jouable que dans votre zone.');
                                 } else if (carteDrag.type === 'perturbation') {
                                     popUpErreur('Cette carte est jouable que dans la zone d\'un de vos adversaire ou directement sur le plateau.');
-                                } else if (carteDrag.type === 'action' || carteDrag.type === 'speciale') {
-                                    popUpErreur('Cette carte doit être jouer directement dans la défausse.');
                                 }
                             }
                         },
@@ -2957,7 +2974,7 @@
 
         //Fonction qui update après avoir jouer une carte.
         function updatePointsRessources() {
-            $('.divTextePointsRessource').html('<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
+            $('.divTextePointsRessource').html('<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources utilisés : ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
             //TODO: À clou: reste juste à modifier la partie de droite pour afficher les différentes variables de points ressources et
             // a update dans cette fonction les text. La fonction est déjà appeler correctement :p
 
