@@ -65,6 +65,9 @@
         var deversement;
         var tempsDeversement;
         var numeroJoueurDeversement;
+        //Variable qui dits si on est en pleine pollution organique.
+        var onPollu;
+        var nombrePolluer;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -955,11 +958,11 @@
 
         //Fonction qui appelle le timer
         function annimationPigerCarte(i) {
-                var carte = pigerCarte(paquetCarte);
-                mains[numeroJoueurActif][i] = carte;
-                setTimeout(function () {
-                    animationPige(carte, i);
-                },500);
+            var carte = pigerCarte(paquetCarte);
+            mains[numeroJoueurActif][i] = carte;
+            setTimeout(function () {
+                animationPige(carte, i);
+            },500);
         }
 
         //Fonction qui permet de chercher une carte en particulier.
@@ -1052,20 +1055,6 @@
             document.getElementById('divDroite').appendChild(buttonOption);
         }
 
-        //Fonction qui annule l'échange en remettant les variables à null.
-        function annulerEchange() {
-            positionCarteEchanger1 = null;
-            positionCarteEchanger2 = null;
-            carteEchanger1 = null;
-            carteEchanger2 = null;
-            numeroJoueurEchange2 = null
-            renduCarte2 = false;
-            emplacementCarte1 = null;
-            emplacementCarte2 = null;
-            brillanceCarteEchange();
-            enleverBrillance();
-        }
-
         //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
         function onClickImage(event, ui) {
             if (onMangeAtableCeSoir) {
@@ -1078,17 +1067,21 @@
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
                         onMangeAtableCeSoir = false;
 
-                        if (numeroEmplacement > 6) {
-                            // event = emplacemenHautJoueurA7 par exemple.
-                        } else {
-                            //TODO: TUER !! TUER LES MACRO !!
-                        }
+                        $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
+                        paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
+                        carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                        brillanceCarteMangeable(false);
+                        $('#divDroite').css('pointer-events', 'auto');
+                        $('#plateau').css('pointer-events', 'auto');
+
                     } else {
                         popUpAvertissement('Le macro-invertebrer doit être de taille inférieur à votre prédateur.')
                     }
                 } else {
                     popUpAvertissement('Vous devez sélectionner un macro-invertebrer à manger.')
                 }
+            } else if (onPollu) {
+                //TODO: Pour pollution organique, reste juste à augmenter le nombre de carte polluer et à rendre la carte habitats pollue.
             }
         }
 
@@ -1131,7 +1124,11 @@
                                 } else if (carteDrag.nom === 'erosion') {
 
                                 } else if (carteDrag.nom === 'pollutionOrganique') {
-
+                                    paquetDecharge.push(carteDrag);
+                                    brillanceHabitatsEnnemi(true);
+                                    ui.draggable.remove();
+                                    onPollu = true;
+                                    nombrePolluer = 0;
                                 } else if (carteDrag.nom === 'prisSurFait') {
                                     //tableauProtege[numeroJoueurActif] = true;
                                 }
@@ -1150,7 +1147,6 @@
                                         if (nouvel) {
                                             annimationPigerCarte(mains[numeroJoueurActif].length);
                                         }
-
                                     }
                                 }
                             }
@@ -1274,6 +1270,8 @@
                                                         onMangeAtableCeSoir = true;
                                                         popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
                                                         brillanceCarteMangeable(true);
+                                                        $('#divDroite').css('pointer-events', 'none');
+                                                        $('#plateau').css('pointer-events', 'none');
                                                     } else {//Sinon, met simplement la carte.
                                                         onDrop(event, ui, this);
                                                     }
@@ -1349,9 +1347,11 @@
             if (carteDrag.nom === 'dechets' || carteDrag.nom === 'artificialisation') {
                 carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
                 carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 10;
+                cartePerturbation[numeroPositionJoueur][numeroPosition] = carteDrag;
             } else if (carteDrag.nom === 'passageToutTerrain') {
                 carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
                 carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 2;
+                cartePerturbation[numeroPositionJoueur][numeroPosition] = carteDrag;
             }
         }
 
@@ -1390,10 +1390,122 @@
             if (brille) {
                 for (var i = 0; i < 10; i++) {
                     if (numeroJoueurActif != 0) {
+                        lettre = lettreJoueur(0);
 
+                        if (carteBas[0][i] != null) {
+                            if (carteBas[0][i].type === 'macroInvertebre') {
+                                if (carteBas[0][i].taille < taillePredateur) {
+                                    $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                                }
+                            }
+                        }
                     }
                     if (numeroJoueurActif != 1) {
+                        lettre = lettreJoueur(1);
 
+                        if (carteBas[1][i] != null) {
+                            if (carteBas[1][i].type === 'macroInvertebre') {
+                                if (carteBas[1][i].taille < taillePredateur) {
+                                    $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                                }
+                            }
+                        }
+                    }
+                    if (numeroJoueurActif != 2) {
+                        if (nombreJoueur > 2) {
+                            lettre = lettreJoueur(2);
+
+                            if (carteBas[2][i] != null) {
+                                if (carteBas[2][i].type === 'macroInvertebre') {
+                                    if (carteBas[2][i].taille < taillePredateur) {
+                                        $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (numeroJoueurActif != 3) {
+                        if (nombreJoueur > 3) {
+                            lettre = lettreJoueur(3);
+
+                            if (carteBas[3][i] != null) {
+                                if (carteBas[3][i].type === 'macroInvertebre') {
+                                    if (carteBas[3][i].taille < taillePredateur) {
+                                        $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (!brille) {
+                for (var i = 0; i < 10; i++) {
+                    $('#emplacementJoueurA' + i).removeClass('ui-echange-highlight');
+                    $('#emplacementJoueurB' + i).removeClass('ui-echange-highlight');
+
+                    if (nombreJoueur > 2) {
+
+                        $('#emplacementJoueurC' + i).removeClass('ui-echange-highlight');
+                    }
+                    if (nombreJoueur === 3) {
+                        $('#emplacementJoueurD' + i).removeClass('ui-echange-highlight');
+                    }
+                }
+            }
+        }
+
+        //Fonction qui rends touts les habitats ennemi brillant.
+        function brillanceHabitatsEnnemi(brille) {
+            if (brille) {
+                for (var i = 0; i < 10; i++) {
+                    if (numeroJoueurActif != 0) {
+                        lettre = lettreJoueur(0);
+
+                        if (carteBas[0][i] != null) {
+                            if (carteBas[0][i].type === 'habitats') {
+                                $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                            }
+                        }
+                    }
+                    if (numeroJoueurActif != 1) {
+                        lettre = lettreJoueur(1);
+
+                        if (carteBas[1][i] != null) {
+                            if (carteBas[1][i].type === 'habitats') {
+                                $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                            }
+                        }
+                    }
+                    if (numeroJoueurActif != 2) {
+                        lettre = lettreJoueur(2);
+
+                        if (carteBas[2][i] != null) {
+                            if (carteBas[2][i].type === 'habitats') {
+                                $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                            }
+                        }
+                    }
+                    if (numeroJoueurActif != 3) {
+                        lettre = lettreJoueur(3);
+
+                        if (carteBas[3][i] != null) {
+                            if (carteBas[3][i].type === 'habitats') {
+                                $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (var i = 0; i < 10; i++) {
+                    $('#emplacementJoueurA' + i).removeClass('ui-echange-highlight');
+                    $('#emplacementJoueurB' + i).removeClass('ui-echange-highlight');
+
+                    if (nombreJoueur > 2) {
+
+                        $('#emplacementJoueurC' + i).removeClass('ui-echange-highlight');
+                    }
+                    if (nombreJoueur === 3) {
+                        $('#emplacementJoueurD' + i).removeClass('ui-echange-highlight');
                     }
                 }
             }
@@ -2040,7 +2152,11 @@
                 pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutResources;
                 updatePointsRessources();
                 var id = drop.id.substr(drop.id.length - 1);
-                carteBas[numeroJoueurActif][id] = carteDrag;
+
+                if (carteDrag.type != 'perturbation') {//Si c'est une perturbation, ne l'ajoute pas.
+                    carteBas[numeroJoueurActif][id] = carteDrag;
+                }
+
                 supprimerCartePrecise(carteDragNumero);
                 calculerPoints();
                 updateZonePoints();
@@ -2163,19 +2279,19 @@
             var x = $('#' + carteMain).offset().left;
             var y = $('#' + carteMain).offset().top;
 
-                $('#carte' + position).animate({
-                    height: 180,
-                    width: 118,
-                    left: x,
-                    top: y,
-                    borderSpacing: 0,
-                }, {
-                    step: function (now) {
-                        $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                        $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                        $(this).css('transform', 'rotate(' + now + 'deg)');
-                    }
-                }, { duration: 500 });
+            $('#carte' + position).animate({
+                height: 180,
+                width: 118,
+                left: x,
+                top: y,
+                borderSpacing: 0,
+            }, {
+                step: function (now) {
+                    $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                    $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                    $(this).css('transform', 'rotate(' + now + 'deg)');
+                }
+            }, { duration: 500 });
             setTimeout(function () {
                 $('#carte' + position).remove();
                 updateAffichageImage();
@@ -2621,153 +2737,185 @@
         }
 
         //Fonction appelé lors d'un clic sur le boutton Passer son tour.
-        function passerTour() {
-            var size = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
+        function passerTour() {        
+                if (!onMangeAtableCeSoir) {
+                    var size = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
 
-            if (size > 4) {
-                defausserCarte();
-            } else {
-            $('#buttonPasserTour').prop('disabled', true);
-            if (nombreJoueur === 4) {
-                facteurRotation += 1;
-                if (facteurRotation > 4) {
-                    facteurRotation = 1;
-                }
-            }
-            else if (nombreJoueur === 2) {
-                facteurRotation += 2;
-                if (facteurRotation > 4) {
-                    facteurRotation = 2
-                }
-            }
-            else if (nombreJoueur === 3) {
-                facteurRotation += 1;
-                if (facteurRotation > 4) {
-                    facteurRotation = 1;
-                }
-                if (facteurRotation === 1) {
-                    facteurRotation += 1;
-                }
-            }
-
-            var angleRotationDebut = (90 * (facteurRotation - 1));
-            var angleRotationFin = (90 * facteurRotation);
-
-            var $plateau = $('#plateau');
-            $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
-                duration: 1000,
-                step: function (now) {
-                    $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
-                    $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
-                    $plateau.css('transform', 'rotate(' + now + 'deg)');
-                }
-            });
-
-            if (deversement) {//Si un déversement est en cour.
-                if (numeroJoueurActif === numeroJoueurDeversement) {//Si c'est la fin du tour du joueur qui a déverser.
-                    tempsDeversement--;
-                    if (tempsDeversement === 0) {//Si le temps de déverseent est écouler, tue les macro et rends déversement à false.
-                        tuerDeversement();
-                        deversement = false;
-                    }
-                }
-            }
-
-            for (i = mains[numeroJoueurActif].length - 1; i > 5; i--) {
-                mains[numeroJoueurActif].length--;
-                $('#liMain' + i).remove();
-            }
-
-            //Partie qui augmente le nombre de joueurs.
-            numeroJoueurActif++;
-            if (numeroJoueurActif === nombreJoueur) {
-                numeroJoueurActif = 0;
-            }
-
-            //Rends le bouton passer tour inactif lorsuq'on clique dessus pour éviter de "spam" le bouton.
-            setTimeout(function () {
-                $('#buttonPasserTour').prop('disabled', false);
-            }, 2000);
-
-            tour++;
-            remplirMain();
-            updateJeu();
-            updateAffichageImage();
-            popUpDebutTour(numeroJoueurActif);
-            debutTourDeperturber();
-
-            }
-        }
-
-        //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
-        function pointsRessourcesAdditionel() {
-            //Variable qui contiendra le nombre de bande riveraine.
-            var nombreBandeRiveraine = 0;
-            //Variable des bandes riveraine différente si chacune est présente.
-            var arbres = 0;
-            var arbustes = 0;
-            var herbace = 0;
-
-            for (var i = 0; i < 10; i++) {
-                if (carteBas[numeroJoueurActif][i] != null) {
-                    if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
-                        nombreBandeRiveraine++;
-                        if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
-                            herbace = 1;
-                        }
-                        else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
-                            arbuste = 1;
-                        }
-                        else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
-                            arbres = 1;
+                    //if (size > 4) {
+                    //    defausserCarte();
+                    //} else {
+                    $('#buttonPasserTour').prop('disabled', true);
+                    if (nombreJoueur === 4) {
+                        facteurRotation += 1;
+                        if (facteurRotation > 4) {
+                            facteurRotation = 1;
                         }
                     }
+                    else if (nombreJoueur === 2) {
+                        facteurRotation += 2;
+                        if (facteurRotation > 4) {
+                            facteurRotation = 2
+                        }
+                    }
+                    else if (nombreJoueur === 3) {
+                        facteurRotation += 1;
+                        if (facteurRotation > 4) {
+                            facteurRotation = 1;
+                        }
+                        if (facteurRotation === 1) {
+                            facteurRotation += 1;
+                        }
+                    }
+
+                    var angleRotationDebut = (90 * (facteurRotation - 1));
+                    var angleRotationFin = (90 * facteurRotation);
+
+                    var $plateau = $('#plateau');
+                    $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
+                        duration: 1000,
+                        step: function (now) {
+                            $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
+                            $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
+                            $plateau.css('transform', 'rotate(' + now + 'deg)');
+                        }
+                    });
+
+                    if (deversement) {//Si un déversement est en cour.
+                        if (numeroJoueurActif === numeroJoueurDeversement) {//Si c'est la fin du tour du joueur qui a déverser.
+                            tempsDeversement--;
+                            if (tempsDeversement === 0) {//Si le temps de déverseent est écouler, tue les macro et rends déversement à false.
+                                tuerDeversement();
+                                deversement = false;
+                            }
+                        }
+                    }
+
+                    for (i = mains[numeroJoueurActif].length - 1; i > 5; i--) {
+                        mains[numeroJoueurActif].length--;
+                        $('#liMain' + i).remove();
+                    }
+
+                    //Partie qui augmente le nombre de joueurs.
+                    numeroJoueurActif++;
+                    if (numeroJoueurActif === nombreJoueur) {
+                        numeroJoueurActif = 0;
+                    }
+
+                    //Rends le bouton passer tour inactif lorsuq'on clique dessus pour éviter de "spam" le bouton.
+                    setTimeout(function () {
+                        $('#buttonPasserTour').prop('disabled', false);
+                    }, 2000);
+
+                    tour++;
+                    remplirMain();
+                    updateJeu();
+                    updateAffichageImage();
+                    popUpDebutTour(numeroJoueurActif);
+                    debutTourDeperturber();
+
+                    //}
+                    } else {
+                    popUpErreur('Vous devez d\'abord sélectionner un macro-invertébré d\'une taille inférieur à ' + taillePredateur + ' pour le manger.');
+                    }
                 }
-            }
 
-            if (nombreBandeRiveraine > 3) {
-                nombreBandeRiveraine = 3;
-            }
-            if (arbres === 1 && arbustes === 1 && herbace === 1) {
-                //TODO: probleme d'affiche meme si les 2 sont present ne retourne pas 5.
-                nombreBandeRiveraine = 5;
-            }
+                //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
+                function pointsRessourcesAdditionel() {
+                    //Variable qui contiendra le nombre de bande riveraine.
+                    var nombreBandeRiveraine = 0;
+                    //Variable des bandes riveraine différente si chacune est présente.
+                    var arbres = 0;
+                    var arbustes = 0;
+                    var herbace = 0;
 
-            return nombreBandeRiveraine;
-        }
+                    for (var i = 0; i < 10; i++) {
+                        if (carteBas[numeroJoueurActif][i] != null) {
+                            if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
+                                nombreBandeRiveraine++;
+                                if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
+                                    herbace = 1;
+                                }
+                                else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
+                                    arbuste = 1;
+                                }
+                                else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
+                                    arbres = 1;
+                                }
+                            }
+                        }
+                    }
 
-        //Fonction qui remet les dimensions de la carte à son état original.
-        function revertCarte(event, ui) {
-            $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD, .plateau').removeClass('droppable-hover');
-            if (event != false) {
-                var id;
-                id = $(event).attr('id').substr($(event).attr('id').length - 1);
-                if (bonneZoneDrop(event)) {
-                    if (accepterDrop(event)) {
-                        if ($(event).attr('id') != 'plateau') {
-                            if ($(event).children().length >= 1) {
-                                if (carteDrag.nom != carteBas[numeroJoueurActif][id].nom) {
-                                    $(ui).stop();
-                                    $(ui).animate({
-                                        height: 180,
-                                        width: 118
-                                    }, {
-                                        duration: 500,
-                                        queue: false,
-                                        complete: function () {
-                                            updateAffichageImage();
+                    if (nombreBandeRiveraine > 3) {
+                        nombreBandeRiveraine = 3;
+                    }
+                    if (arbres === 1 && arbustes === 1 && herbace === 1) {
+                        //TODO: probleme d'affiche meme si les 2 sont present ne retourne pas 5.
+                        nombreBandeRiveraine = 5;
+                    }
+
+                    return nombreBandeRiveraine;
+                }
+
+                //Fonction qui remet les dimensions de la carte à son état original.
+                function revertCarte(event, ui) {
+                    $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD, .plateau').removeClass('droppable-hover');
+                    if (event != false) {
+                        var id;
+                        id = $(event).attr('id').substr($(event).attr('id').length - 1);
+                        if (bonneZoneDrop(event)) {
+                            if (accepterDrop(event)) {
+                                if ($(event).attr('id') != 'plateau') {
+                                    if ($(event).children().length >= 1) {
+                                        if (carteDrag.nom != carteBas[numeroJoueurActif][id].nom) {
+                                            $(ui).stop();
+                                            $(ui).animate({
+                                                height: 180,
+                                                width: 118
+                                            }, {
+                                                duration: 500,
+                                                queue: false,
+                                                complete: function () {
+                                                    updateAffichageImage();
+                                                }
+                                            });
+                                            return true;
+                                        } else {
+                                            return false;
                                         }
-                                    });
-                                    return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
                                 } else {
                                     return false;
                                 }
-                            }
-                            else {
-                                return false;
+                            } else {
+                                $(ui).stop();
+                                $(ui).animate({
+                                    height: 180,
+                                    width: 118
+                                }, {
+                                    duration: 500,
+                                    queue: false,
+                                    complete: function () {
+                                        updateAffichageImage();
+                                    }
+                                });
+                                return true;
                             }
                         } else {
-                            return false;
+                            $(ui).stop();
+                            $(ui).animate({
+                                height: 180,
+                                width: 118
+                            }, {
+                                duration: 500,
+                                queue: false,
+                                complete: function () {
+                                    updateAffichageImage();
+                                }
+                            });
+                            return true;
                         }
                     } else {
                         $(ui).stop();
@@ -2783,313 +2931,285 @@
                         });
                         return true;
                     }
-                } else {
-                    $(ui).stop();
-                    $(ui).animate({
-                        height: 180,
-                        width: 118
-                    }, {
-                        duration: 500,
-                        queue: false,
-                        complete: function () {
-                            updateAffichageImage();
-                        }
-                    });
-                    return true;
-                }
-            } else {
-                $(ui).stop();
-                $(ui).animate({
-                    height: 180,
-                    width: 118
-                }, {
-                    duration: 500,
-                    queue: false,
-                    complete: function () {
-                        updateAffichageImage();
-                    }
-                });
-                return true;
-            }
-        }
-
-        //Fonction pour appeler le pop-up d'erreur.
-        function popUpErreur(texte) {
-            $('#divTexteErreur').text(texte);
-            $('#divErreur').dialog({
-                classes: {
-                    'ui-dialog': 'ui-state-error no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 600,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        //Fonction pour appeler le pop-up d'avertissement.
-        function popUpAvertissement(texte) {
-            $('#divTexteErreur').text(texte);
-            $('#divErreur').dialog({
-                classes: {
-                    'ui-dialog': 'ui-state-highlight no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 600,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        //Fonction pour appeler le pop-up de confirmation.
-        function popUpConfirmation(texte) {
-            $('#divTexteErreur').text(texte);
-            $('#divErreur').dialog({
-                classes: {
-                    'ui-dialog': 'popUpConfirmation no-close ui-state-highlight ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 600,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        //Fonction qui appelle un pop-up qui indique le debut du tour d'un joueur
-        function popUpDebutTour(numeroJoueur) {
-            joueur = nomJoueur[numeroJoueur];
-            $('#divTexteDebutTour').text('Début du tour de ' + joueur + '.');
-            $('#divDebutTour').dialog({
-                classes: {
-                    'ui-dialog': 'popUpDebutTour no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 400,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        //Fonction qui appelle un pop-up qui permet au joueur de choisir parmis plusieurs options
-        function popUpChoixMultiple(tableauBouton) {
-            $('#divTexteChoixMultiple').text('Début du tour de ' + joueur + '.');
-            var tabButtons = new Array(tableauBouton.length);
-            tabButtons.forEach(function (item, index) {
-                tabButtons[index].item = { text: tableauBouton[index][0].item, click: tableauBouton[index][1].item }
-            });
-            $('#divChoixMultiple').dialog({
-                classes: {
-                    'ui-dialog': 'popUpDebutTour no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 150,
-                width: 400,
-                hide: 'fade',
-                show: 'fade',
-                buttons: tabButtons
-            });
-        }
-
-        //Function qui affiche un popUp contenant les règles du jeu.
-        function popUpRegle() {
-            var divRegle = document.createElement('div');
-            divRegle.id = 'divRegle';
-            divRegle.className = 'divRegle';
-            $('body').append(divRegle);
-
-            $(divRegle).dialog({
-                classes: {
-                    'ui-dialog': 'popUpRegle no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 575,
-                width: 1050,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        //Fonction qui "update" le jeu.
-        function updateJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 20;
-            pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
-            pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
-            pointsRessourcesUtiliser[numeroJoueurActif] = 0;
-            pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif];
-
-            updatePointsRessources();
-        }
-
-        //Fonction qui "update" l'affichage des images.
-        function updateAffichageImage() {
-            for (i = 0; i < mains[numeroJoueurActif].length; i++) {
-                var carteMain;
-                if (document.getElementById('divCarte' + i) != null) {
-                    carteMain = document.getElementById('divCarte' + i);
-                    if (carteMain.children.length != 0) {
-                        carteMain.removeChild(carteMain.firstChild);
-                    }
-                } else {
-                    var li = document.createElement('li');
-                    li.className = 'liMain';
-                    li.id = 'liMain' + i;
-                    document.getElementById('divMain').appendChild(li);
-
-                    var divCarte = document.createElement('div');
-                    divCarte.id = 'divCarte' + i;
-                    divCarte.className = 'divCarte';
-                    li.appendChild(divCarte);
                 }
 
-                if (mains[numeroJoueurActif][i] != null) {
-                    var image = document.createElement('img');
-                    var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
-                    image.className = 'imageCarteMains';
-                    image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
-                    carteMain.appendChild(image);
-                    $(image).tooltip({
-                        items: 'img',
-                        content: cloneImage,
-                        position: { my: "right" },
-                        show: { delay: 1000 }
+                //Fonction pour appeler le pop-up d'erreur.
+                function popUpErreur(texte) {
+                    $('#divTexteErreur').text(texte);
+                    $('#divErreur').dialog({
+                        classes: {
+                            'ui-dialog': 'ui-state-error no-close ui-corner-all',
+                            'ui-dialog-titlebar': 'no-header'
+                        },
+                        draggable: false,
+                        resizable: false,
+                        height: 80,
+                        width: 600,
+                        hide: 'fade',
+                        show: 'fade'
                     });
                 }
-                if (mains[numeroJoueurActif].length <= 6)
-                {
-                    $('.liMain').css('height', '180px')
-                    $('.liMain').css('width', '118px')
+
+                //Fonction pour appeler le pop-up d'avertissement.
+                function popUpAvertissement(texte) {
+                    $('#divTexteErreur').text(texte);
+                    $('#divErreur').dialog({
+                        classes: {
+                            'ui-dialog': 'ui-state-highlight no-close ui-corner-all',
+                            'ui-dialog-titlebar': 'no-header'
+                        },
+                        draggable: false,
+                        resizable: false,
+                        height: 80,
+                        width: 600,
+                        hide: 'fade',
+                        show: 'fade'
+                    });
                 }
-                else if (mains[numeroJoueurActif].length > 10) {
-                    $('.liMain').css('height', '90px')
-                    $('.liMain').css('width', '59px')
+
+                //Fonction pour appeler le pop-up de confirmation.
+                function popUpConfirmation(texte) {
+                    $('#divTexteErreur').text(texte);
+                    $('#divErreur').dialog({
+                        classes: {
+                            'ui-dialog': 'popUpConfirmation no-close ui-state-highlight ui-corner-all',
+                            'ui-dialog-titlebar': 'no-header'
+                        },
+                        draggable: false,
+                        resizable: false,
+                        height: 80,
+                        width: 600,
+                        hide: 'fade',
+                        show: 'fade'
+                    });
                 }
-                else if (mains[numeroJoueurActif].length > 8) {
-                    $('.liMain').css('height', '120px')
-                    $('.liMain').css('width', '79px')
+
+                //Fonction qui appelle un pop-up qui indique le debut du tour d'un joueur
+                function popUpDebutTour(numeroJoueur) {
+                    joueur = nomJoueur[numeroJoueur];
+                    $('#divTexteDebutTour').text('Début du tour de ' + joueur + '.');
+                    $('#divDebutTour').dialog({
+                        classes: {
+                            'ui-dialog': 'popUpDebutTour no-close ui-corner-all',
+                            'ui-dialog-titlebar': 'no-header'
+                        },
+                        draggable: false,
+                        resizable: false,
+                        height: 80,
+                        width: 400,
+                        hide: 'fade',
+                        show: 'fade'
+                    });
                 }
-                else if (mains[numeroJoueurActif].length > 6) {
-                    $('.liMain').css('height', '144px')
-                    $('.liMain').css('width', '94px')
+
+                //Fonction qui appelle un pop-up qui permet au joueur de choisir parmis plusieurs options
+                function popUpChoixMultiple(tableauBouton) {
+                    $('#divTexteChoixMultiple').text('Début du tour de ' + joueur + '.');
+                    var tabButtons = new Array(tableauBouton.length);
+                    tabButtons.forEach(function (item, index) {
+                        tabButtons[index].item = { text: tableauBouton[index][0].item, click: tableauBouton[index][1].item }
+                    });
+                    $('#divChoixMultiple').dialog({
+                        classes: {
+                            'ui-dialog': 'popUpDebutTour no-close ui-corner-all',
+                            'ui-dialog-titlebar': 'no-header'
+                        },
+                        draggable: false,
+                        resizable: false,
+                        height: 150,
+                        width: 400,
+                        hide: 'fade',
+                        show: 'fade',
+                        buttons: tabButtons
+                    });
                 }
-                if (paquetDecharge.length != 0) {
-                    if ($('#paquetDefausse').children().length > 0) {
-                        $('#paquetDefausse').children().remove();
-                    }
-                    var imageDecharge = document.createElement('img');
-                    imageDecharge.src = 'ressources/' + paquetDecharge[paquetDecharge.length - 1].nomImage;
-                    imageDecharge.className = 'imageCarteJeu';
-                    $('#paquetDefausse').append(imageDecharge);
+
+                //Function qui affiche un popUp contenant les règles du jeu.
+                function popUpRegle() {
+                    var divRegle = document.createElement('div');
+                    divRegle.id = 'divRegle';
+                    divRegle.className = 'divRegle';
+                    $('body').append(divRegle);
+
+                    $(divRegle).dialog({
+                        classes: {
+                            'ui-dialog': 'popUpRegle no-close ui-corner-all',
+                            'ui-dialog-titlebar': 'no-header'
+                        },
+                        draggable: false,
+                        resizable: false,
+                        height: 575,
+                        width: 1050,
+                        hide: 'fade',
+                        show: 'fade'
+                    });
                 }
-            }
-            $(function () {
-                $('.imageCarteMains').draggable({
-                    start: function () {
-                        $(this).animate({
-                            height: 90,
-                            width: 58
-                        }, { duration: 400, queue: false }
-                        );
-                        var id;
-                        id = event.target.parentNode.id.substr(event.target.id.length - 1);
 
-                        //Les if qui vont envoyer l'objet carte dans la variable.
-                        carteDrag = mains[numeroJoueurActif][id];
-                        carteDragNumero = id;
-                    },
-                    drag: function () {
-                        $('.ui-tooltip').hide();
-                    },
-                    revert: function (socketObj) {
-                        return revertCarte(socketObj, this);
-                    },
-                    revertDuration: 400,
-                    cursorAt: { top: 45, left: 29 }
-                });
-            });
-        }
+                //Fonction qui "update" le jeu.
+                function updateJeu() {
+                    pointsRessourcesBase[numeroJoueurActif] = 20;
+                    pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
+                    pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
+                    pointsRessourcesUtiliser[numeroJoueurActif] = 0;
+                    pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif];
 
-        //Fonction qui update après avoir jouer une carte.
-        function updatePointsRessources() {
-            $('.divTextePointsRessource').html('<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources utilisés : ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
-            //TODO: À clou: reste juste à modifier la partie de droite pour afficher les différentes variables de points ressources et
-            // a update dans cette fonction les text. La fonction est déjà appeler correctement :p
-
-        }
-
-        //Fonction qui calcule les points de chaque joueurs.
-        function calculerPoints() {
-            //Remes les différents points à 0.
-            pointsJoueur[0] = 0;
-            pointsJoueur[1] = 0;
-            pointsJoueur[2] = 0;
-            pointsJoueur[3] = 0;
-
-            for (var i = 0; i < 10; i++) {
-                if (carteBas[0][i] != null) {
-                    pointsJoueur[0] += carteBas[0][i].coutResources;
-
-                    if (exemplaireCarteBas[0][i] > 1) {
-                        pointsJoueur[0] += exemplaireCarteBas[0][i] - 1;
-                    }
+                    updatePointsRessources();
                 }
-                if (nombreJoueur >= 2) {
-                    if (carteBas[1][i] != null) {
-                        pointsJoueur[1] += carteBas[1][i].coutResources;
 
-                        if (exemplaireCarteBas[0][i] > 1) {
-                            pointsJoueur[1] += exemplaireCarteBas[1][i] - 1;
+                //Fonction qui "update" l'affichage des images.
+                function updateAffichageImage() {
+                    for (i = 0; i < mains[numeroJoueurActif].length; i++) {
+                        var carteMain;
+                        if (document.getElementById('divCarte' + i) != null) {
+                            carteMain = document.getElementById('divCarte' + i);
+                            if (carteMain.children.length != 0) {
+                                carteMain.removeChild(carteMain.firstChild);
+                            }
+                        } else {
+                            var li = document.createElement('li');
+                            li.className = 'liMain';
+                            li.id = 'liMain' + i;
+                            document.getElementById('divMain').appendChild(li);
+
+                            var divCarte = document.createElement('div');
+                            divCarte.id = 'divCarte' + i;
+                            divCarte.className = 'divCarte';
+                            li.appendChild(divCarte);
+                        }
+
+                        if (mains[numeroJoueurActif][i] != null) {
+                            var image = document.createElement('img');
+                            var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
+                            image.className = 'imageCarteMains';
+                            image.src = 'ressources/' + mains[numeroJoueurActif][i].nomImage;
+                            carteMain.appendChild(image);
+                            $(image).tooltip({
+                                items: 'img',
+                                content: cloneImage,
+                                position: { my: "right" },
+                                show: { delay: 1000 }
+                            });
+                        }
+                        if (mains[numeroJoueurActif].length <= 6)
+                        {
+                            $('.liMain').css('height', '180px')
+                            $('.liMain').css('width', '118px')
+                        }
+                        else if (mains[numeroJoueurActif].length > 10) {
+                            $('.liMain').css('height', '90px')
+                            $('.liMain').css('width', '59px')
+                        }
+                        else if (mains[numeroJoueurActif].length > 8) {
+                            $('.liMain').css('height', '120px')
+                            $('.liMain').css('width', '79px')
+                        }
+                        else if (mains[numeroJoueurActif].length > 6) {
+                            $('.liMain').css('height', '144px')
+                            $('.liMain').css('width', '94px')
+                        }
+                        if (paquetDecharge.length != 0) {
+                            if ($('#paquetDefausse').children().length > 0) {
+                                $('#paquetDefausse').children().remove();
+                            }
+                            var imageDecharge = document.createElement('img');
+                            imageDecharge.src = 'ressources/' + paquetDecharge[paquetDecharge.length - 1].nomImage;
+                            imageDecharge.className = 'imageCarteJeu';
+                            $('#paquetDefausse').append(imageDecharge);
                         }
                     }
-                    if (nombreJoueur >= 3) {
-                        if (carteBas[2][i] != null) {
-                            pointsJoueur[2] += carteBas[2][i].coutResources;
+                    $(function () {
+                        $('.imageCarteMains').draggable({
+                            start: function () {
+                                $(this).animate({
+                                    height: 90,
+                                    width: 58
+                                }, { duration: 400, queue: false }
+                                );
+                                var id;
+                                id = event.target.parentNode.id.substr(event.target.id.length - 1);
 
-                            if (exemplaireCarteBas[2][i] > 1) {
-                                pointsJoueur[2] += exemplaireCarteBas[2][i] - 1;
+                                //Les if qui vont envoyer l'objet carte dans la variable.
+                                carteDrag = mains[numeroJoueurActif][id];
+                                carteDragNumero = id;
+                            },
+                            drag: function () {
+                                $('.ui-tooltip').hide();
+                            },
+                            revert: function (socketObj) {
+                                return revertCarte(socketObj, this);
+                            },
+                            revertDuration: 400,
+                            cursorAt: { top: 45, left: 29 }
+                        });
+                    });
+                }
+
+                //Fonction qui update après avoir jouer une carte.
+                function updatePointsRessources() {
+                    $('.divTextePointsRessource').html('<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources utilisés : ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
+                    //TODO: À clou: reste juste à modifier la partie de droite pour afficher les différentes variables de points ressources et
+                    // a update dans cette fonction les text. La fonction est déjà appeler correctement :p
+
+                }
+
+                //Fonction qui calcule les points de chaque joueurs.
+                function calculerPoints() {
+                    //Remes les différents points à 0.
+                    pointsJoueur[0] = 0;
+                    pointsJoueur[1] = 0;
+                    pointsJoueur[2] = 0;
+                    pointsJoueur[3] = 0;
+
+                    for (var i = 0; i < 10; i++) {
+                        if (carteBas[0][i] != null) {
+                            pointsJoueur[0] += carteBas[0][i].coutResources;
+
+                            if (exemplaireCarteBas[0][i] > 1) {
+                                pointsJoueur[0] += exemplaireCarteBas[0][i] - 1;
                             }
                         }
-                        if (nombreJoueur >= 4) {
-                            if (carteBas[3][i] != null) {
-                                pointsJoueur[3] += carteBas[3][i].coutResources;
+                        if (nombreJoueur >= 2) {
+                            if (carteBas[1][i] != null) {
+                                pointsJoueur[1] += carteBas[1][i].coutResources;
 
-                                if (exemplaireCarteBas[3][i] > 1) {
-                                    pointsJoueur[3] += exemplaireCarteBas[3][i] - 1;
+                                if (exemplaireCarteBas[0][i] > 1) {
+                                    pointsJoueur[1] += exemplaireCarteBas[1][i] - 1;
+                                }
+                            }
+                            if (nombreJoueur >= 3) {
+                                if (carteBas[2][i] != null) {
+                                    pointsJoueur[2] += carteBas[2][i].coutResources;
+
+                                    if (exemplaireCarteBas[2][i] > 1) {
+                                        pointsJoueur[2] += exemplaireCarteBas[2][i] - 1;
+                                    }
+                                }
+                                if (nombreJoueur >= 4) {
+                                    if (carteBas[3][i] != null) {
+                                        pointsJoueur[3] += carteBas[3][i].coutResources;
+
+                                        if (exemplaireCarteBas[3][i] > 1) {
+                                            pointsJoueur[3] += exemplaireCarteBas[3][i] - 1;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-        }
 
-        //fonction qui va update les points des joueurs.
-        function updateZonePoints() {
-            if (nombreJoueur === 4) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
-            } else if (nombreJoueur === 3) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
-            } else if (nombreJoueur === 2) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
-            } else if (nombreJoueur === 1) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
-            }
-        }
+                //fonction qui va update les points des joueurs.
+                function updateZonePoints() {
+                    if (nombreJoueur === 4) {
+                        divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
+                    } else if (nombreJoueur === 3) {
+                        divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
+                    } else if (nombreJoueur === 2) {
+                        divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
+                    } else if (nombreJoueur === 1) {
+                        divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
+                    }
+                }
     </script>
 </body>
 </html>
