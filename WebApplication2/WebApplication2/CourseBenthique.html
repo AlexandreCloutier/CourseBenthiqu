@@ -630,14 +630,14 @@
             mains = new Array(nombreJoueur);
 
             //Minimum de 2 joueurs.
-            mains[0] = new Array(6);
-            mains[1] = new Array(6);
+            mains[0] = [];
+            mains[1] = [];
 
             if (nombreJoueur >= 3) {//3 joueurs.
-                mains[2] = new Array(6);
+                mains[2] = [];
             }
             if (nombreJoueur === 4) {//4 joueurs.
-                mains[3] = new Array(6);
+                mains[3] = [];
             }
         }
 
@@ -819,7 +819,7 @@
         function remplirMain() {
             if (tour === 0) {//Avant de commencer, remplie toutes les mains.
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                mains[0][0] = chercherCarteParticuliere('accumulation', paquetCarte);
                 mains[1][0] = chercherCarteParticuliere('rapides', paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -886,9 +886,9 @@
             }
             else {
                 //Boucle pour toute les position de la main.
-                for (var i = 0; i < 6; i++) {
+                for (var i = 0; i < mains[numeroJoueurActif].length; i++) {
                     if (mains[numeroJoueurActif][i] === null) {
-                        appelerTimerPigerCarte(i);
+                        annimationPigerCarte(i);
                     }
                 }
             }
@@ -954,12 +954,12 @@
         }
 
         //Fonction qui appelle le timer
-        function appelerTimerPigerCarte(i) {
-            setTimeout(function () {
+        function annimationPigerCarte(i) {
                 var carte = pigerCarte(paquetCarte);
-                animationPige(carte, i);
                 mains[numeroJoueurActif][i] = carte;
-            }, 500);
+                setTimeout(function () {
+                    animationPige(carte, i);
+                },500);
         }
 
         //Fonction qui permet de chercher une carte en particulier.
@@ -1132,8 +1132,26 @@
 
                                 } else if (carteDrag.nom === 'pollutionOrganique') {
 
-                                }else if (carteDrag.nom === 'PrisSurFait'){
-                                    //tableauProtege[numeroJoueurActif] = true;                                  
+                                } else if (carteDrag.nom === 'prisSurFait') {
+                                    //tableauProtege[numeroJoueurActif] = true;
+                                }
+                                else if (carteDrag.nom === 'accumulation') {
+                                    paquetDecharge.push(carteDrag);
+                                    supprimerCartePrecise(carteDragNumero);
+                                    ui.draggable.remove();
+                                    for (i = 0; i < 3; i++) {
+                                        var nouvel = true
+                                        for (j = 0; j < mains[numeroJoueurActif].length; j++) {
+                                            if (mains[numeroJoueurActif][j] === null) {
+                                                annimationPigerCarte(j);
+                                                nouvel = false;
+                                            }
+                                        }
+                                        if (nouvel) {
+                                            annimationPigerCarte(mains[numeroJoueurActif].length);
+                                        }
+
+                                    }
                                 }
                             }
                         }
@@ -1357,9 +1375,9 @@
         //Fonction qui va enlever la carte de perturbation de dessus la carte.
         function retirerCartePerturbation(numeroActif, positionCarte) {
             var lettreActif = lettreJoueur(numeroActif);
-                //TODO: Ajouter au cimetière.
-                $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
-                reempillerCartePasPerturber(numeroActif, positionCarte);
+            //TODO: Ajouter au cimetière.
+            $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
+            reempillerCartePasPerturber(numeroActif, positionCarte);
         }
 
         //Fonction qui va re-empiller la carte qui viens de ne plus être perturber.
@@ -1390,8 +1408,8 @@
                             if (carteBas[0][i].tolerance < 6) {
                                 paquetDecharge.push(carteBas[0][i]);
                                 carteBas[0][i] = null;
-                                    var lettre = lettreJoueur(0);
-                                    $('#emplacementJoueur' + lettre + i).children().remove();
+                                var lettre = lettreJoueur(0);
+                                $('#emplacementJoueur' + lettre + i).children().remove();
                             }
                         }
                     }
@@ -1404,8 +1422,8 @@
                             if (carteBas[1][i].tolerance < 6) {
                                 paquetDecharge.push(carteBas[1][i]);
                                 carteBas[1][i] = null;
-                                    var lettre = lettreJoueur(1);
-                                    $('#emplacementJoueur' + lettre + i).children().remove();
+                                var lettre = lettreJoueur(1);
+                                $('#emplacementJoueur' + lettre + i).children().remove();
                             }
                         }
                     }
@@ -1419,8 +1437,8 @@
                                 if (carteBas[2][i].tolerance < 6) {
                                     paquetDecharge.push(carteBas[2][i]);
                                     carteBas[2][i] = null;
-                                        var lettre = lettreJoueur(2);
-                                        $('#emplacementJoueur' + lettre + i).children().remove();
+                                    var lettre = lettreJoueur(2);
+                                    $('#emplacementJoueur' + lettre + i).children().remove();
                                 }
                             }
                         }
@@ -1436,8 +1454,8 @@
                                 if (carteBas[3][i].tolerance < 6) {
                                     paquetDecharge.push(carteBas[3][i]);
                                     carteBas[3][i] = null;
-                                        var lettre = lettreJoueur(3);
-                                        $('#emplacementJoueur' + lettre + i).children().remove();
+                                    var lettre = lettreJoueur(3);
+                                    $('#emplacementJoueur' + lettre + i).children().remove();
                                 }
                             }
 
@@ -1463,7 +1481,7 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].nomImage === nomCarte) {
-                            return document.getElementById('emplacementJoueur' + lettreActif + i);
+                        return document.getElementById('emplacementJoueur' + lettreActif + i);
                     }
                 }
             }
@@ -1773,7 +1791,6 @@
                         return false;
                     }
                     else if (carteDrag.nom === 'prisSurFait') {
-                        console.log(tableauProtege[numeroJoueurActif]);
                         if (tableauProtege[numeroJoueurActif] === true) {
                             popUpAvertissement('Une carte Pris sur le fait est déjà active sur votre jeu');
                             return false;
@@ -2121,30 +2138,44 @@
 
         //Fonction qui anime les cartes du paquet jusqu'à la main.
         function animationPige(carte, position) {
-            var carteMain = 'divCarte' + position;
+            var carteMain
+            if (document.getElementById('divCarte' + position) != null) {
+                carteMain = 'divCarte' + position;
+            } else {
+                var li = document.createElement('li');
+                li.className = 'liMain';
+                li.id = 'liMain' + position;
+                document.getElementById('divMain').appendChild(li);
 
-            var divCarte = document.createElement('div');
-            divCarte.id = 'carte' + position;
-            divCarte.className = 'divAnimee';
-            divCarte.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
-            $('body').append(divCarte);
+                var divCarte = document.createElement('div');
+                divCarte.id = 'divCarte' + position;
+                divCarte.className = 'divCarte';
+                li.appendChild(divCarte);
+
+                carteMain = divCarte.id;
+            }
+            var divCarteAnimee = document.createElement('div');
+            divCarteAnimee.id = 'carte' + position;
+            divCarteAnimee.className = 'divAnimee';
+            divCarteAnimee.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
+            $('body').append(divCarteAnimee);
 
             var x = $('#' + carteMain).offset().left;
             var y = $('#' + carteMain).offset().top;
 
-            $('#carte' + position).animate({
-                height: 180,
-                width: 118,
-                left: x,
-                top: y,
-                borderSpacing: 0,
-            }, {
-                step: function (now) {
-                    $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                    $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                    $(this).css('transform', 'rotate(' + now + 'deg)');
-                }
-            }, { duration: 500 });
+                $('#carte' + position).animate({
+                    height: 180,
+                    width: 118,
+                    left: x,
+                    top: y,
+                    borderSpacing: 0,
+                }, {
+                    step: function (now) {
+                        $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                        $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                        $(this).css('transform', 'rotate(' + now + 'deg)');
+                    }
+                }, { duration: 500 });
             setTimeout(function () {
                 $('#carte' + position).remove();
                 updateAffichageImage();
@@ -2558,13 +2589,7 @@
                             }, { duration: 500 });
                             setTimeout(function () {
                                 $(image).remove();
-                                if ($('#paquetDefausse').children().length > 0) {
-                                    $('#paquetDefausse').children().remove();
-                                }
-                                var imageDecharge = document.createElement('img');
-                                imageDecharge.src = 'ressources/' + paquetDecharge[paquetDecharge.length - 1].nomImage;
-                                imageDecharge.className = 'imageCarteJeu';
-                                $('#paquetDefausse').append(imageDecharge);
+                                updateAffichageImage();
                             }, 500);
                         }
                     });
@@ -2599,9 +2624,9 @@
         function passerTour() {
             var size = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
 
-            //if (size > 4) {
-            //    defausserCarte();
-            //} else {
+            if (size > 4) {
+                defausserCarte();
+            } else {
             $('#buttonPasserTour').prop('disabled', true);
             if (nombreJoueur === 4) {
                 facteurRotation += 1;
@@ -2648,6 +2673,11 @@
                 }
             }
 
+            for (i = mains[numeroJoueurActif].length - 1; i > 5; i--) {
+                mains[numeroJoueurActif].length--;
+                $('#liMain' + i).remove();
+            }
+
             //Partie qui augmente le nombre de joueurs.
             numeroJoueurActif++;
             if (numeroJoueurActif === nombreJoueur) {
@@ -2666,7 +2696,7 @@
             popUpDebutTour(numeroJoueurActif);
             debutTourDeperturber();
 
-            //}
+            }
         }
 
         //Fonction qui va regarder si le joueur à droits à des points de ressources additionel.
@@ -2721,8 +2751,13 @@
                                     $(ui).animate({
                                         height: 180,
                                         width: 118
-                                    }, { duration: 200, queue: false });
-
+                                    }, {
+                                        duration: 500,
+                                        queue: false,
+                                        complete: function () {
+                                            updateAffichageImage();
+                                        }
+                                    });
                                     return true;
                                 } else {
                                     return false;
@@ -2739,8 +2774,13 @@
                         $(ui).animate({
                             height: 180,
                             width: 118
-                        }, { duration: 200, queue: false });
-
+                        }, {
+                            duration: 500,
+                            queue: false,
+                            complete: function () {
+                                updateAffichageImage();
+                            }
+                        });
                         return true;
                     }
                 } else {
@@ -2748,8 +2788,13 @@
                     $(ui).animate({
                         height: 180,
                         width: 118
-                    }, { duration: 200, queue: false });
-
+                    }, {
+                        duration: 500,
+                        queue: false,
+                        complete: function () {
+                            updateAffichageImage();
+                        }
+                    });
                     return true;
                 }
             } else {
@@ -2757,7 +2802,13 @@
                 $(ui).animate({
                     height: 180,
                     width: 118
-                }, { duration: 200, queue: false });
+                }, {
+                    duration: 500,
+                    queue: false,
+                    complete: function () {
+                        updateAffichageImage();
+                    }
+                });
                 return true;
             }
         }
@@ -2887,10 +2938,23 @@
 
         //Fonction qui "update" l'affichage des images.
         function updateAffichageImage() {
-            for (i = 0; i < 6; i++) {
-                carteMain = document.getElementById('divCarte' + i)
-                if (carteMain.children.length != 0) {
-                    carteMain.removeChild(carteMain.firstChild);
+            for (i = 0; i < mains[numeroJoueurActif].length; i++) {
+                var carteMain;
+                if (document.getElementById('divCarte' + i) != null) {
+                    carteMain = document.getElementById('divCarte' + i);
+                    if (carteMain.children.length != 0) {
+                        carteMain.removeChild(carteMain.firstChild);
+                    }
+                } else {
+                    var li = document.createElement('li');
+                    li.className = 'liMain';
+                    li.id = 'liMain' + i;
+                    document.getElementById('divMain').appendChild(li);
+
+                    var divCarte = document.createElement('div');
+                    divCarte.id = 'divCarte' + i;
+                    divCarte.className = 'divCarte';
+                    li.appendChild(divCarte);
                 }
 
                 if (mains[numeroJoueurActif][i] != null) {
@@ -2905,6 +2969,32 @@
                         position: { my: "right" },
                         show: { delay: 1000 }
                     });
+                }
+                if (mains[numeroJoueurActif].length <= 6)
+                {
+                    $('.liMain').css('height', '180px')
+                    $('.liMain').css('width', '118px')
+                }
+                else if (mains[numeroJoueurActif].length > 10) {
+                    $('.liMain').css('height', '90px')
+                    $('.liMain').css('width', '59px')
+                }
+                else if (mains[numeroJoueurActif].length > 8) {
+                    $('.liMain').css('height', '120px')
+                    $('.liMain').css('width', '79px')
+                }
+                else if (mains[numeroJoueurActif].length > 6) {
+                    $('.liMain').css('height', '144px')
+                    $('.liMain').css('width', '94px')
+                }
+                if (paquetDecharge.length != 0) {
+                    if ($('#paquetDefausse').children().length > 0) {
+                        $('#paquetDefausse').children().remove();
+                    }
+                    var imageDecharge = document.createElement('img');
+                    imageDecharge.src = 'ressources/' + paquetDecharge[paquetDecharge.length - 1].nomImage;
+                    imageDecharge.className = 'imageCarteJeu';
+                    $('#paquetDefausse').append(imageDecharge);
                 }
             }
             $(function () {

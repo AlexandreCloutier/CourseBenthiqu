@@ -382,8 +382,8 @@
 }
 
 .divCarte {
-    width: 118px;
-    height: 180px;
+    width: inherit;
+    height: inherit;
 }
 
 .imageCarteMains {
