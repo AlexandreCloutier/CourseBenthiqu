@@ -822,7 +822,7 @@
         function remplirMain() {
             if (tour === 0) {//Avant de commencer, remplie toutes les mains.
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere('accumulation', paquetCarte);
+                mains[0][0] = chercherCarteParticuliere('rapides', paquetCarte);
                 mains[1][0] = chercherCarteParticuliere('rapides', paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -1072,7 +1072,7 @@
                         carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
                         brillanceCarteMangeable(false);
                         $('#divDroite').css('pointer-events', 'auto');
-                        $('#plateau').css('pointer-events', 'auto');
+                        $('#divMain').css('pointer-events', 'auto');
 
                     } else {
                         popUpAvertissement('Le macro-invertebrer doit être de taille inférieur à votre prédateur.')
@@ -1271,7 +1271,7 @@
                                                         popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
                                                         brillanceCarteMangeable(true);
                                                         $('#divDroite').css('pointer-events', 'none');
-                                                        $('#plateau').css('pointer-events', 'none');
+                                                        $('#divMain').css('pointer-events', 'none');
                                                     } else {//Sinon, met simplement la carte.
                                                         onDrop(event, ui, this);
                                                     }
