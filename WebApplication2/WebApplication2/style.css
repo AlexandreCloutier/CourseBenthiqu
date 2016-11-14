@@ -307,6 +307,10 @@
     display: none;
 }
 
+#listeJoueur .ui-selected {
+    background-color: deepskyblue;
+}
+
 .no-close .ui-dialog-title {
     display: none;
 }

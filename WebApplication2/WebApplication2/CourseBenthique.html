@@ -1353,6 +1353,23 @@
                                         classes: {
                                             'ui-dialog': 'no-x ui-corner-all',
                                         },
+                                        buttons: {
+                                            Confirmer: function () {
+                                                if (selected != null) {
+                                                    var numeroJoueurEchange;
+                                                    for (i = 0; i < nombreJoueur; i++) {
+                                                        if (nomJoueur[i] === selected.innerHTML) {
+                                                            numeroJoueurEchange = i
+                                                        }
+                                                    }
+                                                    var mainsTemporaire = mains[numeroJoueurActif];
+                                                    mains[numeroJoueurActif] = mains[numeroJoueurEchange];
+                                                    mains[numeroJoueurEchange] = mainsTemporaire;
+                                                    $(this).dialog('close');
+                                                    updateAffichageImage();
+                                                }
+                                            }
+                                        },
                                         draggable: false,
                                         resizable: false,
                                         modal: true,
@@ -1377,15 +1394,22 @@
                                     for (i = 0; i < nombreJoueur; i++) {
                                         if (i != numeroJoueurActif) {
                                             var li = document.createElement('li');
+                                            li.className = 'ui-widget-content';
                                             li.innerHTML = nomJoueur[i];
                                             $(ul).append(li);
                                         }
                                     }
-
-                                    $(ul).selectable({
-                                        selected: function () { }
+                                    var selected;
+                                    $(function () {
+                                        $(ul).selectable({
+                                            stop: function (event, ui) {
+                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                            },
+                                            selected: function (event, ui) {
+                                                selected = ui.selected;
+                                            }
+                                        });
                                     });
-
                                 }
                             }
                         }
@@ -3052,7 +3076,10 @@
                 tour++;
                 remplirMain();
                 updateJeu();
-                updateAffichageImage();
+                setTimeout(function () {
+                    updateAffichageImage();
+                }, 500);
+                
                 popUpDebutTour(numeroJoueurActif);
                 debutTourDeperturber();
 
