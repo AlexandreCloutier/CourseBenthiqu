@@ -824,7 +824,7 @@
                 if (carte.condition[0] === '?') {
                     for (var i = 0; i < 10; i++) {
                         if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                            if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                                 return true;
                             }
                         }
@@ -835,7 +835,7 @@
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                        if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                        if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition.
                                 return true;
                             }
@@ -849,7 +849,7 @@
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                        if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                        if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
@@ -871,7 +871,7 @@
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                        if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                        if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
@@ -897,7 +897,7 @@
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                        if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                        if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
@@ -3075,15 +3075,17 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === 'interventionBandeRiveraine' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
-                        nombreBandeRiveraine++;
-                        if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
-                            herbace = 1;
-                        }
-                        else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
-                            arbuste = 1;
-                        }
-                        else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
-                            arbres = 1;
+                        if (!carteBas[numeroJoueurActif][i].perturber) {
+                            nombreBandeRiveraine++;
+                            if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
+                                herbace++;
+                            }
+                            else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
+                                arbuste++;
+                            }
+                            else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
+                                arbres++;
+                            }
                         }
                     }
                 }
