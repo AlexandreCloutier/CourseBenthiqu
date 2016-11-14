@@ -10,11 +10,9 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="scripts/jquery.flip.min.js"></script>
     <script>
-        //TODO: points ressources additionnel erreur voir fonction
+        
         //TODO: À la fin du tour, si le joueur ne peut pas restaurer un habitat perturbé, les macro qui s'en servent meurt.
-        //TODO: Dans la partie de droite, je crois qu'il serais bien d'ajouter le boutons regle.
         //TODO: Lorsque l'on supprime une carte ou échange, modifier le nombre d'exemplaire.
-        //TODO: Mettre les cartes perturbation inutile dans la décharge.
 
         //Tableau contenant l'âge des joueurs.
         var ageJoueur;
@@ -70,6 +68,9 @@
         var nombrePolluer;
         //Variable pour erosion.
         var erosion;
+        //Variable pour prédation.
+        var predation;
+        var etapePredation;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -88,6 +89,14 @@
             facteurRotation = 0;
             onMangeAtableCeSoir = false;
             deversement = false;
+            nombrePolluer = 0;
+            predation = false;
+            etape = 1;
+            cartePerturbation = new Array(4);
+            cartePerturbation[0] = new Array(10);
+            cartePerturbation[1] = new Array(10);
+            cartePerturbation[2] = new Array(10);
+            cartePerturbation[3] = new Array(10);
         }
 
         //Fonction qui va créer les diverse éléments du fond.
@@ -1068,13 +1077,13 @@
                 if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type = 'macroInvertebre') {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
                         onMangeAtableCeSoir = false;
-
                         $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
                         carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
                         brillanceCarteMangeable(false);
                         $('#divDroite').css('pointer-events', 'auto');
                         $('#divMain').css('pointer-events', 'auto');
+                        updateAffichageImage();
 
                     } else {
                         popUpAvertissement('Le macro-invertebrer doit être de taille inférieur à votre prédateur.')
@@ -1085,16 +1094,66 @@
             } else if (onPollu) {
                 //TODO: Pour pollution organique, reste juste à augmenter le nombre de carte polluer et à rendre la carte habitats pollue.
             } else if (erosion === 1) {
-                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type = 'bandeRiveraine') {
-
+                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'bandeRiveraine') {
+                    //TODO: faire le travaille.
                 } else {
                     popUpAvertissement('Vous devez sélectionner une carte bande riveraine pour l\'emvoyer à la décharge.');
                 }
             } else if (erosion === 2) {
-                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type = 'bandeRiveraine') {
-
+                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'bandeRiveraine') {
+                    //TODO: faire le travaille.
                 } else {
                     popUpAvertissement('Vous devez sélectionner une carte habitats pour la transformer en sable.');
+                }
+            } else if (predation) {
+                if (etapePredation === 1) {
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'macroInvertebre' || carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'salmonide') {
+                        if (carteBas[numeroJoueurEnnemi][numeroEmplacement].predateur === 1 || carteBas[numeroJoueurEnnemi][numeroEmplacement].predateur === 2) {
+                            taillePredateur = carteBas[numeroJoueurEnnemi][numeroEmplacement].taille;
+                            etapePredation = 2;
+                            brillanceCarteMangeable(true);
+                            brillerCarte('macroInvertebre', numeroJoueurActif, false);
+                        } else {
+                            popUpAvertissement('Vous devez sélectionner un predateur qui mangera un autre macroinvertébrés.')
+                        }
+                    } else {
+                        popUpAvertissement('Vous devez sélectionner un predateur qui mangera un autre macroinvertébrés.')
+                    }
+                } else if (etapePredation === 2) {
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'macroInvertebre') {
+                        if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
+                            brillanceCarteMangeable(false);
+                            etapePredation = 1;
+                            predation = false;
+                            $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
+                            paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
+                            carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                            updateAffichageImage();
+                        } else {
+                            popUpAvertissement('Le macroinvertebre doit être de taille inférieur au prédateur.')
+                        }
+                    } else {
+                        popUpAvertissement('Vous devez sélectionner un prédateur de taille inférieur pour qu\'il soit manger.');
+                    }
+                }
+            }
+        }
+
+        //Fonction qui fais briller les carte d'un certain type pour le joueur donner.
+        function brillerCarte(type, numero, brille) {
+            var lettre = numeroJoueur(numero);
+
+            if (brille) {              
+                for (var i = 0; i < 10; i++) {                   
+                        if (carteBas[0][i] != null) {
+                            if (carteBas[0][i].type === type.toString()) {
+                                    $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
+                            }
+                        }
+                    }
+            } else {
+                for (var i = 0; i < 10; i++) {
+                    $('#emplacementJoueur' + lettre + i).removeClass('ui-echange-highlight');
                 }
             }
         }
@@ -1130,22 +1189,28 @@
                         if (accepterDrop(event.target)) {
                             if (carteDrag.nom === 'deversement' || carteDrag.nom === 'erosion' || carteDrag.nom === 'pollutionOrganique' || carteDrag.type === 'speciale' || carteDrag.type === 'action') {
                                 if (carteDrag.nom === 'deversement') {
+                                    supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     deversement = true;
                                     tempsDeversement = 2;
                                     numeroJoueurDeversement = numeroJoueurActif;
                                     ui.draggable.remove();
+                                    updateAffichageImage();
                                 } else if (carteDrag.nom === 'erosion') {
                                     erosion = true;
                                     //TODO: erosion :) 
                                 } else if (carteDrag.nom === 'pollutionOrganique') {
+                                    supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     brillanceHabitatsEnnemi(true);
                                     ui.draggable.remove();
                                     onPollu = true;
                                     nombrePolluer = 0;
+                                    //TODO: finir pollution organique
                                 } else if (carteDrag.nom === 'prisSurFait') {
                                     //tableauProtege[numeroJoueurActif] = true;
+                                    supprimerCartePrecise(carteDragNumero);
+                                    ui.draggable.remove();
                                 }
                                 else if (carteDrag.nom === 'accumulation') {
                                     paquetDecharge.push(carteDrag);
@@ -1163,6 +1228,14 @@
                                             annimationPigerCarte(mains[numeroJoueurActif].length);
                                         }
                                     }
+                                } else if (carteDrag.nom === 'predation') {
+                                    supprimerCartePrecise(carteDragNumero);
+                                    predation = true;
+                                    etapePredation = 1;
+                                    paquetDecharge.push(carteDrag);
+                                    brillerCarte('macroInvertebre', numeroJoueurActif, true);
+                                    ui.draggable.remove();
+                                    updateAffichageImage();
                                 }
                             }
                         }
@@ -1390,9 +1463,10 @@
         //Fonction qui va enlever la carte de perturbation de dessus la carte.
         function retirerCartePerturbation(numeroActif, positionCarte) {
             var lettreActif = lettreJoueur(numeroActif);
-            //TODO: Ajouter au cimetière.
+            paquetDecharge.push(cartePerturbation[numeroActif][positionCarte]);
             $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
             reempillerCartePasPerturber(numeroActif, positionCarte);
+            updateAffichageImage();
         }
 
         //Fonction qui va re-empiller la carte qui viens de ne plus être perturber.
@@ -2167,7 +2241,7 @@
                 //Partie qui change les données de la mains vers la partie du bas.
                 pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutResources;
                 pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutResources;
-                updatePointsRessources();
+                
                 var id = drop.id.substr(drop.id.length - 1);
 
                 if (carteDrag.type != 'perturbation') {//Si c'est une perturbation, ne l'ajoute pas.
@@ -2176,6 +2250,7 @@
 
                 supprimerCartePrecise(carteDragNumero);
                 calculerPoints();
+                updatePointsRessources();
                 updateZonePoints();
             });
         }
@@ -2803,6 +2878,7 @@
                         if (tempsDeversement === 0) {//Si le temps de déverseent est écouler, tue les macro et rends déversement à false.
                             tuerDeversement();
                             deversement = false;
+                            popUpAvertissement('Un déversement de produits chimique viens d\'avoir lieu, tout les macroinvertébrés de résistance inférieur à 6 sont mort.');
                         }
                     }
                 }
@@ -3070,6 +3146,7 @@
             pointsRessourcesUtiliser[numeroJoueurActif] = 0;
             pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif];
 
+            calculerPoints();
             updatePointsRessources();
         }
 
