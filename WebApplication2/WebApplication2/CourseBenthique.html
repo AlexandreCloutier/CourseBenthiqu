@@ -37,6 +37,8 @@
         var exemplaireCarteBas;
         //Tableau contenant les position des cartes perturbation.
         var cartePerturbation;
+        //Tableau pour savoir si le joueur garder ses points ressources.
+        var tableauRetention;
         //Tableau contenant les points de ressources.
         var pointsRessourcesBase;
         var pointsRessourcesSuplementaire;
@@ -126,7 +128,8 @@
             instantierTableauExemplaire();
             paquetDecharge = new Array();
             pointsJoueur = new Array(6);
-            tableauProtege = new Array(4);
+            tableauProtege = new Array(nombreJoueur);
+            tableauRetention = new Array(nombreJoueur);
         }
 
         //Fonction qui envoie vers les options de création de partie.
@@ -833,7 +836,7 @@
         function remplirMain() {
             if (tour === 0) {//Avant de commencer, remplie toutes les mains.
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                mains[0][0] = chercherCarteParticuliere('derivation', paquetCarte);
                 mains[1][0] = chercherCarteParticuliere('rapides', paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -1217,14 +1220,16 @@
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
                                     for (i = 0; i < 3; i++) {
-                                        var nouvel = true
+                                        var nouvelle = true
                                         for (j = 0; j < mains[numeroJoueurActif].length; j++) {
-                                            if (mains[numeroJoueurActif][j] === null) {
-                                                annimationPigerCarte(j);
-                                                nouvel = false;
+                                            if (nouvelle) {
+                                                if (mains[numeroJoueurActif][j] === null) {
+                                                    annimationPigerCarte(j);
+                                                    nouvel = false;
+                                                }
                                             }
                                         }
-                                        if (nouvel) {
+                                        if (nouvelle) {
                                             annimationPigerCarte(mains[numeroJoueurActif].length);
                                         }
                                     }
@@ -1236,6 +1241,60 @@
                                     brillerCarte('macroInvertebre', numeroJoueurActif, true);
                                     ui.draggable.remove();
                                     updateAffichageImage();
+                                }
+                                else if (carteDrag.nom === 'retention') {
+                                    tableauRetention[numeroJoueurActif] = true;
+                                    paquetDecharge.push(carteDrag);
+                                    supprimerCartePrecise(carteDragNumero);
+                                    ui.draggable.remove();
+                                }
+                                else if (carteDrag.nom === 'derivation') {
+                                    paquetDecharge.push(carteDrag);
+                                    supprimerCartePrecise(carteDragNumero);
+                                    ui.draggable.remove();
+
+                                    var popUp = document.createElement('div');
+                                    popUp.id = 'popUp';
+                                    popUp.className = 'popUp';
+                                    $('body').append(popUp);
+
+                                    $(popUp).dialog({
+                                        classes: {
+                                            'ui-dialog': 'no-x ui-corner-all',
+                                        },
+                                        draggable: false,
+                                        resizable: false,
+                                        modal: true,
+                                        height: 575,
+                                        width: 500,
+                                        hide: 'fade',
+                                        show: 'fade'
+                                    });
+
+                                    var popUpContenu = document.createElement('div');
+                                    popUpContenu.id = 'popUpContenu';
+                                    $(popUp).append(popUpContenu);
+
+                                    var labelChoixJoueur = document.createElement('label');
+                                    labelChoixJoueur.id = 'labelChoixJoueur';
+                                    labelChoixJoueur.innerHTML = 'Choisissez le joueur avec qui vous voulez échanger votre main.';
+                                    $(popUpContenu).append(labelChoixJoueur);
+
+                                    var ul = document.createElement('ul');
+                                    ul.id = 'listeJoueur';
+                                    $(popUpContenu).append(ul);
+                                    for (i = 0; i < nombreJoueur; i++) {
+                                        if (i != numeroJoueurActif) {
+                                            var li = document.createElement('li');
+                                            li.innerHTML = nomJoueur[i];
+                                            $(ul).append(li);
+                                        }
+                                    }
+
+                                    $(ul).selectable({
+                                        selected: function () { }
+                                    });
+
                                 }
                             }
                         }
@@ -1975,11 +2034,11 @@
                         popUpAvertissement('Vous ne possédez pas de prédateur sur votre jeu.');
                         return false;
                     } else if (carteDrag.nom === 'derivation') {
-                        if (mains[numeroJoueurActif].filter(function (value) { return value !== null }).length < 0) {
+                        if (mains[numeroJoueurActif].filter(function (value) { return value !== null }).length > 0) {
                             var compteur = 0;
                             for (i = 0; i < nombreJoueur; i++) {
                                 if (i !== numeroJoueurActif) {
-                                    if (mains[i].filter(function (value) { return value !== null }).length < 0) {
+                                    if (mains[i].filter(function (value) { return value !== null }).length > 0) {
                                         compteur++;
                                     }
                                 }
@@ -3141,6 +3200,12 @@
         //Fonction qui "update" le jeu.
         function updateJeu() {
             pointsRessourcesBase[numeroJoueurActif] = 20;
+            if (tableauRetention[numeroJoueurActif] != null) {
+                if (tableauRetention[numeroJoueurActif] === true) {
+                    pointsRessourcesBase[numeroJoueurActif] += pointsRessourcesRestant[numeroJoueurActif];
+                    tableauRetention[numeroJoueurActif] = false;
+                }
+            }
             pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel();
             pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
             pointsRessourcesUtiliser[numeroJoueurActif] = 0;

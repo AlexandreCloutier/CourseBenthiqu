@@ -303,9 +303,18 @@
     font-size: 28px !important;
 }
 
+.popUp {
+    display: none;
+}
+
 .no-close .ui-dialog-title {
     display: none;
 }
+
+.no-x .ui-dialog-titlebar {
+    display: none;
+}
+
 .no-header {
     background: none !important;
     border: none !important;
