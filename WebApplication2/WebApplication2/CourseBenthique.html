@@ -12,14 +12,14 @@
     <script>
 
         var typeEnum = {
-            'habitats': 1,
-            'macroInvertebre': 2,
-            'perturbation': 3,
-            'speciale': 4,
-            'action': 5,
-            'intervention': 6,
-            'salmonide': 7,
-            'banderiveraine': 8
+            'habitats': 'habitats',
+            'macroInvertebre': 'macroInvertebre',
+            'perturbation': 'perturbation',
+            'speciale': 'special',
+            'action': 'action',
+            'intervention': 'intervention',
+            'salmonide': 'salmonide',
+            'banderiveraine': 'bandeRiveraine'
         };
 
         var nomEnum = {
@@ -824,7 +824,7 @@
                 if (carte.condition[0] === '?') {
                     for (var i = 0; i < 10; i++) {
                         if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                            if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                            if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                                 return true;
                             }
                         }
@@ -835,7 +835,7 @@
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                        if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition.
                                 return true;
                             }
@@ -849,7 +849,7 @@
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                        if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
@@ -871,7 +871,7 @@
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                        if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
@@ -897,7 +897,7 @@
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
-                        if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
+                        if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
                             }
@@ -927,14 +927,14 @@
         function remplirMain() {
             if (tour === 0) {//Avant de commencer, remplie toutes les mains.
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere('derivation', paquetCarte);
-                mains[1][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
-                    mains[2][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                    mains[2][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
                 }
                 if (nombreJoueur === 4) {//4 joueurs.
-                    mains[3][0] = chercherCarteParticuliere('rapides', paquetCarte);
+                    mains[3][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
                 }
 
                 //Deuxième carte c'est un habitats au hasard.
@@ -1015,23 +1015,23 @@
             var nombreGalets = 0;
 
             for (var i = 0; i < paquetCarte.length ; i++) {
-                if (paquetCarte[i].nom === 'fosse') {
+                if (paquetCarte[i].nom === nomEnum.fosse) {
                     nombreFosse++;
                     nombreHabitats++;
                 }
-                else if (paquetCarte[i].nom === 'sable') {
+                else if (paquetCarte[i].nom === nomEnum.sable) {
                     nombreSable++;
                     nombreHabitats++;
                 }
-                else if (paquetCarte[i].nom === 'gravier') {
+                else if (paquetCarte[i].nom === nomEnum.gravier) {
                     nombreGravier++;
                     nombreHabitats++;
                 }
-                else if (paquetCarte[i].nom === 'rapides') {
+                else if (paquetCarte[i].nom === nomEnum.rapides) {
                     nombreRapides++;
                     nombreHabitats++;
                 }
-                else if (paquetCarte[i].nom === 'galets') {
+                else if (paquetCarte[i].nom === nomEnum.galets) {
                     nombreGalets++;
                     nombreHabitats++;
                 }
@@ -1043,19 +1043,19 @@
 
             //Tout les if pour savoir c'est qu'elle habitats, Toujours plus petit que l'habitats et plus grand que l'ancien habitats.
             if (nombreHasard <= nombreFosse) {
-                habitatsRetourner = 'fosse';
+                habitatsRetourner = nomEnum.fosse;
             }
             else if (nombreHasard <= nombreFosse + nombreSable && nombreHasard > nombreFosse) {
-                habitatsRetourner = 'sable';
+                habitatsRetourner = nomEnum.sable;
             }
             else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier && nombreHasard > nombreFosse + nombreSable) {
-                habitatsRetourner = 'gravier';
+                habitatsRetourner = nomEnum.gravier;
             }
             else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier + nombreRapides && nombreHasard > nombreFosse + nombreSable + nombreGravier) {
-                habitatsRetourner = 'rapides';
+                habitatsRetourner = nomEnum.rapides;
             }
             else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier + nombreRapides + nombreGalets && nombreHasard > nombreFosse + nombreSable + nombreGravier + nombreRapides) {
-                habitatsRetourner = 'galets';
+                habitatsRetourner = nomEnum.galets;
             }
 
             return habitatsRetourner;
@@ -1075,8 +1075,9 @@
             var carteRetours
 
             //Boucle dans tout le paquet de cartes à la recherche de la bonne carte.
-            for (var i = 0; i < paquetCarte.length + 1; i++) {
+            for (var i = 0; i < paquetCarte.length; i++) {
                 if (paquetCarte[i].nom === nomCarte) {
+                    
                     carteRetour = paquetCarte[i];
 
                     //Code qui change la valeur i avec la première valeur pour pouvoir faire un array.shift().
@@ -1555,7 +1556,7 @@
                             } else {
                                 ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
 
-                                if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide') {
+                                if (carteDrag.type === typeEnum.habitats || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide') {
                                     popUpErreur('Cette carte est jouable que dans votre zone.');
                                 } else if (carteDrag.type === 'perturbation') {
                                     popUpErreur('Cette carte est jouable que dans la zone d\'un de vos adversaire ou directement sur le plateau.');
@@ -1597,7 +1598,7 @@
         function debutTourDeperturber() {
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
-                    if (carteBas[numeroJoueurActif][i].type === 'habitats' || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
+                    if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === 'bandeRiveraine') {
                         if (carteBas[numeroJoueurActif][i].tempsPerturber != 10 && carteBas[numeroJoueurActif][i].tempsPerturber > 0) {
                             carteBas[numeroJoueurActif][i].tempsPerturber--;
                             if (carteBas[numeroJoueurActif][i].tempsPerturber === 0) {
@@ -1701,7 +1702,7 @@
                         lettre = lettreJoueur(0);
 
                         if (carteBas[0][i] != null) {
-                            if (carteBas[0][i].type === 'habitats') {
+                            if (carteBas[0][i].type === typeEnum.habitats) {
                                 $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
                             }
                         }
@@ -1710,7 +1711,7 @@
                         lettre = lettreJoueur(1);
 
                         if (carteBas[1][i] != null) {
-                            if (carteBas[1][i].type === 'habitats') {
+                            if (carteBas[1][i].type === typeEnum.habitats) {
                                 $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
                             }
                         }
@@ -1719,7 +1720,7 @@
                         lettre = lettreJoueur(2);
 
                         if (carteBas[2][i] != null) {
-                            if (carteBas[2][i].type === 'habitats') {
+                            if (carteBas[2][i].type === typeEnum.habitats) {
                                 $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
                             }
                         }
@@ -1728,7 +1729,7 @@
                         lettre = lettreJoueur(3);
 
                         if (carteBas[3][i] != null) {
-                            if (carteBas[3][i].type === 'habitats') {
+                            if (carteBas[3][i].type === typeEnum.habitats) {
                                 $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
                             }
                         }
@@ -1850,7 +1851,7 @@
             var lettre = lettreJoueur(numeroJoueurActif);
 
             //Si c'est un habitats, un macro-invertebrer ou une bande riveraine, la carte se joue seulement sur notre territoire.
-            if (carteDrag.type === 'habitats' || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide' || carteDrag.type === 'reglementation') {
+            if (carteDrag.type === typeEnum.habitats || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide' || carteDrag.type === 'reglementation') {
                 if (lettreEmplacement === lettre) {
                     return true;
                 }
@@ -2032,8 +2033,8 @@
                         popUpAvertissement('Vous ne respectez pas les conditions nécéssaires.');
                         return false;
                     }
-                } else if (carteDrag.type === 'habitats' || carteDrag.type === 'intervention' || carteDrag.type === 'bandeRiveraine') {
-                    if (carteDrag.type === 'habitats') {
+                } else if (carteDrag.type === typeEnum.habitats || carteDrag.type === 'intervention' || carteDrag.type === 'bandeRiveraine') {
+                    if (carteDrag.type === typeEnum.habitats) {
                         if (verifierNombreHabitats(numeroJoueurActif, 8)) {
                             return true;
                         } else {
@@ -2232,7 +2233,7 @@
 
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueur][i] != null) {
-                    if (carteBas[numeroJoueur][i].type === 'habitats') {
+                    if (carteBas[numeroJoueur][i].type === typeEnum.habitats) {
                         nombreHabitats += exemplaireCarteBas[numeroJoueur][i];
                     }
                 }
@@ -2324,7 +2325,7 @@
 
             if (carteDrag.nom === 'dechets') {
                 if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
-                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
+                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === typeEnum.habitats) {
                         return 'ok';
                     }
                     else {
@@ -2336,7 +2337,7 @@
                 }
             } else if (carteDrag.nom === 'passageToutTerrain') {
                 if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
-                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'habitats') {
+                    if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === typeEnum.habitats) {
                         return 'ok';
                     } else {
                         return 'La carte "Passage de tout-terrain" doit être jouer sur un habitat.';
@@ -2412,7 +2413,7 @@
 
         //Définition de la classe.
         function Carte(type, nom, nomImage, coutResources, params) {
-            if (type === 'habitats') {
+            if (type === typeEnum.habitats) {
                 this.nom = nom;
                 this.type = type;
                 this.habitats = params.habitats;
@@ -2567,29 +2568,19 @@
             //if (tour == 1) {
             //----------------------------------habitats-----------------------------------
 
-            carte = new Carte('habitats', 'fosse', 'fosse.png', 1, { habitats: 'fosse' });
+            carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
-            carte = new Carte('habitats', 'sable', 'sable.png', 1, { habitats: 'sable' });
+            carte = new Carte(typeEnum.habitats, nomEnum.sable, 'sable.png', 1, { habitats: nomEnum.sable });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
-            carte = new Carte('habitats', 'gravier', 'gravier.png', 2, { habitats: 'gravier' });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
-
-            carte = new Carte('habitats', 'rapides', 'rapides.png', 3, { habitats: 'rapides' });
-            paquetCarte.push(carte);
-            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.gravier, 'gravier.png', 2, { habitats: nomEnum.gravier });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
@@ -2597,7 +2588,17 @@
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
-            carte = new Carte('habitats', 'galets', 'galets.png', 3, { habitats: 'galets' });
+            carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+            paquetCarte.push(carte);
+
+            carte = new Carte(typeEnum.habitats, nomEnum.galets, 'galets.png', 3, { habitats: 'galets' });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             paquetCarte.push(carte);
@@ -2612,7 +2613,7 @@
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
-            carte = new Carte('macroInvertebre', 'simuliidae', 'simuliidae.png', 1, { tolerance: 6, taille: 2, typeMacro: 'diptere', condition: ['rapides', 'galets'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'simuliidae', 'simuliidae.png', 1, { tolerance: 6, taille: 2, typeMacro: 'diptere', condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
             paquetCarte.push(carte)
@@ -2623,33 +2624,33 @@
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'psephenidae', 'psephenidae.png', 2, { tolerance: 3, taille: 4, typeMacro: 'coleoptere', condition: ['rapides', 'galets'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'psephenidae', 'psephenidae.png', 2, { tolerance: 3, taille: 4, typeMacro: 'coleoptere', condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'hydropsychidae', 'hydropsychidae.png', 2, { tolerance: 5, taille: 4, typeMacro: 'trichoptere', condition: ['rapides'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'elmidae', 'elmidae.png', 2, { tolerance: 3, taille: 3, typeMacro: 'coleoptere', condition: ['rapides'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'baetidae', 'baetidae.png', 2, { tolerance: 5, taille: 3, typeMacro: 'ephemeroptere', condition: ['rapides'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-
-            carte = new Carte('macroInvertebre', 'hydroptilidae', 'hydroptilidae.png', 2, { tolerance: 4, taille: 2, typeMacro: 'trichoptere', condition: ['rapides', 'sable', 'galets'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'hydropsychidae', 'hydropsychidae.png', 2, { tolerance: 5, taille: 4, typeMacro: 'trichoptere', condition: [nomEnum.rapides], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'ephemeridae', 'ephemeridae.png', 2, { tolerance: 3, taille: 5, typeMacro: 'ephemeroptere', condition: ['sable'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'elmidae', 'elmidae.png', 2, { tolerance: 3, taille: 3, typeMacro: 'coleoptere', condition: [nomEnum.rapides], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'baetidae', 'baetidae.png', 2, { tolerance: 5, taille: 3, typeMacro: 'ephemeroptere', condition: [nomEnum.rapides], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'hydroptilidae', 'hydroptilidae.png', 2, { tolerance: 4, taille: 2, typeMacro: 'trichoptere', condition: [nomEnum.rapides, nomEnum.sable, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+            paquetCarte.push(carte)
+
+            carte = new Carte('macroInvertebre', 'ephemeridae', 'ephemeridae.png', 2, { tolerance: 3, taille: 5, typeMacro: 'ephemeroptere', condition: [nomEnum.sable], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
@@ -2657,57 +2658,57 @@
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'sphaeridae', 'sphaeridae.png', 2, { tolerance: 5, taille: 3, typeMacro: 'mollusque', condition: ['rapides', 'gravier'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'sphaeridae', 'sphaeridae.png', 2, { tolerance: 5, taille: 3, typeMacro: 'mollusque', condition: [nomEnum.rapides, nomEnum.gravier], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'anisoptera', 'anisoptera.png', 3, { tolerance: 5, taille: 6, typeMacro: 'odonate', condition: ['rapides'], predateur: 1 });
+            carte = new Carte('macroInvertebre', 'anisoptera', 'anisoptera.png', 3, { tolerance: 5, taille: 6, typeMacro: 'odonate', condition: [nomEnum.rapides], predateur: 1 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'glossosomatidae', 'glossosomatidae.png', 3, { tolerance: 0, taille: 5, typeMacro: 'trichoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'glossosomatidae', 'glossosomatidae.png', 3, { tolerance: 0, taille: 5, typeMacro: 'trichoptere', condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'heptageniidae', 'heptageniidae.png', 3, { tolerance: 2, taille: 4, typeMacro: 'ephemeroptere', condition: ['rapides', 'galets'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'heptageniidae', 'heptageniidae.png', 3, { tolerance: 2, taille: 4, typeMacro: 'ephemeroptere', condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'ephemerellidae', 'ephemerellidae.png', 3, { tolerance: 1, taille: 4, typeMacro: 'ephemeroptere', condition: ['rapides', 'gravier'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'ephemerellidae', 'ephemerellidae.png', 3, { tolerance: 1, taille: 4, typeMacro: 'ephemeroptere', condition: [nomEnum.rapides, nomEnum.gravier], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'brachycentrus', 'brachycentrus.png', 3, { tolerance: 3, taille: 4, typeMacro: 'trichoptere', condition: ['rapides', 'galets'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'brachycentrus', 'brachycentrus.png', 3, { tolerance: 3, taille: 4, typeMacro: 'trichoptere', condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'rhyacophilidae', 'rhyacophilidae.png', 4, { tolerance: 0, taille: 4, typeMacro: 'trichoptere', condition: ['rapides'], predateur: 1 });
+            carte = new Carte('macroInvertebre', 'rhyacophilidae', 'rhyacophilidae.png', 4, { tolerance: 0, taille: 4, typeMacro: 'trichoptere', condition: [nomEnum.rapides], predateur: 1 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'tipulidae', 'tipulidae.png', 4, { tolerance: 3, taille: 8, typeMacro: 'diptere', condition: ['fosse'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'tipulidae', 'tipulidae.png', 4, { tolerance: 3, taille: 8, typeMacro: 'diptere', condition: [nomEnum.fosse], predateur: 0 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'gyrinidae', 'gyrinidae.png', 4, { tolerance: 4, taille: 5, typeMacro: 'coleoptere', condition: ['fosse'], predateur: 1 });
+            carte = new Carte('macroInvertebre', 'gyrinidae', 'gyrinidae.png', 4, { tolerance: 4, taille: 5, typeMacro: 'coleoptere', condition: [nomEnum.fosse], predateur: 1 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'perlidae', 'perlidae.png', 4, { tolerance: 1, taille: 5, typeMacro: 'plecoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 1 });
+            carte = new Carte('macroInvertebre', 'perlidae', 'perlidae.png', 4, { tolerance: 1, taille: 5, typeMacro: 'plecoptere', condition:[ nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 1 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'corydalidae', 'corydalidae.png', 5, { tolerance: 0, taille: 8, typeMacro: 'megaloptere', condition: ['rapides', 'gravier', 'galets'], predateur: 1 });
+            carte = new Carte('macroInvertebre', 'corydalidae', 'corydalidae.png', 5, { tolerance: 0, taille: 8, typeMacro: 'megaloptere', condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 1 });
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'nepidae', 'nepidae.png', 6, { tolerance: 6, taille: 9, typeMacro: 'hemiptere', condition: ['fosse'], predateur: 1 });
+            carte = new Carte('macroInvertebre', 'nepidae', 'nepidae.png', 6, { tolerance: 6, taille: 9, typeMacro: 'hemiptere', condition: [nomEnum.fosse], predateur: 1 });
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'decapoda', 'decapoda.png', 6, { tolerance: 5, taille: 10, typeMacro: 'crustace', condition: ['galets'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'decapoda', 'decapoda.png', 6, { tolerance: 5, taille: 10, typeMacro: 'crustace', condition: [nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte);
 
-            carte = new Carte('macroInvertebre', 'pteronarcyidae', 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: 'plecoptere', condition: ['rapides', 'gravier', 'galets'], predateur: 0 });
+            carte = new Carte('macroInvertebre', 'pteronarcyidae', 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: 'plecoptere', condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
             //}
@@ -2715,7 +2716,7 @@
             //if (tour == 5) {
             //---------------------------------salmonide---------------------------------
 
-            carte = new Carte('salmonide', 'ombleFontaine', 'ombleFontaine.png', 10, { tolerance: 4, condition: ['fosse', 'rapides', 'gravier', 'galets'], predateur: 2 });
+            carte = new Carte('salmonide', 'ombleFontaine', 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
@@ -2801,19 +2802,19 @@
 
                 //---------------------------------intervention------------------------------
 
-                carte = new Carte('intervention', 'habitatAmenageSable', 'habitatAmenageSable.png', 1, { habitats: 'sable' });
+                carte = new Carte('intervention', 'habitatAmenageSable', 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
                 paquetCarte.push(carte);
 
-                carte = new Carte('intervention', 'habitatAmenageRapides', 'habitatAmenageRapides.png', 1, { habitats: 'rapides' });
+                carte = new Carte('intervention', 'habitatAmenageRapides', 'habitatAmenageRapides.png', 1, { habitats: nomEnum.rapides });
                 paquetCarte.push(carte);
 
-                carte = new Carte('intervention', 'habitatAmenageFosse', 'habitatAmenageFosse.png', 1, { habitats: 'fosse' });
+                carte = new Carte('intervention', 'habitatAmenageFosse', 'habitatAmenageFosse.png', 1, { habitats: nomEnum.fosse });
                 paquetCarte.push(carte);
 
-                carte = new Carte('intervention', 'habitatAmenageGalets', 'habitatAmenageGalets.png', 1, { habitats: 'galets' });
+                carte = new Carte('intervention', 'habitatAmenageGalets', 'habitatAmenageGalets.png', 1, { habitats: nomEnum.galets });
                 paquetCarte.push(carte);
 
-                carte = new Carte('intervention', 'habitatAmenageGravier', 'habitatAmenageGravier.png', 1, { habitats: 'gravier' });
+                carte = new Carte('intervention', 'habitatAmenageGravier', 'habitatAmenageGravier.png', 1, { habitats: nomEnum.gravier });
                 paquetCarte.push(carte);
 
                 carte = new Carte('intervention', 'bandeRiveraineHerbace', 'bandeRiveraineHerbace.png', 1);
