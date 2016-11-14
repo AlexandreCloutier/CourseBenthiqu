@@ -10,7 +10,98 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="scripts/jquery.flip.min.js"></script>
     <script>
-        
+
+        var typeEnum = {
+            'habitats': 1,
+            'macroInvertebre': 2,
+            'perturbation': 3,
+            'speciale': 4,
+            'action': 5,
+            'intervention': 6,
+            'salmonide': 7,
+            'banderiveraine': 8
+        };
+
+        var nomEnum = {
+            'fosse': 1,
+            'sable': 2,
+            'gravier': 3,
+            'rapides': 4,
+            'galets': 5,
+            'oligochaeta': 6,
+            'simuliidae': 7,
+            'chironomidae': 8,
+            'psephenidae': 9,
+            'hydropsychidae': 10,
+            'elmidae': 11,
+            'baetidae': 12,
+            'hydroptilidae': 13,
+            'ephemeridae': 14,
+            'prosobranchia': 15,
+            'sphaeridae': 16,
+            'anisoptera': 17,
+            'glossosomatidae': 18,
+            'heptageniidae': 19,
+            'ephemerellidae': 20,
+            'brachycentrus': 21,
+            'rhyacophilidae': 22,
+            'tipulidae': 23,
+            'gyrinidae': 24,
+            'perlidae': 25,
+            'corydalidae': 26,
+            'nipidae': 27,
+            'decapoda': 28,
+            'pteronarcyidae': 29,
+            'zonage': 30,
+            'crueSoudaine': 31,
+            'pecheur': 32,
+            'emergence': 33,
+            'derivation': 34,
+            'predation': 35,
+            'retention': 36,
+            'prisSurFait': 37,
+            'accumulation': 38,
+            'corveNettoyage': 39,
+            'naturalisation': 40,
+            'amenagement': 41,
+            'pollutionOrganique': 42,
+            'dechets': 43,
+            'artificialisation': 44,
+            'passageToutTerrain': 45,
+            'deversement': 46,
+            'interdiction': 47,
+            'politique': 48,
+            'attestation': 49,
+            'ombleFontaine': 50,
+            'amenageSable': 51,
+            'amenageRapides': 52,
+            'amenageFosse': 53,
+            'amenageGalets': 54,
+            'amenageGravier': 55,
+            'amenageHerbace': 56,
+            'amenageArbustes': 57,
+            'amenageArbre': 58,
+            'herbace': 59,
+            'arbustes': 60,
+            'arbres': 61
+        };
+
+        var typeMacroEnum = {
+            'annelide': 1,
+            'diptere': 2,
+            'coleoptere': 3,
+            'trichoptere': 4,
+            'ephemeroptere': 5,
+            'mollusque': 6,
+            'odonate': 7,
+            'trichoptere': 8,
+            'plecoptere': 9,
+            'megaloptere': 10,
+            'hemiptere': 11,
+            'crustace': 12
+        };
+
+
         //TODO: À la fin du tour, si le joueur ne peut pas restaurer un habitat perturbé, les macro qui s'en servent meurt.
         //TODO: Lorsque l'on supprime une carte ou échange, modifier le nombre d'exemplaire.
 
@@ -1146,14 +1237,14 @@
         function brillerCarte(type, numero, brille) {
             var lettre = numeroJoueur(numero);
 
-            if (brille) {              
-                for (var i = 0; i < 10; i++) {                   
-                        if (carteBas[0][i] != null) {
-                            if (carteBas[0][i].type === type.toString()) {
-                                    $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
-                            }
+            if (brille) {
+                for (var i = 0; i < 10; i++) {
+                    if (carteBas[0][i] != null) {
+                        if (carteBas[0][i].type === type.toString()) {
+                            $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
                         }
                     }
+                }
             } else {
                 for (var i = 0; i < 10; i++) {
                     $('#emplacementJoueur' + lettre + i).removeClass('ui-echange-highlight');
@@ -1201,7 +1292,7 @@
                                     updateAffichageImage();
                                 } else if (carteDrag.nom === 'erosion') {
                                     erosion = true;
-                                    //TODO: erosion :) 
+                                    //TODO: erosion :)
                                 } else if (carteDrag.nom === 'pollutionOrganique') {
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
@@ -2300,7 +2391,7 @@
                 //Partie qui change les données de la mains vers la partie du bas.
                 pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutResources;
                 pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutResources;
-                
+
                 var id = drop.id.substr(drop.id.length - 1);
 
                 if (carteDrag.type != 'perturbation') {//Si c'est une perturbation, ne l'ajoute pas.
