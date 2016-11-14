@@ -852,8 +852,7 @@
                         if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
-                            }
-                            else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                            } else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
                             }
                         }
@@ -874,11 +873,9 @@
                         if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
-                            }
-                            else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                            } else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
-                            }
-                            else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
+                            } else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
                                 condition3 = 'ok';
                             }
                         }
@@ -888,8 +885,7 @@
                 if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok') {
                     return true;
                 }
-            }
-            else if (carte.condition.length === 4) {
+            } else if (carte.condition.length === 4) {
                 var condition1 = carte.condition[0];
                 var condition2 = carte.condition[1];
                 var condition3 = carte.condition[2];
@@ -900,14 +896,11 @@
                         if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === 'intervention') {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
-                            }
-                            else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
+                            } else if (carteBas[numeroJoueurActif][i].habitats === condition2) {//Si l'habitats de la carte est la meme que la condition2.
                                 condition2 = 'ok';
-                            }
-                            else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
+                            } else if (carteBas[numeroJoueurActif][i].habitats === condition3) {//Si l'habitats de la carte est la meme que la condition3.
                                 condition3 = 'ok';
-                            }
-                            else if (carteBas[numeroJoueurActif][i].habitats === condition4) {//Si l'habitats de la carte est la meme que la condition4.
+                            } else if (carteBas[numeroJoueurActif][i].habitats === condition4) {//Si l'habitats de la carte est la meme que la condition4.
                                 condition4 = 'ok';
                             }
                         }
@@ -917,8 +910,7 @@
                 if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok' && condition4 === 'ok') {
                     return true;
                 }
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -991,8 +983,7 @@
                 if (nombreJoueur === 4) {//4 joueurs.
                     mains[3][5] = pigerCarte(paquetCarte);
                 }
-            }
-            else {
+            } else {
                 //Boucle pour toute les position de la main.
                 for (var i = 0; i < mains[numeroJoueurActif].length; i++) {
                     if (mains[numeroJoueurActif][i] === null) {
@@ -1018,20 +1009,16 @@
                 if (paquetCarte[i].nom === nomEnum.fosse) {
                     nombreFosse++;
                     nombreHabitats++;
-                }
-                else if (paquetCarte[i].nom === nomEnum.sable) {
+                } else if (paquetCarte[i].nom === nomEnum.sable) {
                     nombreSable++;
                     nombreHabitats++;
-                }
-                else if (paquetCarte[i].nom === nomEnum.gravier) {
+                } else if (paquetCarte[i].nom === nomEnum.gravier) {
                     nombreGravier++;
                     nombreHabitats++;
-                }
-                else if (paquetCarte[i].nom === nomEnum.rapides) {
+                } else if (paquetCarte[i].nom === nomEnum.rapides) {
                     nombreRapides++;
                     nombreHabitats++;
-                }
-                else if (paquetCarte[i].nom === nomEnum.galets) {
+                } else if (paquetCarte[i].nom === nomEnum.galets) {
                     nombreGalets++;
                     nombreHabitats++;
                 }
@@ -1044,17 +1031,13 @@
             //Tout les if pour savoir c'est qu'elle habitats, Toujours plus petit que l'habitats et plus grand que l'ancien habitats.
             if (nombreHasard <= nombreFosse) {
                 habitatsRetourner = nomEnum.fosse;
-            }
-            else if (nombreHasard <= nombreFosse + nombreSable && nombreHasard > nombreFosse) {
+            } else if (nombreHasard <= nombreFosse + nombreSable && nombreHasard > nombreFosse) {
                 habitatsRetourner = nomEnum.sable;
-            }
-            else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier && nombreHasard > nombreFosse + nombreSable) {
+            } else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier && nombreHasard > nombreFosse + nombreSable) {
                 habitatsRetourner = nomEnum.gravier;
-            }
-            else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier + nombreRapides && nombreHasard > nombreFosse + nombreSable + nombreGravier) {
+            } else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier + nombreRapides && nombreHasard > nombreFosse + nombreSable + nombreGravier) {
                 habitatsRetourner = nomEnum.rapides;
-            }
-            else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier + nombreRapides + nombreGalets && nombreHasard > nombreFosse + nombreSable + nombreGravier + nombreRapides) {
+            } else if (nombreHasard <= nombreFosse + nombreSable + nombreGravier + nombreRapides + nombreGalets && nombreHasard > nombreFosse + nombreSable + nombreGravier + nombreRapides) {
                 habitatsRetourner = nomEnum.galets;
             }
 
@@ -1077,7 +1060,7 @@
             //Boucle dans tout le paquet de cartes à la recherche de la bonne carte.
             for (var i = 0; i < paquetCarte.length; i++) {
                 if (paquetCarte[i].nom === nomCarte) {
-                    
+
                     carteRetour = paquetCarte[i];
 
                     //Code qui change la valeur i avec la première valeur pour pouvoir faire un array.shift().
@@ -1104,14 +1087,11 @@
             //      les équipes soit toujours écrite l'une en dessous de l'autre.
             if (nombreJoueur === 4) {
                 divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + nomJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + nomJoueur[3] + '</li></ul>';
-            }
-            else if (nombreJoueur === 3) {
+            } else if (nombreJoueur === 3) {
                 divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + nomJoueur[2] + '</li></ul>';
-            }
-            else if (nombreJoueur === 2) {
+            } else if (nombreJoueur === 2) {
                 divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + nomJoueur[1] + '</li></ul>';
-            }
-            else if (nombreJoueur === 1) {
+            } else if (nombreJoueur === 1) {
                 divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divNomJoueurs);
@@ -1127,14 +1107,11 @@
             divTextePointsJoueurs.className = 'divTextePointsJoueurs';
             if (nombreJoueur === 4) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
-            }
-            else if (nombreJoueur === 3) {
+            } else if (nombreJoueur === 3) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
-            }
-            else if (nombreJoueur === 2) {
+            } else if (nombreJoueur === 2) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
-            }
-            else if (nombreJoueur === 1) {
+            } else if (nombreJoueur === 1) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
@@ -1306,8 +1283,7 @@
                                     //tableauProtege[numeroJoueurActif] = true;
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
-                                }
-                                else if (carteDrag.nom === 'accumulation') {
+                                } else if (carteDrag.nom === 'accumulation') {
                                     paquetDecharge.push(carteDrag);
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
@@ -1333,14 +1309,12 @@
                                     brillerCarte('macroInvertebre', numeroJoueurActif, true);
                                     ui.draggable.remove();
                                     updateAffichageImage();
-                                }
-                                else if (carteDrag.nom === 'retention') {
+                                } else if (carteDrag.nom === 'retention') {
                                     tableauRetention[numeroJoueurActif] = true;
                                     paquetDecharge.push(carteDrag);
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
-                                }
-                                else if (carteDrag.nom === 'derivation') {
+                                } else if (carteDrag.nom === 'derivation') {
                                     paquetDecharge.push(carteDrag);
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
@@ -1854,17 +1828,14 @@
             if (carteDrag.type === typeEnum.habitats || carteDrag.type === 'macroInvertebre' || carteDrag.type === 'bandeRiveraine' || carteDrag.type === 'salmonide' || carteDrag.type === 'reglementation') {
                 if (lettreEmplacement === lettre) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
-            }
-            else if (carteDrag.type === 'perturbation') {
+            } else if (carteDrag.type === 'perturbation') {
                 if (carteDrag.nom === 'deversement' || carteDrag.nom === 'erosion' || carteDrag.nom === 'pollutionOrganique') {
                     if (identification === 'au') {//Si c'est dropper sur le plateau.
                         return true;
-                    }
-                    else {
+                    } else {
                         return false;
                     }
                 } else {
@@ -1872,25 +1843,20 @@
                         return false;
                     } else if (identification === 'au') {
                         return false;
-                    }
-                    else {
+                    } else {
                         return true;
                     }
                 }
-            }
-            else if (carteDrag.type === 'action') {
+            } else if (carteDrag.type === 'action') {
                 if (identification === 'au') {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
-            }
-            else if (carteDrag.type === 'speciale') {
+            } else if (carteDrag.type === 'speciale') {
                 if (identification === 'au') {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
@@ -2084,11 +2050,9 @@
                 } else if (carteDrag.type === 'action') {
                     if (carteDrag.nom === 'corveNettoyage') {
 
-                    }
-                    else if (carteDrag.nom === 'naturalistion') {
+                    } else if (carteDrag.nom === 'naturalistion') {
 
-                    }
-                    else if (carteDrag.nom === 'amenagement') {
+                    } else if (carteDrag.nom === 'amenagement') {
 
                     }
                     return true;
@@ -2099,8 +2063,7 @@
                             return false;
                         }
                         return true;
-                    }
-                    else if (carteDrag.nom === 'predation') {
+                    } else if (carteDrag.nom === 'predation') {
                         for (i = 0; i < carteBas[numeroJoueurActif].length; i++) {
                             var carteJoueur = carteBas[numeroJoueurActif][i];
                             if (carteJoueur != null) {
@@ -2143,18 +2106,15 @@
                         }
                         popUpAvertissement('Vous ne pouvez pas échanger votre main si elle est vide.');
                         return false;
-                    }
-                    else if (carteDrag.nom === 'prisSurFait') {
+                    } else if (carteDrag.nom === 'prisSurFait') {
                         if (tableauProtege[numeroJoueurActif] === true) {
                             popUpAvertissement('Une carte Pris sur le fait est déjà active sur votre jeu');
                             return false;
                         }
                         return true;
-                    }
-                    else if (carteDrag.nom === 'accumulation') {
+                    } else if (carteDrag.nom === 'accumulation') {
                         return true;
-                    }
-                    else if (carteDrag.nom === 'emergence') {
+                    } else if (carteDrag.nom === 'emergence') {
                         for (i = 0; i > nombreJoueur; i++) {
                             for (j = 0; j < carteBas[i].length; j++) {
                                 if (carteBas[i][j] != null) {
@@ -2168,8 +2128,7 @@
                         }
                         popUpAvertissement('Il n\'y a aucun macroinvetébrés d\'un des ordres spécifiés sur le jeu');
                         return false;
-                    }
-                    else if (carteDrag.nom === 'pecheur') {
+                    } else if (carteDrag.nom === 'pecheur') {
                         var option1 = false;
                         var option2 = false;
 
@@ -2192,11 +2151,9 @@
                             return false;
                         }
                         return true;
-                    }
-                    else if (carteDrag.nom === 'crueSoudaine') {
+                    } else if (carteDrag.nom === 'crueSoudaine') {
                         return true;
-                    }
-                    else if (carteDrag.nom === 'zonage') {
+                    } else if (carteDrag.nom === 'zonage') {
                         for (i = 0; i < carteBas[numeroJoueurActif].length; i++) {
                             if (carteBas[numeroJoueurActif][i] != null) {
                                 if (carteBas[numeroJoueurActif][i].type === 'habitat') {
@@ -2292,33 +2249,25 @@
             if (nombreJoueur === 4) {
                 if (lettrePositionJoueur === 'A') {
                     numeroPositionJoueur = 0;
-                }
-                else if (lettrePositionJoueur === 'D') {
+                } else if (lettrePositionJoueur === 'D') {
                     numeroPositionJoueur = 1;
-                }
-                else if (lettrePositionJoueur === 'B') {
+                } else if (lettrePositionJoueur === 'B') {
                     numeroPositionJoueur = 2;
-                }
-                else if (lettrePositionJoueur === 'C') {
+                } else if (lettrePositionJoueur === 'C') {
                     numeroPositionJoueur = 3;
                 }
-            }
-            else if (nombreJoueur === 3) {
+            } else if (nombreJoueur === 3) {
                 if (lettrePositionJoueur === 'A') {
                     numeroPositionJoueur = 0;
-                }
-                else if (lettrePositionJoueur === 'B') {
+                } else if (lettrePositionJoueur === 'B') {
                     numeroPositionJoueur = 1;
-                }
-                else if (lettrePositionJoueur === 'C') {
+                } else if (lettrePositionJoueur === 'C') {
                     numeroPositionJoueur = 2;
                 }
-            }
-            else if (nombreJoueur === 2) {
+            } else if (nombreJoueur === 2) {
                 if (lettrePositionJoueur === 'A') {
                     numeroPositionJoueur = 0;
-                }
-                else if (lettrePositionJoueur === 'C') {
+                } else if (lettrePositionJoueur === 'C') {
                     numeroPositionJoueur = 1;
                 }
             }
@@ -2327,12 +2276,10 @@
                 if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
                     if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === typeEnum.habitats) {
                         return 'ok';
-                    }
-                    else {
+                    } else {
                         return 'La carte "Déchets" doit être jouer sur un habitat.';
                     }
-                }
-                else {
+                } else {
                     return 'La carte "Déchets" doit être jouer sur un habitat.';
                 }
             } else if (carteDrag.nom === 'passageToutTerrain') {
@@ -2345,25 +2292,20 @@
                 } else {
                     return 'La carte "Passage de tout-terrain" doit être jouer sur un habitat.';
                 }
-            }
-            else if (carteDrag.nom === 'artificialisation') {
+            } else if (carteDrag.nom === 'artificialisation') {
                 if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
                     if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === 'bandeRiveraine') {
                         return 'ok';
-                    }
-                    else {
+                    } else {
                         return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
                     }
-                }
-                else {
+                } else {
                     return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
                 }
-            }
-            else if (carteDrag.nom === 'deversement') {
+            } else if (carteDrag.nom === 'deversement') {
                 return 'ok';
                 //TODO: la carte déversement se joue n'importe ou, ce serais donc le fun que le plateau entier se highlithts.
-            }
-            else {
+            } else {
                 return 'Vous ne pouvez pas mettre une carte perturbation sur un emplacement vide.';
             }
         }
@@ -2385,8 +2327,7 @@
                 if ($(drop).children().length > 1) {
                     ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
                     exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = $(drop).children().length;
-                }
-                else {
+                } else {
                     exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = 1;
                 }
                 //Partie qui change les données de la mains vers la partie du bas.
@@ -2695,7 +2636,7 @@
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
-            carte = new Carte('macroInvertebre', 'perlidae', 'perlidae.png', 4, { tolerance: 1, taille: 5, typeMacro: 'plecoptere', condition:[ nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 1 });
+            carte = new Carte('macroInvertebre', 'perlidae', 'perlidae.png', 4, { tolerance: 1, taille: 5, typeMacro: 'plecoptere', condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 1 });
             paquetCarte.push(carte)
             paquetCarte.push(carte)
 
@@ -2993,14 +2934,12 @@
                     if (facteurRotation > 4) {
                         facteurRotation = 1;
                     }
-                }
-                else if (nombreJoueur === 2) {
+                } else if (nombreJoueur === 2) {
                     facteurRotation += 2;
                     if (facteurRotation > 4) {
                         facteurRotation = 2
                     }
-                }
-                else if (nombreJoueur === 3) {
+                } else if (nombreJoueur === 3) {
                     facteurRotation += 1;
                     if (facteurRotation > 4) {
                         facteurRotation = 1;
@@ -3079,11 +3018,9 @@
                             nombreBandeRiveraine++;
                             if (carteBas[numeroJoueurActif][i].nom === 'herbaceesNaturelles' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineHerbace') {
                                 herbace++;
-                            }
-                            else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
+                            } else if (carteBas[numeroJoueurActif][i].nom === 'arbustes' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbustes') {
                                 arbuste++;
-                            }
-                            else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
+                            } else if (carteBas[numeroJoueurActif][i].nom === 'arbres' || carteBas[numeroJoueurActif][i].nom === 'bandeRiveraineArbres') {
                                 arbres++;
                             }
                         }
@@ -3128,8 +3065,7 @@
                                 } else {
                                     return false;
                                 }
-                            }
-                            else {
+                            } else {
                                 return false;
                             }
                         } else {
