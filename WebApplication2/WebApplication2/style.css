@@ -262,6 +262,12 @@
     box-shadow: 0px 0px 15px 10px #ffdb4d;
 }
 
+.ui-perturber-highlight {
+    -moz-box-shadow: 0 0 15px 10px #ff0000;
+    -webkit-box-shadow: 0 0 15px 10px #ff0000;
+    box-shadow: 0px 0px 15px 10px #ff0000;
+}
+
 /*  ------------IA--------------------*/
 .divOmbragee {
     width: 200px;

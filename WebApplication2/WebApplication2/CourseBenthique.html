@@ -166,7 +166,7 @@
         var predation;
         var etapePredation;
         //Variable qui contient le joueur selectioner par le popUp de choix de joueur.
-        var selectedJoueur
+        var selectedJoueur;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -1199,21 +1199,37 @@
                         updateAffichageImage();
 
                     } else {
-                        popUpAvertissement('Le macro-invertebrer doit être de taille inférieur à votre prédateur.')
+                        popUpAvertissement('Le macro-invertebrer doit être de taille inférieur à votre prédateur.');
                     }
                 } else {
-                    popUpAvertissement('Vous devez sélectionner un macro-invertebrer à manger.')
+                    popUpAvertissement('Vous devez sélectionner un macro-invertebrer à manger.');
                 }
             } else if (onPollu) {
-                //TODO: Pour pollution organique, reste juste à augmenter le nombre de carte polluer et à rendre la carte habitats pollue.
+                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
+                    var lettre = lettreJoueur(numeroJoueurEnnemi);
+                    $('#emplacementJoueur' + lettre + numeroEmplacement).removeClass('ui-echange-highlight');
+                    $('#emplacementJoueur' + lettre + numeroEmplacement).addClass('ui-echange-highlight');
+                    carteBas[numeroJoueurEnnemi][numeroEmplacement].perturber = true;
+                    carteBas[numeroJoueurEnnemi][numeroEmplacement].tempsPerturber = 2;
+                    nombrePolluer++;
+
+                    if (nombrePolluer === 3) {
+                        onPollu = false;
+                        nombrePolluer === 0;
+                        $('#divDroite').css('pointer-events', 'auto');
+                        $('#divMain').css('pointer-events', 'auto');
+                    }
+                } else {
+                    popUpAvertissement('Seulement les habitats peuvent être poluer');
+                }
             } else if (erosion === 1) {
-                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'bandeRiveraine') {
+                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
                     //TODO: faire le travaille.
                 } else {
                     popUpAvertissement('Vous devez sélectionner une carte bande riveraine pour l\'emvoyer à la décharge.');
                 }
             } else if (erosion === 2) {
-                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'bandeRiveraine') {
+                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
                     //TODO: faire le travaille.
                 } else {
                     popUpAvertissement('Vous devez sélectionner une carte habitats pour la transformer en sable.');
@@ -1225,7 +1241,7 @@
                             taillePredateur = carteBas[numeroJoueurEnnemi][numeroEmplacement].taille;
                             etapePredation = 2;
                             brillanceCarteMangeable(true);
-                            brillerCarte('macroInvertebre', numeroJoueurActif, false);
+                            brillerCarte(typeEnum.macroInvertebre, numeroJoueurActif, false);
                         } else {
                             popUpAvertissement('Vous devez sélectionner un predateur qui mangera un autre macroinvertébrés.')
                         }
@@ -1328,7 +1344,9 @@
                                         ui.draggable.remove();
                                         onPollu = true;
                                         nombrePolluer = 0;
-                                        //TODO: finir pollution organique
+                                        $('#divDroite').css('pointer-events', 'none');
+                                        $('#divMain').css('pointer-events', 'none');
+                                        popUpConfirmation('Veuillez choisir les 3 macroinvertébrés à perturber.')
                                     } else {
 
                                     }
@@ -1362,6 +1380,9 @@
                                     brillerCarte(typeEnum.macroInvertebre, numeroJoueurActif, true);
                                     ui.draggable.remove();
                                     updateAffichageImage();
+                                    $('#divDroite').css('pointer-events', 'none');
+                                    $('#divMain').css('pointer-events', 'none');
+                                    popUpConfirmation('veuillez choissir un prédateur pour manger.')
                                 } else if (carteDrag.nom === nomEnum.retention) {
                                     tableauRetention[numeroJoueurActif] = true;
                                     paquetDecharge.push(carteDrag);
@@ -1641,6 +1662,8 @@
                 carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 2;
                 cartePerturbation[numeroPositionJoueur][numeroPosition] = carteDrag;
             }
+
+            $('#emplacementJoueur' + lettreJoueur(numeroPositionJoueur) + numeroPosition).addClass('ui-perturber-highlight');
         }
 
         //Fonction qui enleverais 1 tour au temps de perturbation et si le temps est désormais rendu à 0, retire la carte perturbation et l'état perturber.
@@ -1653,6 +1676,7 @@
                             if (carteBas[numeroJoueurActif][i].tempsPerturber === 0) {
                                 carteBas[numeroJoueurActif][i].perturber = false;
                                 retirerCartePerturbation(numeroJoueurActif, i);
+                                $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + i).removeClass('ui-perturber-highlight');
                             }
                         }
                     }
@@ -1664,6 +1688,7 @@
         function retirerCartePerturbation(numeroActif, positionCarte) {
             var lettreActif = lettreJoueur(numeroActif);
             paquetDecharge.push(cartePerturbation[numeroActif][positionCarte]);
+            cartePerturbation[numeroActif][positionCarte] = null;
             $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
             reempillerCartePasPerturber(numeroActif, positionCarte);
             updateAffichageImage();
@@ -1736,7 +1761,7 @@
 
                         $('#emplacementJoueurC' + i).removeClass('ui-echange-highlight');
                     }
-                    if (nombreJoueur === 3) {
+                    if (nombreJoueur > 3) {
                         $('#emplacementJoueurD' + i).removeClass('ui-echange-highlight');
                     }
                 }
@@ -2182,8 +2207,8 @@
                         popUpAvertissement('Vous ne pouvez pas échanger votre main si elle est vide.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.prisSurFait) {
-                            popUpAvertissement('Cette carte ne peut être jouée que lorsqu\'un adversaire joue une carte Perturbation.');
-                            return false;
+                        popUpAvertissement('Cette carte ne peut être jouée que lorsqu\'un adversaire joue une carte Perturbation.');
+                        return false;
                     } else if (carteDrag.nom === nomEnum.accumulation) {
                         return true;
                     } else if (carteDrag.nom === nomEnum.emergence) {
@@ -2385,7 +2410,7 @@
         //Fonction quivérifie si une carte perturbation se trouve dans la main d'un joueur.
         function verifierPresencePrisSurFait() {
             var tabJoueur;
-            for(i = 0; i < nombreJoueur; i++) {
+            for (i = 0; i < nombreJoueur; i++) {
                 if (i !== numeroJoueurActif) {
                     for (j = 0; j < mains[i].length; j++) {
                         if (mains[i][j] === nomEnum.prisSurFait) {
@@ -2739,7 +2764,7 @@
             //if (tour == 5) {
             //---------------------------------salmonide---------------------------------
 
-            carte = new Carte(typeEnum.salmonide,  nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
@@ -2797,7 +2822,7 @@
             carte = new Carte(typeEnum.reglementation, nomEnum.assainissement, 'assainissement.png', 3);
             paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.reglementation,nomEnum.interdiction, 'interdiction.png', 3);
+            carte = new Carte(typeEnum.reglementation, nomEnum.interdiction, 'interdiction.png', 3);
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.reglementation, nomEnum.politique, 'politique.png', 3);
@@ -3107,7 +3132,7 @@
 
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
-                    if (carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbre || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbustes ||carteBas[numeroJoueurActif][i].nom === nomEnum.amenageHerbace ||carteBas[numeroJoueurActif][i].type === typeEnum.bandeRiveraine) {
+                    if (carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbre || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbustes || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageHerbace || carteBas[numeroJoueurActif][i].type === typeEnum.bandeRiveraine) {
                         if (!carteBas[numeroJoueurActif][i].perturber) {
                             nombreBandeRiveraine++;
                             if (carteBas[numeroJoueurActif][i].nom === nomEnum.herbace || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageHerbace) {
