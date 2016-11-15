@@ -1302,24 +1302,36 @@
                         if (accepterDrop(event.target)) {
                             if (carteDrag.nom === nomEnum.deversement || carteDrag.nom === nomEnum.erosion || carteDrag.nom === nomEnum.pollutionOrganique || carteDrag.type === typeEnum.speciale || carteDrag.type === typeEnum.action) {
                                 if (carteDrag.nom === nomEnum.deversement) {
-                                    supprimerCartePrecise(carteDragNumero);
-                                    paquetDecharge.push(carteDrag);
-                                    deversement = true;
-                                    tempsDeversement = 2;
-                                    numeroJoueurDeversement = numeroJoueurActif;
-                                    ui.draggable.remove();
-                                    updateAffichageImage();
+                                    if (verifierPresencePrisSurFait() === null) {
+                                        supprimerCartePrecise(carteDragNumero);
+                                        paquetDecharge.push(carteDrag);
+                                        deversement = true;
+                                        tempsDeversement = 2;
+                                        numeroJoueurDeversement = numeroJoueurActif;
+                                        ui.draggable.remove();
+                                        updateAffichageImage();
+                                    } else {
+
+                                    }
                                 } else if (carteDrag.nom === nomEnum.erosion) {
-                                    erosion = true;
-                                    //TODO: erosion :)
+                                    if (verifierPresencePrisSurFait() === null) {
+                                        erosion = true;
+                                        //TODO: erosion :)
+                                    } else {
+
+                                    }
                                 } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
-                                    supprimerCartePrecise(carteDragNumero);
-                                    paquetDecharge.push(carteDrag);
-                                    brillanceHabitatsEnnemi(true);
-                                    ui.draggable.remove();
-                                    onPollu = true;
-                                    nombrePolluer = 0;
-                                    //TODO: finir pollution organique
+                                    if (verifierPresencePrisSurFait() === null) {
+                                        supprimerCartePrecise(carteDragNumero);
+                                        paquetDecharge.push(carteDrag);
+                                        brillanceHabitatsEnnemi(true);
+                                        ui.draggable.remove();
+                                        onPollu = true;
+                                        nombrePolluer = 0;
+                                        //TODO: finir pollution organique
+                                    } else {
+
+                                    }
                                 } else if (carteDrag.nom === nomEnum.prisSurFait) {
                                     //tableauProtege[numeroJoueurActif] = true;
                                     supprimerCartePrecise(carteDragNumero);
@@ -2170,11 +2182,8 @@
                         popUpAvertissement('Vous ne pouvez pas échanger votre main si elle est vide.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.prisSurFait) {
-                        if (tableauProtege[numeroJoueurActif] === true) {
-                            popUpAvertissement('Une carte Pris sur le fait est déjà active sur votre jeu');
+                            popUpAvertissement('Cette carte ne peut être jouée que lorsqu\'un adversaire joue une carte Perturbation.');
                             return false;
-                        }
-                        return true;
                     } else if (carteDrag.nom === nomEnum.accumulation) {
                         return true;
                     } else if (carteDrag.nom === nomEnum.emergence) {
@@ -2371,6 +2380,21 @@
             } else {
                 return 'Vous ne pouvez pas mettre une carte perturbation sur un emplacement vide.';
             }
+        }
+
+        //Fonction quivérifie si une carte perturbation se trouve dans la main d'un joueur.
+        function verifierPresencePrisSurFait() {
+            var tabJoueur;
+            for(i = 0; i < nombreJoueur; i++) {
+                if (i !== numeroJoueurActif) {
+                    for (j = 0; j < mains[i].length; j++) {
+                        if (mains[i][j] === nomEnum.prisSurFait) {
+                            tabJoueur[i] = true;
+                        }
+                    }
+                }
+            }
+            return tabJoueur;
         }
 
         //Fonction qui se produit lorsque l'on drop.
