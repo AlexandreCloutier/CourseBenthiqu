@@ -1300,8 +1300,8 @@
                 drop: function (event, ui) {
                     if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
                         if (accepterDrop(event.target)) {
-                            if (carteDrag.nom === 'deversement' || carteDrag.nom === 'erosion' || carteDrag.nom === 'pollutionOrganique' || carteDrag.type === 'speciale' || carteDrag.type === 'action') {
-                                if (carteDrag.nom === 'deversement') {
+                            if (carteDrag.nom === nomEnum.deversement || carteDrag.nom === nomEnum.erosion || carteDrag.nom === nomEnum.pollutionOrganique || carteDrag.type === typeEnum.speciale || carteDrag.type === typeEnum.action) {
+                                if (carteDrag.nom === nomEnum.deversement) {
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     deversement = true;
@@ -1309,10 +1309,10 @@
                                     numeroJoueurDeversement = numeroJoueurActif;
                                     ui.draggable.remove();
                                     updateAffichageImage();
-                                } else if (carteDrag.nom === 'erosion') {
+                                } else if (carteDrag.nom === nomEnum.erosion) {
                                     erosion = true;
                                     //TODO: erosion :)
-                                } else if (carteDrag.nom === 'pollutionOrganique') {
+                                } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     brillanceHabitatsEnnemi(true);
@@ -1320,11 +1320,11 @@
                                     onPollu = true;
                                     nombrePolluer = 0;
                                     //TODO: finir pollution organique
-                                } else if (carteDrag.nom === 'prisSurFait') {
+                                } else if (carteDrag.nom === nomEnum.prisSurFait) {
                                     //tableauProtege[numeroJoueurActif] = true;
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
-                                } else if (carteDrag.nom === 'accumulation') {
+                                } else if (carteDrag.nom === nomEnum.accumulation) {
                                     paquetDecharge.push(carteDrag);
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
@@ -1342,20 +1342,20 @@
                                             annimationPigerCarte(mains[numeroJoueurActif].length);
                                         }
                                     }
-                                } else if (carteDrag.nom === 'predation') {
+                                } else if (carteDrag.nom === nomEnum.predation) {
                                     supprimerCartePrecise(carteDragNumero);
                                     predation = true;
                                     etapePredation = 1;
                                     paquetDecharge.push(carteDrag);
-                                    brillerCarte('macroInvertebre', numeroJoueurActif, true);
+                                    brillerCarte(typeEnum.macroInvertebre, numeroJoueurActif, true);
                                     ui.draggable.remove();
                                     updateAffichageImage();
-                                } else if (carteDrag.nom === 'retention') {
+                                } else if (carteDrag.nom === nomEnum.retention) {
                                     tableauRetention[numeroJoueurActif] = true;
                                     paquetDecharge.push(carteDrag);
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
-                                } else if (carteDrag.nom === 'derivation') {
+                                } else if (carteDrag.nom === nomEnum.derivation) {
                                     paquetDecharge.push(carteDrag);
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
@@ -1392,7 +1392,7 @@
                                         show: 'fade'
                                     });
 
-                                } else if (carteDrag.nom === 'crueSoudaine') {
+                                } else if (carteDrag.nom === nomEnum.crueSoudaine) {
                                     paquetDecharge.push(carteDrag);
                                     supprimerCartePrecise(carteDragNumero);
                                     ui.draggable.remove();
