@@ -2399,9 +2399,14 @@
                 } else {
                     return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
                 }
+            } else if (carteDrag.nom === nomEnum.erosion) {
+                return 'ok';
             } else if (carteDrag.nom === nomEnum.deversement) {
                 return 'ok';
-                //TODO: la carte déversement se joue n'importe ou, ce serais donc le fun que le plateau entier se highlithts.
+                //TODO: Vérifier qu'il y a une bande riveraine à tuer ET un habitats à transformer en sable.
+            } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
+                return 'ok';
+                //TODO: Vérifier qu'il y a 3 habitats à perturber au moins.
             } else {
                 return 'Vous ne pouvez pas mettre une carte perturbation sur un emplacement vide.';
             }
