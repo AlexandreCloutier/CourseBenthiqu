@@ -150,7 +150,7 @@
         //Variable qui contient le nombre de joueur.
         var nombreJoueur;
         //Variable qui nous dira si nous sommes en train de manger.
-        var onMangeAtableCeSoir;
+        var mangerPredateur;
         //Variable qui stock la taille.
         var taillePredateur;
         //Vairable qui dits si un déversement va avoir lieu.
@@ -183,7 +183,7 @@
             numeroJoueurActif = 0;
             tour = 0;
             facteurRotation = 0;
-            onMangeAtableCeSoir = false;
+            mangerPredateur = false;
             deversement = false;
             nombrePolluer = 0;
             predation = false;
@@ -1186,10 +1186,10 @@
             var numeroEmplacement = emplacement.substr(emplacement.length - 1);
             var numeroJoueurEnnemi = numeroJoueur(lettreEmplacement);
 
-            if (onMangeAtableCeSoir) {
+            if (mangerPredateur) {
                 if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type = 'macroInvertebre') {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
-                        onMangeAtableCeSoir = false;
+                        mangerPredateur = false;
                         $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
                         carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
@@ -1576,7 +1576,7 @@
                                                     if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
                                                         taillePredateur = carteDrag.taille;
                                                         onDrop(event, ui, this);
-                                                        onMangeAtableCeSoir = true;
+                                                        mangerPredateur = true;
                                                         popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
                                                         brillanceCarteMangeable(true);
                                                         $('#divDroite').css('pointer-events', 'none');
@@ -1592,7 +1592,7 @@
                                                     if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
                                                         taillePredateur = carteDrag.taille;
                                                         onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
-                                                        onMangeAtableCeSoir = true;
+                                                        mangerPredateur = true;
                                                         popUpConfirmation('Vous devez sélectionnez un macro-invertébré de taille inférieur à manger.');
                                                         brillanceCarteMangeable(true);
                                                     } else {//Sinon, mes simplement la carte.
@@ -3029,7 +3029,7 @@
 
         //Fonction appelé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
-            if (!onMangeAtableCeSoir) {
+            if (!mangerPredateur) {
                 var size = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
 
                 if (size > 4 && tableauPasserTour[numeroJoueurActif] != true) {
