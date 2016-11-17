@@ -2809,33 +2809,65 @@
         function tuerMacroSansHabitats() {
             //Tuer si rapides = perturber.
             if (!presence(nomEnum.rapides)) {
-
+                tuerMacroHabitats(nomEnum.rapides);
             }
 
             //Tuer si sables = perturber.
             if (!presence(nomEnum.sable)) {
-
+                tuerMacroHabitats(nomEnum.sable);
             }
 
             //Tuer si galets = perturber.
             if (!presence(nomEnum.galets)) {
-
+                tuerMacroHabitats(nomEnum.galets);
             }
 
             //tuer si gravier = perturber.
             if (!presence(nomEnum.gravier)) {
-
+                tuerMacroHabitats(nomEnum.gravier);
             }
 
             //Tuer si fosse = perturber.
             if (!presence(nomEnum.fosse)) {
-
+                tuerMacroHabitats(nomEnum.fosse);
             }
         }
 
         //Fonction qui vérifie si le joueur actif détiens une certaine carte non perturber.
         function presence(carte) {
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroJoueurActif][i] != null) {
+                    if (carteBas[numeroJoueurActif][i].type === carte) {
+                        if (!carteBas[numeroJoueurActif][i].perturber) {
+                            return true;
+                        }
+                    }
+                }
+            }
 
+            return false;
+        }
+
+        //Fonction qui tue les macro qui ont besoin d'un habitats entrer en paramètre.
+        function tuerMacroHabitats(habitats) {
+            var tuer = false;
+
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
+                    for (var j = 0; j < carteBas[numeroJoueurActif][i].condition.length; j++) {
+                        if (carteBas[numeroJoueurActif][i].condition[j] === habitats) {
+                            carteBas[numeroJoueurActif][i] = null;
+                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + i).children().remove();
+
+                            tuer = true;
+                        }
+                    }
+                }
+            }
+
+            if (tuer) {
+                popUpConfirmation('Votre habitats ' + habitats + ' est perturber et le/les macroinvertébré(s) l\'utilisant sont mort');
+            }
         }
 
         //Fonction quivérifie si une carte perturbation se trouve dans la main d'un joueur.
@@ -3521,6 +3553,9 @@
                         mains[numeroJoueurActif].length--;
                         $('#liMain' + i).remove();
                     }
+
+                    //On tue les macroInvertébrés qui ont plus leurs habitats ou que leurs habitats est perturber.
+                    tuerMacroSansHabitats();
 
                     //Partie qui augmente le nombre de joueurs.
                     numeroJoueurActif++;
