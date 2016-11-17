@@ -157,6 +157,7 @@
         var deversement;
         var tempsDeversement;
         var numeroJoueurDeversement;
+        var verifier; //SOLUTION TEMPORAIRE
         //Variable qui dits si on est en pleine pollution organique.
         var onPollu;
         var nombrePolluer;
@@ -166,7 +167,8 @@
         var predation;
         var etapePredation;
         //Variable qui contient le joueur selectioner par le popUp de choix de joueur.
-        var selectedJoueur
+        var joueurSelectionne
+        
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -185,6 +187,7 @@
             facteurRotation = 0;
             onMangeAtableCeSoir = false;
             deversement = false;
+            verifier = false;
             nombrePolluer = 0;
             predation = false;
             etape = 1;
@@ -805,58 +808,25 @@
             divTexteDebutTour.className = 'divTexteDebutTour';
             $('#divDebutTour').append(divTexteDebutTour);
 
-            //Div Choix multiple
-            var divChoixMultiple = document.createElement('div');
-            divChoixMultiple.id = 'divChoixMultiple';
-            divChoixMultiple.className = 'divChoixMultiple';
-            $('#plateau').append(divChoixMultiple);
-
-            var divTexteChoixMultiple = document.createElement('div');
-            divTexteChoixMultiple.id = 'divTexteChoixMultiple';
-            divTexteChoixMultiple.className = 'divTexteChoixMultiple';
-            $('#divChoixMultiple').append(divTexteChoixMultiple);
-
             //Div Règle
             var divRegle = document.createElement('div');
             divRegle.id = 'divRegle';
             divRegle.className = 'divRegle';
             $('body').append(divRegle);
 
-            //Div Choix Joueur
-            var divChoixJoueur = document.createElement('div');
-            divChoixJoueur.id = 'divChoixJoueur';
-            divChoixJoueur.className = 'divChoixJoueur';
-            $('body').append(divChoixJoueur);
+            //Div Choix
+            var divChoix = document.createElement('div');
+            divChoix.id = 'divChoix';
+            divChoix.className = 'divChoix';
+            $('body').append(divChoix);
 
-            var popUpContenu = document.createElement('div');
-            popUpContenu.id = 'popUpContenu';
-            $(divChoixJoueur).append(popUpContenu);
+            var divChoixContenu = document.createElement('div');
+            divChoixContenu.id = 'divChoixContenu';
+            $(divChoix).append(divChoixContenu);
 
-            var labelChoixJoueur = document.createElement('label');
-            labelChoixJoueur.id = 'labelChoixJoueur';
-            $(popUpContenu).append(labelChoixJoueur);
-
-            var ul = document.createElement('ul');
-            ul.id = 'listeJoueur';
-            $(popUpContenu).append(ul);
-            for (i = 0; i < nombreJoueur; i++) {
-                if (i != numeroJoueurActif) {
-                    var li = document.createElement('li');
-                    li.style.listStyleType = 'none';
-                    li.innerHTML = nomJoueur[i];
-                    $(ul).append(li);
-                }
-            }
-            $(function () {
-                $(ul).selectable({
-                    stop: function (event, ui) {
-                        $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
-                    },
-                    selected: function (event, ui) {
-                        selectedJoueur = ui.selected;
-                    }
-                });
-            });
+            var labelChoix = document.createElement('label');
+            labelChoix.id = 'labelChoix';
+            $(divChoixContenu).append(labelChoix);
         }
 
         //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
@@ -959,9 +929,12 @@
         //Fonction qui sera fréquement appeler pour ré-emplir la main.
         function remplirMain() {
             if (tour === 0) {//Avant de commencer, remplie toutes les mains.
+                //On distrubue les rapides d'abord, puis les habitats au hasard et on termine par le reste de la main au hasard
+                //pour assurer une chance egal à tous les joueurs d'avoir les mêmes cartes.
+
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere('crueSoudaine', paquetCarte);
-                mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.prisSurFait, paquetCarte);
+                mains[1][0] = chercherCarteParticuliere(nomEnum.deversement, paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
                     mains[2][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
@@ -1300,98 +1273,53 @@
                 drop: function (event, ui) {
                     if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
                         if (accepterDrop(event.target)) {
-                            if (carteDrag.nom === nomEnum.deversement || carteDrag.nom === nomEnum.erosion || carteDrag.nom === nomEnum.pollutionOrganique || carteDrag.type === typeEnum.speciale || carteDrag.type === typeEnum.action) {
-                                if (carteDrag.nom === nomEnum.deversement) {
-                                    if (verifierPresencePrisSurFait() === null) {
-                                        supprimerCartePrecise(carteDragNumero);
-                                        paquetDecharge.push(carteDrag);
-                                        deversement = true;
-                                        tempsDeversement = 2;
-                                        numeroJoueurDeversement = numeroJoueurActif;
-                                        ui.draggable.remove();
-                                        updateAffichageImage();
-                                    } else {
+                            if (carteDrag.nom === nomEnum.deversement) {
+                                if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
 
-                                    }
-                                } else if (carteDrag.nom === nomEnum.erosion) {
-                                    if (verifierPresencePrisSurFait() === null) {
-                                        erosion = true;
-                                        //TODO: erosion :)
-                                    } else {
-
-                                    }
-                                } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
-                                    if (verifierPresencePrisSurFait() === null) {
-                                        supprimerCartePrecise(carteDragNumero);
-                                        paquetDecharge.push(carteDrag);
-                                        brillanceHabitatsEnnemi(true);
-                                        ui.draggable.remove();
-                                        onPollu = true;
-                                        nombrePolluer = 0;
-                                        //TODO: finir pollution organique
-                                    } else {
-
-                                    }
-                                } else if (carteDrag.nom === nomEnum.prisSurFait) {
-                                    //tableauProtege[numeroJoueurActif] = true;
-                                    supprimerCartePrecise(carteDragNumero);
-                                    ui.draggable.remove();
-                                } else if (carteDrag.nom === nomEnum.accumulation) {
                                     paquetDecharge.push(carteDrag);
                                     supprimerCartePrecise(carteDragNumero);
-                                    ui.draggable.remove();
-                                    for (i = 0; i < 3; i++) {
-                                        var nouvelle = true
-                                        for (j = 0; j < mains[numeroJoueurActif].length; j++) {
-                                            if (nouvelle) {
-                                                if (mains[numeroJoueurActif][j] === null) {
-                                                    annimationPigerCarte(j);
-                                                    nouvel = false;
-                                                }
-                                            }
-                                        }
-                                        if (nouvelle) {
-                                            annimationPigerCarte(mains[numeroJoueurActif].length);
-                                        }
-                                    }
-                                } else if (carteDrag.nom === nomEnum.predation) {
-                                    supprimerCartePrecise(carteDragNumero);
-                                    predation = true;
-                                    etapePredation = 1;
-                                    paquetDecharge.push(carteDrag);
-                                    brillerCarte(typeEnum.macroInvertebre, numeroJoueurActif, true);
+                                    console.log(deversement);
+                                    deversement = true;
+                                    tempsDeversement = 2;
+                                    numeroJoueurDeversement = numeroJoueurActif;
                                     ui.draggable.remove();
                                     updateAffichageImage();
-                                } else if (carteDrag.nom === nomEnum.retention) {
-                                    tableauRetention[numeroJoueurActif] = true;
-                                    paquetDecharge.push(carteDrag);
-                                    supprimerCartePrecise(carteDragNumero);
-                                    ui.draggable.remove();
-                                } else if (carteDrag.nom === nomEnum.derivation) {
-                                    paquetDecharge.push(carteDrag);
-                                    supprimerCartePrecise(carteDragNumero);
-                                    ui.draggable.remove();
-
-                                    $('#labelChoixJoueur').text('Choisissez le joueur avec qui vous voulez échanger votre main.');
-
-                                    $('#divChoixJoueur').dialog({
+                                } else {
+                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
+                                    $('#divChoix').dialog({
                                         classes: {
                                             'ui-dialog': 'no-x ui-corner-all',
                                         },
                                         buttons: {
                                             Confirmer: function () {
-                                                if (selectedJoueur != null) {
-                                                    var numeroJoueurEchange;
+                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                                    supprimerCartePrecise(carteDragNumero);
+                                                    paquetDecharge.push(carteDrag);
+                                                    deversement = true;
+                                                    console.log(deversement);
+                                                    tempsDeversement = 2;
+                                                    numeroJoueurDeversement = numeroJoueurActif;
+                                                    ui.draggable.remove();
+                                                    updateAffichageImage();
+                                                    $(this).dialog('close');
+                                                } else {
+                                                    paquetDecharge.push(carteDrag);
+                                                    supprimerCartePrecise(carteDragNumero);
+                                                    ui.draggable.remove();
+
                                                     for (i = 0; i < nombreJoueur; i++) {
-                                                        if (nomJoueur[i] === selectedJoueur.innerHTML) {
-                                                            numeroJoueurEchange = i
+                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                            for (j = 0; j < mains[i].length; j++) {
+                                                                if (mains[i][j] !== null) {
+                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                                                        paquetDecharge.push(mains[i][j]);
+                                                                        mains[i][j] = null;
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
-                                                    var mainsTemporaire = mains[numeroJoueurActif];
-                                                    mains[numeroJoueurActif] = mains[numeroJoueurEchange];
-                                                    mains[numeroJoueurEchange] = mainsTemporaire;
                                                     $(this).dialog('close');
-                                                    updateAffichageImage();
                                                 }
                                             }
                                         },
@@ -1404,39 +1332,422 @@
                                         show: 'fade'
                                     });
 
-                                } else if (carteDrag.nom === nomEnum.crueSoudaine) {
-                                    paquetDecharge.push(carteDrag);
-                                    supprimerCartePrecise(carteDragNumero);
-                                    ui.draggable.remove();
+                                    var ul = document.createElement('ul');
+                                    ul.id = 'listeJoueur';
+                                    $('#divChoixContenu').append(ul);
 
-                                    $('#divChoixJoueur').dialog({
-                                        classes: {
-                                            'ui-dialog': 'no-x ui-corner-all',
-                                        },
-                                        buttons: {
-                                            Confirmer: function () {
-                                                if (selectedJoueur != null) {
-                                                    var numeroJoueurPasserTour;
-                                                    for (i = 0; i < nombreJoueur; i++) {
-                                                        if (nomJoueur[i] === selectedJoueur.innerHTML) {
-                                                            numeroJoueurPasserTour = i
-                                                        }
-                                                    }
-                                                    tableauPasserTour[numeroJoueurPasserTour] = true;
-                                                    $(this).dialog('close');
-                                                    updateAffichageImage();
-                                                }
+                                    var tabJoueur = verifierPresencePrisSurFait();
+                                    for (i = 0; i < tabJoueur.length; i++) {
+                                        if (tabJoueur[i] != null) {
+                                            var li = document.createElement('li');
+                                            li.style.listStyleType = 'none';
+                                            li.innerHTML = nomJoueur[i];
+                                            $(ul).append(li);
+                                        }
+                                    }
+                                    var li = document.createElement('li');
+                                    li.style.listStyleType = 'none';
+                                    li.innerHTML = 'Aucun joueur';
+                                    $(ul).append(li);
+
+                                    $(function () {
+                                        $(ul).selectable({
+                                            stop: function (event, ui) {
+                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                            },
+                                            selected: function (event, ui) {
+                                                joueurSelectionne = ui.selected;
                                             }
-                                        },
-                                        draggable: false,
-                                        resizable: false,
-                                        modal: true,
-                                        height: 575,
-                                        width: 500,
-                                        hide: 'fade',
-                                        show: 'fade'
+                                        });
                                     });
                                 }
+                            } else if (carteDrag.nom === nomEnum.erosion) {
+                                if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
+                                    erosion = true;
+                                    //TODO: erosion :)
+                                } else {
+                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
+                                    $('#divChoix').dialog({
+                                        classes: {
+                                            'ui-dialog': 'no-x ui-corner-all',
+                                        },
+                                        buttons: {
+                                            Confirmer: function () {
+                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                                    supprimerCartePrecise(carteDragNumero);
+                                                    paquetDecharge.push(carteDrag);
+                                                    erosion = true
+                                                    //TODO: erosion:)
+                                                    ui.draggable.remove();
+                                                    updateAffichageImage();
+                                                    $(this).dialog('close');
+                                                } else {
+                                                    paquetDecharge.push(carteDrag);
+                                                    supprimerCartePrecise(carteDragNumero);
+                                                    ui.draggable.remove();
+
+                                                    for (i = 0; i < nombreJoueur; i++) {
+                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                            for (j = 0; j < mains[i].length; j++) {
+                                                                if (mains[i][j] !== null) {
+                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                                                        paquetDecharge.push(mains[i][j]);
+                                                                        mains[i][j] = null;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    $(this).dialog('close');
+                                                }
+                                            }
+                                        },
+                                        draggable: false,
+                                        resizable: false,
+                                        modal: true,
+                                        height: 575,
+                                        width: 500,
+                                        hide: 'fade',
+                                        show: 'fade'
+                                    });
+
+                                    var ul = document.createElement('ul');
+                                    ul.id = 'listeJoueur';
+                                    $('#divChoixContenu').append(ul);
+
+                                    var tabJoueur = verifierPresencePrisSurFait();
+                                    for (i = 0; i < tabJoueur.length; i++) {
+                                        if (tabJoueur[i] != null) {
+                                            var li = document.createElement('li');
+                                            li.style.listStyleType = 'none';
+                                            li.innerHTML = nomJoueur[i];
+                                            $(ul).append(li);
+                                        }
+                                    }
+                                    var li = document.createElement('li');
+                                    li.style.listStyleType = 'none';
+                                    li.innerHTML = 'Aucun joueur';
+                                    $(ul).append(li);
+
+                                    $(function () {
+                                        $(ul).selectable({
+                                            stop: function (event, ui) {
+                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                            },
+                                            selected: function (event, ui) {
+                                                joueurSelectionne = ui.selected;
+                                            }
+                                        });
+                                    });
+                                }
+                            } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
+                                if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
+                                    supprimerCartePrecise(carteDragNumero);
+                                    paquetDecharge.push(carteDrag);
+                                    brillanceHabitatsEnnemi(true);
+                                    ui.draggable.remove();
+                                    onPollu = true;
+                                    nombrePolluer = 0;
+                                    //TODO: finir pollution organique
+                                } else {
+                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
+                                    $('#divChoix').dialog({
+                                        classes: {
+                                            'ui-dialog': 'no-x ui-corner-all',
+                                        },
+                                        buttons: {
+                                            Confirmer: function () {
+                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                                    supprimerCartePrecise(carteDragNumero);
+                                                    paquetDecharge.push(carteDrag);
+                                                    brillanceHabitatsEnnemi(true);
+                                                    onPollu = true;
+                                                    nombrePolluer = 0;
+                                                    //TODO: finir pollution organique
+                                                    ui.draggable.remove();
+                                                    updateAffichageImage();
+                                                    $(this).dialog('close');
+                                                } else {
+                                                    paquetDecharge.push(carteDrag);
+                                                    supprimerCartePrecise(carteDragNumero);
+                                                    ui.draggable.remove();
+
+                                                    for (i = 0; i < nombreJoueur; i++) {
+                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                            for (j = 0; j < mains[i].length; j++) {
+                                                                if (mains[i][j] !== null) {
+                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                                                        paquetDecharge.push(mains[i][j]);
+                                                                        mains[i][j] = null;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    $(this).dialog('close');
+                                                }
+                                            }
+                                        },
+                                        draggable: false,
+                                        resizable: false,
+                                        modal: true,
+                                        height: 575,
+                                        width: 500,
+                                        hide: 'fade',
+                                        show: 'fade'
+                                    });
+
+                                    var ul = document.createElement('ul');
+                                    ul.id = 'listeJoueur';
+                                    $('#divChoixContenu').append(ul);
+
+                                    var tabJoueur = verifierPresencePrisSurFait();
+                                    for (i = 0; i < tabJoueur.length; i++) {
+                                        if (tabJoueur[i] != null) {
+                                            var li = document.createElement('li');
+                                            li.style.listStyleType = 'none';
+                                            li.innerHTML = nomJoueur[i];
+                                            $(ul).append(li);
+                                        }
+                                    }
+
+                                    var li = document.createElement('li');
+                                    li.style.listStyleType = 'none';
+                                    li.innerHTML = 'Aucun joueur';
+                                    $(ul).append(li);
+
+                                    $(function () {
+                                        $(ul).selectable({
+                                            stop: function (event, ui) {
+                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                            },
+                                            selected: function (event, ui) {
+                                                joueurSelectionne = ui.selected;
+                                            }
+                                        });
+                                    });
+                                }
+                            } else if (carteDrag.nom === nomEnum.prisSurFait) {
+                                //tableauProtege[numeroJoueurActif] = true;
+                                supprimerCartePrecise(carteDragNumero);
+                                ui.draggable.remove();
+                            } else if (carteDrag.nom === nomEnum.accumulation) {
+                                paquetDecharge.push(carteDrag);
+                                supprimerCartePrecise(carteDragNumero);
+                                ui.draggable.remove();
+                                for (i = 0; i < 3; i++) {
+                                    var nouvelle = true
+                                    for (j = 0; j < mains[numeroJoueurActif].length; j++) {
+                                        if (nouvelle) {
+                                            if (mains[numeroJoueurActif][j] === null) {
+                                                annimationPigerCarte(j);
+                                                nouvel = false;
+                                            }
+                                        }
+                                    }
+                                    if (nouvelle) {
+                                        annimationPigerCarte(mains[numeroJoueurActif].length);
+                                    }
+                                }
+                            } else if (carteDrag.nom === nomEnum.predation) {
+                                supprimerCartePrecise(carteDragNumero);
+                                predation = true;
+                                etapePredation = 1;
+                                paquetDecharge.push(carteDrag);
+                                brillerCarte(typeEnum.macroInvertebre, numeroJoueurActif, true);
+                                ui.draggable.remove();
+                                updateAffichageImage();
+                            } else if (carteDrag.nom === nomEnum.retention) {
+                                tableauRetention[numeroJoueurActif] = true;
+                                paquetDecharge.push(carteDrag);
+                                supprimerCartePrecise(carteDragNumero);
+                                ui.draggable.remove();
+                            } else if (carteDrag.nom === nomEnum.derivation) {
+                                paquetDecharge.push(carteDrag);
+                                supprimerCartePrecise(carteDragNumero);
+                                ui.draggable.remove();
+
+                                $('#labelChoix').text('Choisissez le joueur avec qui vous voulez échanger votre main.');
+
+                                var ul = document.createElement('ul');
+                                ul.id = 'listeJoueur';
+                                $('#divChoixContenu').append(ul);
+
+                                for (i = 0; i < nombreJoueur; i++) {
+                                    if (i != numeroJoueurActif) {
+                                        var li = document.createElement('li');
+                                        li.style.listStyleType = 'none';
+                                        li.innerHTML = nomJoueur[i];
+                                        $(ul).append(li);
+                                    }
+                                }
+                                $(function () {
+                                    $(ul).selectable({
+                                        stop: function (event, ui) {
+                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        },
+                                        selected: function (event, ui) {
+                                            joueurSelectionne = ui.selected;
+                                        }
+                                    });
+                                });
+                                $('#divChoix').dialog({
+                                    classes: {
+                                        'ui-dialog': 'no-x ui-corner-all',
+                                    },
+                                    buttons: {
+                                        Confirmer: function () {
+                                            if (joueurSelectionne != null) {
+                                                var numeroJoueurEchange;
+                                                for (i = 0; i < nombreJoueur; i++) {
+                                                    if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                        numeroJoueurEchange = i
+                                                    }
+                                                }
+                                                var mainsTemporaire = mains[numeroJoueurActif];
+                                                mains[numeroJoueurActif] = mains[numeroJoueurEchange];
+                                                mains[numeroJoueurEchange] = mainsTemporaire;
+                                                $(this).dialog('close');
+                                                updateAffichageImage();
+                                            }
+                                        }
+                                    },
+                                    draggable: false,
+                                    resizable: false,
+                                    modal: true,
+                                    height: 575,
+                                    width: 500,
+                                    hide: 'fade',
+                                    show: 'fade'
+                                });
+
+                            } else if (carteDrag.nom === nomEnum.crueSoudaine) {
+                                paquetDecharge.push(carteDrag);
+                                supprimerCartePrecise(carteDragNumero);
+                                ui.draggable.remove();
+
+                                $('#labelChoix').text('Choisissez le joueur qui ratera son prochain tour.');
+
+                                var ul = document.createElement('ul');
+                                ul.id = 'listeJoueur';
+                                $('#divChoixContenu').append(ul);
+
+                                for (i = 0; i < nombreJoueur; i++) {
+                                    if (i != numeroJoueurActif) {
+                                        var li = document.createElement('li');
+                                        li.style.listStyleType = 'none';
+                                        li.innerHTML = nomJoueur[i];
+                                        $(ul).append(li);
+                                    }
+                                }
+                                $(function () {
+                                    $(ul).selectable({
+                                        stop: function (event, ui) {
+                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        },
+                                        selected: function (event, ui) {
+                                            joueurSelectionne = ui.selected;
+                                        }
+                                    });
+                                });
+
+                                $('#divChoix').dialog({
+                                    classes: {
+                                        'ui-dialog': 'no-x ui-corner-all',
+                                    },
+                                    buttons: {
+                                        Confirmer: function () {
+                                            if (joueurSelectionne != null) {
+                                                var numeroJoueurPasserTour;
+                                                for (i = 0; i < nombreJoueur; i++) {
+                                                    if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                        numeroJoueurPasserTour = i
+                                                    }
+                                                }
+                                                tableauPasserTour[numeroJoueurPasserTour] = true;
+                                                $(this).dialog('close');
+                                                updateAffichageImage();
+                                            }
+                                        }
+                                    },
+                                    draggable: false,
+                                    resizable: false,
+                                    modal: true,
+                                    height: 575,
+                                    width: 500,
+                                    hide: 'fade',
+                                    show: 'fade'
+                                });
+                            } else if (carteDrag.nom === nomEnum.pecheur) {
+                                $('#labelChoix').text('Choisissez un des effets suivants.')
+                                $('#divChoix').dialog({
+                                    classes: {
+                                        'ui-dialog': 'no-x ui-corner-all',
+                                    },
+                                    buttons: {
+                                        Confirmer: function () {
+                                            if (joueurSelectionne.id === '1') {
+                                                for (i = 0; i < nombreJoueur.length; i++) {
+                                                    if (i != numeroJoueurActif) {
+                                                        for (j = 0; j < carteBas[i].length; j++) {
+                                                            if (carteBas[i][j] != null) {
+                                                                if (carteBas[i][j].type = typeEnum.salmonide) {
+                                                                    for (k = 0; k < mains[numeroJoueurActif].length; k++) {
+                                                                        if (mains[numeroJoueurActif][k] === null) {
+                                                                            mains[numeroJoueurActif][k] = carteBas[i][j];
+                                                                            carteBas[i][j] = null;
+                                                                            break;
+                                                                        }
+                                                                    }
+                                                                    if (carteBas[i][j] !== null) {
+                                                                        mains[numeroJoueurActif][mains[numeroJoueurActif].length] = carteBas[i][j];
+                                                                        carteBas[i][j] = null;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+
+                                            }
+                                        }
+                                    },
+                                    draggable: false,
+                                    resizable: false,
+                                    modal: true,
+                                    height: 575,
+                                    width: 500,
+                                    hide: 'fade',
+                                    show: 'fade'
+                                });
+
+                                var ul = document.createElement('ul');
+                                ul.id = 'listeJoueur';
+                                $('#divChoixContenu').append(ul);
+
+                                var li = document.createElement('li');
+                                li.style.listStyleType = 'none';
+                                li.id = '1';
+                                li.innerHTML = 'Pêcher la carte Salmonidé d\'un adversaire et la placer dans votre main.';
+                                $(ul).append(li);
+
+                                var li = document.createElement('li');
+                                li.style.listStyleType = 'none';
+                                li.id = '2';
+                                li.innerHTML = 'Choisir un carte dans la décharge.';
+                                $(ul).append(li);
+
+                                $(function () {
+                                    $(ul).selectable({
+                                        stop: function (event, ui) {
+                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        },
+                                        selected: function (event, ui) {
+                                            joueurSelectionne = ui.selected;
+                                        }
+                                    });
+                                });
                             }
                         }
                     }
@@ -1594,8 +1905,84 @@
                                                     popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                                 }
                                             } else {
-                                                rendrePerturber(event);
-                                                onDrop(event, ui, this);
+                                                if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
+                                                    rendrePerturber(event);
+                                                    onDrop(event, ui, this);
+                                                } else {
+                                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
+                                                    $('#divChoix').dialog({
+                                                        classes: {
+                                                            'ui-dialog': 'no-x ui-corner-all',
+                                                        },
+                                                        buttons: {
+                                                            Confirmer: function () {
+                                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                                                    supprimerCartePrecise(carteDragNumero);
+                                                                    paquetDecharge.push(carteDrag);
+                                                                    erosion = true
+                                                                    //TODO: erosion:)
+                                                                    ui.draggable.remove();
+                                                                    updateAffichageImage();
+                                                                    $(this).dialog('close');
+                                                                } else {
+                                                                    paquetDecharge.push(carteDrag);
+                                                                    supprimerCartePrecise(carteDragNumero);
+                                                                    ui.draggable.remove();
+
+                                                                    for (i = 0; i < nombreJoueur; i++) {
+                                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                                            for (j = 0; j < mains[i].length; j++) {
+                                                                                if (mains[i][j] !== null) {
+                                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                                                                        paquetDecharge.push(mains[i][j]);
+                                                                                        mains[i][j] = null;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    $(this).dialog('close');
+                                                                }
+                                                            }
+                                                        },
+                                                        draggable: false,
+                                                        resizable: false,
+                                                        modal: true,
+                                                        height: 575,
+                                                        width: 500,
+                                                        hide: 'fade',
+                                                        show: 'fade'
+                                                    });
+
+                                                    var ul = document.createElement('ul');
+                                                    ul.id = 'listeJoueur';
+                                                    $('#divChoixContenu').append(ul);
+
+                                                    var tabJoueur = verifierPresencePrisSurFait();
+                                                    for (i = 0; i < tabJoueur.length; i++) {
+                                                        if (tabJoueur[i] != null) {
+                                                            var li = document.createElement('li');
+                                                            li.style.listStyleType = 'none';
+                                                            li.innerHTML = nomJoueur[i];
+                                                            $(ul).append(li);
+                                                        }
+                                                    }
+                                                    var li = document.createElement('li');
+                                                    li.style.listStyleType = 'none';
+                                                    li.innerHTML = 'Aucun joueur';
+                                                    $(ul).append(li);
+
+                                                    $(function () {
+                                                        $(ul).selectable({
+                                                            stop: function (event, ui) {
+                                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                                            },
+                                                            selected: function (event, ui) {
+                                                                joueurSelectionne = ui.selected;
+                                                            }
+                                                        });
+                                                    });
+                                                }
                                             }
                                         }
                                     }
@@ -2104,11 +2491,17 @@
                             return false;
                         }
                     } else if (carteDrag.nom === nomEnum.deversement) {
-                        if (deversement === false) {
-                            return true;
+                        if (!verifier) {
+                            verifier = true;
+                            if (deversement === false) {
+                                return true;
+                            } else {
+                                popUpAvertissement('Un déversement aura déjà lieu à la fin du tour du joueur: ' + nomJoueur[numeroJoueurDeversement] + '.');
+                                return false;
+                            }
                         } else {
-                            popUpAvertissement('Un déversement aura déjà lieu à la fin du tour du joueur: ' + numeroJoueurDeversement + '.');
-                            return false;
+                            verifier = false;
+                            return true;
                         }
                     }
 
@@ -2182,8 +2575,8 @@
                         popUpAvertissement('Vous ne pouvez pas échanger votre main si elle est vide.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.prisSurFait) {
-                            popUpAvertissement('Cette carte ne peut être jouée que lorsqu\'un adversaire joue une carte Perturbation.');
-                            return false;
+                        popUpAvertissement('Cette carte ne peut être jouée que lorsqu\'un adversaire joue une carte Perturbation.');
+                        return false;
                     } else if (carteDrag.nom === nomEnum.accumulation) {
                         return true;
                     } else if (carteDrag.nom === nomEnum.emergence) {
@@ -2374,22 +2767,19 @@
                 } else {
                     return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
                 }
-            } else if (carteDrag.nom === nomEnum.deversement) {
-                return 'ok';
-                //TODO: la carte déversement se joue n'importe ou, ce serais donc le fun que le plateau entier se highlithts.
-            } else {
-                return 'Vous ne pouvez pas mettre une carte perturbation sur un emplacement vide.';
             }
         }
 
         //Fonction quivérifie si une carte perturbation se trouve dans la main d'un joueur.
         function verifierPresencePrisSurFait() {
-            var tabJoueur;
-            for(i = 0; i < nombreJoueur; i++) {
+            var tabJoueur = new Array(nombreJoueur);
+            for (i = 0; i < nombreJoueur; i++) {
                 if (i !== numeroJoueurActif) {
                     for (j = 0; j < mains[i].length; j++) {
-                        if (mains[i][j] === nomEnum.prisSurFait) {
-                            tabJoueur[i] = true;
+                        if (mains[i][j] != null) {
+                            if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                tabJoueur[i] = true;
+                            }
                         }
                     }
                 }
@@ -2739,7 +3129,7 @@
             //if (tour == 5) {
             //---------------------------------salmonide---------------------------------
 
-            carte = new Carte(typeEnum.salmonide,  nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
             paquetCarte.push(carte);
             paquetCarte.push(carte);
 
@@ -2797,7 +3187,7 @@
             carte = new Carte(typeEnum.reglementation, nomEnum.assainissement, 'assainissement.png', 3);
             paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.reglementation,nomEnum.interdiction, 'interdiction.png', 3);
+            carte = new Carte(typeEnum.reglementation, nomEnum.interdiction, 'interdiction.png', 3);
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.reglementation, nomEnum.politique, 'politique.png', 3);
@@ -3107,13 +3497,13 @@
 
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
-                    if (carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbre || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbustes ||carteBas[numeroJoueurActif][i].nom === nomEnum.amenageHerbace ||carteBas[numeroJoueurActif][i].type === typeEnum.bandeRiveraine) {
+                    if (carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbre || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbustes || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageHerbace || carteBas[numeroJoueurActif][i].type === typeEnum.bandeRiveraine) {
                         if (!carteBas[numeroJoueurActif][i].perturber) {
                             nombreBandeRiveraine++;
                             if (carteBas[numeroJoueurActif][i].nom === nomEnum.herbace || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageHerbace) {
                                 herbace++;
                             } else if (carteBas[numeroJoueurActif][i].nom === nomEnum.arbustes || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbustes) {
-                                arbuste++;
+                                arbustes++;
                             } else if (carteBas[numeroJoueurActif][i].nom === nomEnum.arbres || carteBas[numeroJoueurActif][i].nom === nomEnum.amenageArbre) {
                                 arbres++;
                             }
@@ -3278,28 +3668,6 @@
             });
         }
 
-        //Fonction qui appelle un pop-up qui permet au joueur de choisir parmis plusieurs options
-        function popUpChoixMultiple(tableauBouton) {
-            $('#divTexteChoixMultiple').text('Début du tour de ' + joueur + '.');
-            var tabButtons = new Array(tableauBouton.length);
-            tabButtons.forEach(function (item, index) {
-                tabButtons[index].item = { text: tableauBouton[index][0].item, click: tableauBouton[index][1].item }
-            });
-            $('#divChoixMultiple').dialog({
-                classes: {
-                    'ui-dialog': 'popUpDebutTour no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 150,
-                width: 400,
-                hide: 'fade',
-                show: 'fade',
-                buttons: tabButtons
-            });
-        }
-
         //Function qui affiche un popUp contenant les règles du jeu.
         function popUpRegle() {
             $(divRegle).dialog({
@@ -3407,6 +3775,9 @@
                         //Les if qui vont envoyer l'objet carte dans la variable.
                         carteDrag = mains[numeroJoueurActif][id];
                         carteDragNumero = id;
+                    },
+                    stop: function() {
+                        $('.ui-tooltip').hide();
                     },
                     drag: function () {
                         $('.ui-tooltip').hide();

@@ -303,7 +303,7 @@
     font-size: 28px !important;
 }
 
-.divChoixJoueur {
+.divChoixJoueur, .divChoix{
     display: none;
 }
 
