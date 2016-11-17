@@ -960,7 +960,7 @@
         function remplirMain() {
             if (tour === 0) {//Avant de commencer, remplie toutes les mains.
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere('crueSoudaine', paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -2428,7 +2428,12 @@
 
         //Fonction qui va tuer les macroinvertébrés qui ont plus d'habitats.
         function tuerMacroSansHabitats() {
+            //Tuer si rapides = perturber.
 
+            //Tuer si sables = perturber.
+            //Tuer si galets = perturber.
+            //tuer si gravier = perturber.
+            //Tuer si fosse = perturber.
         }
 
         //Fonction quivérifie si une carte perturbation se trouve dans la main d'un joueur.
