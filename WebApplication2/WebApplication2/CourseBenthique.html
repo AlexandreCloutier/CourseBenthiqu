@@ -2808,11 +2808,34 @@
         //Fonction qui va tuer les macroinvertébrés qui ont plus d'habitats.
         function tuerMacroSansHabitats() {
             //Tuer si rapides = perturber.
+            if (!presence(nomEnum.rapides)) {
+
+            }
 
             //Tuer si sables = perturber.
+            if (!presence(nomEnum.sable)) {
+
+            }
+
             //Tuer si galets = perturber.
+            if (!presence(nomEnum.galets)) {
+
+            }
+
             //tuer si gravier = perturber.
+            if (!presence(nomEnum.gravier)) {
+
+            }
+
             //Tuer si fosse = perturber.
+            if (!presence(nomEnum.fosse)) {
+
+            }
+        }
+
+        //Fonction qui vérifie si le joueur actif détiens une certaine carte non perturber.
+        function presence(carte) {
+
         }
 
         //Fonction quivérifie si une carte perturbation se trouve dans la main d'un joueur.
