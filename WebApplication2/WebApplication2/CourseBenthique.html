@@ -1316,9 +1316,12 @@
                 drop: function (event, ui) {
                     if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
                         if (accepterDrop(event.target)) {
+                            console.log('a');
                             if (carteDrag.nom === nomEnum.deversement || carteDrag.nom === nomEnum.erosion || carteDrag.nom === nomEnum.pollutionOrganique || carteDrag.type === typeEnum.speciale || carteDrag.type === typeEnum.action) {
-                                if (carteDrag.nom === nomEnum.deversement) {
+                                console.log('b'); if (carteDrag.nom === nomEnum.deversement) {
+                                    console.log('c');
                                     if (verifierPresencePrisSurFait() === null) {
+                                        console.log('d');
                                         supprimerCartePrecise(carteDragNumero);
                                         paquetDecharge.push(carteDrag);
                                         deversement = true;
@@ -1609,7 +1612,15 @@
                                                 id = event.target.id.substr(event.target.id.length - 1);
 
                                                 if (carteDrag.nom === carteBas[numeroJoueurActif][id].nom) {
-                                                    onDrop(event, ui, this);
+                                                    if (!(carteBas[numeroJoueurActif][id].type === typeEnum.habitats && carteBas[numeroJoueurActif][id].perturber)) {
+                                                        if (!(carteBas[numeroJoueurActif][id].type === typeEnum.bandeRiveraine && carteBas[numeroJoueurActif][id].perturber)) {
+                                                            onDrop(event, ui, this);
+                                                        } else {
+                                                            popUpErreur('Vous ne pouvez pas empiller sur une carte perturber.')
+                                                        }
+                                                    } else {
+                                                        popUpErreur('Vous ne pouvez pas empiller sur une carte perturber.')
+                                                    }
                                                 } else {//Sinon, le drop est pas accepter.
                                                     ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                                     popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
@@ -1909,7 +1920,11 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].nomImage === nomCarte) {
-                        return document.getElementById('emplacementJoueur' + lettreActif + i);
+                        if (!(carteBas[numeroJoueurActif][i].type === typeEnum.habitats && carteBas[numeroJoueurActif][i].perturber)) {
+                            if (!(carteBas[numeroJoueurActif][i].type === typeEnum.bandeRiveraine && carteBas[numeroJoueurActif][i].perturber)) {
+                                return document.getElementById('emplacementJoueur' + lettreActif + i);
+                            }
+                        }
                     }
                 }
             }
@@ -2129,10 +2144,10 @@
                             return false;
                         }
                     } else if (carteDrag.nom === nomEnum.deversement) {
-                        if (deversement === false) {
+                        if (!deversement) {
                             return true;
                         } else {
-                            popUpAvertissement('Un déversement aura déjà lieu à la fin du tour du joueur: ' + numeroJoueurDeversement + '.');
+                            popUpAvertissement('Un déversement aura déjà lieu à la fin du tour du joueur: ' + nomJoueur[numeroJoueurDeversement] + '.');
                             return false;
                         }
                     }
@@ -2400,16 +2415,20 @@
                     return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
                 }
             } else if (carteDrag.nom === nomEnum.erosion) {
-                return 'ok';
+                return 'ok';//TODO: Vérifier qu'il y a une bande riveraine à tuer ET un habitats à transformer en sable.
             } else if (carteDrag.nom === nomEnum.deversement) {
-                return 'ok';
-                //TODO: Vérifier qu'il y a une bande riveraine à tuer ET un habitats à transformer en sable.
+                return 'ok';              
             } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
                 return 'ok';
                 //TODO: Vérifier qu'il y a 3 habitats à perturber au moins.
             } else {
                 return 'Vous ne pouvez pas mettre une carte perturbation sur un emplacement vide.';
             }
+        }
+
+        //Fonction qui va tuer les macroinvertébrés qui ont plus d'habitats.
+        function tuerMacroSansHabitats() {
+
         }
 
         //Fonction quivérifie si une carte perturbation se trouve dans la main d'un joueur.
