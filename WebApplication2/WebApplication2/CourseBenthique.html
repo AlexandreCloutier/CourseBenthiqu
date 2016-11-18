@@ -1199,13 +1199,21 @@
             } else if (erosion) {
                 if (etapeErosion === 1) {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
-                        //TODO: faire le travaille.
+                        paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
+                        carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                        $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().last().remove();
+                        etapeErosion = 2;
+                        updateAffichageImage();
+                        popUpConfirmation('Vous devez désormais sélectionner un habitats que vous voulez transformer en sable.')
                     } else {
                         popUpAvertissement('Vous devez sélectionner une carte bande riveraine pour l\'emvoyer à la décharge.');
                     }
                 } else if (etapeErosion === 2) {
-                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
                         //TODO: faire le travaille.
+                        
+                        $('#divDroite').css('pointer-events', 'auto');
+                        $('#divMain').css('pointer-events', 'auto');
                     } else {
                         popUpAvertissement('Vous devez sélectionner une carte habitats pour la transformer en sable.');
                     }
@@ -1377,12 +1385,14 @@
                                         });
                                     });
                                 }
-                            } else if (carteDrag.nom === nomEnum.erosion) {
+                            } else if (carteDrag.nom === nomEnum.erosion) {                             
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
+                                    popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.');
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     ui.draggable.remove();
                                     erosion = true;
+                                    etapeErosion = 1;
                                     $('#divDroite').css('pointer-events', 'none');
                                     $('#divMain').css('pointer-events', 'none');
                                     //TODO: erosion :)
@@ -1463,6 +1473,7 @@
                                 }
                             } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
+                                    popUpConfirmation('Vous devez sélectioner 3 habitats à polluer.');
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     brillanceHabitatsEnnemi(true);
@@ -2842,11 +2853,11 @@
             }
         }
 
-        //Fonction qui vérifie si le joueur actif détiens une certaine carte non perturber.
+        //Fonction qui vérifie si le joueur actif détiens un certain habitat non perturber.
         function presence(carte) {
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
-                    if (carteBas[numeroJoueurActif][i].type === carte) {
+                    if (carteBas[numeroJoueurActif][i].nom === carte) {
                         if (!carteBas[numeroJoueurActif][i].perturber) {
                             return true;
                         }
