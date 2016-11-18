@@ -934,7 +934,7 @@
 
                 //Première carte c'est un habitats rapides.
 
-                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.pecheur, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -942,6 +942,8 @@
                 }
                 if (nombreJoueur === 4) {//4 joueurs.
                     mains[3][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                    //Test Pecheur
+                    carteBas[1][0] = chercherCarteParticuliere(nomEnum.ombleFontaine, paquetCarte);
                 }
 
                 //Deuxième carte c'est un habitats au hasard.
@@ -1331,9 +1333,9 @@
                                                     supprimerCartePrecise(carteDragNumero);
                                                     ui.draggable.remove();
 
-                                                    for (i = 0; i < nombreJoueur; i++) {
+                                                    for (var i = 0; i < nombreJoueur; i++) {
                                                         if (nomJoueur[i] === joueurSelectionne.innerHTML) {
-                                                            for (j = 0; j < mains[i].length; j++) {
+                                                            for (var j = 0; j < mains[i].length; j++) {
                                                                 if (mains[i][j] !== null) {
                                                                     if (mains[i][j].nom === nomEnum.prisSurFait) {
                                                                         paquetDecharge.push(mains[i][j]);
@@ -1361,7 +1363,7 @@
                                     $('#divChoixContenu').append(ul);
 
                                     var tabJoueur = verifierPresencePrisSurFait();
-                                    for (i = 0; i < tabJoueur.length; i++) {
+                                    for (var i = 0; i < tabJoueur.length; i++) {
                                         if (tabJoueur[i] != null) {
                                             var li = document.createElement('li');
                                             li.style.listStyleType = 'none';
@@ -1417,9 +1419,9 @@
                                                     supprimerCartePrecise(carteDragNumero);
                                                     ui.draggable.remove();
 
-                                                    for (i = 0; i < nombreJoueur; i++) {
+                                                    for (var i = 0; i < nombreJoueur; i++) {
                                                         if (nomJoueur[i] === joueurSelectionne.innerHTML) {
-                                                            for (j = 0; j < mains[i].length; j++) {
+                                                            for (var j = 0; j < mains[i].length; j++) {
                                                                 if (mains[i][j] !== null) {
                                                                     if (mains[i][j].nom === nomEnum.prisSurFait) {
                                                                         paquetDecharge.push(mains[i][j]);
@@ -1447,7 +1449,7 @@
                                     $('#divChoixContenu').append(ul);
 
                                     var tabJoueur = verifierPresencePrisSurFait();
-                                    for (i = 0; i < tabJoueur.length; i++) {
+                                    for (var i = 0; i < tabJoueur.length; i++) {
                                         if (tabJoueur[i] != null) {
                                             var li = document.createElement('li');
                                             li.style.listStyleType = 'none';
@@ -1505,9 +1507,9 @@
                                                     supprimerCartePrecise(carteDragNumero);
                                                     ui.draggable.remove();
 
-                                                    for (i = 0; i < nombreJoueur; i++) {
+                                                    for (var i = 0; i < nombreJoueur; i++) {
                                                         if (nomJoueur[i] === joueurSelectionne.innerHTML) {
-                                                            for (j = 0; j < mains[i].length; j++) {
+                                                            for (var j = 0; j < mains[i].length; j++) {
                                                                 if (mains[i][j] !== null) {
                                                                     if (mains[i][j].nom === nomEnum.prisSurFait) {
                                                                         paquetDecharge.push(mains[i][j]);
@@ -1535,7 +1537,7 @@
                                     $('#divChoixContenu').append(ul);
 
                                     var tabJoueur = verifierPresencePrisSurFait();
-                                    for (i = 0; i < tabJoueur.length; i++) {
+                                    for (var i = 0; i < tabJoueur.length; i++) {
                                         if (tabJoueur[i] != null) {
                                             var li = document.createElement('li');
                                             li.style.listStyleType = 'none';
@@ -1564,9 +1566,9 @@
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
-                                for (i = 0; i < 3; i++) {
+                                for (var i = 0; i < 3; i++) {
                                     var nouvelle = true
-                                    for (j = 0; j < mains[numeroJoueurActif].length; j++) {
+                                    for (var j = 0; j < mains[numeroJoueurActif].length; j++) {
                                         if (nouvelle) {
                                             if (mains[numeroJoueurActif][j] === null) {
                                                 annimationPigerCarte(j);
@@ -1602,7 +1604,7 @@
                                 ul.id = 'listeJoueur';
                                 $('#divChoixContenu').append(ul);
 
-                                for (i = 0; i < nombreJoueur; i++) {
+                                for (var i = 0; i < nombreJoueur; i++) {
                                     if (i != numeroJoueurActif) {
                                         var li = document.createElement('li');
                                         li.style.listStyleType = 'none';
@@ -1628,7 +1630,7 @@
                                         Confirmer: function () {
                                             if (joueurSelectionne != null) {
                                                 var numeroJoueurEchange;
-                                                for (i = 0; i < nombreJoueur; i++) {
+                                                for (var i = 0; i < nombreJoueur; i++) {
                                                     if (nomJoueur[i] === joueurSelectionne.innerHTML) {
                                                         numeroJoueurEchange = i
                                                     }
@@ -1661,7 +1663,7 @@
                                 ul.id = 'listeJoueur';
                                 $('#divChoixContenu').append(ul);
 
-                                for (i = 0; i < nombreJoueur; i++) {
+                                for (var i = 0; i < nombreJoueur; i++) {
                                     if (i != numeroJoueurActif) {
                                         var li = document.createElement('li');
                                         li.style.listStyleType = 'none';
@@ -1688,7 +1690,7 @@
                                         Confirmer: function () {
                                             if (joueurSelectionne != null) {
                                                 var numeroJoueurPasserTour;
-                                                for (i = 0; i < nombreJoueur; i++) {
+                                                for (var i = 0; i < nombreJoueur; i++) {
                                                     if (nomJoueur[i] === joueurSelectionne.innerHTML) {
                                                         numeroJoueurPasserTour = i
                                                     }
@@ -1708,6 +1710,9 @@
                                     show: 'fade'
                                 });
                             } else if (carteDrag.nom === nomEnum.pecheur) {
+                                paquetDecharge.push(carteDrag);
+                                supprimerCartePrecise(carteDragNumero);
+                                ui.draggable.remove();
                                 $('#labelChoix').text('Choisissez un des effets suivants.')
                                 $('#divChoix').dialog({
                                     classes: {
@@ -1716,27 +1721,31 @@
                                     buttons: {
                                         Confirmer: function () {
                                             if (joueurSelectionne.id === '1') {
-                                                for (i = 0; i < nombreJoueur.length; i++) {
+                                                for (var i = 0; i < nombreJoueur; i++) {
                                                     if (i != numeroJoueurActif) {
-                                                        for (j = 0; j < carteBas[i].length; j++) {
+                                                        for (var j = 0; j < carteBas[i].length; j++) {
                                                             if (carteBas[i][j] != null) {
                                                                 if (carteBas[i][j].type = typeEnum.salmonide) {
-                                                                    for (k = 0; k < mains[numeroJoueurActif].length; k++) {
+                                                                    for (var k = 0; k < mains[numeroJoueurActif].length; k++) {
                                                                         if (mains[numeroJoueurActif][k] === null) {
                                                                             mains[numeroJoueurActif][k] = carteBas[i][j];
                                                                             carteBas[i][j] = null;
+                                                                            $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
                                                                             break;
                                                                         }
                                                                     }
                                                                     if (carteBas[i][j] !== null) {
                                                                         mains[numeroJoueurActif][mains[numeroJoueurActif].length] = carteBas[i][j];
                                                                         carteBas[i][j] = null;
+                                                                        $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
+                                                updateAffichageImage();
+                                                $(this).dialog('close');
                                             } else {
 
                                             }
@@ -1817,7 +1826,7 @@
         //Fonction qui crée les divers emplacement sur le tableau.
         function creerEmplacementsPlateau() {
             $(function () {
-                for (i = 0; i < 6; i++) {
+                for (var i = 0; i < 6; i++) {
                     var emplacementJoueurA = document.createElement('div');
                     emplacementJoueurA.id = 'emplacementJoueurA' + i;
                     emplacementJoueurA.className = 'emplacementJoueurA';
@@ -1849,7 +1858,7 @@
                         $('#plateau').append(emplacementJoueurD);
                     }
                 }
-                for (i = 6; i < 10; i++) {
+                for (var i = 6; i < 10; i++) {
                     var emplacementJoueurA = document.createElement('div');
                     emplacementJoueurA.id = 'emplacementJoueurA' + i;
                     emplacementJoueurA.className = 'emplacementJoueurA';
@@ -1954,11 +1963,8 @@
                                                         buttons: {
                                                             Confirmer: function () {
                                                                 if (joueurSelectionne.innerHTML === 'Aucun joueur') {
-                                                                    supprimerCartePrecise(carteDragNumero);
-                                                                    paquetDecharge.push(carteDrag);
-                                                                    erosion = true
-                                                                    //TODO: erosion:)
-                                                                    ui.draggable.remove();
+                                                                    rendrePerturber(event);
+                                                                    onDrop(event, ui, this);
                                                                     updateAffichageImage();
                                                                     $(this).dialog('close');
                                                                 } else {
@@ -1966,9 +1972,9 @@
                                                                     supprimerCartePrecise(carteDragNumero);
                                                                     ui.draggable.remove();
 
-                                                                    for (i = 0; i < nombreJoueur; i++) {
+                                                                    for (var i = 0; i < nombreJoueur; i++) {
                                                                         if (nomJoueur[i] === joueurSelectionne.innerHTML) {
-                                                                            for (j = 0; j < mains[i].length; j++) {
+                                                                            for (var j = 0; j < mains[i].length; j++) {
                                                                                 if (mains[i][j] !== null) {
                                                                                     if (mains[i][j].nom === nomEnum.prisSurFait) {
                                                                                         paquetDecharge.push(mains[i][j]);
@@ -1996,7 +2002,7 @@
                                                     $('#divChoixContenu').append(ul);
 
                                                     var tabJoueur = verifierPresencePrisSurFait();
-                                                    for (i = 0; i < tabJoueur.length; i++) {
+                                                    for (var i = 0; i < tabJoueur.length; i++) {
                                                         if (tabJoueur[i] != null) {
                                                             var li = document.createElement('li');
                                                             li.style.listStyleType = 'none';
@@ -2047,6 +2053,10 @@
                     });
                 });
             });
+            var omble = document.createElement('img');
+            omble.className = 'imageCarteJeu';
+            omble.src = 'ressources/ombleFontaine.png';
+            $('#emplacementJoueur' + lettreJoueur(1) + 0).append(omble);
         }
 
         //Fonction qui va mettre la variable perturber à true.
@@ -2429,7 +2439,7 @@
 
         //Fonction qui crée l'espace de la main.
         function creerMain() {
-            for (i = 0; i < 6; i++) {
+            for (var i = 0; i < 6; i++) {
                 var li = document.createElement('li');
                 li.className = 'liMain';
                 li.id = 'liMain' + i;
@@ -2548,16 +2558,16 @@
                             verifier = false;
                             return true;
                         }
-
-                        var message = verifierConditionPerturbation(event);
-
-                        if (message === 'ok') {
-                            return true;
-                        } else {
-                            popUpAvertissement(message);
-                            return false;
-                        }
                     }
+                    var message = verifierConditionPerturbation(event);
+
+                    if (message === 'ok') {
+                        return true;
+                    } else {
+                        popUpAvertissement(message);
+                        return false;
+                    }
+
                 } else if (carteDrag.type === typeEnum.reglementation) {
                     return true;
                 } else if (carteDrag.type === typeEnum.action) {
@@ -2577,14 +2587,14 @@
                         }
                         return true;
                     } else if (carteDrag.nom === nomEnum.predation) {
-                        for (i = 0; i < carteBas[numeroJoueurActif].length; i++) {
+                        for (var i = 0; i < carteBas[numeroJoueurActif].length; i++) {
                             var carteJoueur = carteBas[numeroJoueurActif][i];
                             if (carteJoueur != null) {
                                 if (carteJoueur.type === typeEnum.macroInvertebre || carteJoueur.type === typeEnum.salmonide) {
                                     if (carteJoueur.predateur > 0) {
-                                        for (j = 0; j < nombreJoueur; j++) {
+                                        for (var j = 0; j < nombreJoueur; j++) {
                                             if (j !== numeroJoueurActif) {
-                                                for (k = 0; k < carteBas[j].length; k++) {
+                                                for (var k = 0; k < carteBas[j].length; k++) {
                                                     if (carteBas[j][k] != null) {
                                                         if (carteBas[j][k].type === typeEnum.macroInvertebre) {
                                                             return true;
@@ -2604,7 +2614,7 @@
                     } else if (carteDrag.nom === nomEnum.derivation) {
                         if (mains[numeroJoueurActif].filter(function (value) { return value !== null }).length > 0) {
                             var compteur = 0;
-                            for (i = 0; i < nombreJoueur; i++) {
+                            for (var i = 0; i < nombreJoueur; i++) {
                                 if (i !== numeroJoueurActif) {
                                     if (mains[i].filter(function (value) { return value !== null }).length > 0) {
                                         compteur++;
@@ -2625,8 +2635,8 @@
                     } else if (carteDrag.nom === nomEnum.accumulation) {
                         return true;
                     } else if (carteDrag.nom === nomEnum.emergence) {
-                        for (i = 0; i > nombreJoueur; i++) {
-                            for (j = 0; j < carteBas[i].length; j++) {
+                        for (var i = 0; i > nombreJoueur; i++) {
+                            for (var j = 0; j < carteBas[i].length; j++) {
                                 if (carteBas[i][j] != null) {
                                     if (carteBas[i][j].type === typeEnum.macroInvertebre) {
                                         if (carteBas[i][j].typeMacro === typeMacroEnum.ephemeroptere || carteBas[i][j].typeMacro === typeMacroEnum.trichoptere || carteBas[i][j].typeMacro === typeMacroEnum.plecoptere || carteBas[i][j].typeMacro === typeMacroEnum.odonate || carteBas[i][j].typeMacro === typeMacroEnum.diptere) {
@@ -2642,9 +2652,9 @@
                         var option1 = false;
                         var option2 = false;
 
-                        for (i = 0; i < nombreJoueur; i++) {
+                        for (var i = 0; i < nombreJoueur; i++) {
                             if (i != numeroJoueurActif) {
-                                for (j = 0; j < carteBas[i].length; j++) {
+                                for (var j = 0; j < carteBas[i].length; j++) {
                                     if (carteBas[i][j] != null) {
                                         if (carteBas[i][j].type === typeEnum.salmonide) {
                                             option1 = true;
@@ -2664,12 +2674,12 @@
                     } else if (carteDrag.nom === nomEnum.crueSoudaine) {
                         return true;
                     } else if (carteDrag.nom === nomEnum.zonage) {
-                        for (i = 0; i < carteBas[numeroJoueurActif].length; i++) {
+                        for (var i = 0; i < carteBas[numeroJoueurActif].length; i++) {
                             if (carteBas[numeroJoueurActif][i] != null) {
                                 if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats) {
-                                    for (j = 0; j < nombreJoueur; j++) {
+                                    for (var j = 0; j < nombreJoueur; j++) {
                                         if (j !== numeroJoueurActif) {
-                                            for (k = 0; k < carteBas[j].length; k++) {
+                                            for (var k = 0; k < carteBas[j].length; k++) {
                                                 if (carteBas[j][k] != null) {
                                                     if (carteBas[j][k].type === typeEnum.habitats) {
                                                         return true;
@@ -2896,9 +2906,9 @@
         function verifierPresencePrisSurFait() {
             var tabJoueur = new Array(nombreJoueur);
 
-            for (i = 0; i < nombreJoueur; i++) {
+            for (var i = 0; i < nombreJoueur; i++) {
                 if (i !== numeroJoueurActif) {
-                    for (j = 0; j < mains[i].length; j++) {
+                    for (var j = 0; j < mains[i].length; j++) {
                         if (mains[i][j] != null) {
                             if (mains[i][j].nom === nomEnum.prisSurFait) {
                                 tabJoueur[i] = true;
@@ -3571,7 +3581,7 @@
                         }
                     }
 
-                    for (i = mains[numeroJoueurActif].length - 1; i > 5; i--) {
+                    for (var i = mains[numeroJoueurActif].length - 1; i > 5; i--) {
                         mains[numeroJoueurActif].length--;
                         $('#liMain' + i).remove();
                     }
@@ -3830,7 +3840,7 @@
 
         //Fonction qui "update" l'affichage des images.
         function updateAffichageImage() {
-            for (i = 0; i < mains[numeroJoueurActif].length; i++) {
+            for (var i = 0; i < mains[numeroJoueurActif].length; i++) {
                 var carteMain;
                 if (document.getElementById('divCarte' + i) != null) {
                     carteMain = document.getElementById('divCarte' + i);
