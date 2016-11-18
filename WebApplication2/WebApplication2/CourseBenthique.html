@@ -163,6 +163,7 @@
         var nombrePolluer;
         //Variable pour erosion.
         var erosion;
+        var etapeErosion
         //Variable pour prédation.
         var predation;
         var etapePredation;
@@ -1195,17 +1196,19 @@
                 } else {
                     popUpAvertissement('Seulement les habitats peuvent être poluer');
                 }
-            } else if (erosion === 1) {
-                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
-                    //TODO: faire le travaille.
-                } else {
-                    popUpAvertissement('Vous devez sélectionner une carte bande riveraine pour l\'emvoyer à la décharge.');
-                }
-            } else if (erosion === 2) {
-                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
-                    //TODO: faire le travaille.
-                } else {
-                    popUpAvertissement('Vous devez sélectionner une carte habitats pour la transformer en sable.');
+            } else if (erosion) {
+                if (etapeErosion === 1) {
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
+                        //TODO: faire le travaille.
+                    } else {
+                        popUpAvertissement('Vous devez sélectionner une carte bande riveraine pour l\'emvoyer à la décharge.');
+                    }
+                } else if (etapeErosion === 2) {
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
+                        //TODO: faire le travaille.
+                    } else {
+                        popUpAvertissement('Vous devez sélectionner une carte habitats pour la transformer en sable.');
+                    }
                 }
             } else if (predation) {
                 if (etapePredation === 1) {
@@ -1376,7 +1379,12 @@
                                 }
                             } else if (carteDrag.nom === nomEnum.erosion) {
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
+                                    supprimerCartePrecise(carteDragNumero);
+                                    paquetDecharge.push(carteDrag);
+                                    ui.draggable.remove();
                                     erosion = true;
+                                    $('#divDroite').css('pointer-events', 'none');
+                                    $('#divMain').css('pointer-events', 'none');
                                     //TODO: erosion :)
                                 } else {
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
@@ -1461,7 +1469,8 @@
                                     ui.draggable.remove();
                                     onPollu = true;
                                     nombrePolluer = 0;
-                                    //TODO: finir pollution organique
+                                    $('#divDroite').css('pointer-events', 'none');
+                                    $('#divMain').css('pointer-events', 'none');
                                 } else {
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
@@ -2853,13 +2862,15 @@
             var tuer = false;
 
             for (var i = 0; i < 10; i++) {
-                if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
-                    for (var j = 0; j < carteBas[numeroJoueurActif][i].condition.length; j++) {
-                        if (carteBas[numeroJoueurActif][i].condition[j] === habitats) {
-                            carteBas[numeroJoueurActif][i] = null;
-                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + i).children().remove();
+                if (carteBas[numeroJoueurActif][i] != null) {
+                    if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
+                        for (var j = 0; j < carteBas[numeroJoueurActif][i].condition.length; j++) {
+                            if (carteBas[numeroJoueurActif][i].condition[j] === habitats) {
+                                carteBas[numeroJoueurActif][i] = null;
+                                $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + i).children().remove();
 
-                            tuer = true;
+                                tuer = true;
+                            }
                         }
                     }
                 }
