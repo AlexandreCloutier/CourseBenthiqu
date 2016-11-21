@@ -1175,7 +1175,12 @@
                         mangerPredateur = false;
                         $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
-                        carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                        exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;
+                        
+                        if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 0) {
+                            carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                        }
+
                         brillanceCarteMangeable(false);
                         $('#divDroite').css('pointer-events', 'auto');
                         $('#divMain').css('pointer-events', 'auto');
@@ -1209,7 +1214,11 @@
                 if (etapeErosion === 1) {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
-                        carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                        exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;
+                        if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]) {
+                            carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                        }
+
                         $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().last().remove();
                         etapeErosion = 2;
                         updateAffichageImage();
@@ -1276,7 +1285,12 @@
                             predation = false;
                             $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
                             paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
-                            carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                            exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;
+
+                            if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 1) {
+                                carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                            }
+
                             updateAffichageImage();
                         } else {
                             popUpAvertissement('Le macroinvertebre doit être de taille inférieur au prédateur.')
@@ -1287,7 +1301,7 @@
                 }
             } else if (zonage) {
                 if (etapeZonage === 1) {
-
+                    //TODO: zonage
                 } else if (etapeZonage === 2) {
 
                 }
@@ -1855,6 +1869,7 @@
                                                                         if (mains[numeroJoueurActif][k] === null) {
                                                                             mains[numeroJoueurActif][k] = carteBas[i][j];
                                                                             carteBas[i][j] = null;
+                                                                            exemplaireCarteBas[i][j] = 0;
                                                                             $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
                                                                             break;
                                                                         }
@@ -1862,6 +1877,7 @@
                                                                     if (carteBas[i][j] !== null) {
                                                                         mains[numeroJoueurActif][mains[numeroJoueurActif].length] = carteBas[i][j];
                                                                         carteBas[i][j] = null;
+                                                                        exemplaireCarteBas[i][j] = 0;
                                                                         $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
                                                                     }
                                                                 }
@@ -2372,6 +2388,7 @@
                             if (carteBas[0][i].tolerance < 6) {
                                 paquetDecharge.push(carteBas[0][i]);
                                 carteBas[0][i] = null;
+                                exemplaireCarteBas[0][i] = 0;
                                 var lettre = lettreJoueur(0);
                                 $('#emplacementJoueur' + lettre + i).children().remove();
                             }
@@ -2386,6 +2403,7 @@
                             if (carteBas[1][i].tolerance < 6) {
                                 paquetDecharge.push(carteBas[1][i]);
                                 carteBas[1][i] = null;
+                                exemplaireCarteBas[1][i] = 0;
                                 var lettre = lettreJoueur(1);
                                 $('#emplacementJoueur' + lettre + i).children().remove();
                             }
@@ -2401,6 +2419,7 @@
                                 if (carteBas[2][i].tolerance < 6) {
                                     paquetDecharge.push(carteBas[2][i]);
                                     carteBas[2][i] = null;
+                                    exemplaireCarteBas[2][i] = 0;
                                     var lettre = lettreJoueur(2);
                                     $('#emplacementJoueur' + lettre + i).children().remove();
                                 }
@@ -2418,6 +2437,7 @@
                                 if (carteBas[3][i].tolerance < 6) {
                                     paquetDecharge.push(carteBas[3][i]);
                                     carteBas[3][i] = null;
+                                    exemplaireCarteBas[3][i] = 0;
                                     var lettre = lettreJoueur(3);
                                     $('#emplacementJoueur' + lettre + i).children().remove();
                                 }
