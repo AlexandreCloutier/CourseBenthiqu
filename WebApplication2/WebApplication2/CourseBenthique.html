@@ -168,7 +168,14 @@
         var predation;
         var etapePredation;
         //Variable qui contient le joueur selectioner par le popUp de choix de joueur.
-        var joueurSelectionne
+        var joueurSelectionne;
+        //Variable pour l'échange de la carte zonage.
+        var zonage;
+        var etapeZonage;
+        var carteEchange1;
+        var positionCarte1;
+        var carteEchange2;
+        var positionCarte2;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -1212,8 +1219,35 @@
                     }
                 } else if (etapeErosion === 2) {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
-                        //TODO: faire le travaille.
-                        
+                        if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 1) {//Si il y a seulement une carte non empiller.
+                            carteBas[numeroJoueurEnnemi][numeroEmplacement] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
+                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
+                            var carteSable = document.createElement('img');
+                            carteSable.className = 'imageCarteJeu imageCarteJeuErosion';
+
+                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi).append(carteSable));
+                            $(function () {
+                                $('.imageCarteJeuErosion').on({
+                                    click: function (event, ui) {
+                                        onClickImage($(this).parent().attr("id"), ui);
+                                    }
+                                })
+                            });
+
+                            $('.emplacementJoueurA').removeClass('imageCarteJeuErosion');
+                            $('.emplacementJoueurB').removeClass('imageCarteJeuErosion');
+
+                            if (nombreJoueur > 2) {
+                                $('.emplacementJoueurC').removeClass('imageCarteJeuErosion');
+                            }
+
+                            if (nombreJoueur > 3) {
+                                $('.emplacementJoueurD').removeClass('imageCarteJeuErosion');
+                            }
+                        } else {
+                            //TODO: Travail pour mettre la carte dans une autre position.
+                        }
+
                         $('#divDroite').css('pointer-events', 'auto');
                         $('#divMain').css('pointer-events', 'auto');
                     } else {
@@ -1250,6 +1284,12 @@
                     } else {
                         popUpAvertissement('Vous devez sélectionner un prédateur de taille inférieur pour qu\'il soit manger.');
                     }
+                }
+            } else if (zonage) {
+                if (etapeZonage === 1) {
+
+                } else if (etapeZonage === 2) {
+
                 }
             }
         }
@@ -1387,7 +1427,92 @@
                                         });
                                     });
                                 }
-                            } else if (carteDrag.nom === nomEnum.erosion) {                             
+                            } else if (carteDrag.nom === nomEnum.zonage) {
+                                if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
+                                    zonage = true;
+                                    etapeZonage = 1;
+                                    popUpConfirmation('Sélectionnez l\'habitats que vous voulez échanger');
+                                    supprimerCartePrecise(carteDragNumero);
+                                    paquetDecharge.push(carteDrag);
+                                    ui.draggable.remove();
+                                    $('#divDroite').css('pointer-events', 'none');
+                                    $('#divMain').css('pointer-events', 'none');
+                                } else {
+                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
+                                    $('#divChoix').dialog({
+                                        classes: {
+                                            'ui-dialog': 'no-x ui-corner-all',
+                                        },
+                                        buttons: {
+                                            Confirmer: function () {
+                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                                    supprimerCartePrecise(carteDragNumero);
+                                                    paquetDecharge.push(carteDrag);
+                                                    erosion = true
+                                                    //TODO: erosion:)
+                                                    ui.draggable.remove();
+                                                    updateAffichageImage();
+                                                    $(this).dialog('close');
+                                                } else {
+                                                    paquetDecharge.push(carteDrag);
+                                                    supprimerCartePrecise(carteDragNumero);
+                                                    ui.draggable.remove();
+
+                                                    for (var i = 0; i < nombreJoueur; i++) {
+                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                            for (var j = 0; j < mains[i].length; j++) {
+                                                                if (mains[i][j] !== null) {
+                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                                                        paquetDecharge.push(mains[i][j]);
+                                                                        mains[i][j] = null;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    $(this).dialog('close');
+                                                }
+                                            }
+                                        },
+                                        draggable: false,
+                                        resizable: false,
+                                        modal: true,
+                                        height: 575,
+                                        width: 500,
+                                        hide: 'fade',
+                                        show: 'fade'
+                                    });
+
+                                    var ul = document.createElement('ul');
+                                    ul.id = 'listeJoueur';
+                                    $('#divChoixContenu').append(ul);
+
+                                    var tabJoueur = verifierPresencePrisSurFait();
+                                    for (var i = 0; i < tabJoueur.length; i++) {
+                                        if (tabJoueur[i] != null) {
+                                            var li = document.createElement('li');
+                                            li.style.listStyleType = 'none';
+                                            li.innerHTML = nomJoueur[i];
+                                            $(ul).append(li);
+                                        }
+                                    }
+                                    var li = document.createElement('li');
+                                    li.style.listStyleType = 'none';
+                                    li.innerHTML = 'Aucun joueur';
+                                    $(ul).append(li);
+
+                                    $(function () {
+                                        $(ul).selectable({
+                                            stop: function (event, ui) {
+                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                            },
+                                            selected: function (event, ui) {
+                                                joueurSelectionne = ui.selected;
+                                            }
+                                        });
+                                    });
+                                }
+                            } else if (carteDrag.nom === nomEnum.erosion) {
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
                                     popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.');
                                     supprimerCartePrecise(carteDragNumero);
@@ -2503,7 +2628,6 @@
                     if (verifierCondition(carteDrag)) {
                         if (carteDrag.predateur > 0) {
                             if (possibleManger()) {
-                                //TODO: appeler une méthode qui se chargera de manger les cartes.
                                 return true;
                             } else {
                                 popUpErreur('Un adversaire doit avoir une carte avec une taille inférieur au prédateur pour qu\'il est quelque choses à manger');
@@ -3326,7 +3450,7 @@
             carte = new Carte(typeEnum.reglementation, nomEnum.politique, 'politique.png', 3);
             paquetCarte.push(carte);
 
-            if (difficulte === 2)//Moyen
+            if (difficulte >= 2)//Moyen
             {
 
                 //---------------------------action--------------------------------------
