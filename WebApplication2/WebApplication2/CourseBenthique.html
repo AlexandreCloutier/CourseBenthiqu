@@ -1888,7 +1888,24 @@
                                                 updateAffichageImage();
                                                 $(this).dialog('close');
                                             } else {
+                                                $('#divChoixContenu').children().remove();
+                                                console.log(this);
+                                                $(this).dialog({ width: 575 });
+                                                var ul = document.createElement('ul');
+                                                ul.id = 'listeCartes';
+                                                $('#divChoixContenu').append(ul);
 
+                                                paquetDecharge.forEach(function (item, index) {
+                                                    console.log(item);
+                                                    var li = document.createElement('li');
+                                                    li.className = 'listeChoixCarte';
+                                                    var carte = document.createElement('img');
+                                                    carte.id = index;
+                                                    carte.className = 'cartesListe'
+                                                    carte.src = 'ressources/' + item.nomImage;
+                                                    $(ul).append(li);
+                                                    $(li).append(carte);                                                   
+                                                });
                                             }
                                         }
                                     },

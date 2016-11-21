@@ -303,10 +303,25 @@
     display:none;
 }
 
-.divChoixMultiple {
+/*.divChoix {
     background: #3892ba !important;
     border: 3px white solid !important;
     font-size: 28px !important;
+}*/
+
+.listeChoixCarte {
+    list-style: none;
+    display: inline-block;
+    float: left;
+    margin: 15px;
+    table-layout: fixed;
+    width: 118px;
+    height: 180px;
+}
+
+.cartesListe {
+    width: inherit;
+    height: inherit;
 }
 
 .divChoixJoueur, .divChoix{
