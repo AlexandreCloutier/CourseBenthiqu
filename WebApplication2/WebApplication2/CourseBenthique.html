@@ -166,7 +166,6 @@
         var etapeErosion
         //Variable pour prédation.
         var predation;
-        var etapePredation;
         //Variable qui contient le joueur selectioner par le popUp de choix de joueur.
         var joueurSelectionne;
         //Variable pour l'échange de la carte zonage.
@@ -1262,24 +1261,10 @@
                     }
                 }
             } else if (predation) {
-                if (etapePredation === 1) {
-                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'macroInvertebre' || carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'salmonide') {
-                        if (carteBas[numeroJoueurEnnemi][numeroEmplacement].predateur === 1 || carteBas[numeroJoueurEnnemi][numeroEmplacement].predateur === 2) {
-                            taillePredateur = carteBas[numeroJoueurEnnemi][numeroEmplacement].taille;
-                            etapePredation = 2;
-                            brillanceCarteMangeable(true);
-                            brillerCarte(typeEnum.macroInvertebre, numeroJoueurActif, false);
-                        } else {
-                            popUpAvertissement('Vous devez sélectionner un predateur qui mangera un autre macroinvertébrés.')
-                        }
-                    } else {
-                        popUpAvertissement('Vous devez sélectionner un predateur qui mangera un autre macroinvertébrés.')
-                    }
-                } else if (etapePredation === 2) {
-                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'macroInvertebre') {
-                        if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
+                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'macroInvertebre') {
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
+                        if (numeroJoueurEnnemi != numeroJoueurActif) {
                             brillanceCarteMangeable(false);
-                            etapePredation = 1;
                             predation = false;
                             $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
                             paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
@@ -1291,11 +1276,13 @@
 
                             updateAffichageImage();
                         } else {
-                            popUpAvertissement('Le macroinvertebre doit être de taille inférieur au prédateur.')
+                            popUpAvertissement('Vous ne pouvez pas manger vos propres prédateurs');
                         }
                     } else {
-                        popUpAvertissement('Vous devez sélectionner un prédateur de taille inférieur pour qu\'il soit manger.');
+                        popUpAvertissement('Le macroinvertebre doit être de taille inférieur au prédateur.')
                     }
+                } else {
+                    popUpAvertissement('Vous devez sélectionner un prédateur de taille inférieur pour qu\'il soit manger.');
                 }
             } else if (zonage) {
                 if (etapeZonage === 1) {
@@ -1534,7 +1521,6 @@
                                     etapeErosion = 1;
                                     $('#divDroite').css('pointer-events', 'none');
                                     $('#divMain').css('pointer-events', 'none');
-                                    //TODO: erosion :)
                                 } else {
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
@@ -1544,10 +1530,13 @@
                                         buttons: {
                                             Confirmer: function () {
                                                 if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                                    popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.');
                                                     supprimerCartePrecise(carteDragNumero);
                                                     paquetDecharge.push(carteDrag);
                                                     erosion = true
-                                                    //TODO: erosion:)
+                                                    etapeErosion = 1;
+                                                    $('#divDroite').css('pointer-events', 'none');
+                                                    $('#divMain').css('pointer-events', 'none');
                                                     ui.draggable.remove();
                                                     updateAffichageImage();
                                                     $(this).dialog('close');
@@ -1720,11 +1709,12 @@
                             } else if (carteDrag.nom === nomEnum.predation) {
                                 supprimerCartePrecise(carteDragNumero);
                                 predation = true;
-                                etapePredation = 1;
+                                trouverPredateur();
+                                brillanceCarteMangeable(true);
                                 paquetDecharge.push(carteDrag);
-                                brillerCarte(typeEnum.macroInvertebre, numeroJoueurActif, true);
                                 ui.draggable.remove();
                                 updateAffichageImage();
+                                popUpConfirmation('Choississez le macroinvertébrés de taille inférieur à ' + taillePredateur + ' que vous voulez manger.');
                             } else if (carteDrag.nom === nomEnum.retention) {
                                 tableauRetention[numeroJoueurActif] = true;
                                 paquetDecharge.push(carteDrag);
@@ -1789,6 +1779,12 @@
                                     show: 'fade'
                                 });
 
+                            } else if (carteDrag.nom === nomEnum.corveNettoyage) {
+                                retirerDechets();
+                                paquetDecharge.push(carteDrag);
+                                supprimerCartePrecise(carteDragNumero);
+                                ui.draggable.remove();
+                                updateAffichageImage();
                             } else if (carteDrag.nom === nomEnum.crueSoudaine) {
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
@@ -2015,6 +2011,23 @@
             paquetDefausse.id = 'paquetDefausse';
             paquetDefausse.className = 'paquetDefausse';
             $(plateau).append(paquetDefausse);
+        }
+
+        //Fonction qui change la taille du predateur
+        function trouverPredateur() {
+            taillePredateur = 0;
+
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroJoueurActif][i] != null) {
+                    if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
+                        if (carteBas[numeroJoueurActif][i].predateur > 0) {
+                            if (carteBas[numeroJoueurActif][i].taille > taillePredateur) {
+                                taillePredateur = carteBas[numeroJoueurActif][i].taille
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         //Fonction qui crée les divers emplacement sur le tableau.
@@ -2765,7 +2778,7 @@
                     return true;
                 } else if (carteDrag.type === typeEnum.action) {
                     if (carteDrag.nom === nomEnum.corveNettoyage) {
-
+                        return true;
                     } else if (carteDrag.nom === nomEnum.naturalisation) {
 
                     } else if (carteDrag.nom === nomEnum.amenagement) {
@@ -2785,18 +2798,19 @@
                             if (carteJoueur != null) {
                                 if (carteJoueur.type === typeEnum.macroInvertebre || carteJoueur.type === typeEnum.salmonide) {
                                     if (carteJoueur.predateur > 0) {
+                                        trouverPredateur();
                                         for (var j = 0; j < nombreJoueur; j++) {
                                             if (j !== numeroJoueurActif) {
                                                 for (var k = 0; k < carteBas[j].length; k++) {
                                                     if (carteBas[j][k] != null) {
-                                                        if (carteBas[j][k].type === typeEnum.macroInvertebre) {
-                                                            return true;
+                                                        if (carteBas[j][k].type === typeEnum.macroInvertebre && carteBas[j][k].taille < taillePredateur) {
+                                                            return true; 
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                        popUpAvertissement('Aucun adversaire ne possède de macroinvertébrés.');
+                                        popUpAvertissement('Aucun adversaire ne possède de macroinvertébrés de taille inférieur aux votres.');
                                         return false;
                                     }
                                 }
@@ -4181,6 +4195,51 @@
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
             } else if (nombreJoueur === 1) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
+            }
+        }
+
+        //Fonction qui va retirer toutes les cartes déchets.
+        function retirerDechets() {
+            for (var i = 0; i < 10; i++) {
+                if (cartePerturbation[0][i] != null) {
+                    if (cartePerturbation[0][i].nom === nomEnum.dechets) {
+                        cartePerturbation[0][i] = null;
+                        carteBas[0][i].perturber = false;
+                        carteBas[0][i].tempsPerturber = 0;
+                        $('#emplacementJoueur' + lettreJoueur(0) + i).children().last().remove();
+                    }
+                }
+
+                if (cartePerturbation[1][i] != null) {
+                    if (cartePerturbation[1][i].nom === nomEnum.dechets) {
+                        cartePerturbation[1][i] = null;
+                        carteBas[1][i].perturber = false;
+                        carteBas[1][i].tempsPerturber = 0;
+                        $('#emplacementJoueur' + lettreJoueur(1) + i).children().last().remove();
+                    }
+                }
+
+                if (nombreJoueur > 2) {
+                    if (cartePerturbation[2][i] != null) {
+                        if (cartePerturbation[2][i].nom === nomEnum.dechets) {
+                            cartePerturbation[2][i] = null;
+                            carteBas[2][i].perturber = false;
+                            carteBas[2][i].tempsPerturber = 0;
+                            $('#emplacementJoueur' + lettreJoueur(2) + i).children().last().remove();
+                        }
+                    }
+                }
+
+                if (nombreJoueur > 3) {
+                    if (cartePerturbation[3][i] != null) {
+                        if (cartePerturbation[3][i].nom === nomEnum.dechets) {
+                            cartePerturbation[3][i] = null;
+                            carteBas[3][i].perturber = false;
+                            carteBas[3][i].tempsPerturber = 0;
+                            $('#emplacementJoueur' + lettreJoueur(3) + i).children().last().remove();
+                        }
+                    }
+                }
             }
         }
     </script>
