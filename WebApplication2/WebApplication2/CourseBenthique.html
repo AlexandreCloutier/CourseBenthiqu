@@ -1976,6 +1976,103 @@
                                         }
                                     });
                                 });
+                            } else if (carteDrag.nom === nomEnum.emergence) {
+                                var ordreSelectionne;
+                                var tabOrdre = new Array(5);
+                                paquetDecharge.push(carteDrag);
+                                ui.draggable.remove();
+                                supprimerCartePrecise(carteDragNumero);
+
+                                $('#labelChoix').text('Veuillez choisir un ordre de macroinvertébrés à retourner dans les mains de leurs joueurs respectifs.');
+
+                                var ul = document.createElement('ul');
+                                ul.id = 'listeJoueur';
+                                $('#divChoixContenu').append(ul);
+
+                                for (i = 0; i < nombreJoueur; i++) {
+                                    for (j = 0; j < carteBas[i].length; j++) {
+                                        if (carteBas[i][j] != null) {
+                                            if (carteBas[i][j].type === typeEnum.macroInvertebre) {
+                                                if (carteBas[i][j].typeMacro === typeMacroEnum.ephemeroptere) {
+                                                    tabOrdre[0] = typeMacroEnum.ephemeroptere;
+                                                } else if (carteBas[i][j].typeMacro === typeMacroEnum.trichoptere) {
+                                                    tabOrdre[1] = typeMacroEnum.trichoptere;
+                                                } else if (carteBas[i][j].typeMacro === typeMacroEnum.plecoptere) {
+                                                    tabOrdre[2] = typeMacroEnum.plecoptere;
+                                                } else if (carteBas[i][j].typeMacro === typeMacroEnum.odonate) {
+                                                    tabOrdre[3] = typeMacroEnum.odonate;
+                                                } else if (carteBas[i][j].typeMacro === typeMacroEnum.diptere) {
+                                                    tabOrdre[4] = typeMacroEnum.diptere;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                tabOrdre.forEach(function (item, index) {
+                                    if (tabOrdre[index] !== null) {
+                                        var li = document.createElement('li');
+                                        li.style.listStyleType = 'none';
+                                        li.className = 'listeJoueur';
+                                        li.innerHTML = tabOrdre[index];
+                                        $(ul).append(li);
+                                    }
+                                });
+
+                                $(function () {
+                                    $(ul).selectable({
+                                        stop: function (event, ui) {
+                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        },
+                                        selected: function (event, ui) {
+                                            ordreSelectionne = ui.selected.innerHTML;
+                                        }
+                                    });
+                                });
+
+                                $('#divChoix').dialog({
+                                    classes: {
+                                        'ui-dialog': 'no-x ui-corner-all',
+                                    },
+                                    buttons: {
+                                        Confirmer: function () {
+                                            if (ordreSelectionne != null) {
+                                                for (i = 0; i < nombreJoueur; i++) {
+                                                    for (j = 0; j < carteBas[i].length; j++) {
+                                                        if (carteBas[i][j] != null && carteBas[i][j].typeMacro === ordreSelectionne) {
+                                                            for (k = 0; k < mains[i].length; k++) {
+                                                                console.log(mains[i][k]);
+                                                                if (mains[i][k] === null) {
+                                                                    if (carteBas[i][j] != null) {
+                                                                        mains[i][k] = carteBas[i][j];
+                                                                        carteBas[i][j] = null;
+                                                                        $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (carteBas[i][j] != null) {
+                                                                mains[i][mains[i].length] = carteBas[i][j];
+                                                                carteBas[i][j] = null;
+                                                                $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                $(this).dialog('close');
+                                                updateAffichageImage();
+                                            } else {
+                                                popUpAvertissement('Veuillez selectionner un ordre.')
+                                            }
+                                        }
+                                    },
+                                    draggable: false,
+                                    resizable: false,
+                                    modal: true,
+                                    height: 575,
+                                    width: 500,
+                                    hide: 'fade',
+                                    show: 'fade'
+                                });
                             }
                         }
                     }
@@ -2842,7 +2939,7 @@
                     } else if (carteDrag.nom === nomEnum.accumulation) {
                         return true;
                     } else if (carteDrag.nom === nomEnum.emergence) {
-                        for (var i = 0; i > nombreJoueur; i++) {
+                        for (var i = 0; i < nombreJoueur; i++) {
                             for (var j = 0; j < carteBas[i].length; j++) {
                                 if (carteBas[i][j] != null) {
                                     if (carteBas[i][j].type === typeEnum.macroInvertebre) {

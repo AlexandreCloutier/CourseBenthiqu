@@ -332,6 +332,11 @@
     background-color: deepskyblue;
 }
 
+.listeJoueur{
+    border: solid 2px black;
+    margin: 2px;
+}
+
 .no-close .ui-dialog-title {
     display: none;
 }
