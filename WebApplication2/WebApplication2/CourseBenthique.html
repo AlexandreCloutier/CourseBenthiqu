@@ -941,7 +941,7 @@
 
                 //Première carte c'est un habitats rapides.
 
-                mains[0][0] = chercherCarteParticuliere(nomEnum.pecheur, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.emergence, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -949,8 +949,6 @@
                 }
                 if (nombreJoueur === 4) {//4 joueurs.
                     mains[3][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
-                    //Test Pecheur
-                    carteBas[1][0] = chercherCarteParticuliere(nomEnum.ombleFontaine, paquetCarte);
                 }
 
                 //Deuxième carte c'est un habitats au hasard.
@@ -1176,7 +1174,7 @@
                         $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
                         exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;
-                        
+
                         if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 0) {
                             carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
                         }
@@ -1890,21 +1888,59 @@
                                             } else {
                                                 $('#divChoixContenu').children().remove();
                                                 console.log(this);
-                                                $(this).dialog({ width: 575 });
+                                                $(this).dialog({
+                                                    width: 575,
+                                                    buttons: {
+                                                        Confirmer: function () {
+                                                            if (carteSelectionne === null) {
+                                                                popUpAvertissement('Veuillez d\'abord choisir une carte');
+                                                            } else {
+                                                                for (var i = 0; i < mains[numeroJoueurActif].length; i++) {
+                                                                    if (mains[numeroJoueurActif][i] === null) {
+                                                                        if (paquetDecharge[carteSelectionne] != null) {
+                                                                            mains[numeroJoueurActif][i] = paquetDecharge[carteSelectionne];
+                                                                            paquetDecharge[carteSelectionne] = null;
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if (paquetDecharge[carteSelectionne] != null) {
+                                                                    mains[numeroJoueurActif][mains[numeroJoueurActif.length]] = paquetDecharge[joueurSelectionne];
+                                                                    paquetDecharge[carteSelectionne] = null;
+                                                                }
+                                                                $(this).dialog('close');
+                                                                updateAffichageImage();
+                                                            }
+                                                        }
+                                                    }
+                                                });
                                                 var ul = document.createElement('ul');
                                                 ul.id = 'listeCartes';
                                                 $('#divChoixContenu').append(ul);
 
+                                                var carteSelectionne;
                                                 paquetDecharge.forEach(function (item, index) {
-                                                    console.log(item);
-                                                    var li = document.createElement('li');
-                                                    li.className = 'listeChoixCarte';
-                                                    var carte = document.createElement('img');
-                                                    carte.id = index;
-                                                    carte.className = 'cartesListe'
-                                                    carte.src = 'ressources/' + item.nomImage;
-                                                    $(ul).append(li);
-                                                    $(li).append(carte);                                                   
+                                                    if (paquetDecharge[index] != null) {
+                                                        var li = document.createElement('li');
+                                                        li.className = 'listeChoixCarte';
+                                                        var carte = document.createElement('img');
+                                                        carte.id = index;
+                                                        carte.className = 'cartesListe'
+                                                        carte.src = 'ressources/' + item.nomImage;
+                                                        $(carte).click(function () {
+                                                            if (carteSelectionne != null) {
+                                                                $('.cartesListe').removeAttr('style');
+                                                            }
+
+                                                            $(this).css('-moz-box-shadow', '0 0 15px 10px #000');
+                                                            $(this).css('-webkit-box-shadow', '0 0 15px 10px #000');
+                                                            $(this).css('box-shadow', '0px 0px 15px 10px #000');
+                                                            carteSelectionne = index;
+                                                            console.log(carteSelectionne);
+                                                        });
+
+                                                        $(ul).append(li);
+                                                        $(li).append(carte);
+                                                    }
                                                 });
                                             }
                                         }
@@ -2211,10 +2247,6 @@
                     });
                 });
             });
-            var omble = document.createElement('img');
-            omble.className = 'imageCarteJeu';
-            omble.src = 'ressources/ombleFontaine.png';
-            $('#emplacementJoueur' + lettreJoueur(1) + 0).append(omble);
         }
 
         //Fonction qui va mettre la variable perturber à true.
