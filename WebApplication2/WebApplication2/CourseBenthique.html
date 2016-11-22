@@ -2422,9 +2422,9 @@
                     $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         tolerance: 'pointer',
                         drop: function (event, ui) {
+                            if (carteDrag.nom != nomEnum.deversement && carteDrag.nom != nomEnum.erosion && carteDrag.nom != nomEnum.pollutionOrganique && carteDrag.type != typeEnum.speciale && carteDrag.type != typeEnum.action) {
                             if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
-                                if (accepterDrop(event.target)) {
-                                    if (carteDrag.nom != nomEnum.deversement && carteDrag.nom != nomEnum.erosion && carteDrag.nom != nomEnum.pollutionOrganique && carteDrag.type != typeEnum.speciale && carteDrag.type != typeEnum.action) {
+                                if (accepterDrop(event.target)) {                                   
                                         if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
                                             if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
                                                 if (carteDrag.type === typeEnum.macroInvertebre) {
