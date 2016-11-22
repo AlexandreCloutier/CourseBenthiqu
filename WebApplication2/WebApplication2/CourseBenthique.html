@@ -1163,7 +1163,7 @@
         function onClickImage(event, ui) {
             var emplacement = event.substr(event.length - 2);
             var lettreEmplacement = emplacement.substr(0, 1);
-            var numeroEmplacement = emplacement.substr(emplacement.length - 1);
+            var numeroEmplacement = positionLibre
             var numeroJoueurEnnemi = numeroJoueur(lettreEmplacement);
 
             if (mangerPredateur) {
@@ -1251,7 +1251,37 @@
                                 $('.emplacementJoueurD').removeClass('imageCarteJeuErosion');
                             }
                         } else {
-                            //TODO: Travail pour mettre la carte dans une autre position.
+                            var positionLibre = trouverPositionLibre();
+                            var numeroLettrePosition = positionLibre.substr(positionLibre.length - 2);;
+                            var numeroJoueurPositionLibree = numeroLettrePosition(numeroLettrePosition.substr(0, 1));
+                            var numeroPositionLibre = numeroLettrePosition(numeroLettrePosition.substr(1, 2))
+
+                            carteBas[numeroJoueurPositionLibree][numeroPositionLibre] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
+                            exemplaireCarteBas[numeroJoueurPositionLibree][numeroPositionLibre] = 1;
+                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
+                            var carteSable = document.createElement('img');
+                            carteSable.className = 'imageCarteJeu imageCarteJeuErosion';
+
+                            $(positionLibre).append(carteSable);
+
+                            $(function () {
+                                $('.imageCarteJeuErosion').on({
+                                    click: function (event, ui) {
+                                        onClickImage($(this).parent().attr("id"), ui);
+                                    }
+                                })
+                            });
+
+                            $('.emplacementJoueurA').removeClass('imageCarteJeuErosion');
+                            $('.emplacementJoueurB').removeClass('imageCarteJeuErosion');
+
+                            if (nombreJoueur > 2) {
+                                $('.emplacementJoueurC').removeClass('imageCarteJeuErosion');
+                            }
+
+                            if (nombreJoueur > 3) {
+                                $('.emplacementJoueurD').removeClass('imageCarteJeuErosion');
+                            }
                         }
 
                         $('#divDroite').css('pointer-events', 'auto');
