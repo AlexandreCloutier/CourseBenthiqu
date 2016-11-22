@@ -1807,10 +1807,12 @@
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
+                                updateAffichageImage();
                             } else if (carteDrag.nom === nomEnum.derivation) {
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
+                                updateAffichageImage();
 
                                 $('#labelChoix').text('Choisissez le joueur avec qui vous voulez échanger votre main.');
 
@@ -1865,7 +1867,6 @@
                                     hide: 'fade',
                                     show: 'fade'
                                 });
-
                             } else if (carteDrag.nom === nomEnum.corveNettoyage) {
                                 retirerDechets();
                                 paquetDecharge.push(carteDrag);
@@ -1876,6 +1877,7 @@
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
+                                updateAffichageImage();
 
                                 $('#labelChoix').text('Choisissez le joueur qui ratera son prochain tour.');
 
@@ -1933,6 +1935,7 @@
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
+                                updateAffichageImage();
                                 $('#labelChoix').text('Choisissez un des effets suivants.')
                                 $('#divChoix').dialog({
                                     classes: {
@@ -2069,6 +2072,7 @@
                                 paquetDecharge.push(carteDrag);
                                 ui.draggable.remove();
                                 supprimerCartePrecise(carteDragNumero);
+                                updateAffichageImage();
 
                                 $('#labelChoix').text('Veuillez choisir un ordre de macroinvertébrés à retourner dans les mains de leurs joueurs respectifs.');
 
@@ -2971,6 +2975,7 @@
                                 }
                             }
                         }
+                        popUpAvertissement('Il n\'y a pas de carte déchets en jeu.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.naturalisation) {
                         for (i = 0; i < nombreJoueur; i++) {
@@ -2989,6 +2994,8 @@
                                 }
                             }
                         }
+
+                        popUpAvertissement('Il n\'y a pas d\'artificialisation à retirer et il n\' y a plus de carte bande riveraine dans les cartes d\'intervention');
                         return false;
                     } else if (carteDrag.nom === nomEnum.amenagement) {
                         for (i = 0; i < nombreJoueur; i++) {
@@ -3007,6 +3014,8 @@
                                 }
                             }
                         }
+
+                        popUpAvertissement('Il n\'y a pas de carte érosion à annuler et il n\'y a plus de d\'habitats parmis les cartes d\'intervention.');
                         return false;
                     }
                 } else if (carteDrag.type === typeEnum.speciale) {
