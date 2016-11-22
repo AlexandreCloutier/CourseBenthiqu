@@ -2964,8 +2964,10 @@
                     if (carteDrag.nom === nomEnum.corveNettoyage) {
                         for (i = 0; i < nombreJoueur; i++) {
                             for (j = 0; j < cartePerturbation[i].length; j++) {
-                                if (cartePerturbation[i][j].nom === nomEnum.dechets) {
-                                    return true;
+                                if (cartePerturbation[i][j] != null) {
+                                    if (cartePerturbation[i][j].nom === nomEnum.dechets) {
+                                        return true;
+                                    }
                                 }
                             }
                         }
