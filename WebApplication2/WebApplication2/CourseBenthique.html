@@ -1186,6 +1186,7 @@
                         brillanceCarteMangeable(false);
                         $('#divDroite').css('pointer-events', 'auto');
                         $('#divMain').css('pointer-events', 'auto');
+                        griserZone(false, false, false);
                         updateAffichageImage();
 
                     } else {
@@ -1208,6 +1209,7 @@
                         nombrePolluer === 0;
                         $('#divDroite').css('pointer-events', 'auto');
                         $('#divMain').css('pointer-events', 'auto');
+                        griserZone(false, false, false);
                     }
                 } else {
                     popUpAvertissement('Seulement les habitats peuvent être poluer');
@@ -1292,6 +1294,7 @@
 
                         $('#divDroite').css('pointer-events', 'auto');
                         $('#divMain').css('pointer-events', 'auto');
+                        griserZone(false, false, false);
                     } else {
                         popUpAvertissement('Vous devez sélectionner une carte habitats pour la transformer en sable.');
                     }
@@ -1371,6 +1374,7 @@
                     etapeZonage = 1;
                     $('#divDroite').css('pointer-events', 'auto');
                     $('#divMain').css('pointer-events', 'auto');
+                    griserZone(false, false, false);
 
                     popUpConfirmation('La carte ' + carteEchange1.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur1)] + ' à été changer par la carte ' + carteEchange2.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur2)]);
                 }
@@ -1523,6 +1527,7 @@
                                     brillerCarte(typeEnum.habitats, numeroJoueurActif, true);
                                     $('#divDroite').css('pointer-events', 'none');
                                     $('#divMain').css('pointer-events', 'none');
+                                    griserZone(true, false, true);
                                 } else {
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
@@ -1614,6 +1619,7 @@
                                             if (joueurSelectionne.id === '1') {
                                                 $('#divDroite').css('pointer-events', 'none');
                                                 $('#divMain').css('pointer-events', 'none');
+                                                griserZone(true, false, true);
                                             } else {
                                                 $('#divChoixContenu').children().remove();
                                                 $(this).dialog({
@@ -1722,6 +1728,7 @@
                                     etapeErosion = 1;
                                     $('#divDroite').css('pointer-events', 'none');
                                     $('#divMain').css('pointer-events', 'none');
+                                    griserZone(true, false, true);
                                 } else {
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
@@ -1738,6 +1745,7 @@
                                                     etapeErosion = 1;
                                                     $('#divDroite').css('pointer-events', 'none');
                                                     $('#divMain').css('pointer-events', 'none');
+                                                    griserZone(true, false, true);
                                                     ui.draggable.remove();
                                                     updateAffichageImage();
                                                     $(this).dialog('close');
@@ -1813,6 +1821,7 @@
                                     nombrePolluer = 0;
                                     $('#divDroite').css('pointer-events', 'none');
                                     $('#divMain').css('pointer-events', 'none');
+                                    griserZone(true, false, true);
                                 } else {
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
@@ -2425,6 +2434,7 @@
                                                         brillanceCarteMangeable(true);
                                                         $('#divDroite').css('pointer-events', 'none');
                                                         $('#divMain').css('pointer-events', 'none');
+                                                        griserZone(true, false, true);
                                                     } else {//Sinon, met simplement la carte.
                                                         onDrop(event, ui, this);
                                                     }
@@ -4029,7 +4039,6 @@
             $('.divMain').append(buttonDefausser);
 
             griserZone(false, true, true);
-
             $('#divDroite').css('pointer-events', 'none');
             $('#plateau').css('pointer-events', 'none');
             $('#divMain').addClass('divMainDefausse');
