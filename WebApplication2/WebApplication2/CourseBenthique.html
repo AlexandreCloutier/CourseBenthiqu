@@ -175,8 +175,10 @@
         var etapeZonage;
         var carteEchange1;
         var positionCarte1;
+        var lettreJoueur1;
         var carteEchange2;
         var positionCarte2;
+        var lettreJoueur2;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -1264,6 +1266,7 @@
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
                             var carteSable = document.createElement('img');
                             carteSable.className = 'imageCarteJeu imageCarteJeuErosion';
+                            carteSable.src = 'habitatAmenageSable.png';
 
                             $(positionLibre).append(carteSable);
 
@@ -1294,7 +1297,7 @@
                     }
                 }
             } else if (predation) {
-                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === 'macroInvertebre') {
+                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.macroInvertebre) {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
                         if (numeroJoueurEnnemi != numeroJoueurActif) {
                             brillanceCarteMangeable(false);
@@ -1319,9 +1322,57 @@
                 }
             } else if (zonage) {
                 if (etapeZonage === 1) {
-                    //TODO: zonage
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
+                        if (numeroJoueurEnnemi === numeroJoueurActif) {
+                            carteEchange1 = carteBas[numeroJoueurEnnemi][numeroEmplacement];
+                            lettreJoueur1 = lettreJoueur(numeroJoueurEnnemi);
+                            positionCarte1 = numeroEmplacement;
+                            etapeZonage = 2;
+                            brillanceHabitatsEnnemi(true);
+                            brillerCarte(typeEnum.habitats, numeroJoueurActif, false);
+                        }
+                    }
                 } else if (etapeZonage === 2) {
+                    carteEchange2 = carteBas[numeroJoueurEnnemi][numeroEmplacement];
+                    lettreJoueur2 = lettreJoueur(numeroJoueurEnnemi);
+                    positionCarte2 = numeroEmplacement;
 
+                    $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
+                    $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().remove();
+
+                    var carte1 = document.createElement('img');
+                    carte1.className = 'imageCarteJeu imageCarteEchange';
+                    carte1.src = carteEchange1.nomImage;
+
+                    var carte2 = document.createElement('img');
+                    carte2.className = 'imageCarteJeu imageCarteEchange';
+                    carte2.src = carteEchange2.nomImage;
+
+                    $(function () {
+                        $('.imageCarteEchange').on({
+                            click: function (event, ui) {
+                                onClickImage($(this).parent().attr("id"), ui);
+                            }
+                        })
+                    });
+
+                    $('.emplacementJoueurA').removeClass('imageCarteEchange');
+                    $('.emplacementJoueurB').removeClass('imageCarteEchange');
+
+                    if (nombreJoueur > 2) {
+                        $('.emplacementJoueurC').removeClass('imageCarteEchange');
+                    }
+
+                    if (nombreJoueur > 3) {
+                        $('.emplacementJoueurD').removeClass('imageCarteEchange');
+                    }
+
+                    brillanceHabitatsEnnemi(false);
+                    etapeZonage = 1;
+                    $('#divDroite').css('pointer-events', 'auto');
+                    $('#divMain').css('pointer-events', 'auto');
+
+                    popUpConfirmation('La carte ' + carteEchange1.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur1)] + ' à été changer par la carte ' + carteEchange2.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur2)]);
                 }
             }
         }
@@ -1467,6 +1518,7 @@
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     ui.draggable.remove();
+                                    brillerCarte(typeEnum.habitats, numeroJoueurActif, true);
                                     $('#divDroite').css('pointer-events', 'none');
                                     $('#divMain').css('pointer-events', 'none');
                                 } else {
@@ -1481,7 +1533,7 @@
                                                     supprimerCartePrecise(carteDragNumero);
                                                     paquetDecharge.push(carteDrag);
                                                     erosion = true
-                                                    //TODO: erosion:)
+                                                    brillerCarte(typeEnum.habitats, numeroJoueurActif, true);
                                                     ui.draggable.remove();
                                                     updateAffichageImage();
                                                     $(this).dialog('close');
