@@ -945,7 +945,7 @@
 
                 //Première carte c'est un habitats rapides.
 
-                mains[0][0] = chercherCarteParticuliere(nomEnum.emergence, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -1168,11 +1168,11 @@
         function onClickImage(event, ui) {
             var emplacement = event.substr(event.length - 2);
             var lettreEmplacement = emplacement.substr(0, 1);
-            var numeroEmplacement = positionLibre
+            var numeroEmplacement = emplacement.substr(1, 2);
             var numeroJoueurEnnemi = numeroJoueur(lettreEmplacement);
 
             if (mangerPredateur) {
-                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type = 'macroInvertebre') {
+                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type = typeEnum.macroInvertebre) {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
                         mangerPredateur = false;
                         $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
@@ -1390,7 +1390,7 @@
             if (brille) {
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[0][i] != null) {
-                        if (carteBas[0][i].type === type.toString()) {
+                        if (carteBas[0][i].type === type) {
                             $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
                         }
                     }
@@ -2423,8 +2423,8 @@
                         tolerance: 'pointer',
                         drop: function (event, ui) {
                             if (carteDrag.nom != nomEnum.deversement && carteDrag.nom != nomEnum.erosion && carteDrag.nom != nomEnum.pollutionOrganique && carteDrag.type != typeEnum.speciale && carteDrag.type != typeEnum.action) {
-                            if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
-                                if (accepterDrop(event.target)) {                                   
+                                if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
+                                    if (accepterDrop(event.target)) {
                                         if ($(this).children().length < 1) {//Si l'endroit ou on drope est vide.
                                             if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
                                                 if (carteDrag.type === typeEnum.macroInvertebre) {
@@ -3421,7 +3421,7 @@
         //Fonction qui vérifie si un type de carte entrer en paramètre est disponible sur le plateau.
         function presenceTypePrecis(type, joueurActif) {
             for (var j = 0; j < nombreJoueur; j++) {
-                if(!(joueurActif && j === numeroJoueurActif)){
+                if (!(joueurActif && j === numeroJoueurActif)) {
                     for (var i = 0; i < 10; i++) {
                         if (carteBas[j][i] != null) {
                             if (carteBas[j][i].type === type) {
@@ -4051,6 +4051,7 @@
                 $('#divDroiteGrise').remove();
             }
         }
+
         //Fonction appelé pour défausser les cartes suplémentaires de la main.
         function defausserCarte() {
             var cartesDefausse = new Array();
