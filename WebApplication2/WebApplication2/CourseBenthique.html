@@ -1325,14 +1325,16 @@
                 }
             } else if (zonage) {
                 if (etapeZonage === 1) {
-                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
-                        if (numeroJoueurEnnemi === numeroJoueurActif) {
-                            carteEchange1 = carteBas[numeroJoueurEnnemi][numeroEmplacement];
-                            lettreJoueur1 = lettreJoueur(numeroJoueurEnnemi);
-                            positionCarte1 = numeroEmplacement;
-                            etapeZonage = 2;
-                            brillanceHabitatsEnnemi(true);
-                            brillerCarte(typeEnum.habitats, numeroJoueurActif, false);
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement] != null) {
+                        if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
+                            if (numeroJoueurEnnemi === numeroJoueurActif) {
+                                carteEchange1 = carteBas[numeroJoueurEnnemi][numeroEmplacement];
+                                lettreJoueur1 = lettreJoueur(numeroJoueurEnnemi);
+                                positionCarte1 = numeroEmplacement;
+                                etapeZonage = 2;
+                                brillanceHabitatsEnnemi(true);
+                                brillerCarte(typeEnum.habitats, numeroJoueurActif, false);
+                            }
                         }
                     }
                 } else if (etapeZonage === 2) {
@@ -3397,7 +3399,15 @@
                     return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
                 }
             } else if (carteDrag.nom === nomEnum.erosion) {
-                return 'ok';//TODO: Vérifier qu'il y a une bande riveraine à tuer ET un habitats à transformer en sable.
+                if (presenceCartePrecise(typeEnum.bandeRiveraine, false)) {
+                    if (presenceHabitats(typeEnum.habitats, true)) {
+                        return 'ok';
+                    } else {
+                        return 'Il n\'y a pas d\'habitats à changer en sable.';
+                    }
+                } else {
+                    return 'Il n\'y a pas de bande riveraine à détruire';
+                }
             } else if (carteDrag.nom === nomEnum.deversement) {
                 return 'ok';
             } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
@@ -3405,6 +3415,21 @@
                 //TODO: Vérifier qu'il y a 3 habitats à perturber au moins.
             } else {
                 return 'Vous ne pouvez pas mettre une carte perturbation sur un emplacement vide.';
+            }
+        }
+
+        //Fonction qui vérifie si un type de carte entrer en paramètre est disponible sur le plateau.
+        function presenceTypePrecis(type, joueurActif) {
+            for (var j = 0; j < nombreJoueur; j++) {
+                if(!(joueurActif && j === numeroJoueurActif)){
+                    for (var i = 0; i < 10; i++) {
+                        if (carteBas[j][i] != null) {
+                            if (carteBas[j][i].type === type) {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
         }
 
