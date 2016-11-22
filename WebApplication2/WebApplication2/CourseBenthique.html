@@ -116,10 +116,12 @@
         var tableauPasserTour;
         //Niveau de difficulté de la partie
         var difficulte;
-        //Paquet de carte principal.
+        //Paquet de cartes principales.
         var paquetCarte;
-        //Paquet de carte de la décharge
+        //Paquet de cartes de la décharge
         var paquetDecharge;
+        //Paquet de cartes interventions
+        var paquetIntervention;
         /*-----------------------------Partie tableau de données---------------*/
         //Tableau contenant les mains.
         var mains;
@@ -227,7 +229,8 @@
             instantierTableauEmplacementBas();
             instantierTableauPointsRessources();
             instantierTableauExemplaire();
-            paquetDecharge = new Array();
+            paquetDecharge = [];
+            paquetIntervention = [];
             pointsJoueur = new Array(6);
             tableauProtege = new Array(nombreJoueur);
             tableauRetention = new Array(nombreJoueur);
@@ -1541,6 +1544,8 @@
                                         });
                                     });
                                 }
+                            } else if (carteDrag.nom === nomEnum.naturalisation) {
+
                             } else if (carteDrag.nom === nomEnum.erosion) {
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
                                     popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.');
@@ -2905,13 +2910,51 @@
                     return true;
                 } else if (carteDrag.type === typeEnum.action) {
                     if (carteDrag.nom === nomEnum.corveNettoyage) {
-                        return true;
+                        for (i = 0; i < nombreJoueur; i++) {
+                            for (j = 0; j < cartePerturbation[i].length; j++) {
+                                if (cartePerturbation[i][j].nom === nomEnum.dechets) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
                     } else if (carteDrag.nom === nomEnum.naturalisation) {
-
+                        for (i = 0; i < nombreJoueur; i++) {
+                            for (j = 0; j < cartePerturbation[i].length; j++) {
+                                if (carte[i][j] != null) {
+                                    if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        for (i = 0; i < paquetIntervention.length; i++) {
+                            if (paquetIntervention[i] != null) {
+                                if (paquetIntervention[i].nom === nomEnum.amenageArbre || paquetIntervention[i].nom === nomEnum.amenageArbustes || paquetIntervention[i].nom === nomEnum.amenageHerbace) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
                     } else if (carteDrag.nom === nomEnum.amenagement) {
-
+                        for (i = 0; i < nombreJoueur; i++) {
+                            for (j = 0; j < cartePerturbation[i].length; j++) {
+                                if (carte[i][j] != null) {
+                                    if (cartePerturbation[i][j].nom === nomEnum.erosion) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        for (i = 0; i < paquetIntervention.length; i++) {
+                            if (paquetIntervention[i] != null) {
+                                if (paquetIntervention[i].nom === nomEnum.amenageFosse || paquetIntervention[i].nom === nomEnum.amenageGalets || paquetIntervention[i].nom === nomEnum.amenageGravier || paquetIntervention[i].nom === nomEnum.amenageRapides || paquetIntervention[i].nom === nomEnum.amenageSable) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
                     }
-                    return true;
                 } else if (carteDrag.type === typeEnum.speciale) {
                     if (carteDrag.nom === nomEnum.retention) {
                         if (pointsRessourcesRestant[numeroJoueurActif] === 0) {
@@ -2931,7 +2974,7 @@
                                                 for (var k = 0; k < carteBas[j].length; k++) {
                                                     if (carteBas[j][k] != null) {
                                                         if (carteBas[j][k].type === typeEnum.macroInvertebre && carteBas[j][k].taille < taillePredateur) {
-                                                            return true; 
+                                                            return true;
                                                         }
                                                     }
                                                 }
@@ -3683,28 +3726,28 @@
                 //---------------------------------intervention------------------------------
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
-                paquetCarte.push(carte);
+                paquetIntervention.push(carte);
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageRapides, 'habitatAmenageRapides.png', 1, { habitats: nomEnum.rapides });
-                paquetCarte.push(carte);
+                paquetIntervention.push(carte);
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageFosse, 'habitatAmenageFosse.png', 1, { habitats: nomEnum.fosse });
-                paquetCarte.push(carte);
+                paquetIntervention.push(carte);
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageGalets, 'habitatAmenageGalets.png', 1, { habitats: nomEnum.galets });
-                paquetCarte.push(carte);
+                paquetIntervention.push(carte);
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageGravier, 'habitatAmenageGravier.png', 1, { habitats: nomEnum.gravier });
-                paquetCarte.push(carte);
+                paquetIntervention.push(carte);
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageHerbace, 'bandeRiveraineHerbace.png', 1);
-                paquetCarte.push(carte);
+                paquetIntervention.push(carte);
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageArbustes, 'bandeRiveraineArbuste.png', 2);
-                paquetCarte.push(carte);
+                paquetIntervention.push(carte);
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageArbre, 'bandeRiveraineArbre.png', 3);
-                paquetCarte.push(carte);
+                paquetIntervention.push(carte);
             }
 
             if (difficulte >= 3)//Difficile
