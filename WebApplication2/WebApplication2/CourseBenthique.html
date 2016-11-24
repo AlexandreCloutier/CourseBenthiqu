@@ -168,6 +168,8 @@
         var etapeErosion
         //Variable pour prédation.
         var predation;
+        //Variable pour Naturalisation
+        var naturalisation;
         //Variable qui contient le joueur selectioner par le popUp de choix de joueur.
         var joueurSelectionne;
         //Variable pour l'échange de la carte zonage.
@@ -200,12 +202,17 @@
             verifier = false;
             nombrePolluer = 0;
             predation = false;
+            naturalisation = false;
             etape = 1;
-            cartePerturbation = new Array(4);
+            cartePerturbation = new Array(nombreJoueur);
             cartePerturbation[0] = new Array(10);
             cartePerturbation[1] = new Array(10);
-            cartePerturbation[2] = new Array(10);
-            cartePerturbation[3] = new Array(10);
+            if (nombreJoueur > 2) {
+                cartePerturbation[2] = new Array(10);
+            }
+            if (nombreJoueur > 3) {
+                cartePerturbation[3] = new Array(10);
+            }
         }
 
         //Fonction qui va créer les diverse éléments du fond.
@@ -945,8 +952,9 @@
 
                 //Première carte c'est un habitats rapides.
 
-                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
-                mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.naturalisation, paquetCarte);
+                mains[1][0] = chercherCarteParticuliere(nomEnum.artificialisation, paquetCarte);
+
 
                 if (nombreJoueur >= 3) {//3 joueurs.
                     mains[2][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
@@ -956,7 +964,7 @@
                 }
 
                 //Deuxième carte c'est un habitats au hasard.
-                mains[0][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+                mains[0][1] = chercherCarteParticuliere(nomEnum.arbres, paquetCarte);
                 mains[1][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -1184,8 +1192,6 @@
                         }
 
                         brillanceCarteMangeable(false);
-                        $('#divDroite').css('pointer-events', 'auto');
-                        $('#divMain').css('pointer-events', 'auto');
                         griserZone(false, false, false);
                         updateAffichageImage();
 
@@ -1207,8 +1213,6 @@
                     if (nombrePolluer === 3) {
                         onPollu = false;
                         nombrePolluer === 0;
-                        $('#divDroite').css('pointer-events', 'auto');
-                        $('#divMain').css('pointer-events', 'auto');
                         griserZone(false, false, false);
                     }
                 } else {
@@ -1299,7 +1303,7 @@
                             }
                         } else {
                             var positionLibre = trouverPositionLibre();
-                            var numeroLettrePosition = positionLibre.substr(positionLibre.length - 2);;
+                            var numeroLettrePosition = positionLibre.substr(positionLibre.length - 2);
                             var numeroJoueurPositionLibree = numeroLettrePosition(numeroLettrePosition.substr(0, 1));
                             var numeroPositionLibre = numeroLettrePosition(numeroLettrePosition.substr(1, 2))
 
@@ -1343,8 +1347,6 @@
                             }
                         }
 
-                        $('#divDroite').css('pointer-events', 'auto');
-                        $('#divMain').css('pointer-events', 'auto');
                         griserZone(false, false, false);
                     } else {
                         popUpAvertissement('Vous devez sélectionner une carte habitats pour la transformer en sable.');
@@ -1426,12 +1428,12 @@
                     brillanceHabitatsEnnemi(false);
                     etapeZonage = 1;
                     zonage = false;
-                    $('#divDroite').css('pointer-events', 'auto');
-                    $('#divMain').css('pointer-events', 'auto');
                     griserZone(false, false, false);
 
                     popUpConfirmation('La carte ' + carteEchange1.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur1)] + ' à été changer par la carte ' + carteEchange2.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur2)]);
                 }
+            } else if (naturalisation) {
+
             }
         }
 
@@ -1493,6 +1495,7 @@
                                     ui.draggable.remove();
                                     updateAffichageImage();
                                 } else {
+                                    $('#divChoixContenu').children().remove('ul');
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
                                         classes: {
@@ -1578,14 +1581,13 @@
                                 paquetDecharge.push(carteDrag);
                                 ui.draggable.remove();
                                 brillerCarte(typeEnum.habitats, numeroJoueurActif, true);
-                                $('#divDroite').css('pointer-events', 'none');
-                                $('#divMain').css('pointer-events', 'none');
                                 griserZone(true, false, true);
                             } else if (carteDrag.nom === nomEnum.naturalisation) {
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
-                                $('#labelChoix').text('Choisissez un des effets suivants.')
+                                $('#divChoixContenu').children().remove('ul');
+                                $('#labelChoix').text('Choisissez un des effets suivants.');
                                 $('#divChoix').dialog({
                                     classes: {
                                         'ui-dialog': 'no-x ui-corner-all',
@@ -1593,9 +1595,23 @@
                                     buttons: {
                                         Confirmer: function () {
                                             if (joueurSelectionne.id === '1') {
-                                                $('#divDroite').css('pointer-events', 'none');
-                                                $('#divMain').css('pointer-events', 'none');
+                                                paquetDecharge.push(carteDrag);
+                                                supprimerCartePrecise(numeroCarteDrag);
+                                                ui.draggable.remove();
+                                                updateAffichageImage();
+                                                naturalisation = true;
                                                 griserZone(true, false, true);
+                                                popUpConfirmation('Choisissez la bande riveraine que vous voulez désartificialiser.');
+                                                for (var i = 0; i < nombreJoueur; i++) {
+                                                    for (varj = 0; j < cartePerturbation[i].length; j++) {
+                                                        if (cartePerturbation[i][j] != null) {
+                                                            if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
+                                                                $('#emplacementJoueur' + lettreJouer[i] + j).addClass('ui-echange-highlight');
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                $(this).dialog('close');
                                             } else {
                                                 $('#divChoixContenu').children().remove();
                                                 $(this).dialog({
@@ -1670,19 +1686,38 @@
                                 ul.id = 'listeJoueur';
                                 $('#divChoixContenu').append(ul);
 
-                                var li = document.createElement('li');
-                                li.style.listStyleType = 'none';
-                                li.className = 'listeJoueur';
-                                li.id = '1';
-                                li.innerHTML = 'Annuler l\'effet d\'une carte Artificialisation.';
-                                $(ul).append(li);
+                                var conte = false;
+                                for (var i = 0; i < nombreJoueur; i++) {
+                                    for (var j = 0; j < cartePerturbation[i].length; j++) {
+                                        if (!conte) {
+                                            if (cartePerturbation[i][j] != null) {
+                                                if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
+                                                    var li = document.createElement('li');
+                                                    li.style.listStyleType = 'none';
+                                                    li.className = 'listeJoueur';
+                                                    li.id = '1';
+                                                    li.innerHTML = 'Annuler l\'effet d\'une carte Artificialisation.';
+                                                    $(ul).append(li);
+                                                    conte = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
 
-                                var li = document.createElement('li');
-                                li.style.listStyleType = 'none';
-                                li.className = 'listeJoueur';
-                                li.id = '2';
-                                li.innerHTML = 'Choisir une bande riveraine dans les cartes Interventions.';
-                                $(ul).append(li);
+                                if (paquetIntervention.filter(
+                                    function (value) {
+                                        if (value.nom === nomEnum.amenageArbre || value.nom === nomEnum.amenageArbustes || value.nom === nomEnum.amenageHerbace) {
+                                            return value;
+                                }
+                                }).length > 0) {
+                                    var li = document.createElement('li');
+                                    li.style.listStyleType = 'none';
+                                    li.className = 'listeJoueur';
+                                    li.id = '2';
+                                    li.innerHTML = 'Choisir une bande riveraine dans les cartes Interventions.';
+                                    $(ul).append(li);
+                                }
 
                                 $(function () {
                                     $(ul).selectable({
@@ -1719,11 +1754,9 @@
                                             brillerCarte(typeEnum.bandeRiveraine, 3, true);
                                         }
                                     }
-
-                                    $('#divDroite').css('pointer-events', 'none');
-                                    $('#divMain').css('pointer-events', 'none');
                                     griserZone(true, false, true);
                                 } else {
+                                    $('#divChoixContenu').children().remove('ul');
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
                                         classes: {
@@ -1737,8 +1770,6 @@
                                                     paquetDecharge.push(carteDrag);
                                                     erosion = true
                                                     etapeErosion = 1;
-                                                    $('#divDroite').css('pointer-events', 'none');
-                                                    $('#divMain').css('pointer-events', 'none');
                                                     griserZone(true, false, true);
                                                     ui.draggable.remove();
                                                     updateAffichageImage();
@@ -1813,10 +1844,9 @@
                                     ui.draggable.remove();
                                     onPollu = true;
                                     nombrePolluer = 0;
-                                    $('#divDroite').css('pointer-events', 'none');
-                                    $('#divMain').css('pointer-events', 'none');
                                     griserZone(true, false, true);
                                 } else {
+                                    $('#divChoixContenu').children().remove('ul');
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
                                         classes: {
@@ -1901,17 +1931,18 @@
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
                                 for (var i = 0; i < 3; i++) {
-                                    var nouvelle = true
+                                    var nouvelle = true;
                                     for (var j = 0; j < mains[numeroJoueurActif].length; j++) {
                                         if (nouvelle) {
-                                            if (mains[numeroJoueurActif][j] === null) {
+                                            if (mains[numeroJoueurActif][j] == null) {
                                                 annimationPigerCarte(j);
-                                                nouvel = false;
+                                                nouvelle = false;
                                             }
                                         }
                                     }
                                     if (nouvelle) {
                                         annimationPigerCarte(mains[numeroJoueurActif].length);
+                                        nouvelle = false;
                                     }
                                 }
                             } else if (carteDrag.nom === nomEnum.predation) {
@@ -1934,7 +1965,7 @@
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
                                 updateAffichageImage();
-
+                                $('#divChoixContenu').children().remove('ul');
                                 $('#labelChoix').text('Choisissez le joueur avec qui vous voulez échanger votre main.');
 
                                 var ul = document.createElement('ul');
@@ -2000,7 +2031,7 @@
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
                                 updateAffichageImage();
-
+                                $('#divChoixContenu').children().remove('ul');
                                 $('#labelChoix').text('Choisissez le joueur qui ratera son prochain tour.');
 
                                 var ul = document.createElement('ul');
@@ -2059,7 +2090,8 @@
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
                                 updateAffichageImage();
-                                $('#labelChoix').text('Choisissez un des effets suivants.')
+                                $('#divChoixContenu').children().remove('ul');
+                                $('#labelChoix').text('Choisissez un des effets suivants.');
                                 $('#divChoix').dialog({
                                     classes: {
                                         'ui-dialog': 'no-x ui-corner-all',
@@ -2197,15 +2229,15 @@
                                 ui.draggable.remove();
                                 supprimerCartePrecise(carteDragNumero);
                                 updateAffichageImage();
-
+                                $('#divChoixContenu').children().remove('ul');
                                 $('#labelChoix').text('Veuillez choisir un ordre de macroinvertébrés à retourner dans les mains de leurs joueurs respectifs.');
 
                                 var ul = document.createElement('ul');
                                 ul.id = 'listeJoueur';
                                 $('#divChoixContenu').append(ul);
 
-                                for (i = 0; i < nombreJoueur; i++) {
-                                    for (j = 0; j < carteBas[i].length; j++) {
+                                for (var i = 0; i < nombreJoueur; i++) {
+                                    for (var j = 0; j < carteBas[i].length; j++) {
                                         if (carteBas[i][j] != null) {
                                             if (carteBas[i][j].type === typeEnum.macroInvertebre) {
                                                 if (carteBas[i][j].typeMacro === typeMacroEnum.ephemeroptere) {
@@ -2252,10 +2284,10 @@
                                     buttons: {
                                         Confirmer: function () {
                                             if (ordreSelectionne != null) {
-                                                for (i = 0; i < nombreJoueur; i++) {
-                                                    for (j = 0; j < carteBas[i].length; j++) {
+                                                for (var i = 0; i < nombreJoueur; i++) {
+                                                    for (var j = 0; j < carteBas[i].length; j++) {
                                                         if (carteBas[i][j] != null && carteBas[i][j].typeMacro === ordreSelectionne) {
-                                                            for (k = 0; k < mains[i].length; k++) {
+                                                            for (var k = 0; k < mains[i].length; k++) {
                                                                 console.log(mains[i][k]);
                                                                 if (mains[i][k] === null) {
                                                                     if (carteBas[i][j] != null) {
@@ -2426,8 +2458,6 @@
                                                         mangerPredateur = true;
                                                         popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
                                                         brillanceCarteMangeable(true);
-                                                        $('#divDroite').css('pointer-events', 'none');
-                                                        $('#divMain').css('pointer-events', 'none');
                                                         griserZone(true, false, true);
                                                     } else {//Sinon, met simplement la carte.
                                                         onDrop(event, ui, this);
@@ -2475,6 +2505,7 @@
                                                     rendrePerturber(event);
                                                     onDrop(event, ui, this);
                                                 } else {
+                                                    $('#divChoixContenu').children().remove('ul');
                                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                                     $('#divChoix').dialog({
                                                         classes: {
@@ -3093,8 +3124,8 @@
                     return true;
                 } else if (carteDrag.type === typeEnum.action) {
                     if (carteDrag.nom === nomEnum.corveNettoyage) {
-                        for (i = 0; i < nombreJoueur; i++) {
-                            for (j = 0; j < cartePerturbation[i].length; j++) {
+                        for (var i = 0; i < nombreJoueur; i++) {
+                            for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.dechets) {
                                         return true;
@@ -3105,16 +3136,16 @@
                         popUpAvertissement('Il n\'y a pas de carte déchets en jeu.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.naturalisation) {
-                        for (i = 0; i < nombreJoueur; i++) {
-                            for (j = 0; j < cartePerturbation[i].length; j++) {
-                                if (carte[i][j] != null) {
+                        for (var i = 0; i < nombreJoueur; i++) {
+                            for (var j = 0; j < cartePerturbation[i].length; j++) {
+                                if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
                                         return true;
                                     }
                                 }
                             }
                         }
-                        for (i = 0; i < paquetIntervention.length; i++) {
+                        for (var i = 0; i < paquetIntervention.length; i++) {
                             if (paquetIntervention[i] != null) {
                                 if (paquetIntervention[i].nom === nomEnum.amenageArbre || paquetIntervention[i].nom === nomEnum.amenageArbustes || paquetIntervention[i].nom === nomEnum.amenageHerbace) {
                                     return true;
@@ -3125,8 +3156,8 @@
                         popUpAvertissement('Il n\'y a pas d\'artificialisation à retirer et il n\' y a plus de carte bande riveraine dans les cartes d\'intervention');
                         return false;
                     } else if (carteDrag.nom === nomEnum.amenagement) {
-                        for (i = 0; i < nombreJoueur; i++) {
-                            for (j = 0; j < cartePerturbation[i].length; j++) {
+                        for (var i = 0; i < nombreJoueur; i++) {
+                            for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (carte[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.erosion) {
                                         return true;
@@ -3134,7 +3165,7 @@
                                 }
                             }
                         }
-                        for (i = 0; i < paquetIntervention.length; i++) {
+                        for (var i = 0; i < paquetIntervention.length; i++) {
                             if (paquetIntervention[i] != null) {
                                 if (paquetIntervention[i].nom === nomEnum.amenageFosse || paquetIntervention[i].nom === nomEnum.amenageGalets || paquetIntervention[i].nom === nomEnum.amenageGravier || paquetIntervention[i].nom === nomEnum.amenageRapides || paquetIntervention[i].nom === nomEnum.amenageSable) {
                                     return true;
@@ -4021,8 +4052,10 @@
                 divMainGrise.id = 'divMainGrise';
                 divMainGrise.className = 'zoneGrise';
                 $('#divMain').append(divMainGrise);
+                $('#divMain').css('pointer-events', 'none');
             } else {
                 $('#divMainGrise').remove();
+                $('#divMain').css('pointer-events', 'auto');
             }
 
             if (divPlateau) {
@@ -4030,8 +4063,10 @@
                 plateauGrise.id = 'plateauGrise';
                 plateauGrise.className = 'zoneGrise';
                 $('#plateau').append(plateauGrise);
+                $('#plateau').css('pointer-events', 'none');
             } else {
                 $('#plateauGrise').remove();
+                $('#plateau').css('pointer-events', 'auto');
             }
 
             if (divDroite) {
@@ -4039,8 +4074,10 @@
                 divDroiteGrise.id = 'divDroiteGrise';
                 divDroiteGrise.className = 'zoneGrise'
                 $('#divDroite').append(divDroiteGrise);
+                $('#divDroite').css('pointer-events', 'none');
             } else {
                 $('#divDroiteGrise').remove();
+                $('#divDroite').css('pointer-events', 'auto');
             }
         }
 
@@ -4057,8 +4094,6 @@
             $('.divMain').append(buttonDefausser);
 
             griserZone(false, true, true);
-            $('#divDroite').css('pointer-events', 'none');
-            $('#plateau').css('pointer-events', 'none');
             $('#divMain').addClass('divMainDefausse');
             $('.imageCarteMains').draggable('disable');
 
@@ -4080,8 +4115,8 @@
 
         //Fonction appelé lors d'un clic sur le bouton Défausser.
         function onClickButtonDefausse(cartesDefausse) {
-            sizeMain = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
-            sizeADefausse = cartesDefausse.filter(function (value) { return value !== null }).length;
+            sizeMain = mains[numeroJoueurActif].filter(function (value) { return value != null }).length;
+            sizeADefausse = cartesDefausse.filter(function (value) { return value != null }).length;
             if ((sizeMain - sizeADefausse) === 4) {
                 if (sizeADefausse != 0) {
                     cartesDefausse.forEach(function (item, index) {
@@ -4111,8 +4146,6 @@
                         }
                     });
                     griserZone(false, false, false);
-                    $('#divDroite').css('pointer-events', 'auto');
-                    $('#plateau').css('pointer-events', 'auto');
                     $('.imageCarteMains').draggable('enable');
                     $('#divMain').removeClass('divMainDefausse');
                     mains[numeroJoueurActif].forEach(function (item, index) {
@@ -4139,7 +4172,7 @@
         //Fonction appelé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
             if (!mangerPredateur) {
-                var size = mains[numeroJoueurActif].filter(function (value) { return value !== null }).length;
+                var size = mains[numeroJoueurActif].filter(function (value) { return value != null }).length;
 
                 if (size > 4 && tableauPasserTour[numeroJoueurActif] != true) {
                     defausserCarte();
