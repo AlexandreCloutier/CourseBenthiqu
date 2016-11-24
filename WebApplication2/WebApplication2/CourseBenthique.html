@@ -1401,10 +1401,12 @@
                     var carte1 = document.createElement('img');
                     carte1.className = 'imageCarteJeu imageCarteEchange';
                     carte1.src = 'ressources/' + carteEchange1.nomImage;
-
+                    $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).append(carte1);
+                    
                     var carte2 = document.createElement('img');
                     carte2.className = 'imageCarteJeu imageCarteEchange';
                     carte2.src = 'ressources/' + carteEchange2.nomImage;
+                    $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).append(carte2);
 
                     $(function () {
                         $('.imageCarteEchange').on({
@@ -2895,7 +2897,7 @@
             var lettre = lettreJoueur(numeroJoueurActif);
 
             //Si c'est un habitats, un macro-invertebrer ou une bande riveraine, la carte se joue seulement sur notre territoire.
-            if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.bandeRiveraine || carteDrag.type === typeEnum.salmonide || carteDrag.type === typeEnum.reglementation) {
+            if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.bandeRiveraine || carteDrag.type === typeEnum.salmonide || carteDrag.type === typeEnum.reglementation || carteDrag.type === typeEnum.intervention) {
                 if (lettreEmplacement === lettre) {
                     return true;
                 } else {
