@@ -1597,18 +1597,14 @@
                                     buttons: {
                                         Confirmer: function () {
                                             if (joueurSelectionne.id === '1') {
-                                                paquetDecharge.push(carteDrag);
-                                                supprimerCartePrecise(numeroCarteDrag);
-                                                ui.draggable.remove();
-                                                updateAffichageImage();
                                                 naturalisation = true;
                                                 griserZone(true, false, true);
                                                 popUpConfirmation('Choisissez la bande riveraine que vous voulez désartificialiser.');
                                                 for (var i = 0; i < nombreJoueur; i++) {
-                                                    for (varj = 0; j < cartePerturbation[i].length; j++) {
+                                                    for (var j = 0; j < cartePerturbation[i].length; j++) {
                                                         if (cartePerturbation[i][j] != null) {
                                                             if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
-                                                                $('#emplacementJoueur' + lettreJouer[i] + j).addClass('ui-echange-highlight');
+                                                                $('#emplacementJoueur' + lettreJoueur[i] + j).addClass('ui-echange-highlight');
                                                             }
                                                         }
                                                     }
@@ -1862,7 +1858,6 @@
                                                     brillanceHabitatsEnnemi(true);
                                                     onPollu = true;
                                                     nombrePolluer = 0;
-                                                    //TODO: finir pollution organique
                                                     ui.draggable.remove();
                                                     updateAffichageImage();
                                                     $(this).dialog('close');
@@ -2503,9 +2498,10 @@
                                                     popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                                 }
                                             } else {
+                                                var zoneDrop = this;
                                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
                                                     rendrePerturber(event);
-                                                    onDrop(event, ui, this);
+                                                    onDrop(event, ui, zoneDrop);
                                                 } else {
                                                     $('#divChoixContenu').children().remove('ul');
                                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
@@ -2517,7 +2513,7 @@
                                                             Confirmer: function () {
                                                                 if (joueurSelectionne.innerHTML === 'Aucun joueur') {
                                                                     rendrePerturber(event);
-                                                                    onDrop(event, ui, this);
+                                                                    onDrop(event, ui, zoneDrop);
                                                                     updateAffichageImage();
                                                                     $(this).dialog('close');
                                                                 } else {
