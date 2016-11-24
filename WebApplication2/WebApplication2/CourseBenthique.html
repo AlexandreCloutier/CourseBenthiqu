@@ -1226,6 +1226,35 @@
                         $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().last().remove();
                         etapeErosion = 2;
                         updateAffichageImage();
+
+                        if (numeroJoueurActif != 0) {
+                            brillerCarte(typeEnum.bandeRiveraine, 0, false);
+                        }
+                        if (numeroJoueurActif != 1) {
+                            brillerCarte(typeEnum.bandeRiveraine, 1, false);
+                        }
+                        if (nombreJoueur > 2) {
+                            if (numeroJoueur != 2) {
+                                brillerCarte(typeEnum.bandeRiveraine, 2, false);
+                            }
+                        }
+                        if (nombreJoueur > 3) {
+                            if (numeroJoueur != 3) {
+                                brillerCarte(typeEnum.bandeRiveraine, 3, false);
+                            }
+                        }
+
+                        brillerCarte(typeEnum.habitats, 0, true);
+                        brillerCarte(typeEnum.habitats, 1, true);
+
+                        if (nombreJoueur > 2) {
+                            brillerCarte(typeEnum.habitats, 2, true);
+                        }
+
+                        if (nombrePolluer > 3) {
+                            brillerCarte(typeEnum.habitats, 3, true);
+                        }
+
                         popUpConfirmation('Vous devez désormais sélectionner un habitats que vous voulez transformer en sable.')
                     } else {
                         popUpAvertissement('Vous devez sélectionner une carte bande riveraine pour l\'emvoyer à la décharge.');
@@ -1238,7 +1267,7 @@
                             var carteSable = document.createElement('img');
                             carteSable.className = 'imageCarteJeu imageCarteJeuErosion';
 
-                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi).append(carteSable));
+                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi)).append(carteSable);
                             $(function () {
                                 $('.imageCarteJeuErosion').on({
                                     click: function (event, ui) {
@@ -1246,6 +1275,17 @@
                                     }
                                 })
                             });
+
+                            brillerCarte(typeEnum.habitats, 0, false);
+                            brillerCarte(typeEnum.habitats, 1, false);
+
+                            if (nombreJoueur > 2) {
+                                brillerCarte(typeEnum.habitats, 2, false);
+                            }
+
+                            if (nombrePolluer > 3) {
+                                brillerCarte(typeEnum.habitats, 3, false);
+                            }
 
                             $('.emplacementJoueurA').removeClass('imageCarteJeuErosion');
                             $('.emplacementJoueurB').removeClass('imageCarteJeuErosion');
@@ -1279,6 +1319,17 @@
                                     }
                                 })
                             });
+
+                            brillerCarte(typeEnum.habitats, 0, false);
+                            brillerCarte(typeEnum.habitats, 1, false);
+
+                            if (nombreJoueur > 2) {
+                                brillerCarte(typeEnum.habitats, 2, false);
+                            }
+
+                            if (nombrePolluer > 3) {
+                                brillerCarte(typeEnum.habitats, 3, false);
+                            }
 
                             $('.emplacementJoueurA').removeClass('imageCarteJeuErosion');
                             $('.emplacementJoueurB').removeClass('imageCarteJeuErosion');
@@ -1347,11 +1398,11 @@
 
                     var carte1 = document.createElement('img');
                     carte1.className = 'imageCarteJeu imageCarteEchange';
-                    carte1.src = carteEchange1.nomImage;
+                    carte1.src = 'ressources/' + carteEchange1.nomImage;
 
                     var carte2 = document.createElement('img');
                     carte2.className = 'imageCarteJeu imageCarteEchange';
-                    carte2.src = carteEchange2.nomImage;
+                    carte2.src = 'ressources/' + carteEchange2.nomImage;
 
                     $(function () {
                         $('.imageCarteEchange').on({
@@ -1519,94 +1570,16 @@
                                     });
                                 }
                             } else if (carteDrag.nom === nomEnum.zonage) {
-                                if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
-                                    zonage = true;
-                                    etapeZonage = 1;
-                                    popUpConfirmation('Sélectionnez l\'habitats que vous voulez échanger');
-                                    supprimerCartePrecise(carteDragNumero);
-                                    paquetDecharge.push(carteDrag);
-                                    ui.draggable.remove();
-                                    brillerCarte(typeEnum.habitats, numeroJoueurActif, true);
-                                    $('#divDroite').css('pointer-events', 'none');
-                                    $('#divMain').css('pointer-events', 'none');
-                                    griserZone(true, false, true);
-                                } else {
-                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
-                                    $('#divChoix').dialog({
-                                        classes: {
-                                            'ui-dialog': 'no-x ui-corner-all',
-                                        },
-                                        buttons: {
-                                            Confirmer: function () {
-                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
-                                                    supprimerCartePrecise(carteDragNumero);
-                                                    paquetDecharge.push(carteDrag);
-                                                    erosion = true
-                                                    brillerCarte(typeEnum.habitats, numeroJoueurActif, true);
-                                                    ui.draggable.remove();
-                                                    updateAffichageImage();
-                                                    $(this).dialog('close');
-                                                } else {
-                                                    paquetDecharge.push(carteDrag);
-                                                    supprimerCartePrecise(carteDragNumero);
-                                                    ui.draggable.remove();
-
-                                                    for (var i = 0; i < nombreJoueur; i++) {
-                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
-                                                            for (var j = 0; j < mains[i].length; j++) {
-                                                                if (mains[i][j] !== null) {
-                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
-                                                                        paquetDecharge.push(mains[i][j]);
-                                                                        mains[i][j] = null;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    $(this).dialog('close');
-                                                }
-                                            }
-                                        },
-                                        draggable: false,
-                                        resizable: false,
-                                        modal: true,
-                                        height: 575,
-                                        width: 500,
-                                        hide: 'fade',
-                                        show: 'fade'
-                                    });
-
-                                    var ul = document.createElement('ul');
-                                    ul.id = 'listeJoueur';
-                                    $('#divChoixContenu').append(ul);
-
-                                    var tabJoueur = verifierPresencePrisSurFait();
-                                    for (var i = 0; i < tabJoueur.length; i++) {
-                                        if (tabJoueur[i] != null) {
-                                            var li = document.createElement('li');
-                                            li.style.listStyleType = 'none';
-                                            li.className = 'listeJoueur';
-                                            li.innerHTML = nomJoueur[i];
-                                            $(ul).append(li);
-                                        }
-                                    }
-                                    var li = document.createElement('li');
-                                    li.style.listStyleType = 'none';
-                                    li.className = 'listeJoueur';
-                                    li.innerHTML = 'Aucun joueur';
-                                    $(ul).append(li);
-
-                                    $(function () {
-                                        $(ul).selectable({
-                                            stop: function (event, ui) {
-                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
-                                            },
-                                            selected: function (event, ui) {
-                                                joueurSelectionne = ui.selected;
-                                            }
-                                        });
-                                    });
-                                }
+                                zonage = true;
+                                etapeZonage = 1;
+                                popUpConfirmation('Sélectionnez l\'habitats que vous voulez échanger');
+                                supprimerCartePrecise(carteDragNumero);
+                                paquetDecharge.push(carteDrag);
+                                ui.draggable.remove();
+                                brillerCarte(typeEnum.habitats, numeroJoueurActif, true);
+                                $('#divDroite').css('pointer-events', 'none');
+                                $('#divMain').css('pointer-events', 'none');
+                                griserZone(true, false, true);
                             } else if (carteDrag.nom === nomEnum.naturalisation) {
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
@@ -1728,6 +1701,24 @@
                                     ui.draggable.remove();
                                     erosion = true;
                                     etapeErosion = 1;
+
+                                    if (numeroJoueurActif != 0) {
+                                        brillerCarte(typeEnum.bandeRiveraine, 0, true);
+                                    }
+                                    if (numeroJoueurActif != 1) {
+                                        brillerCarte(typeEnum.bandeRiveraine, 1, true);
+                                    }
+                                    if (nombreJoueur > 2) {
+                                        if (numeroJoueur != 2) {
+                                            brillerCarte(typeEnum.bandeRiveraine, 2, true);
+                                        }
+                                    }
+                                    if (nombreJoueur > 3) {
+                                        if (numeroJoueur != 3) {
+                                            brillerCarte(typeEnum.bandeRiveraine, 3, true);
+                                        }
+                                    }
+
                                     $('#divDroite').css('pointer-events', 'none');
                                     $('#divMain').css('pointer-events', 'none');
                                     griserZone(true, false, true);
@@ -3399,8 +3390,8 @@
                     return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
                 }
             } else if (carteDrag.nom === nomEnum.erosion) {
-                if (presenceCartePrecise(typeEnum.bandeRiveraine, false)) {
-                    if (presenceHabitats(typeEnum.habitats, true)) {
+                if (presenceTypePrecis(typeEnum.bandeRiveraine, false)) {
+                    if (presenceTypePrecis(typeEnum.habitats, true)) {
                         return 'ok';
                     } else {
                         return 'Il n\'y a pas d\'habitats à changer en sable.';
@@ -4288,6 +4279,10 @@
                     if (accepterDrop(event)) {
                         if ($(event).attr('id') != 'plateau') {
                             if ($(event).children().length >= 1) {
+                                if (carteDrag.type === typeEnum.perturbation) {
+                                    return false;
+                                }
+
                                 if (carteDrag.nom != carteBas[numeroJoueurActif][id].nom) {
                                     $(ui).stop();
                                     $(ui).animate({
