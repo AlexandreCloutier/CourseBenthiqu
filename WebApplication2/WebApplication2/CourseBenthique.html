@@ -971,8 +971,8 @@
 
                 //Première carte c'est un habitats rapides.
 
-                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
-                mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.erosion, paquetCarte);
+                mains[1][0] = chercherCarteParticuliere(nomEnum.arbres, paquetCarte);
 
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -3717,6 +3717,7 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
+                        console.log(carteBas[numeroJoueurActif][i].condition().length);
                         for (var j = 0; j < carteBas[numeroJoueurActif][i].condition.length; j++) {
                             if (carteBas[numeroJoueurActif][i].condition[j] === habitats) {
                                 carteBas[numeroJoueurActif][i] = null;
