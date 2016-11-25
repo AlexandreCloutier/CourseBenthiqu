@@ -1338,7 +1338,7 @@
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
                             var carteSable = document.createElement('img');
                             carteSable.className = 'imageCarteJeu imageCarteJeuErosion';
-                            carteSable.src = 'habitatAmenageSable.png';
+                            carteSable.src = 'ressources/habitatAmenageSable.png';
 
                             $(positionLibre).append(carteSable);
 
@@ -1430,7 +1430,7 @@
                     carte1.className = 'imageCarteJeu imageCarteEchange';
                     carte1.src = 'ressources/' + carteEchange1.nomImage;
                     $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).append(carte1);
-                    
+
                     var carte2 = document.createElement('img');
                     carte2.className = 'imageCarteJeu imageCarteEchange';
                     carte2.src = 'ressources/' + carteEchange2.nomImage;
@@ -2288,7 +2288,7 @@
                                     }
                                 }
                                 /* pop-up contenant les type de macro-invertébrés présent en jeu et pouvant être tuer
-                                un clique sur le type puis sur confirmer détruit tout les macro-invertébrés de ce type. */                            
+                                un clique sur le type puis sur confirmer détruit tout les macro-invertébrés de ce type. */
 
                                 tabOrdre.forEach(function (item, index) {
                                     if (tabOrdre[index] !== null) {
@@ -2514,7 +2514,7 @@
                                                     onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
                                                 }
                                             }
-                                            //sinon si l'endroit contient une carte ET qu'elle est identique.
+                                            //sinon si l'endroit contient une carte.
                                         } else if ($(this).children().length >= 1) {
                                             if (carteDrag.type != typeEnum.perturbation) {
                                                 var id;
@@ -2534,11 +2534,16 @@
                                                     ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                                     popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                                 }
-                                            } else {//Si un jouer à une care pris sur le fait.
+                                            } else {//Si un joueur à une care pris sur le fait.
                                                 var zoneDrop = this;
                                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
-                                                    rendrePerturber(event);
-                                                    onDrop(event, ui, zoneDrop);
+                                                    if ($(this).children().length >= 2) {
+                                                        deplacerCartePerturber(this, event, ui);
+                                                        $(this).children().last().remove();//Enlève la carte sur le dessus.
+                                                    } else {
+                                                        rendrePerturber(event);
+                                                        onDrop(event, ui, zoneDrop);
+                                                    }
                                                 } else {
                                                     $('#divChoixContenu').children().remove('ul');
                                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
@@ -2643,6 +2648,32 @@
             });
         }
 
+        //Fonction qui va déplacer une carte et droper la perturbation dessus pour pas qu'une carte perturber soit empiler sur une carte non-perturber.
+        function deplacerCartePerturber(positionCarteDepart, event, ui) {
+            var emplacement = positionCarteDepart.target.id.substr(event.length - 2);//2 derniers caractères de l'emplacement ex: A9.
+            var numeroJoueurPositionDrop = numeroJoueur(emplacement.substr(0, 1));
+            var numeroPosition = emplacement.substr(1, 2);
+
+            var positionDropable = trouverPositionLibre(numeroJoueurPositionDrop);
+            exemplaireCarteBas[numeroJoueurPositionDrop][numeroPosition]--;
+
+            var carte = document.createElement('img');
+            carte.className = 'imageCarteJeu imageCarteNouvelleCarte';
+            carte.src = 'ressources/' + carteBas[numeroJoueurPositionDrop][numeroPosition].nomImage;
+
+            $(positionLibre).append(carte);
+
+            $(function () {
+                $('.imageCarteNouvelleCarte').on({
+                    click: function (event, ui) {
+                        onClickImage($(this).parent().attr("id"), ui);
+                    }
+                })
+            });
+
+            onDrop(event, ui, positionDropable);
+        }
+
         //Fonction qui va mettre la variable perturber à true.
         function rendrePerturber(event) {
             var position = event.target.id.substr(event.target.id.length - 2);//2 derniers caractères de l'emplacement ex: A9.
@@ -2689,7 +2720,7 @@
             paquetDecharge.push(cartePerturbation[numeroActif][positionCarte]);//Envoie la carte à la décharge.
             cartePerturbation[numeroActif][positionCarte] = null;//Rends la position ou étais la carte pertubation à null.
             $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
-           //TODO: reempillerCartePasPerturber(numeroActif, positionCarte);
+            //TODO: reempillerCartePasPerturber(numeroActif, positionCarte);
             updateAffichageImage();
         }
 
