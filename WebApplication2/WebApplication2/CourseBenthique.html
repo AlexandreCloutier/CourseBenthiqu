@@ -969,8 +969,8 @@
 
                 //Première carte c'est un habitats rapides.
 
-                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
-                mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.erosion, paquetCarte);
+                mains[1][0] = chercherCarteParticuliere(nomEnum.arbres, paquetCarte);
 
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -1906,7 +1906,7 @@
                             } else if (carteDrag.nom === nomEnum.erosion) {//Carte érosion.
                                 //Si personne à la carte pris sur le fait.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
-                                    popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.');
+                                    popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.'); console.log('pipi');
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     ui.draggable.remove();
@@ -1931,6 +1931,7 @@
                                     }
                                     griserZone(true, false, true);
                                 } else {//Sinon, demande si un joueur veut utiliser sa carte et annuler la carte.
+                                    console.log('caca');
                                     $('#divChoixContenu').children().remove('ul');
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
@@ -3711,6 +3712,7 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
+                        console.log(carteBas[numeroJoueurActif][i].condition().length);
                         for (var j = 0; j < carteBas[numeroJoueurActif][i].condition.length; j++) {
                             if (carteBas[numeroJoueurActif][i].condition[j] === habitats) {
                                 carteBas[numeroJoueurActif][i] = null;
