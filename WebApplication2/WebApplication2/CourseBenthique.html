@@ -1770,6 +1770,138 @@
                                         }
                                     });
                                 });
+                            } else if (carteDrag.nom = nomEnum.amenagement) {
+                                paquetDecharge.push(carteDrag);
+                                supprimerCartePrecise(carteDragNumero);
+                                ui.draggable.remove();
+                                $('#divChoixContenu').children().remove('ul');
+                                $('#labelChoix').text('Choisissez un des effets suivants.');
+                                $('#divChoix').dialog({
+                                    classes: {
+                                        'ui-dialog': 'no-x ui-corner-all',
+                                    },
+                                    buttons: {
+                                        Confirmer: function () {
+                                            if (joueurSelectionne.id === '1') {
+
+                                                $(this).dialog('close');
+                                            } else {
+                                                $('#divChoixContenu').children().remove();
+                                                $(this).dialog({
+                                                    width: 575,
+                                                    buttons: {
+                                                        Confirmer: function () {
+                                                            if (carteSelectionne == null) {
+                                                                popUpAvertissement('Veuillez d\'abord choisir une carte');
+                                                            } else {
+                                                                for (var i = 0; i < mains[numeroJoueurActif].length; i++) {
+                                                                    if (mains[numeroJoueurActif][i] == null) {
+                                                                        if (paquetIntervention[carteSelectionne] != null) {
+                                                                            mains[numeroJoueurActif][i] = paquetIntervention[carteSelectionne];
+                                                                            paquetIntervention[carteSelectionne] = null;
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if (paquetIntervention[carteSelectionne] != null) {
+                                                                    mains[numeroJoueurActif][mains[numeroJoueurActif.length]] = paquetIntervention[joueurSelectionne];
+                                                                    paquetIntervention[carteSelectionne] = null;
+                                                                }
+                                                                $(this).dialog('close');
+                                                                updateAffichageImage();
+                                                            }
+                                                        }
+                                                    }
+                                                });
+
+                                                var ul = document.createElement('ul');
+                                                ul.id = 'listeCartes';
+                                                $('#divChoixContenu').append(ul);
+
+                                                var carteSelectionne;
+                                                paquetIntervention.forEach(function (item, index) {
+                                                    if (paquetIntervention[index] != null) {
+                                                        if (paquetIntervention[index].nom === nomEnum.amenageFosse || paquetIntervention[index].nom === nomEnum.amenageGalets || paquetIntervention[index].nom === nomEnum.amenageGravier || paquetIntervention[index].nom === nomEnum.amenageRapides || paquetIntervention[index].nom === nomEnum.amenageSable) {
+                                                            var li = document.createElement('li');
+                                                            li.className = 'listeChoixCarte';
+                                                            var carte = document.createElement('img');
+                                                            carte.id = index;
+                                                            carte.className = 'cartesListe'
+                                                            carte.src = 'ressources/' + item.nomImage;
+                                                            $(carte).click(function () {
+                                                                if (carteSelectionne != null) {
+                                                                    $('.cartesListe').removeAttr('style');
+                                                                }
+
+                                                                $(this).css('-moz-box-shadow', '0 0 15px 10px #000');
+                                                                $(this).css('-webkit-box-shadow', '0 0 15px 10px #000');
+                                                                $(this).css('box-shadow', '0px 0px 15px 10px #000');
+                                                                carteSelectionne = index;
+                                                            });
+
+                                                            $(ul).append(li);
+                                                            $(li).append(carte);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    },
+                                    draggable: false,
+                                    resizable: false,
+                                    modal: true,
+                                    height: 575,
+                                    width: 500,
+                                    hide: 'fade',
+                                    show: 'fade'
+                                });
+
+                                var ul = document.createElement('ul');
+                                ul.id = 'listeJoueur';
+                                $('#divChoixContenu').append(ul);
+
+                                var stop = false;
+                                for (var i = 0; i < nombreJoueur; i++) {
+                                    for (var j = 0; j < cartePerturbation[i].length; j++) {
+                                        if (!conte) {
+                                            if (cartePerturbation[i][j] != null) {
+                                                if (cartePerturbation[i][j].nom === nomEnum.erosion) {
+                                                    var li = document.createElement('li');
+                                                    li.style.listStyleType = 'none';
+                                                    li.className = 'listeJoueur';
+                                                    li.id = '1';
+                                                    li.innerHTML = 'Annuler l\'effet d\'une carte Artificialisation.';
+                                                    $(ul).append(li);
+                                                    stop = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (paquetIntervention.filter(
+                                    function (value) {
+                                        if (value.nom === nomEnum.amenageFosse || value.nom === nomEnum.amenageGalets || value.nom === nomEnum.amenageGravier || value.nom === nomEnum.amenageRapides || value.nom === nomEnum.amenageSable) {
+                                            return value;
+                                }
+                                }).length > 0) {
+                                    var li = document.createElement('li');
+                                    li.style.listStyleType = 'none';
+                                    li.className = 'listeJoueur';
+                                    li.id = '2';
+                                    li.innerHTML = 'Choisir un habitat dans les cartes Interventions.';
+                                    $(ul).append(li);
+                                }
+
+                                $(function () {
+                                    $(ul).selectable({
+                                        stop: function (event, ui) {
+                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        },
+                                        selected: function (event, ui) {
+                                            joueurSelectionne = ui.selected;
+                                        }
+                                    });
+                                });
                             } else if (carteDrag.nom === nomEnum.erosion) {//Carte érosion.
                                 //Si personne à la carte pris sur le fait.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
