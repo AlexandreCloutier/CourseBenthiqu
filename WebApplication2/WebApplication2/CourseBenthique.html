@@ -1463,7 +1463,10 @@
                     popUpConfirmation('La carte ' + carteEchange1.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur1)] + ' à été changer par la carte ' + carteEchange2.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur2)]);
                 }
             } else if (naturalisation) {
-
+                console.log('patate');
+                cartePerturbation[numeroJoueur(lettreEmplacement)][numeroEmplacement] = null;
+                $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
+                carteBas[numeroJoueur(lettreEmplacement)][numeroEmplacement].perturber === false;
             }
         }
 
@@ -1634,7 +1637,8 @@
                                                     for (var j = 0; j < cartePerturbation[i].length; j++) {
                                                         if (cartePerturbation[i][j] != null) {
                                                             if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
-                                                                $('#emplacementJoueur' + lettreJoueur[i] + j).addClass('ui-echange-highlight');
+                                                                $('#emplacementJoueur' + lettreJoueur(i) + j).addClass('ui-echange-highlight');
+                                                                $('.ui-perturber-highlight').removeClass('ui-perturber-highlight');
                                                             }
                                                         }
                                                     }
