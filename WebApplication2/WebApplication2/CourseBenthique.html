@@ -1462,11 +1462,19 @@
 
                     popUpConfirmation('La carte ' + carteEchange1.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur1)] + ' à été changer par la carte ' + carteEchange2.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur2)]);
                 }
+            // ----------------Carte Naturalisation --------------
             } else if (naturalisation) {
-                console.log('patate');
-                cartePerturbation[numeroJoueur(lettreEmplacement)][numeroEmplacement] = null;
-                $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
-                carteBas[numeroJoueur(lettreEmplacement)][numeroEmplacement].perturber === false;
+                if (document.getElementById(event).classList.contains('ui-echange-highlight')) {
+                    cartePerturbation[numeroJoueur(lettreEmplacement)][numeroEmplacement] = null;
+                    $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
+                    carteBas[numeroJoueur(lettreEmplacement)][numeroEmplacement].perturber = false;
+                    carteBas[numeroJoueur(lettreEmplacement)][numeroEmplacement].tempsPerturber = 0;
+                    $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).removeClass('ui-echange-highlight');
+                    $('.ui-echange-highlight').addClass('ui-perturber-highlight');
+                    $('.ui-echange-highlight').removeClass('ui-echange-highlight');
+                    griserZone(false, false, false);
+                    naturalisation = false;
+                }
             }
         }
 
@@ -3607,9 +3615,7 @@
         //Fonction qui se produit lorsque l'on drop.
         function onDrop(event, ui, drop) {
             $(function () {
-                if (carteDrag.type != typeEnum.perturbation) {
-                    $(ui.draggable).click(function () { onClickImage($(this).parent().attr('id'), ui) });
-                }
+                $(ui.draggable).click(function () { onClickImage($(this).parent().attr('id'), ui) });
                 ui.draggable.appendTo(drop);
                 ui.draggable.addClass('imageCarteJeu');
                 ui.draggable.removeClass('imageCarteMains');
