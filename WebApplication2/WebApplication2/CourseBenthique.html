@@ -1481,12 +1481,12 @@
 
         //Fonction qui fais briller les carte d'un certain type pour le joueur donner.
         function brillerCarte(type, numero, brille) {
-            var lettre = numeroJoueur(numero);
+            var lettre = lettreJoueur(numero);
 
             if (brille) {//Si on voulais briller.
                 for (var i = 0; i < 10; i++) {
-                    if (carteBas[0][i] != null) {
-                        if (carteBas[0][i].type === type) {
+                    if (carteBas[numero][i] != null) {
+                        if (carteBas[numero][i].type === type) {
                             $('#emplacementJoueur' + lettre + i).addClass('ui-echange-highlight');
                         }
                     }
