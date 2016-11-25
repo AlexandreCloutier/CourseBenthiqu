@@ -1770,6 +1770,7 @@
                                         }
                                     });
                                 });
+                            //-----------------------Carte Aménagement-------------------------------
                             } else if (carteDrag.nom = nomEnum.amenagement) {
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
@@ -1919,12 +1920,12 @@
                                         brillerCarte(typeEnum.bandeRiveraine, 1, true);
                                     }
                                     if (nombreJoueur > 2) {
-                                        if (numeroJoueur != 2) {
+                                        if (numeroJoueurActif != 2) {
                                             brillerCarte(typeEnum.bandeRiveraine, 2, true);
                                         }
                                     }
                                     if (nombreJoueur > 3) {
-                                        if (numeroJoueur != 3) {
+                                        if (numeroJoueurActif != 3) {
                                             brillerCarte(typeEnum.bandeRiveraine, 3, true);
                                         }
                                     }
