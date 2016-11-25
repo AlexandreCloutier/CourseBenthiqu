@@ -2422,7 +2422,7 @@
                     emplacementJoueurB.style.top = '30px';
                     $('#plateau').append(emplacementJoueurB);
 
-                    if (nombreJoueur >= 3) {
+                    if (nombreJoueur >= 3) {// si 3 joueurs.
                         var emplacementJoueurC = document.createElement('div');
                         emplacementJoueurC.id = 'emplacementJoueurC' + i;
                         emplacementJoueurC.className = 'emplacementJoueurC';
@@ -2430,7 +2430,7 @@
                         emplacementJoueurC.style.left = '46px';
                         $('#plateau').append(emplacementJoueurC);
                     }
-                    if (nombreJoueur === 4) {
+                    if (nombreJoueur === 4) {//Si 4 joueurs.
                         var emplacementJoueurD = document.createElement('div');
                         emplacementJoueurD.id = 'emplacementJoueurD' + i;
                         emplacementJoueurD.className = 'emplacementJoueurD';
@@ -2454,7 +2454,7 @@
                     emplacementJoueurB.style.top = '130px';
                     $('#plateau').append(emplacementJoueurB);
 
-                    if (nombreJoueur >= 3) {
+                    if (nombreJoueur >= 3) {//Si 3 joueurs.
                         var emplacementJoueurC = document.createElement('div');
                         emplacementJoueurC.id = 'emplacementJoueurC' + i;
                         emplacementJoueurC.className = 'emplacementJoueurC';
@@ -2463,7 +2463,7 @@
                         $('#plateau').append(emplacementJoueurC);
                     }
 
-                    if (nombreJoueur === 4) {
+                    if (nombreJoueur === 4) {//Si 4 joueurs.
                         var emplacementJoueurD = document.createElement('div');
                         emplacementJoueurD.id = 'emplacementJoueurD' + i;
                         emplacementJoueurD.className = 'emplacementJoueurD';
@@ -2472,7 +2472,7 @@
                         $('#plateau').append(emplacementJoueurD);
                     }
                 }
-                $(function () {
+                $(function () {//Ajout le droppable à chaque zone.
                     $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         tolerance: 'pointer',
                         drop: function (event, ui) {
@@ -2530,7 +2530,7 @@
                                                     ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                                     popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                                 }
-                                            } else {
+                                            } else {//Si un jouer à une care pris sur le fait.
                                                 var zoneDrop = this;
                                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
                                                     rendrePerturber(event);
@@ -2641,16 +2641,16 @@
 
         //Fonction qui va mettre la variable perturber à true.
         function rendrePerturber(event) {
-            var position = event.target.id.substr(event.target.id.length - 2);
-            var lettrePositionJoueur = position.substr(0, 1);
-            var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);
-            var numeroPosition = position.substr(position.length - 1);
+            var position = event.target.id.substr(event.target.id.length - 2);//2 derniers caractères de l'emplacement ex: A9.
+            var lettrePositionJoueur = position.substr(0, 1);//Lettre de l'emplacement ex: A.
+            var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);//Numero du joueur selon l'emplacement.
+            var numeroPosition = position.substr(position.length - 1);// Numero de la position ex:9.
 
-            if (carteDrag.nom === nomEnum.dechets || carteDrag.nom === nomEnum.artificialisation) {
-                carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
-                carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 10;
-                cartePerturbation[numeroPositionJoueur][numeroPosition] = carteDrag;
-            } else if (carteDrag.nom === nomEnum.passageToutTerrain) {
+            if (carteDrag.nom === nomEnum.dechets || carteDrag.nom === nomEnum.artificialisation) {//Si c'est un déchets ou artificialisation.
+                carteBas[numeroPositionJoueur][numeroPosition].perturber = true;//rends la carte perturber.
+                carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 10;//Le temps de perturbation de 10 fais en sorte qu'il baisse jamais.
+                cartePerturbation[numeroPositionJoueur][numeroPosition] = carteDrag;//Ajoute la carte dans le tableau de perturbation.
+            } else if (carteDrag.nom === nomEnum.passageToutTerrain) {//Si c'est passage tout-terrain.
                 carteBas[numeroPositionJoueur][numeroPosition].perturber = true;
                 carteBas[numeroPositionJoueur][numeroPosition].tempsPerturber = 2;
                 cartePerturbation[numeroPositionJoueur][numeroPosition] = carteDrag;
@@ -2666,9 +2666,11 @@
                     if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === typeEnum.bandeRiveraine) {
                         if (carteBas[numeroJoueurActif][i].tempsPerturber != 10 && carteBas[numeroJoueurActif][i].tempsPerturber > 0) {
                             carteBas[numeroJoueurActif][i].tempsPerturber--;
-                            if (carteBas[numeroJoueurActif][i].tempsPerturber === 0) {
-                                carteBas[numeroJoueurActif][i].perturber = false;
+                            if (carteBas[numeroJoueurActif][i].tempsPerturber === 0) {//si le temps est écoulé.
+                                carteBas[numeroJoueurActif][i].perturber = false;//Déperturbe.
+                                //Retire la carte dans le tableau de perturbation et sur le plateau.
                                 retirerCartePerturbation(numeroJoueurActif, i);
+                                //Retire le highlight de perturbation.
                                 $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + i).removeClass('ui-perturber-highlight');
                             }
                         }
@@ -2680,18 +2682,18 @@
         //Fonction qui va enlever la carte de perturbation de dessus la carte.
         function retirerCartePerturbation(numeroActif, positionCarte) {
             var lettreActif = lettreJoueur(numeroActif);
-            paquetDecharge.push(cartePerturbation[numeroActif][positionCarte]);
-            cartePerturbation[numeroActif][positionCarte] = null;
+            paquetDecharge.push(cartePerturbation[numeroActif][positionCarte]);//Envoie la carte à la décharge.
+            cartePerturbation[numeroActif][positionCarte] = null;//Rends la position ou étais la carte pertubation à null.
             $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
-            reempillerCartePasPerturber(numeroActif, positionCarte);
+           //TODO: reempillerCartePasPerturber(numeroActif, positionCarte);
             updateAffichageImage();
         }
 
         //Fonction qui mes en brillances les trucs qui sont mangeable.
         function brillanceCarteMangeable(brille) {
-            if (brille) {
+            if (brille) {//Si on voulais les faire briller.
                 for (var i = 0; i < 10; i++) {
-                    if (numeroJoueurActif != 0) {
+                    if (numeroJoueurActif != 0) {//Si le joueur actif n'est pas le joueur 0.
                         lettre = lettreJoueur(0);
 
                         if (carteBas[0][i] != null) {
@@ -2702,7 +2704,7 @@
                             }
                         }
                     }
-                    if (numeroJoueurActif != 1) {
+                    if (numeroJoueurActif != 1) {//Si le joueur actif n'est pas le joueur 1.
                         lettre = lettreJoueur(1);
 
                         if (carteBas[1][i] != null) {
@@ -2713,7 +2715,7 @@
                             }
                         }
                     }
-                    if (numeroJoueurActif != 2) {
+                    if (numeroJoueurActif != 2) {//Si le joueur actif n'est pas le joueur 2.
                         if (nombreJoueur > 2) {
                             lettre = lettreJoueur(2);
 
@@ -2726,7 +2728,7 @@
                             }
                         }
                     }
-                    if (numeroJoueurActif != 3) {
+                    if (numeroJoueurActif != 3) {//Si le joueur actif n'est pas le joueur 3.
                         if (nombreJoueur > 3) {
                             lettre = lettreJoueur(3);
 
@@ -2740,7 +2742,7 @@
                         }
                     }
                 }
-            } else if (!brille) {
+            } else if (!brille) {//Sinon débrille tout.
                 for (var i = 0; i < 10; i++) {
                     $('#emplacementJoueurA' + i).removeClass('ui-echange-highlight');
                     $('#emplacementJoueurB' + i).removeClass('ui-echange-highlight');
@@ -2760,7 +2762,7 @@
         function brillanceHabitatsEnnemi(brille) {
             if (brille) {
                 for (var i = 0; i < 10; i++) {
-                    if (numeroJoueurActif != 0) {
+                    if (numeroJoueurActif != 0) {//Si le joueur actif n'est pas le joueur 0.
                         lettre = lettreJoueur(0);
 
                         if (carteBas[0][i] != null) {
@@ -2769,7 +2771,7 @@
                             }
                         }
                     }
-                    if (numeroJoueurActif != 1) {
+                    if (numeroJoueurActif != 1) {//Si le joueur actif n'est pas le joueur 1.
                         lettre = lettreJoueur(1);
 
                         if (carteBas[1][i] != null) {
@@ -2778,7 +2780,7 @@
                             }
                         }
                     }
-                    if (numeroJoueurActif != 2) {
+                    if (numeroJoueurActif != 2) {//Si le joueur actif n'est pas le joueur 2.
                         lettre = lettreJoueur(2);
 
                         if (carteBas[2][i] != null) {
@@ -2787,7 +2789,7 @@
                             }
                         }
                     }
-                    if (numeroJoueurActif != 3) {
+                    if (numeroJoueurActif != 3) {//Si le joueur actif n'est pas le joueur 3.
                         lettre = lettreJoueur(3);
 
                         if (carteBas[3][i] != null) {
@@ -2815,7 +2817,7 @@
 
         //Fonction qui tue les macro-invertébré de tolérance inférieure à 6.
         function tuerDeversement() {
-            if (!possedeAssainissement(0)) {
+            if (!possedeAssainissement(0)) {//S'il ne possède pas de protection, tue.
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[0][i] != null) {
                         if (carteBas[0][i].type === typeEnum.macroInvertebre) {
@@ -2830,7 +2832,7 @@
                     }
                 }
             }
-            if (!possedeAssainissement(1)) {
+            if (!possedeAssainissement(1)) {//S'il ne possède pas de protection, tue.
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[1][i] != null) {
                         if (carteBas[1][i].type === typeEnum.macroInvertebre) {
@@ -2845,8 +2847,8 @@
                     }
                 }
             }
-            if (nombreJoueur > 2) {
-                if (!possedeAssainissement(2)) {
+            if (nombreJoueur > 2) {//Si 3 joueurs.
+                if (!possedeAssainissement(2)) {//S'il ne possède pas de protection, tue.
                     for (var i = 0; i < 10; i++) {
                         if (carteBas[2][i] != null) {
                             if (carteBas[2][i].type === typeEnum.macroInvertebre) {
@@ -2863,8 +2865,8 @@
                     }
                 }
             }
-            if (nombreJoueur > 3) {
-                if (!possedeAssainissement(3)) {
+            if (nombreJoueur > 3) {//Si 4 joueurs.
+                if (!possedeAssainissement(3)) {//S'il ne possède pas de protection, tue.
                     for (var i = 0; i < 10; i++) {
                         if (carteBas[3][i] != null) {
                             if (carteBas[3][i].type === typeEnum.macroInvertebre) {
@@ -2927,7 +2929,7 @@
                 } else {
                     return false;
                 }
-            } else if (carteDrag.type === typeEnum.perturbation) {
+            } else if (carteDrag.type === typeEnum.perturbation) {//Si c'est une carte de perturbation.
                 if (carteDrag.nom === nomEnum.deversement || carteDrag.nom === nomEnum.erosion || carteDrag.nom === nomEnum.pollutionOrganique) {
                     if (identification === 'au') {//Si c'est dropper sur le plateau.
                         return true;
@@ -2937,20 +2939,20 @@
                 } else {
                     if (lettreEmplacement === lettre) {
                         return false;
-                    } else if (identification === 'au') {
+                    } else if (identification === 'au') {//Si on drope sur le plateau.
                         return false;
                     } else {
                         return true;
                     }
                 }
-            } else if (carteDrag.type === typeEnum.action) {
-                if (identification === 'au') {
+            } else if (carteDrag.type === typeEnum.action) {//Si c'est une carte action.
+                if (identification === 'au') {//Si on drope sur le plateau.
                     return true;
                 } else {
                     return false;
                 }
-            } else if (carteDrag.type === typeEnum.speciale) {
-                if (identification === 'au') {
+            } else if (carteDrag.type === typeEnum.speciale) {//Si c'est une carte speciale.
+                if (identification === 'au') {//Si on drope sur le plateau.
                     return true;
                 } else {
                     return false;
