@@ -11,6 +11,7 @@
     <script src="scripts/jquery.flip.min.js"></script>
     <script>
 
+        /* ------------------enum---------------------  */
         var typeEnum = {
             'habitats': 'habitats',
             'macroInvertebre': 'macroInvertebre',
@@ -101,8 +102,6 @@
             'hemiptere': 'hemiptere',
             'crustace': 'crustace'
         };
-        //TODO: À la fin du tour, si le joueur ne peut pas restaurer un habitat perturbé, les macro qui s'en servent meurt.
-        //TODO: Lorsque l'on supprime une carte ou échange, modifier le nombre d'exemplaire.
 
         //Tableau contenant l'âge des joueurs.
         var ageJoueur;
@@ -187,49 +186,49 @@
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
             instantierTableaux();//Instantie tout les tableaux.
             instantierPaquetCarte();//Crée le paquet de carte de départ.
-            updateJeu();
+            updatePointsRessourcesJeu();//Update les points ressources.
             creerElementFond();//Crée touts les éléments du jeu.
-            updateAffichageImage();
+            updateAffichageImage();//Update l'affichage de toutes les images.
         }
 
         //Fonction qui donne les valeurs de départs à nos variables.
         function valeurDepartVariable() {
+            //Partie général.
             numeroJoueurActif = 0;
             tour = 0;
             facteurRotation = 0;
+
+            //Partie prédateur.
             mangerPredateur = false;
+
+            //Partie pour la carte déversement.
             deversement = false;
             verifier = false;
             nombrePolluer = 0;
+
+            //Partie carte prédation.
             predation = false;
+
+            //Partie pour la carte naturalisation.
             naturalisation = false;
-            etape = 1;
-            cartePerturbation = new Array(nombreJoueur);
-            cartePerturbation[0] = new Array(10);
-            cartePerturbation[1] = new Array(10);
-            if (nombreJoueur > 2) {
-                cartePerturbation[2] = new Array(10);
-            }
-            if (nombreJoueur > 3) {
-                cartePerturbation[3] = new Array(10);
-            }
+            //           etape = 1; *********************************************************************** PAS UTILE JE CROIT***********
         }
 
         //Fonction qui va créer les diverse éléments du fond.
         function creerElementFond() {
-            creerFond();
-            creerEmplacementsPlateau();
-            calculerPoints();
-            creerPartieDroite();
-            creerMain();
-            instantierDivPopUp();
+            creerFond();//Crée le fond et lui mes le droppable.
+            creerEmplacementsPlateau();//Crée les emplacements de touts les joueurs.
+            calculerPoints();//Calcul les points de départ.
+            creerPartieDroite();//Crée la partie de droite.
+            creerMain();//Crée les divisions de la main.
+            instantierDivPopUp();//Crée les pop-up pour plus tard.
         }
 
         //Fonction qui s'occupe de créer le paquet de carte et de le mélanger au début de la partie.
         function instantierPaquetCarte() {
-            paquetCarte = creerPaquetCarte(difficulte);
-            melangerPaquetCarte(paquetCarte);
-            remplirMain();
+            paquetCarte = creerPaquetCarte(difficulte);//Remplie le paquet de carte selon la difficulté.
+            melangerPaquetCarte(paquetCarte);//Mélange le paquet de carte.
+            remplirMain();//Remplie les tableau de main de chaque joueur.
         }
 
         //Fonction qui appelle les fonctions qui instantie les différents tableaux.
@@ -238,6 +237,7 @@
             instantierTableauEmplacementBas();
             instantierTableauPointsRessources();
             instantierTableauExemplaire();
+            instantierTableauPerturbation();
             paquetDecharge = [];
             paquetIntervention = [];
             pointsJoueur = new Array(6);
@@ -250,7 +250,7 @@
         function commencerNouvellePartie() {
             if (verifierConditionCreationPartie() === '') {
                 $('#menuCreerPartie').remove();
-                startGame();
+                startGame();//Commence la partie.
             }
             else {
                 $('#labelErreur').css('color', 'red');
@@ -262,7 +262,7 @@
         function verifierConditionCreationPartie() {
             var retour;
 
-            if ($('#dropDownNombreJoueur').val() === '2') {
+            if ($('#dropDownNombreJoueur').val() === '2') {//Si 2 joueurs.
                 if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '') {
                     if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {
                         entrerValeurCreationPartie();
@@ -278,7 +278,7 @@
                     return retour;
                 }
             }
-            else if ($('#dropDownNombreJoueur').val() === '3') {
+            else if ($('#dropDownNombreJoueur').val() === '3') {//Si 3 joueurs.
                 if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '' && $('#nomJoueurC').val() != '') {
                     if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '') {
                         entrerValeurCreationPartie();
@@ -294,7 +294,7 @@
                     return retour;
                 }
             }
-            else if ($('#dropDownNombreJoueur').val() === '4') {
+            else if ($('#dropDownNombreJoueur').val() === '4') {//Si 4 joueurs.
                 if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() && $('#nomJoueurC').val() != '' && $('#nomJoueurD').val() != '') {
                     if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '' && $('#ageJoueurD').val() != '') {
                         entrerValeurCreationPartie();
@@ -324,7 +324,7 @@
 
             difficulte = $('#dropDownDifficulte').val();
 
-            if ($('#dropDownNombreJoueur').val() >= '2') {
+            if ($('#dropDownNombreJoueur').val() >= '2') {//Si 2 joueurs.
                 nombreJoueur = 2;
                 nomJoueur[0] = $('#nomJoueurA').val();
                 nomJoueur[1] = $('#nomJoueurB').val();
@@ -333,13 +333,13 @@
                 pointsJoueur[0] = 0;
                 pointsJoueur[1] = 0;
             }
-            if ($('#dropDownNombreJoueur').val() >= '3') {
+            if ($('#dropDownNombreJoueur').val() >= '3') {//Si 3 joueurs.
                 nombreJoueur = 3;
                 nomJoueur[2] = $('#nomJoueurC').val();
                 ageJoueur[2] = $('#ageJoueurC').val();
                 pointsJoueur[2] = 0;
             }
-            if ($('#dropDownNombreJoueur').val() >= '4') {
+            if ($('#dropDownNombreJoueur').val() >= '4') {//Si 4 joueurs.
                 nombreJoueur = 4;
                 nomJoueur[3] = $('#nomJoueurD').val();
                 ageJoueur[3] = $('#ageJoueurD').val();
@@ -756,6 +756,19 @@
             }
         }
 
+        //Fonction qui va instantier le tableau des pertubations.
+        function instantierTableauPerturbation() {
+            cartePerturbation = new Array(nombreJoueur);
+            cartePerturbation[0] = new Array(10);
+            cartePerturbation[1] = new Array(10);
+            if (nombreJoueur > 2) {// 3 joueurs.
+                cartePerturbation[2] = new Array(10);
+            }
+            if (nombreJoueur > 3) {// 4 joueurs.
+                cartePerturbation[3] = new Array(10);
+            }
+        }
+
         //Fonction qui va instantier le tableau bi-dimensionel de mains.
         function instantierTableauJoueur() {
             mains = new Array(nombreJoueur);
@@ -778,10 +791,10 @@
             exemplaireCarteBas[0] = new Array(6);
             exemplaireCarteBas[1] = new Array(6);
 
-            if (nombreJoueur >= 3) {
+            if (nombreJoueur >= 3) {//3 joueurs.
                 exemplaireCarteBas[2] = new Array(6);
             }
-            if (nombreJoueur === 4) {
+            if (nombreJoueur === 4) {//4 joueurs.
                 exemplaireCarteBas[3] = new Array(6);
             }
         }
@@ -849,10 +862,11 @@
 
         //Fonction qui vérifie si le macroInvertebre ou le salmonide est jouable.
         function verifierCondition(carte) {
-            if (carte.condition.length === 1) {
-                if (carte.condition[0] === '?') {
+            if (carte.condition.length === 1) {//Si il y a juste une condition
+                if (carte.condition[0] === '?') {//Si la condition est juste d'avoir un habitats.
                     for (var i = 0; i < 10; i++) {
                         if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
+                            //Si c'est un habitats pas perturber ou une carte d'intervention d'habitats.
                             if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === typeEnum.intervention) {// Si la carte est une habitats.
                                 return true;
                             }
@@ -872,12 +886,13 @@
                     }
                 }
             }
-            else if (carte.condition.length === 2) {
+            else if (carte.condition.length === 2) {//Si il y a 2 conditions
                 var condition1 = carte.condition[0];
                 var condition2 = carte.condition[1];
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
+                        //Si c'est un habitats pas perturber ou une carte d'intervention d'habitats.
                         if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === typeEnum.intervention) {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
@@ -888,17 +903,18 @@
                     }
                 }
 
-                if (condition1 === 'ok' && condition2 === 'ok') {
+                if (condition1 === 'ok' && condition2 === 'ok') {//Si toute les conditions sont ok.
                     return true;
                 }
             }
-            else if (carte.condition.length === 3) {
+            else if (carte.condition.length === 3) {//Si il y a 3 conditions.
                 var condition1 = carte.condition[0];
                 var condition2 = carte.condition[1];
                 var condition3 = carte.condition[2];
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
+                        //Si c'est un habitats pas perturber ou une carte d'intervention d'habitats.
                         if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === typeEnum.intervention) {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
@@ -911,10 +927,10 @@
                     }
                 }
 
-                if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok') {
+                if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok') {//Si toute les conditions sont ok.
                     return true;
                 }
-            } else if (carte.condition.length === 4) {
+            } else if (carte.condition.length === 4) {//Si il y a 4 conditions.
                 var condition1 = carte.condition[0];
                 var condition2 = carte.condition[1];
                 var condition3 = carte.condition[2];
@@ -922,6 +938,7 @@
 
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[numeroJoueurActif][i] != null) {// Si il y a une carte.
+                        //Si c'est un habitats pas perturber ou une carte d'intervention d'habitats.
                         if ((carteBas[numeroJoueurActif][i].type === typeEnum.habitats && !carteBas[numeroJoueurActif][i].perturber) || carteBas[numeroJoueurActif][i].type === typeEnum.intervention) {// Si la carte est une habitats.
                             if (carteBas[numeroJoueurActif][i].habitats === condition1) {//Si l'habitats de la carte est la meme que la condition1.
                                 condition1 = 'ok';
@@ -936,7 +953,7 @@
                     }
                 }
 
-                if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok' && condition4 === 'ok') {
+                if (condition1 === 'ok' && condition2 === 'ok' && condition3 === 'ok' && condition4 === 'ok') {//Si toute les conditions sont ok.
                     return true;
                 }
             } else {
@@ -974,7 +991,7 @@
                     mains[3][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
                 }
 
-                //3e carte
+                //3e carte, piger au hasard.
                 mains[0][2] = pigerCarte(paquetCarte);
                 mains[1][2] = pigerCarte(paquetCarte);
 
@@ -985,7 +1002,7 @@
                     mains[3][2] = pigerCarte(paquetCarte);
                 }
 
-                //4e carte
+                //4e carte, piger au hasard.
                 mains[0][3] = pigerCarte(paquetCarte);
                 mains[1][3] = pigerCarte(paquetCarte);
 
@@ -996,7 +1013,7 @@
                     mains[3][3] = pigerCarte(paquetCarte);
                 }
 
-                //5e carte
+                //5e carte, piger au hasard.
                 mains[0][4] = pigerCarte(paquetCarte);
                 mains[1][4] = pigerCarte(paquetCarte);
 
@@ -1007,7 +1024,7 @@
                     mains[3][4] = pigerCarte(paquetCarte);
                 }
 
-                //6e carte
+                //6e carte, piger au hasard.
                 mains[0][5] = pigerCarte(paquetCarte);
                 mains[1][5] = pigerCarte(paquetCarte);
 
@@ -1017,7 +1034,7 @@
                 if (nombreJoueur === 4) {//4 joueurs.
                     mains[3][5] = pigerCarte(paquetCarte);
                 }
-            } else {
+            } else {//Sinon, remplie les position vide dans la main.
                 //Boucle pour toute les position de la main.
                 for (var i = 0; i < mains[numeroJoueurActif].length; i++) {
                     if (mains[numeroJoueurActif][i] === null) {
@@ -1039,7 +1056,7 @@
             var nombreGravier = 0;
             var nombreGalets = 0;
 
-            for (var i = 0; i < paquetCarte.length ; i++) {
+            for (var i = 0; i < paquetCarte.length ; i++) {//Boucle pour calculer le nombre d'habitats.
                 if (paquetCarte[i].nom === nomEnum.fosse) {
                     nombreFosse++;
                     nombreHabitats++;
@@ -1060,6 +1077,7 @@
 
             //math.random qui décidera qu'elle habitats on retourne. Elle envoie un chiffre au hasard entre 1 et le nombre d'habitats.
             var nombreHasard;
+            //Donne un nombre au hasard selon le nombre d'habitats calculer plus haut.
             nombreHasard = Math.floor((Math.random() * nombreHabitats) + 1);
 
             //Tout les if pour savoir c'est qu'elle habitats, Toujours plus petit que l'habitats et plus grand que l'ancien habitats.
@@ -1075,15 +1093,16 @@
                 habitatsRetourner = nomEnum.galets;
             }
 
+            //Retourne l'habitats au hasard.
             return habitatsRetourner;
         }
 
-        //Fonction qui appelle le timer
-        function annimationPigerCarte(i) {
+        //Fonction qui appelle le timer.
+        function annimationPigerCarte(positionMain) {
             var carte = pigerCarte(paquetCarte);
-            mains[numeroJoueurActif][i] = carte;
+            mains[numeroJoueurActif][positionMain] = carte;
             setTimeout(function () {
-                animationPige(carte, i);
+                animationPige(carte, positionMain);
             }, 500);
         }
 
@@ -1114,12 +1133,12 @@
 
         //Fonction qui ajoute la partie de droite.
         function creerPartieDroite() {
+            //Div des noms.
             var divNomJoueurs = document.createElement('div');
             divNomJoueurs.id = 'divNomJoueurs';
             divNomJoueurs.className = 'divNomJoueurs';
-            //TODO: Nous devrions grossir la 'box' ou qu'il y a les noms si il y a quatre équipe ou 3 et faire en sorte que
-            //      les équipes soit toujours écrite l'une en dessous de l'autre.
-            if (nombreJoueur === 4) {
+
+            if (nombreJoueur === 4) {//Selon le nombre de joueur, marque les noms.
                 divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + nomJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + nomJoueur[3] + '</li></ul>';
             } else if (nombreJoueur === 3) {
                 divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + nomJoueur[2] + '</li></ul>';
@@ -1130,12 +1149,14 @@
             }
             document.getElementById('divDroite').appendChild(divNomJoueurs);
 
+            //Div points ressources.
             var divTextePointsRessource = document.createElement('div');
             divTextePointsRessource.id = 'divTextePointsRessource';
             divTextePointsRessource.className = 'divTextePointsRessource';
             divTextePointsRessource.innerHTML = '<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources utilisés : ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
             document.getElementById('divDroite').appendChild(divTextePointsRessource);
 
+            //Div des points de joueurs.
             var divTextePointsJoueurs = document.createElement('div');
             divTextePointsJoueurs.id = 'divTextePointsJoueurs';
             divTextePointsJoueurs.className = 'divTextePointsJoueurs';
@@ -1150,6 +1171,7 @@
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
+            //Bouton des règles.
             var buttonRegle = document.createElement('button');
             buttonRegle.id = 'buttonRegle';
             buttonRegle.className = 'buttonJeu';
@@ -1157,6 +1179,7 @@
             buttonRegle.textContent = 'Voir les règles';
             $('#divDroite').append(buttonRegle);
 
+            //Bouton pour passer le tour.
             var buttonPasserTour = document.createElement('button');
             buttonPasserTour.id = 'buttonPasserTour';
             buttonPasserTour.className = 'buttonJeu';
@@ -1164,6 +1187,7 @@
             buttonPasserTour.textContent = 'Passer son tour';
             document.getElementById('divDroite').appendChild(buttonPasserTour);
 
+            //Bouton pour les options.
             var buttonOption = document.createElement('button');
             buttonOption.id = 'buttonOption';
             buttonOption.className = 'buttonJeu';
@@ -1174,20 +1198,20 @@
 
         //Fonction qui sera appeler lors du clique sur une image. Si on est en mode échange cela va faire quelque choses.
         function onClickImage(event, ui) {
-            var emplacement = event.substr(event.length - 2);
-            var lettreEmplacement = emplacement.substr(0, 1);
-            var numeroEmplacement = emplacement.substr(1, 2);
-            var numeroJoueurEnnemi = numeroJoueur(lettreEmplacement);
+            var emplacement = event.substr(event.length - 2);//2 derniers caractères de l'emplacement ex: A9.
+            var lettreEmplacement = emplacement.substr(0, 1);//Lettre de l'emplacement ex:A.
+            var numeroEmplacement = emplacement.substr(1, 2);//Chiffre de l'emplacement ex:9.
+            var numeroJoueurEnnemi = numeroJoueur(lettreEmplacement);//Numero selon la lettre ex: A = 0.
 
-            if (mangerPredateur) {
-                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type = typeEnum.macroInvertebre) {
-                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
+            if (mangerPredateur) {//Si nous sommes en train de manger un macro-invertébrés de taille inférieur.
+                if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type = typeEnum.macroInvertebre) {//Si c'est un macro.
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {//Si sa taille est ok.
                         mangerPredateur = false;
-                        $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
+                        $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();//Supprime le macro
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
-                        exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;
+                        exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;//Baisse le nombre d'Exemplaire.
 
-                        if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 0) {
+                        if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 0) {//Si il n'Y a plus d'Exemplaire, supprime la carte.
                             carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
                         }
 
@@ -1201,6 +1225,7 @@
                 } else {
                     popUpAvertissement('Vous devez sélectionner un macro-invertebrer à manger.');
                 }
+                /* ---------------Partie déversement--------------*/
             } else if (onPollu) {
                 if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
                     var lettre = lettreJoueur(numeroJoueurEnnemi);
@@ -1218,8 +1243,9 @@
                 } else {
                     popUpAvertissement('Seulement les habitats peuvent être poluer');
                 }
+                /* -----------------Partie érosion -------------------*/
             } else if (erosion) {
-                if (etapeErosion === 1) {
+                if (etapeErosion === 1) {//étape 1, détruire une bande riveraine.
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
                         exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;
@@ -1263,7 +1289,7 @@
                     } else {
                         popUpAvertissement('Vous devez sélectionner une carte bande riveraine pour l\'emvoyer à la décharge.');
                     }
-                } else if (etapeErosion === 2) {
+                } else if (etapeErosion === 2) {//Étape 2, transformer un habitats en sable.
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
                         if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 1) {//Si il y a seulement une carte non empiller.
                             carteBas[numeroJoueurEnnemi][numeroEmplacement] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
@@ -1352,6 +1378,7 @@
                         popUpAvertissement('Vous devez sélectionner une carte habitats pour la transformer en sable.');
                     }
                 }
+                /* --------------------- carte prédation -----------*/
             } else if (predation) {
                 if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.macroInvertebre) {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].taille < taillePredateur) {
@@ -1376,8 +1403,9 @@
                 } else {
                     popUpAvertissement('Vous devez sélectionner un prédateur de taille inférieur pour qu\'il soit manger.');
                 }
+                /* -------------------- carte zonage---------------- */
             } else if (zonage) {
-                if (etapeZonage === 1) {
+                if (etapeZonage === 1) {//Étape de zonage 1.
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement] != null) {
                         if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
                             if (numeroJoueurEnnemi === numeroJoueurActif) {
@@ -1390,7 +1418,7 @@
                             }
                         }
                     }
-                } else if (etapeZonage === 2) {
+                } else if (etapeZonage === 2) {//Étape de zonage 2.
                     carteEchange2 = carteBas[numeroJoueurEnnemi][numeroEmplacement];
                     lettreJoueur2 = lettreJoueur(numeroJoueurEnnemi);
                     positionCarte2 = numeroEmplacement;
@@ -1443,7 +1471,7 @@
         function brillerCarte(type, numero, brille) {
             var lettre = numeroJoueur(numero);
 
-            if (brille) {
+            if (brille) {//Si on voulais briller.
                 for (var i = 0; i < 10; i++) {
                     if (carteBas[0][i] != null) {
                         if (carteBas[0][i].type === type) {
@@ -1451,7 +1479,7 @@
                         }
                     }
                 }
-            } else {
+            } else {//Sinon, débrille tout.
                 for (var i = 0; i < 10; i++) {
                     $('#emplacementJoueur' + lettre + i).removeClass('ui-echange-highlight');
                 }
@@ -1484,10 +1512,12 @@
             $('body').append(plateau);
             $(plateau).droppable({
                 tolerance: 'pointer',
-                drop: function (event, ui) {
+                drop: function (event, ui) {//Ajoute le code du drop pour la plateau.
                     if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
                         if (accepterDrop(event.target)) {
+                            /* -----------Perturbation--------------*/
                             if (carteDrag.nom === nomEnum.deversement) {
+                                //Si personne a de carte pris sur le fait.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
@@ -1496,7 +1526,7 @@
                                     numeroJoueurDeversement = numeroJoueurActif;
                                     ui.draggable.remove();
                                     updateAffichageImage();
-                                } else {
+                                } else {//Code pour le pop-up qui demande si un joueur désire utiliser sa carte pris sur le fait.
                                     $('#divChoixContenu').children().remove('ul');
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
@@ -1504,8 +1534,8 @@
                                             'ui-dialog': 'no-x ui-corner-all',
                                         },
                                         buttons: {
-                                            Confirmer: function () {
-                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                            Confirmer: function () {//Confirmation du résultats du pop-up.
+                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {//Si personne désire utiliser sa carte.
                                                     supprimerCartePrecise(carteDragNumero);
                                                     paquetDecharge.push(carteDrag);
                                                     deversement = true;
@@ -1514,7 +1544,7 @@
                                                     ui.draggable.remove();
                                                     updateAffichageImage();
                                                     $(this).dialog('close');
-                                                } else {
+                                                } else {//Sinon la personne qui désire utiliser sa carte, l'utiliser et annule les effets de la carte.
                                                     paquetDecharge.push(carteDrag);
                                                     supprimerCartePrecise(carteDragNumero);
                                                     ui.draggable.remove();
@@ -1575,7 +1605,7 @@
                                         });
                                     });
                                 }
-                            } else if (carteDrag.nom === nomEnum.zonage) {
+                            } else if (carteDrag.nom === nomEnum.zonage) {//Carte zonage.
                                 zonage = true;
                                 etapeZonage = 1;
                                 popUpConfirmation('Sélectionnez l\'habitats que vous voulez échanger');
@@ -1584,7 +1614,7 @@
                                 ui.draggable.remove();
                                 brillerCarte(typeEnum.habitats, numeroJoueurActif, true);
                                 griserZone(true, false, true);
-                            } else if (carteDrag.nom === nomEnum.naturalisation) {
+                            } else if (carteDrag.nom === nomEnum.naturalisation) {//Carte naturalisation.
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
@@ -1727,7 +1757,8 @@
                                         }
                                     });
                                 });
-                            } else if (carteDrag.nom === nomEnum.erosion) {
+                            } else if (carteDrag.nom === nomEnum.erosion) {//Carte érosion.
+                                //Si personne à la carte pris sur le fait.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
                                     popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.');
                                     supprimerCartePrecise(carteDragNumero);
@@ -1753,7 +1784,7 @@
                                         }
                                     }
                                     griserZone(true, false, true);
-                                } else {
+                                } else {//Sinon, demande si un joueur veut utiliser sa carte et annuler la carte.
                                     $('#divChoixContenu').children().remove('ul');
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
                                     $('#divChoix').dialog({
@@ -1833,7 +1864,7 @@
                                         });
                                     });
                                 }
-                            } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
+                            } else if (carteDrag.nom === nomEnum.pollutionOrganique) {//Carte pollution Organique.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
                                     popUpConfirmation('Vous devez sélectioner 3 habitats à polluer.');
                                     supprimerCartePrecise(carteDragNumero);
@@ -1923,7 +1954,7 @@
                                         });
                                     });
                                 }
-                            } else if (carteDrag.nom === nomEnum.accumulation) {
+                            } else if (carteDrag.nom === nomEnum.accumulation) {//Carte accumulation.
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
@@ -1942,7 +1973,7 @@
                                         nouvelle = false;
                                     }
                                 }
-                            } else if (carteDrag.nom === nomEnum.predation) {
+                            } else if (carteDrag.nom === nomEnum.predation) {//Carte prédation.
                                 supprimerCartePrecise(carteDragNumero);
                                 predation = true;
                                 trouverPredateur();
@@ -1951,13 +1982,13 @@
                                 ui.draggable.remove();
                                 updateAffichageImage();
                                 popUpConfirmation('Choississez le macroinvertébrés de taille inférieur à ' + taillePredateur + ' que vous voulez manger.');
-                            } else if (carteDrag.nom === nomEnum.retention) {
+                            } else if (carteDrag.nom === nomEnum.retention) {//Carte rétention.
                                 tableauRetention[numeroJoueurActif] = true;
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
                                 updateAffichageImage();
-                            } else if (carteDrag.nom === nomEnum.derivation) {
+                            } else if (carteDrag.nom === nomEnum.derivation) {//Carte dérivation.
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
@@ -2017,13 +2048,13 @@
                                     hide: 'fade',
                                     show: 'fade'
                                 });
-                            } else if (carteDrag.nom === nomEnum.corveNettoyage) {
+                            } else if (carteDrag.nom === nomEnum.corveNettoyage) {//Carte corvé de nettoyage.
                                 retirerDechets();
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
                                 updateAffichageImage();
-                            } else if (carteDrag.nom === nomEnum.crueSoudaine) {
+                            } else if (carteDrag.nom === nomEnum.crueSoudaine) {//Carte crue soudaine.
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
@@ -2082,7 +2113,7 @@
                                     hide: 'fade',
                                     show: 'fade'
                                 });
-                            } else if (carteDrag.nom === nomEnum.pecheur) {
+                            } else if (carteDrag.nom === nomEnum.pecheur) {//Carte pécheur.
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
@@ -2219,7 +2250,7 @@
                                         }
                                     });
                                 });
-                            } else if (carteDrag.nom === nomEnum.emergence) {
+                            } else if (carteDrag.nom === nomEnum.emergence) {//Carte émergence.
                                 var ordreSelectionne;
                                 var tabOrdre = new Array(5);
                                 paquetDecharge.push(carteDrag);
@@ -2252,6 +2283,8 @@
                                         }
                                     }
                                 }
+                                /* pop-up contenant les type de macro-invertébrés présent en jeu et pouvant être tuer
+                                un clique sur le type puis sur confirmer détruit tout les macro-invertébrés de ce type. */                            
 
                                 tabOrdre.forEach(function (item, index) {
                                     if (tabOrdre[index] !== null) {
@@ -2354,7 +2387,7 @@
             $(plateau).append(paquetDefausse);
         }
 
-        //Fonction qui change la taille du predateur
+        //Fonction qui change la taille du predateur pour trouver le plus gros du coté du joueur actif.
         function trouverPredateur() {
             taillePredateur = 0;
 
@@ -2652,11 +2685,6 @@
             $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
             reempillerCartePasPerturber(numeroActif, positionCarte);
             updateAffichageImage();
-        }
-
-        //Fonction qui va re-empiller la carte qui viens de ne plus être perturber.
-        function reempillerCartePasPerturber() {
-
         }
 
         //Fonction qui mes en brillances les trucs qui sont mangeable.
@@ -4245,7 +4273,7 @@
 
                     tour++;
                     remplirMain();
-                    updateJeu();
+                    updatePointsRessourcesJeu();
                     setTimeout(function () {
                         updateAffichageImage();
                     }, 500);
@@ -4467,7 +4495,7 @@
         }
 
         //Fonction qui "update" le jeu.
-        function updateJeu() {
+        function updatePointsRessourcesJeu() {
             pointsRessourcesBase[numeroJoueurActif] = 20;
             if (tableauRetention[numeroJoueurActif] != null) {
                 if (tableauRetention[numeroJoueurActif] === true) {
