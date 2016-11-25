@@ -165,6 +165,8 @@
         //Variable pour erosion.
         var erosion;
         var etapeErosion
+        var bandeRiveraineEroder;
+        var habitatEroder;
         //Variable pour prédation.
         var predation;
         //Variable pour Naturalisation
@@ -1249,27 +1251,28 @@
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
                         exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;
-                        if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]) {
-                            carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                        if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 0) {
+                            bandeRiveraineEroder = carteBas[numeroJoueurEnnemi][numeroEmplacement];
+                            carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;                            
                         }
 
                         $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().last().remove();
                         etapeErosion = 2;
                         updateAffichageImage();
 
-                        if (numeroJoueurActif != 0) {
+                        if (numeroJoueurActif !== 0) {
                             brillerCarte(typeEnum.bandeRiveraine, 0, false);
                         }
-                        if (numeroJoueurActif != 1) {
+                        if (numeroJoueurActif !== 1) {
                             brillerCarte(typeEnum.bandeRiveraine, 1, false);
                         }
                         if (nombreJoueur > 2) {
-                            if (numeroJoueur != 2) {
+                            if (numeroJoueur !== 2) {
                                 brillerCarte(typeEnum.bandeRiveraine, 2, false);
                             }
                         }
                         if (nombreJoueur > 3) {
-                            if (numeroJoueur != 3) {
+                            if (numeroJoueur !== 3) {
                                 brillerCarte(typeEnum.bandeRiveraine, 3, false);
                             }
                         }
@@ -1292,6 +1295,9 @@
                 } else if (etapeErosion === 2) {//Étape 2, transformer un habitats en sable.
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
                         if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 1) {//Si il y a seulement une carte non empiller.
+                            habitatEroder = carteBas[numeroJoueurEnnemi][numeroEmplacement];
+                            carteBas[numeroJoueurEnnemi][numeroEmplacement].perturber === true;
+                            cartePerturbation[numeroJoueurEnnemi][numeroEmplacement] = 
                             carteBas[numeroJoueurEnnemi][numeroEmplacement] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
                             var carteSable = document.createElement('img');
@@ -1771,7 +1777,7 @@
                                     });
                                 });
                             //-----------------------Carte Aménagement-------------------------------
-                            } else if (carteDrag.nom = nomEnum.amenagement) {
+                            } else if (carteDrag.nom === nomEnum.amenagement) {
                                 paquetDecharge.push(carteDrag);
                                 supprimerCartePrecise(carteDragNumero);
                                 ui.draggable.remove();
@@ -1905,7 +1911,7 @@
                                 });
                             } else if (carteDrag.nom === nomEnum.erosion) {//Carte érosion.
                                 //Si personne à la carte pris sur le fait.
-                                if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
+                                if (verifierPresencePrisSurFait().filter(function (value) { return value != null }).length === 0) {
                                     popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.');
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
