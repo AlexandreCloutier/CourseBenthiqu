@@ -969,8 +969,8 @@
 
                 //Première carte c'est un habitats rapides.
 
-                mains[0][0] = chercherCarteParticuliere(nomEnum.naturalisation, paquetCarte);
-                mains[1][0] = chercherCarteParticuliere(nomEnum.artificialisation, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -981,7 +981,7 @@
                 }
 
                 //Deuxième carte c'est un habitats au hasard.
-                mains[0][1] = chercherCarteParticuliere(nomEnum.arbres, paquetCarte);
+                mains[0][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
                 mains[1][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -1296,8 +1296,9 @@
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
                             var carteSable = document.createElement('img');
                             carteSable.className = 'imageCarteJeu imageCarteJeuErosion';
+                            carteSable.src = 'ressources/habitatAmenageSable.png';
 
-                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi)).append(carteSable);
+                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi)+ numeroEmplacement).append(carteSable);
                             $(function () {
                                 $('.imageCarteJeuErosion').on({
                                     click: function (event, ui) {
