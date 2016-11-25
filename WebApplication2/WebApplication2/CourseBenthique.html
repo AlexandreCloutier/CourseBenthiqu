@@ -1297,7 +1297,7 @@
                         if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 1) {//Si il y a seulement une carte non empiller.
                             habitatEroder = carteBas[numeroJoueurEnnemi][numeroEmplacement];
                             carteBas[numeroJoueurEnnemi][numeroEmplacement].perturber === true;
-                            cartePerturbation[numeroJoueurEnnemi][numeroEmplacement] = 
+                            cartePerturbation[numeroJoueurEnnemi][numeroEmplacement] = carteDrag;
                             carteBas[numeroJoueurEnnemi][numeroEmplacement] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
                             var carteSable = document.createElement('img');
@@ -1340,6 +1340,9 @@
                             var numeroJoueurPositionLibree = numeroLettrePosition(numeroLettrePosition.substr(0, 1));
                             var numeroPositionLibre = numeroLettrePosition(numeroLettrePosition.substr(1, 2))
 
+                            habitatEroder = carteBas[numeroJoueurPositionLibree][numeroPositionLibre];
+                            carteBas[numeroJoueurPositionLibree][numeroPositionLibre].perturber = true;
+                            cartePerturbation[numeroJoueurPositionLibree][numeroPositionLibre] = carteDrag;
                             carteBas[numeroJoueurPositionLibree][numeroPositionLibre] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
                             exemplaireCarteBas[numeroJoueurPositionLibree][numeroPositionLibre] = 1;
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
@@ -1790,7 +1793,28 @@
                                     buttons: {
                                         Confirmer: function () {
                                             if (joueurSelectionne.id === '1') {
+                                                for (var i = 0; i < nombreJoueur; i++) {
+                                                    for (var j = 0; j < cartePerturbation[i].length; j++) {
+                                                        if (cartePerturbation[i][j].nom === nomEnum.erosion) {
+                                                            carteBas[i][j].perturber = false;
+                                                            carteBas[i][j] = habitatEroder;
+                                                            cartePerturbation[i][j] = null;
+                                                            $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
+                                                            var carteHabitat = document.createElement('img');
+                                                            carteHabitat.className = 'imageCarteJeu';
+                                                            carteHabitat.src = 'ressources/' + habitatEroder.nomImage;
 
+                                                            $(function () {
+                                                                $(carteHabitat).on({
+                                                                    click: function (event, ui) {
+                                                                        onClickImage($(this).parent().attr("id"), ui);
+                                                                    }
+                                                                })
+                                                            });
+                                                        }
+                                                    }
+                                                }
+                                                //TODO: Reajouter la carte bande riveraine
                                                 $(this).dialog('close');
                                             } else {
                                                 $('#divChoixContenu').children().remove();
