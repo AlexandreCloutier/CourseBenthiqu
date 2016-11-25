@@ -3078,12 +3078,12 @@
 
         //Fonction qui valide si le drop est accepter.
         function accepterDrop(event) {
-            if (carteDrag.coutResources <= pointsRessourcesRestant[numeroJoueurActif]) {
+            if (carteDrag.coutResources <= pointsRessourcesRestant[numeroJoueurActif]) {//Si on a assez de points de ressources.
                 // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
                 if (carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.salmonide) {
                     if (verifierCondition(carteDrag)) {
                         if (carteDrag.predateur > 0) {
-                            if (possibleManger()) {
+                            if (possibleManger()) {//Si il y a un macro-invertébrés mangeable.
                                 return true;
                             } else {
                                 popUpErreur('Un adversaire doit avoir une carte avec une taille inférieur au prédateur pour qu\'il est quelque choses à manger');
@@ -3097,35 +3097,35 @@
                         return false;
                     }
                 } else if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.intervention || carteDrag.type === typeEnum.bandeRiveraine) {
-                    if (carteDrag.type === typeEnum.habitats) {
-                        if (verifierNombreHabitats(numeroJoueurActif, 8)) {
+                    if (carteDrag.type === typeEnum.habitats) {//Si on joue un habitats.
+                        if (verifierNombreHabitats(numeroJoueurActif, 8)) {//Si on a pas 8 habitats déjà en jeu.
                             return true;
                         } else {
                             popUpAvertissement('Vous ne pouvez pas avoir plus de 8 habitats en jeu.');
                             return false;
                         }
-                    } else if (carteDrag.type === typeEnum.bandeRiveraine) {
-                        if (verifierNombreBandeRiveraine(numeroJoueurActif, 3)) {
+                    } else if (carteDrag.type === typeEnum.bandeRiveraine) {//Si on joue une bande riveraine.
+                        if (verifierNombreBandeRiveraine(numeroJoueurActif, 3)) {//Si on a pas 3 bande riveraine en jeu.
                             return true;
                         } else {
                             popUpAvertissement('Vous ne pouvez pas avoir plus de 3 bande riveraine en jeu.');
                             return false;
                         }
-                    } else if (carteDrag.type === typeEnum.intervention) {
+                    } else if (carteDrag.type === typeEnum.intervention) {//Si on joue une intervention.
                         return true;
                     }
-                } else if (carteDrag.type === typeEnum.perturbation) {
-                    if (carteDrag.nom === nomEnum.dechets) {
+                } else if (carteDrag.type === typeEnum.perturbation) {//Si on joue une perturbation.
+                    if (carteDrag.nom === nomEnum.dechets) {//Carte déchets.
                         if (presenceReglementation(nomEnum.interdiction, event)) {
                             popUpAvertissement('Il y a une interdiction de jeter des ordures pour cet écosystèmes.');
                             return false;
                         }
-                    } else if (carteDrag.nom === nomEnum.artificialisation) {
+                    } else if (carteDrag.nom === nomEnum.artificialisation) {//Carte artificialisation.
                         if (presenceReglementation(nomEnum.politique, event)) {
                             popUpAvertissement('Il y a une politique de protection pour cet écosystème.');
                             return false;
                         }
-                    } else if (carteDrag.nom === nomEnum.deversement) {
+                    } else if (carteDrag.nom === nomEnum.deversement) {//Carte déversement.
                         if (!verifier) {
                             verifier = true;
                             if (!deversement) {
@@ -3148,9 +3148,9 @@
                         return false;
                     }
 
-                } else if (carteDrag.type === typeEnum.reglementation) {
+                } else if (carteDrag.type === typeEnum.reglementation) {//Carte réglementation.
                     return true;
-                } else if (carteDrag.type === typeEnum.action) {
+                } else if (carteDrag.type === typeEnum.action) {//Carte action.
                     if (carteDrag.nom === nomEnum.corveNettoyage) {
                         for (var i = 0; i < nombreJoueur; i++) {
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
@@ -3163,7 +3163,7 @@
                         }
                         popUpAvertissement('Il n\'y a pas de carte déchets en jeu.');
                         return false;
-                    } else if (carteDrag.nom === nomEnum.naturalisation) {
+                    } else if (carteDrag.nom === nomEnum.naturalisation) {//Si c'est une naturalisation.
                         for (var i = 0; i < nombreJoueur; i++) {
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
@@ -3183,7 +3183,7 @@
 
                         popUpAvertissement('Il n\'y a pas d\'artificialisation à retirer et il n\' y a plus de carte bande riveraine dans les cartes d\'intervention');
                         return false;
-                    } else if (carteDrag.nom === nomEnum.amenagement) {
+                    } else if (carteDrag.nom === nomEnum.amenagement) {//Si c'est une carte d'aménagement.
                         for (var i = 0; i < nombreJoueur; i++) {
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (carte[i][j] != null) {
@@ -3204,14 +3204,14 @@
                         popUpAvertissement('Il n\'y a pas de carte érosion à annuler et il n\'y a plus de d\'habitats parmis les cartes d\'intervention.');
                         return false;
                     }
-                } else if (carteDrag.type === typeEnum.speciale) {
+                } else if (carteDrag.type === typeEnum.speciale) {//Si c'est une carte spéciale.
                     if (carteDrag.nom === nomEnum.retention) {
                         if (pointsRessourcesRestant[numeroJoueurActif] === 0) {
                             popUpAvertissement('Vous n\'avez plus de points ressources à garder.');
                             return false;
                         }
                         return true;
-                    } else if (carteDrag.nom === nomEnum.predation) {
+                    } else if (carteDrag.nom === nomEnum.predation) {//Si c'est une carte de prédation.
                         for (var i = 0; i < carteBas[numeroJoueurActif].length; i++) {
                             var carteJoueur = carteBas[numeroJoueurActif][i];
                             if (carteJoueur != null) {
@@ -3237,7 +3237,7 @@
                         }
                         popUpAvertissement('Vous ne possédez pas de prédateur sur votre jeu.');
                         return false;
-                    } else if (carteDrag.nom === nomEnum.derivation) {
+                    } else if (carteDrag.nom === nomEnum.derivation) {//Si c'est une carte dérivation.
                         if (mains[numeroJoueurActif].filter(function (value) { return value !== null }).length > 0) {
                             var compteur = 0;
                             for (var i = 0; i < nombreJoueur; i++) {
@@ -3255,12 +3255,12 @@
                         }
                         popUpAvertissement('Vous ne pouvez pas échanger votre main si elle est vide.');
                         return false;
-                    } else if (carteDrag.nom === nomEnum.prisSurFait) {
+                    } else if (carteDrag.nom === nomEnum.prisSurFait) {//Si c'est la carte pris sur le fait.
                         popUpAvertissement('Cette carte ne peut être jouée que lorsqu\'un adversaire joue une carte Perturbation.');
                         return false;
-                    } else if (carteDrag.nom === nomEnum.accumulation) {
+                    } else if (carteDrag.nom === nomEnum.accumulation) {//Si c'est la carte accumlarion.
                         return true;
-                    } else if (carteDrag.nom === nomEnum.emergence) {
+                    } else if (carteDrag.nom === nomEnum.emergence) {//Si c'est la carte émergence.
                         for (var i = 0; i < nombreJoueur; i++) {
                             for (var j = 0; j < carteBas[i].length; j++) {
                                 if (carteBas[i][j] != null) {
@@ -3274,7 +3274,7 @@
                         }
                         popUpAvertissement('Il n\'y a aucun macroinvetébrés d\'un des ordres spécifiés sur le jeu');
                         return false;
-                    } else if (carteDrag.nom === nomEnum.pecheur) {
+                    } else if (carteDrag.nom === nomEnum.pecheur) {//Si c'est la carte pécheur.
                         var option1 = false;
                         var option2 = false;
 
@@ -3297,9 +3297,9 @@
                             return false;
                         }
                         return true;
-                    } else if (carteDrag.nom === nomEnum.crueSoudaine) {
+                    } else if (carteDrag.nom === nomEnum.crueSoudaine) {//Si c'est la carte crue soudaine.
                         return true;
-                    } else if (carteDrag.nom === nomEnum.zonage) {
+                    } else if (carteDrag.nom === nomEnum.zonage) {//Si c'est la carte zonage.
                         for (var i = 0; i < carteBas[numeroJoueurActif].length; i++) {
                             if (carteBas[numeroJoueurActif][i] != null) {
                                 if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats) {
@@ -3419,7 +3419,7 @@
                 }
             }
 
-            if (carteDrag.nom === nomEnum.dechets) {
+            if (carteDrag.nom === nomEnum.dechets) {//Carte déchets.
                 if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
                     if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === typeEnum.habitats) {
                         return 'ok';
@@ -3429,7 +3429,7 @@
                 } else {
                     return 'La carte "Déchets" doit être jouer sur un habitat.';
                 }
-            } else if (carteDrag.nom === nomEnum.passageToutTerrain) {
+            } else if (carteDrag.nom === nomEnum.passageToutTerrain) {//Carte passage tout-terrain.
                 if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
                     if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === typeEnum.habitats) {
                         return 'ok';
@@ -3439,7 +3439,7 @@
                 } else {
                     return 'La carte "Passage de tout-terrain" doit être jouer sur un habitat.';
                 }
-            } else if (carteDrag.nom === nomEnum.artificialisation) {
+            } else if (carteDrag.nom === nomEnum.artificialisation) {//Carte artificialisation.
                 if (carteBas[numeroPositionJoueur][numeroPositionEmplacement] != null) {
                     if (carteBas[numeroPositionJoueur][numeroPositionEmplacement].type === typeEnum.bandeRiveraine) {
                         return 'ok';
@@ -3449,7 +3449,7 @@
                 } else {
                     return 'La carte "Artificialisation" doit être jouer sur une bande riveraine.';
                 }
-            } else if (carteDrag.nom === nomEnum.erosion) {
+            } else if (carteDrag.nom === nomEnum.erosion) {//Carte érosion.
                 if (presenceTypePrecis(typeEnum.bandeRiveraine, false)) {
                     if (presenceTypePrecis(typeEnum.habitats, true)) {
                         return 'ok';
@@ -3459,9 +3459,9 @@
                 } else {
                     return 'Il n\'y a pas de bande riveraine à détruire';
                 }
-            } else if (carteDrag.nom === nomEnum.deversement) {
+            } else if (carteDrag.nom === nomEnum.deversement) {//Carte déversement.
                 return 'ok';
-            } else if (carteDrag.nom === nomEnum.pollutionOrganique) {
+            } else if (carteDrag.nom === nomEnum.pollutionOrganique) {//Carte pollution organique.
                 return 'ok';
                 //TODO: Vérifier qu'il y a 3 habitats à perturber au moins.
             } else {
@@ -4209,6 +4209,7 @@
                     $('#buttonPasserTour').prop('disabled', true);
                     $('#divMain').css('pointer-events', 'none');
 
+                    //Change le facteur de rotation selon le nombre de joueur.
                     if (nombreJoueur === 4) {
                         facteurRotation += 1;
                         if (facteurRotation > 4) {
@@ -4323,8 +4324,8 @@
             if (nombreBandeRiveraine > 3) {
                 nombreBandeRiveraine = 3;
             }
+
             if (arbres === 1 && arbustes === 1 && herbace === 1) {
-                //TODO: probleme d'affiche meme si les 2 sont present ne retourne pas 5.
                 nombreBandeRiveraine = 5;
             }
 
@@ -4535,6 +4536,7 @@
                     li.appendChild(divCarte);
                 }
 
+                //Update de la zone de main.
                 if (mains[numeroJoueurActif][i] != null) {
                     var image = document.createElement('img');
                     var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
@@ -4563,6 +4565,7 @@
                     $('.liMain').css('width', '94px')
                 }
 
+                //Update l'affichage du paquet défausse.
                 if (paquetDecharge.length != 0) {
                     if ($('#paquetDefausse').children().length > 0) {
                         $('#paquetDefausse').children().remove();
