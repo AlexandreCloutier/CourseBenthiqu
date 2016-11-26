@@ -299,8 +299,15 @@
 
 .divRegle {
     width: 575px;
+    height: 1150px;
+    display:none;
+}
+
+.divTableauCarte {
+    width: 575px;
     height: 1050px;
     display:none;
+
 }
 
 /*.divChoix {
@@ -335,6 +342,11 @@
 .listeJoueur{
     border: solid 2px black;
     margin: 2px;
+}
+
+.imageRegle {
+    width:1100px;
+    height:786px;
 }
 
 .no-close .ui-dialog-title {
@@ -569,7 +581,7 @@
 /*****Les boutons*****/
 #buttonPasserTour {
     position: absolute;
-    bottom: 90px;
+    bottom: 85px;
     height: 50px;
     width: 250px;
     left: 11%;
@@ -578,6 +590,14 @@
 #buttonRegle {
     position: absolute;
     bottom: 150px;
+    height: 40px;
+    width: 250px;
+    left: 11%
+}
+
+#buttonTableauCarte {
+    position: absolute;
+    bottom: 205px;
     height: 40px;
     width: 250px;
     left: 11%

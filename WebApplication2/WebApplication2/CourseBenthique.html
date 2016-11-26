@@ -211,6 +211,8 @@
             //Partie carte prédation.
             predation = false;
 
+            //Partie Érosion
+            bandeRiveraineEroder = [];
             //Partie pour la carte naturalisation.
             naturalisation = false;
             //           etape = 1; *********************************************************************** PAS UTILE JE CROIT***********
@@ -845,7 +847,15 @@
             var divRegle = document.createElement('div');
             divRegle.id = 'divRegle';
             divRegle.className = 'divRegle';
+            divRegle.innerHTML = '<img class="imageRegle" src="ressources/instructionPage2.png">';
             $('body').append(divRegle);
+
+            //divTableauCarte
+            var divTableauCarte = document.createElement('div');
+            divTableauCarte.id = 'divTableauCarte';
+            divTableauCarte.className = 'divTableauCarte';
+            divTableauCarte.innerHTML = '<img class="imageTableauCarte" src="ressources/instructionPage1.png">';
+            $('body').append(divTableauCarte);
 
             //Div Choix
             var divChoix = document.createElement('div');
@@ -983,7 +993,7 @@
                 }
 
                 //Deuxième carte c'est un habitats au hasard.
-                mains[0][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+                mains[0][1] = chercherCarteParticuliere(nomEnum.amenagement, paquetCarte);
                 mains[1][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -1173,6 +1183,14 @@
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
+            //Bouton du tableau des cartes
+            var buttonTableauCarte = document.createElement('button');
+            buttonTableauCarte.id = 'buttonTableauCarte';
+            buttonTableauCarte.className = 'buttonJeu';
+            buttonTableauCarte.setAttribute('onclick', 'popUpTableauCarte()');
+            buttonTableauCarte.textContent = 'Voir le tableau des cartes';
+            $('#divDroite').append(buttonTableauCarte);
+
             //Bouton des règles.
             var buttonRegle = document.createElement('button');
             buttonRegle.id = 'buttonRegle';
@@ -1252,7 +1270,8 @@
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
                         exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;
                         if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 0) {
-                            bandeRiveraineEroder = carteBas[numeroJoueurEnnemi][numeroEmplacement];
+                            bandeRiveraineEroder[0] = carteBas[numeroJoueurEnnemi][numeroEmplacement];
+                            bandeRiveraineEroder[1] = numeroJoueurEnnemi;
                             carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;                            
                         }
 
@@ -1793,29 +1812,48 @@
                                     buttons: {
                                         Confirmer: function () {
                                             if (joueurSelectionne.id === '1') {
+                                                //Retransforme la carte sable en habitat
                                                 for (var i = 0; i < nombreJoueur; i++) {
                                                     for (var j = 0; j < cartePerturbation[i].length; j++) {
-                                                        if (cartePerturbation[i][j].nom === nomEnum.erosion) {
-                                                            carteBas[i][j].perturber = false;
-                                                            carteBas[i][j] = habitatEroder;
-                                                            cartePerturbation[i][j] = null;
-                                                            $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
-                                                            var carteHabitat = document.createElement('img');
-                                                            carteHabitat.className = 'imageCarteJeu';
-                                                            carteHabitat.src = 'ressources/' + habitatEroder.nomImage;
+                                                        if (cartePerturbation[i][j] != null) {
+                                                            if (cartePerturbation[i][j].nom === nomEnum.erosion) {
+                                                                carteBas[i][j].perturber = false;
+                                                                carteBas[i][j] = habitatEroder;
+                                                                cartePerturbation[i][j] = null;
+                                                                $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
+                                                                var carteHabitat = document.createElement('img');
+                                                                carteHabitat.className = 'imageCarteJeu';
+                                                                carteHabitat.src = 'ressources/' + habitatEroder.nomImage;
+                                                                $('#emplacementJoueur' + lettreJoueur(i) + j).append(carteHabitat);
 
-                                                            $(function () {
-                                                                $(carteHabitat).on({
-                                                                    click: function (event, ui) {
-                                                                        onClickImage($(this).parent().attr("id"), ui);
-                                                                    }
-                                                                })
-                                                            });
+                                                                $(function () {
+                                                                    $(carteHabitat).on({
+                                                                        click: function (event, ui) {
+                                                                            onClickImage($(this).parent().attr("id"), ui);
+                                                                        }
+                                                                    })
+                                                                });
+                                                            }
                                                         }
                                                     }
                                                 }
-                                                //TODO: Reajouter la carte bande riveraine
+                                                //Reajoute la carte bande riveraine
+                                                var posLibre = trouverPositionLibre(bandeRiveraineEroder[1]);
+                                                var numeroPosLibre = posLibre.substr(posLibre.length - 1);
+                                                carteBas[bandeRiveraineEroder[1]][numeroPosLibre] = bandeRiveraineEroder[0];
+                                                var carte = document.createElement('img');
+                                                carte.className = 'imageCarteJeu';
+                                                carte.src = 'ressources/' + bandeRiveraineEroder[0].nomImage;
+                                                $(posLibre).append(carte);
+                                                $(function () {
+                                                    $(carte).on({
+                                                        click: function (event, ui) {
+                                                            onClickImage($(this).parent().attr("id"), ui);
+                                                        }
+                                                    })
+                                                });
                                                 $(this).dialog('close');
+                                                updateAffichageImage();
                                             } else {
                                                 $('#divChoixContenu').children().remove();
                                                 $(this).dialog({
@@ -1900,7 +1938,7 @@
                                                     li.style.listStyleType = 'none';
                                                     li.className = 'listeJoueur';
                                                     li.id = '1';
-                                                    li.innerHTML = 'Annuler l\'effet d\'une carte Artificialisation.';
+                                                    li.innerHTML = 'Annuler l\'effet de la carte Érosion.';
                                                     $(ul).append(li);
                                                     stop = true;
                                                 }
@@ -3393,7 +3431,7 @@
                     } else if (carteDrag.nom === nomEnum.amenagement) {//Si c'est une carte d'aménagement.
                         for (var i = 0; i < nombreJoueur; i++) {
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
-                                if (carte[i][j] != null) {
+                                if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.erosion) {
                                         return true;
                                     }
@@ -4687,9 +4725,25 @@
             });
         }
 
-        //Function qui affiche un popUp contenant les règles du jeu.
+        //Fonction qui affiche un popUp contenant les règles du jeu.
         function popUpRegle() {
             $(divRegle).dialog({
+                classes: {
+                    'ui-dialog': 'popUpRegle no-close ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header'
+                },
+                draggable: false,
+                resizable: false,
+                height: 575,
+                width: 1150,
+                hide: 'fade',
+                show: 'fade'
+            });
+        }
+
+        //Fonction qui affiche un popup contenant le tableau d'aide des cartes.
+        function popUpTableauCarte() {
+            $(divTableauCarte).dialog({
                 classes: {
                     'ui-dialog': 'popUpRegle no-close ui-corner-all',
                     'ui-dialog-titlebar': 'no-header'

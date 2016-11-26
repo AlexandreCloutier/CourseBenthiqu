@@ -150,6 +150,8 @@
     <Content Include="ressources\herbaceesNaturelles.png" />
     <Content Include="ressources\hydropsychidae.png" />
     <Content Include="ressources\hydroptilidae.png" />
+    <Content Include="ressources\instructionPage2.png" />
+    <Content Include="ressources\instructionPage1.png" />
     <Content Include="ressources\interdiction.png" />
     <Content Include="ressources\logo.png" />
     <Content Include="ressources\moyenPaquet.png" />
