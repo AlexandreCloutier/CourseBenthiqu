@@ -136,6 +136,7 @@
         var pointsRessourcesTotal;
         var pointsRessourcesUtiliser;
         var pointsRessourcesRestant;
+        var calculer;
         //Numero du joueur présentement actif.
         var numeroJoueurActif;
         //Variable comptant le nombre de tour.
@@ -3342,17 +3343,20 @@
         //Fonction qui valide si le drop est accepter.
         function accepterDrop(event) {
             if (carteDrag.coutResources <= pointsRessourcesRestant[numeroJoueurActif]) {//Si on a assez de points de ressources.
-                // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
+                calculer = true;
+                // Si c'est un macroInvertebre ou un salmonide, il y a des conditions.
                 if (carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.salmonide) {
                     if (verifierCondition(carteDrag)) {
                         if (carteDrag.predateur > 0) {
                             if (possibleManger()) {//Si il y a un macro-invertébrés mangeable.
+
                                 return true;
                             } else {
                                 popUpErreur('Un adversaire doit avoir une carte avec une taille inférieur au prédateur pour qu\'il est quelque choses à manger');
                                 return false;
                             }
                         } else {
+
                             return true;
                         }
                     } else {
@@ -3419,6 +3423,7 @@
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.dechets) {
+                                        
                                         return true;
                                     }
                                 }
@@ -3431,6 +3436,7 @@
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
+                                        
                                         return true;
                                     }
                                 }
@@ -3903,7 +3909,7 @@
                 pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutResources;
 
                 if (carteDrag.type != typeEnum.perturbation) {//Si c'est une perturbation, ne l'ajoute pas.
-                var id = drop.id.substr(drop.id.length - 1);               
+                    var id = drop.id.substr(drop.id.length - 1);
                     carteBas[numeroJoueurActif][id] = carteDrag;
                 }
 
@@ -4647,7 +4653,10 @@
                 var id;
                 id = $(event).attr('id').substr($(event).attr('id').length - 1);
                 if (bonneZoneDrop(event)) {
-                    if (accepterDrop(event)) {
+                    if (accepterDrop(event) || calculer) {
+                        if (calculer) {
+                            calculer = false;
+                        }
                         if ($(event).attr('id') != 'plateau') {
                             if ($(event).children().length >= 1) {
                                 if (carteDrag.type === typeEnum.perturbation) {
@@ -4823,7 +4832,7 @@
 
         //Fonction qui "update" le jeu.
         function updatePointsRessourcesJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 200;
+            pointsRessourcesBase[numeroJoueurActif] = 3;
             if (tableauRetention[numeroJoueurActif] != null) {
                 if (tableauRetention[numeroJoueurActif] === true) {
                     pointsRessourcesBase[numeroJoueurActif] += pointsRessourcesRestant[numeroJoueurActif];
@@ -4965,7 +4974,7 @@
                         pointsJoueur[2] += carteBas[2][i].coutResources;
 
                         if (exemplaireCarteBas[2][i] > 1) {
-                            pointsJoueur[2] +(exemplaireCarteBas[2][i] - 1);
+                            pointsJoueur[2] + (exemplaireCarteBas[2][i] - 1);
                         }
                     }
                 }
