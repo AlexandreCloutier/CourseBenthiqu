@@ -143,6 +143,16 @@
         cursor: hand;
     }
 
+.fileReader {
+    opacity: 0.0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
 
 /*  --------------- Zone centre -------------*/
 
@@ -300,21 +310,14 @@
 .divRegle {
     width: 575px;
     height: 1150px;
-    display:none;
+    display: none;
 }
 
 .divTableauCarte {
     width: 575px;
     height: 1050px;
-    display:none;
-
+    display: none;
 }
-
-/*.divChoix {
-    background: #3892ba !important;
-    border: 3px white solid !important;
-    font-size: 28px !important;
-}*/
 
 .listeChoixCarte {
     list-style: none;
@@ -331,7 +334,7 @@
     height: inherit;
 }
 
-.divChoixJoueur, .divChoix{
+.divChoixJoueur, .divChoix {
     display: none;
 }
 
@@ -339,14 +342,14 @@
     background-color: deepskyblue;
 }
 
-.listeJoueur{
+.listeJoueur {
     border: solid 2px black;
     margin: 2px;
 }
 
 .imageRegle {
-    width:1100px;
-    height:786px;
+    width: 1100px;
+    height: 786px;
 }
 
 .no-close .ui-dialog-title {
@@ -372,9 +375,11 @@
     font-family: 'Arial' !important;
     float: none;
 }
-.ui-dialog .ui-dialog-content {
-    height:auto !important;
-}
+
+    .ui-dialog .ui-dialog-content {
+        height: auto !important;
+    }
+
 .ui-corner-all {
     border-radius: 10px !important;
 }
@@ -382,34 +387,45 @@
 /* ----------------Option-------------------------*/
 .divOptions label {
     display: block;
-    margin: 0px 0px 15px 0px;
+    margin: 15px 0px 0px 0px;
 }
 
     .divOptions label > span {
         float: left;
-        padding-top: 8px;
-        padding-right: 5px;
+        margin-bottom: 5px;
     }
 
 .divTitreOptions {
     font-size: 30px;
 }
 
-.labelResolution {
-}
-
-.labelPopUp {
-}
-
 .dropDownReso {
+    padding-top: 5px;
+    margin-bottom: 8px;
 }
 
-.checkBoxPopUp {
+.textBoxSauvegarder {
+    float: left;
+    width: 150px;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
-.carteCliquable{
-    cursor:pointer;
-    cursor:hand;
+.labelText {
+    float: left;
+    color: grey;
+}
+
+.buttonSauvegarder {
+    text-align: center;
+    margin: 8px;
+}
+
+
+.carteCliquable {
+    cursor: pointer;
+    cursor: hand;
 }
 
 /* -----------------Zone Main--------------------*/
@@ -592,7 +608,7 @@
     bottom: 150px;
     height: 40px;
     width: 250px;
-    left: 11%
+    left: 11%;
 }
 
 #buttonTableauCarte {
@@ -600,7 +616,7 @@
     bottom: 205px;
     height: 40px;
     width: 250px;
-    left: 11%
+    left: 11%;
 }
 
 #buttonOption {

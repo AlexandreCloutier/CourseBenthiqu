@@ -181,8 +181,8 @@
     <Content Include="ressources\zonage.png" />
     <Content Include="scripts\ai.0.15.0-build58334.js" />
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="scripts\FileSaver.min.js" />
     <Content Include="scripts\jquery-ui.min.js" />
-    <Content Include="scripts\jquery.flip.min.js" />
     <Content Include="style.css" />
     <Content Include="Web.config" />
   </ItemGroup>

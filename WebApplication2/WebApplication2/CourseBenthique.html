@@ -8,7 +8,7 @@
 <body onload="menuPrincipal()">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
-    <script src="scripts/jquery.flip.min.js"></script>
+    <script src="scripts/FileSaver.min.js"></script>
     <script>
 
         /* ------------------enum---------------------  */
@@ -375,13 +375,20 @@
             $('#menuPrincipal').append(buttonNouvellePartie);
 
             var buttonChargerPartie = document.createElement('button');
-            //buttonChargerPartie.type = 'file'
             buttonChargerPartie.id = 'buttonChargerPartie';
             buttonChargerPartie.className = 'buttonMenuPrincipal';
             buttonChargerPartie.innerHTML = 'Charger une partie';
             buttonChargerPartie.style.bottom = '155px';
-            //buttonChargerPartie.onclick = chargerPartie;
             $('#menuPrincipal').append(buttonChargerPartie);
+
+            var fileReader = document.createElement('input');
+            fileReader.type = 'file';
+            fileReader.id = 'fileReader';
+            fileReader.className = 'fileReader';
+            fileReader.onchange = function () {
+                chargerPartie(fileReader.files);
+            }
+            buttonChargerPartie.appendChild(fileReader);
 
             var buttonOptions = document.createElement('button');
             buttonOptions.id = 'buttonOptions';
@@ -666,19 +673,44 @@
             $(menuCreerPartie).append(buttonRetour);
         }
 
-        //function chargerPartie() {
-        //var charger = $('#buttonChargerPartie');
-        //upclick({
-        //    element: charger,
-        //    action: '/',
-        //    onstart: function (filename) {
-        //        alert('Start Upload:' + filename);
-        //    },
-        //    oncomplete: function (response_data) {
-        //        alert(response_data);
-        //    }
-        //});
-        //}
+        //Fonction qui sera appelé lors d'un clic sur le bouton sauvegarder
+        function sauvegarderPartie(nom) {
+            var paquetCarteJson = '[';
+            paquetCarte.forEach(function (item, index) {                
+                paquetCarteJson += '{ "type":"' + item.type + '" , "nom":"' + item.nom + '" , "nomImage":"' + item.nomImage + '" , "coutRessources":' + item.coutRessources + '';
+                if (item.type === typeEnum.habitats) {
+                    paquetCarteJson += ' , "habitats":"' + item.habitats + '" , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
+                } else if (item.type === typeEnum.salmonide) {
+                    paquetCarteJson += ' , "condition":"' + item.condition + '" }';
+                } else if (item.type === typeEnum.bandeRiveraine) {
+                    paquetCarteJson += ' , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
+                } else if (item.type === typeEnum.speciale || item.type === typeEnum.action || item.type === typeEnum.reglementation || item.type === typeEnum.intervention) {
+                    paquetCarteJson +=  ' }';
+                } else if (item.type === typeEnum.perturbation) {
+                    paquetCarteJson += ' , "tempsActif":' + item.tempsActif + ' }';
+                } else if (item.type === typeEnum.macroInvertebre) {
+                    paquetCarteJson += ' , "tolerance":' + item.tolerance + ' , "taille":' + item.taille + ' , "predateur":' + item.predateur + ' , "typeMacro":"' + item.typeMacro + '" , "condition":"' + item.condition + '" }';
+                }
+                if (index != paquetCarte.length - 1) {
+                    paquetCarteJson += ','
+                }
+
+            });
+            paquetCarteJson += ' ]';
+            var json = '{ "paquetCarte":' + paquetCarteJson + '}';
+            var prout = JSON.parse(json);
+            console.log(prout);
+            console.log(paquetCarte);
+            var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, nom + '.asb');
+        }
+
+        function chargerPartie(file) {
+            var fileReader = new FileReader();
+            fileReader.readAsText(file[0]);
+            fileReader.onload = function (e) { console.log(JSON.parse(fileReader.result)) };
+
+        }
 
         //Fonction appelé lors d'un clic sur le bouton Options en jeu
         function ouvrirOptionsEnJeu() {
@@ -708,22 +740,28 @@
             option1.innerHTML = '1280 x 720';
             dropDownReso.appendChild(option1);
 
-            var labelPopUp = document.createElement('label');
-            labelPopUp.id = 'labelPopUp';
-            labelPopUp.className = 'labelPopUp';
-            labelPopUp.innerHTML = '<span>Activé les pop-ups éducatifs : </span>'
-            divOptions.appendChild(labelPopUp);
+            var textBoxSauvegarder = document.createElement('input');
+            textBoxSauvegarder.type = 'text';
+            textBoxSauvegarder.id = 'textBoxSauvegarder';
+            textBoxSauvegarder.className = 'textBoxSauvegarder';
+            divOptions.appendChild(textBoxSauvegarder);
 
-            var checkBoxPopUp = document.createElement('input');
-            checkBoxPopUp.type = 'checkbox';
-            checkBoxPopUp.id = 'checkBoxPopUp';
-            checkBoxPopUp.value = 'PopUpActif';
-            checkBoxPopUp.className = 'checkBoxPopUp';
-            divOptions.appendChild(checkBoxPopUp);
+            var labelText = document.createElement('label');
+            labelText.id = 'labelText';
+            labelText.className = 'labelText';
+            labelText.innerHTML = '.Asb';
+            divOptions.appendChild(labelText);
+
+            var buttonSauvegarder = document.createElement('button');
+            buttonSauvegarder.id = 'buttonSauvegarder';
+            buttonSauvegarder.className = 'buttonSauvegarder';
+            $(buttonSauvegarder).click(function () { sauvegarderPartie(textBoxSauvegarder.value) });
+            buttonSauvegarder.textContent = 'Sauvegarder';
+            divOptions.appendChild(buttonSauvegarder);
 
             $(divOptions).dialog({
                 classes: {
-                    'ui-dialog': 'no-close ui-corner-all',
+                    'ui-dialog': 'no-x ui-corner-all',
                 },
                 draggable: false,
                 resizable: false,
@@ -2016,6 +2054,23 @@
                                                     griserZone(true, false, true);
                                                     ui.draggable.remove();
                                                     updateAffichageImage();
+
+                                                    if (numeroJoueurActif != 0) {
+                                                        brillerCarte(typeEnum.bandeRiveraine, 0, true);
+                                                    }
+                                                    if (numeroJoueurActif != 1) {
+                                                        brillerCarte(typeEnum.bandeRiveraine, 1, true);
+                                                    }
+                                                    if (nombreJoueur > 2) {
+                                                        if (numeroJoueurActif != 2) {
+                                                            brillerCarte(typeEnum.bandeRiveraine, 2, true);
+                                                        }
+                                                    }
+                                                    if (nombreJoueur > 3) {
+                                                        if (numeroJoueurActif != 3) {
+                                                            brillerCarte(typeEnum.bandeRiveraine, 3, true);
+                                                        }
+                                                    }
                                                     $(this).dialog('close');
                                                 } else {
                                                     paquetDecharge.push(carteDrag);
@@ -3344,7 +3399,7 @@
 
         //Fonction qui valide si le drop est accepter.
         function accepterDrop(event) {
-            if (carteDrag.coutResources <= pointsRessourcesRestant[numeroJoueurActif]) {//Si on a assez de points de ressources.
+            if (carteDrag.coutRessources <= pointsRessourcesRestant[numeroJoueurActif]) {//Si on a assez de points de ressources.
                 // Si c'est un macroInvertebre ou un salmonive, il y a des conditions.
                 if (carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.salmonide) {
                     if (verifierCondition(carteDrag)) {
@@ -3855,8 +3910,8 @@
                     exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = 1;
                 }
                 //Partie qui change les données de la mains vers la partie du bas.
-                pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutResources;
-                pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutResources;
+                pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutRessources;
+                pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutRessources;
 
                 var id = drop.id.substr(drop.id.length - 1);
 
@@ -3877,27 +3932,25 @@
         }
 
         //Définition de la classe.
-        function Carte(type, nom, nomImage, coutResources, params) {
+        function Carte(type, nom, nomImage, coutRessources, params) {
             if (type === typeEnum.habitats) {
                 this.nom = nom;
                 this.type = type;
                 this.habitats = params.habitats;
-                this.coutResources = coutResources;
+                this.coutRessources = coutRessources;
                 this.nomImage = nomImage;
                 this.perturber = false;
                 this.tempsPerturber = 0;
             } else if (type === typeEnum.salmonide) {
                 this.nom = nom;
                 this.type = type;
-                this.coutResources = coutResources;
+                this.coutRessources = coutRessources;
                 this.condition = params.condition;
                 this.nomImage = nomImage;
-                this.perturber = false;
-                this.tempsPerturber = 0;
             } else if (type === typeEnum.bandeRiveraine) {
                 this.nom = nom;
                 this.type = type;
-                this.coutResources = coutResources;
+                this.coutRessources = coutRessources;
                 this.nomImage = nomImage;
                 this.perturber = false;
                 this.tempsPerturber = 0;
@@ -3905,40 +3958,38 @@
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
-                this.coutResources = coutResources;
+                this.coutRessources = coutRessources;
             } else if (type === typeEnum.action) {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
-                this.coutResources = coutResources;
+                this.coutRessources = coutRessources;
             } else if (type === typeEnum.perturbation) {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
-                this.coutResources = coutResources;
+                this.coutRessources = coutRessources;
                 this.tempsActif = params.tempsActif;
             } else if (type === typeEnum.reglementation) {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
-                this.coutResources = coutResources;
+                this.coutRessources = coutRessources;
             } else if (type === typeEnum.macroInvertebre) {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
-                this.coutResources = coutResources;
+                this.coutRessources = coutRessources;
                 this.tolerance = params.tolerance;
                 this.taille = params.taille;
                 this.predateur = params.predateur;
                 this.typeMacro = params.typeMacro;
                 this.condition = params.condition;
-                this.perturber = false;
-                this.tempsPerturber = 0;
             } else if (type === typeEnum.intervention) {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
-                this.coutResources = coutResources;
+                this.coutRessources = coutRessources;
             }
         }
 
@@ -4902,7 +4953,7 @@
 
             for (var i = 0; i < 10; i++) {
                 if (carteBas[0][i] != null) {
-                    pointsJoueur[0] += carteBas[0][i].coutResources;
+                    pointsJoueur[0] += carteBas[0][i].coutRessources;
 
                     if (exemplaireCarteBas[0][i] > 1) {
                         pointsJoueur[0] += exemplaireCarteBas[0][i] - 1;
@@ -4910,7 +4961,7 @@
                 }
                 if (nombreJoueur >= 2) {
                     if (carteBas[1][i] != null) {
-                        pointsJoueur[1] += carteBas[1][i].coutResources;
+                        pointsJoueur[1] += carteBas[1][i].coutRessources;
 
                         if (exemplaireCarteBas[0][i] > 1) {
                             pointsJoueur[1] += exemplaireCarteBas[1][i] - 1;
@@ -4919,7 +4970,7 @@
                 }
                 if (nombreJoueur >= 3) {
                     if (carteBas[2][i] != null) {
-                        pointsJoueur[2] += carteBas[2][i].coutResources;
+                        pointsJoueur[2] += carteBas[2][i].coutRessources;
 
                         if (exemplaireCarteBas[2][i] > 1) {
                             pointsJoueur[2] += exemplaireCarteBas[2][i] - 1;
@@ -4928,7 +4979,7 @@
                 }
                 if (nombreJoueur >= 4) {
                     if (carteBas[3][i] != null) {
-                        pointsJoueur[3] += carteBas[3][i].coutResources;
+                        pointsJoueur[3] += carteBas[3][i].coutRessources;
 
                         if (exemplaireCarteBas[3][i] > 1) {
                             pointsJoueur[3] += exemplaireCarteBas[3][i] - 1;
