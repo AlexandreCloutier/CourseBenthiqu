@@ -981,8 +981,8 @@
 
                 //Première carte c'est un habitats rapides.
 
-                mains[0][0] = chercherCarteParticuliere(nomEnum.erosion, paquetCarte);
-                mains[1][0] = chercherCarteParticuliere(nomEnum.arbres, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -993,7 +993,7 @@
                 }
 
                 //Deuxième carte c'est un habitats au hasard.
-                mains[0][1] = chercherCarteParticuliere(nomEnum.amenagement, paquetCarte);
+                mains[0][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
                 mains[1][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -2860,18 +2860,26 @@
 
         //Fonction qui va déplacer une carte et droper la perturbation dessus pour pas qu'une carte perturber soit empiler sur une carte non-perturber.
         function deplacerCartePerturber(positionCarteDepart, event, ui) {
-            var emplacement = positionCarteDepart.target.id.substr(event.length - 2);//2 derniers caractères de l'emplacement ex: A9.
+            var emplacement = positionCarteDepart.id.substr(positionCarteDepart.id.length - 2);
             var numeroJoueurPositionDrop = numeroJoueur(emplacement.substr(0, 1));
             var numeroPosition = emplacement.substr(1, 2);
 
+            $(positionCarteDepart).children().last().remove();
+
             var positionDropable = trouverPositionLibre(numeroJoueurPositionDrop);
-            exemplaireCarteBas[numeroJoueurPositionDrop][numeroPosition]--;
+            console.log(emplacement);
+            exemplaireCarteBas[numeroJoueurPositionDrop][numeroPosition] = (exemplaireCarteBas[numeroJoueurPositionDrop][numeroPosition]-1);
 
             var carte = document.createElement('img');
             carte.className = 'imageCarteJeu imageCarteNouvelleCarte';
             carte.src = 'ressources/' + carteBas[numeroJoueurPositionDrop][numeroPosition].nomImage;
 
-            $(positionLibre).append(carte);
+            $(positionDropable).append(carte);
+            var emplacementDropper = positionDropable.substr(positionDropable.length - 2);//2 derniers caractères de l'emplacement ex: A9.
+            var numeroPositionDropper = emplacementDropper.substr(1, 2);
+
+            exemplaireCarteBas[numeroJoueurPositionDrop][numeroPositionDropper] = 1;
+            carteBas[numeroJoueurPositionDrop][numeroPositionDropper] = carteBas[numeroJoueurPositionDrop][numeroPosition];
 
             $(function () {
                 $('.imageCarteNouvelleCarte').on({
@@ -2881,7 +2889,20 @@
                 })
             });
 
-            onDrop(event, ui, positionDropable);
+            $('#emplacementJoueurA').removeClass('imageCarteNouvelleCarte');
+            $('#emplacementJoueurB').removeClass('imageCarteNouvelleCarte');
+
+            if (nombreJoueur > 2) {
+                $('#emplacementJoueurC').removeClass('imageCarteNouvelleCarte');
+            }
+            
+            if (nombreJoueur > 3) {
+                $('#emplacementJoueurD').removeClass('imageCarteNouvelleCarte');
+            }
+
+            //onDrop(event, ui, $(positionDropable));
+            //On va pas utiliser on drop, on va la drop dans la zone à bras.
+            //Il va falloir que je rende perturber.
         }
 
         //Fonction qui va mettre la variable perturber à true.
@@ -3779,7 +3800,7 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
-                        console.log(carteBas[numeroJoueurActif][i].condition().length);
+                        console.log(carteBas[numeroJoueurActif][i].condition.length);
                         for (var j = 0; j < carteBas[numeroJoueurActif][i].condition.length; j++) {
                             if (carteBas[numeroJoueurActif][i].condition[j] === habitats) {
                                 carteBas[numeroJoueurActif][i] = null;
