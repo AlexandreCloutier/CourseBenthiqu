@@ -214,7 +214,7 @@
             bandeRiveraineEroder = [];
             //Partie pour la carte naturalisation.
             naturalisation = false;
-            //           etape = 1; *********************************************************************** PAS UTILE JE CROIT***********
+            calculer = false;
         }
 
         //Fonction qui va créer les diverse éléments du fond.
@@ -3397,15 +3397,17 @@
 
         //Fonction qui valide si le drop est accepter.
         function accepterDrop(event) {
-
-            if (carteDrag.coutResources <= pointsRessourcesRestant[numeroJoueurActif]) {//Si on a assez de points de ressources.
+            if (calculer) {
+                calculer = false;
+                return true;  
+            }
+            if (carteDrag.coutRessources <= pointsRessourcesRestant[numeroJoueurActif]) {//Si on a assez de points de ressources.
                 calculer = true;
                 // Si c'est un macroInvertebre ou un salmonide, il y a des conditions.
                 if (carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.salmonide) {
                     if (verifierCondition(carteDrag)) {
                         if (carteDrag.predateur > 0) {
                             if (possibleManger()) {//Si il y a un macro-invertébrés mangeable.
-
                                 return true;
                             } else {
                                 popUpErreur('Un adversaire doit avoir une carte avec une taille inférieur au prédateur pour qu\'il est quelque choses à manger');
@@ -4705,10 +4707,7 @@
                 var id;
                 id = $(event).attr('id').substr($(event).attr('id').length - 1);
                 if (bonneZoneDrop(event)) {
-                    if (accepterDrop(event) || calculer) {
-                        if (calculer) {
-                            calculer = false;
-                        }
+                    if (accepterDrop(event)) {
                         if ($(event).attr('id') != 'plateau') {
                             if ($(event).children().length >= 1) {
                                 if (carteDrag.type === typeEnum.perturbation) {
