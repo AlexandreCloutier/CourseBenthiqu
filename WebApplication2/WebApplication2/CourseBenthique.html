@@ -807,7 +807,7 @@
             //Sauvegarder le nom des joueurs
             nomJoueur.forEach(function (item, index) {
                 nomJoueurJson += '{ "nom":"' + item + '" }';
-                if(index != nomJoueur.length - 1) {
+                if (index != nomJoueur.length - 1) {
                     nomJoueurJson += ','
                 }
             });
@@ -1157,7 +1157,6 @@
                 //pour assurer une chance egal à tous les joueurs d'avoir les mêmes cartes.
 
                 //Première carte c'est un habitats rapides.
-
                 mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
@@ -1480,7 +1479,7 @@
                             brillerCarte(typeEnum.habitats, 2, true);
                         }
 
-                        if (nombrePolluer > 3) {
+                        if (nombreJoueur > 3) {
                             brillerCarte(typeEnum.habitats, 3, true);
                         }
 
@@ -1492,7 +1491,6 @@
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
                         if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 1) {//Si il y a seulement une carte non empiller.
                             habitatEroder = carteBas[numeroJoueurEnnemi][numeroEmplacement];
-                            carteBas[numeroJoueurEnnemi][numeroEmplacement].perturber === true;
                             cartePerturbation[numeroJoueurEnnemi][numeroEmplacement] = carteDrag;
                             carteBas[numeroJoueurEnnemi][numeroEmplacement] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
@@ -1536,15 +1534,15 @@
                         } else {
                             var positionLibre = trouverPositionLibre();
                             var numeroLettrePosition = positionLibre.substr(positionLibre.length - 2);
-                            var numeroJoueurPositionLibree = numeroLettrePosition(numeroLettrePosition.substr(0, 1));
-                            var numeroPositionLibre = numeroLettrePosition(numeroLettrePosition.substr(1, 2))
+                            var numeroJoueurPositionLibree = numeroJoueur(numeroLettrePosition.substr(0, 1));
+                            var numeroPositionLibre = numeroLettrePosition.substr(1, 2);
 
                             habitatEroder = carteBas[numeroJoueurPositionLibree][numeroPositionLibre];
-                            carteBas[numeroJoueurPositionLibree][numeroPositionLibre].perturber = true;
                             cartePerturbation[numeroJoueurPositionLibree][numeroPositionLibre] = carteDrag;
                             carteBas[numeroJoueurPositionLibree][numeroPositionLibre] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
                             exemplaireCarteBas[numeroJoueurPositionLibree][numeroPositionLibre] = 1;
-                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
+                            $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().last().remove();
+
                             var carteSable = document.createElement('img');
                             carteSable.className = 'imageCarteJeu imageCarteJeuErosion';
                             carteSable.src = 'ressources/habitatAmenageSable.png';
@@ -1566,20 +1564,11 @@
                                 brillerCarte(typeEnum.habitats, 2, false);
                             }
 
-                            if (nombrePolluer > 3) {
+                            if (nombreJoueur > 3) {
                                 brillerCarte(typeEnum.habitats, 3, false);
                             }
 
-                            $('.emplacementJoueurA').removeClass('imageCarteJeuErosion');
-                            $('.emplacementJoueurB').removeClass('imageCarteJeuErosion');
-
-                            if (nombreJoueur > 2) {
-                                $('.emplacementJoueurC').removeClass('imageCarteJeuErosion');
-                            }
-
-                            if (nombreJoueur > 3) {
-                                $('.emplacementJoueurD').removeClass('imageCarteJeuErosion');
-                            }
+                            $('.imageCarteJeuErosion').removeClass('imageCarteJeuErosion');
                         }
 
                         erosion = false;
@@ -1737,6 +1726,7 @@
                 drop: function (event, ui) {//Ajoute le code du drop pour la plateau.
                     if (bonneZoneDrop(event.target)) {//Si l'endroits que nous voulons droper est à la bonne place.
                         if (accepterDrop(event.target)) {
+                            pointsRessourcesUtiliser += carteDrag.coutRessources;
                             /* -----------Perturbation--------------*/
                             if (carteDrag.nom === nomEnum.deversement) {
                                 //Si personne a de carte pris sur le fait.
@@ -2616,7 +2606,6 @@
                                                             $(this).css('-webkit-box-shadow', '0 0 15px 10px #000');
                                                             $(this).css('box-shadow', '0px 0px 15px 10px #000');
                                                             carteSelectionne = index;
-                                                            console.log(carteSelectionne);
                                                         });
 
                                                         $(ul).append(li);
@@ -2731,7 +2720,6 @@
                                                     for (var j = 0; j < carteBas[i].length; j++) {
                                                         if (carteBas[i][j] != null && carteBas[i][j].typeMacro === ordreSelectionne) {
                                                             for (var k = 0; k < mains[i].length; k++) {
-                                                                console.log(mains[i][k]);
                                                                 if (mains[i][k] === null) {
                                                                     if (carteBas[i][j] != null) {
                                                                         mains[i][k] = carteBas[i][j];
@@ -3543,10 +3531,9 @@
 
         //Fonction qui valide si le drop est accepter.
         function accepterDrop(event) {
-            console.log(calculer + 'a');
             if (calculer) {
                 calculer = false;
-                return true;  
+                return true;
             }
             if (carteDrag.coutRessources <= pointsRessourcesRestant[numeroJoueurActif]) {//Si on a assez de points de ressources.
                 // Si c'est un macroInvertebre ou un salmonide, il y a des conditions.
@@ -4072,7 +4059,6 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
-                        console.log(carteBas[numeroJoueurActif][i].condition.length);
                         for (var j = 0; j < carteBas[numeroJoueurActif][i].condition.length; j++) {
                             if (carteBas[numeroJoueurActif][i].condition[j] === habitats) {
                                 carteBas[numeroJoueurActif][i] = null;
@@ -4122,10 +4108,16 @@
                 ui.draggable.draggable('disable');
                 if ($(drop).children().length > 1) {
                     ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
-                    exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)]++;
+                    if (carteDrag.type != typeEnum.perturbation) {//Si c'est une perturbation, ne l'ajoute pas.
+                        exemplaireCarteBas[numeroJoueurActif][drop.id.substr(drop.id.length - 1)]++;
+                    }
+
                 } else {
-                    exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = 1;
+                    if (carteDrag.type != typeEnum.perturbation) {//Si c'est une perturbation, ne l'ajoute pas.
+                        exemplaireCarteBas[numeroJoueurActif][drop.id.substr(drop.id.length - 1)] = 1;
+                    }
                 }
+
                 //Partie qui change les données de la mains vers la partie du bas.
                 pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutRessources;
                 pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutRessources;
