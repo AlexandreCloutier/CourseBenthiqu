@@ -4876,6 +4876,9 @@
                             }
                         }
                     }
+                    if (tableauPasserTour[numeroJoueurActif] === true) {
+                        tableauPasserTour[numeroJoueurActif] = pointsRessourcesRestant[numeroJoueurActif];
+                    }
 
                     for (var i = mains[numeroJoueurActif].length - 1; i > 5; i--) {
                         mains[numeroJoueurActif].length--;
