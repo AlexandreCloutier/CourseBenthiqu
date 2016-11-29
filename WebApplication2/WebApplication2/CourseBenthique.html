@@ -674,7 +674,26 @@
         //Fonction qui sera appelé lors d'un clic sur le bouton sauvegarder
         function sauvegarderPartie(nom) {
             var paquetCarteJson = '[';
-            paquetCarte.forEach(function (item, index) {                
+            var paquetDechargeJson = '[';
+            var paquetInterventionJson = '[';
+            var mainsJson = '[';
+            var carteBasJson = '[';
+            var nomJoueurJson = '[';
+            var exemplaireCarteBasJson = '[';
+            var cartePerturbationJson = '[';
+            var tableauRetentionJson = '[';
+            var dificulteJson;
+            var tableauPasserTourJson = '[';
+            var nombreJoueurJson;
+            var numeroJoueurActifJson;
+            var tourJson;
+            var facteurRotationJson;
+            var deversementJson;
+            var tempsDeversementJson;
+            var numeroJoueurDeversementJson;
+
+            //Sauvegarde le paquet de cartes principales.
+            paquetCarte.forEach(function (item, index) {
                 paquetCarteJson += '{ "type":"' + item.type + '" , "nom":"' + item.nom + '" , "nomImage":"' + item.nomImage + '" , "coutRessources":' + item.coutRessources + '';
                 if (item.type === typeEnum.habitats) {
                     paquetCarteJson += ' , "habitats":"' + item.habitats + '" , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
@@ -683,7 +702,7 @@
                 } else if (item.type === typeEnum.bandeRiveraine) {
                     paquetCarteJson += ' , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
                 } else if (item.type === typeEnum.speciale || item.type === typeEnum.action || item.type === typeEnum.reglementation || item.type === typeEnum.intervention) {
-                    paquetCarteJson +=  ' }';
+                    paquetCarteJson += ' }';
                 } else if (item.type === typeEnum.perturbation) {
                     paquetCarteJson += ' , "tempsActif":' + item.tempsActif + ' }';
                 } else if (item.type === typeEnum.macroInvertebre) {
@@ -692,17 +711,138 @@
                 if (index != paquetCarte.length - 1) {
                     paquetCarteJson += ','
                 }
-
             });
             paquetCarteJson += ' ]';
-            var json = '{ "paquetCarte":' + paquetCarteJson + '}';
+
+            //Sauvegarde le paquet de cartes de la défausse.
+            paquetDecharge.forEach(function (item, index) {
+                paquetDechargeJson += '{ "type":"' + item.type + '" , "nom":"' + item.nom + '" , "nomImage":"' + item.nomImage + '" , "coutRessources":' + item.coutRessources + '';
+                if (item.type === typeEnum.habitats) {
+                    paquetDechargeJson += ' , "habitats":"' + item.habitats + '" , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
+                } else if (item.type === typeEnum.salmonide) {
+                    paquetDechargeJson += ' , "condition":"' + item.condition + '" }';
+                } else if (item.type === typeEnum.bandeRiveraine) {
+                    paquetDechargeJson += ' , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
+                } else if (item.type === typeEnum.speciale || item.type === typeEnum.action || item.type === typeEnum.reglementation || item.type === typeEnum.intervention) {
+                    paquetDechargeJson += ' }';
+                } else if (item.type === typeEnum.perturbation) {
+                    paquetDechargeJson += ' , "tempsActif":' + item.tempsActif + ' }';
+                } else if (item.type === typeEnum.macroInvertebre) {
+                    paquetDechargeJson += ' , "tolerance":' + item.tolerance + ' , "taille":' + item.taille + ' , "predateur":' + item.predateur + ' , "typeMacro":"' + item.typeMacro + '" , "condition":"' + item.condition + '" }';
+                }
+                if (index != paquetDecharge.length - 1) {
+                    paquetDechargeJson += ','
+                }
+            });
+            paquetDechargeJson += ' ]';
+
+            //Sauvegarde le paquet de cartes interventions.
+            paquetIntervention.forEach(function (item, index) {
+                paquetInterventionJson += '{ "type":"' + item.type + '" , "nom":"' + item.nom + '" , "nomImage":"' + item.nomImage + '" , "coutRessources":' + item.coutRessources + ' }';
+                if (index != paquetIntervention.length - 1) {
+                    paquetInterventionJson += ','
+                }
+            });
+            paquetInterventionJson += ' ]';
+
+            //Sauvegarde les mains de chaque joueur.
+            mains.forEach(function (item1, index1) {
+                mainsJson += '[';
+                mains[index1].forEach(function (item, index) {
+                    mainsJson += '{ "type":"' + item.type + '" , "nom":"' + item.nom + '" , "nomImage":"' + item.nomImage + '" , "coutRessources":' + item.coutRessources + '';
+                    if (item.type === typeEnum.habitats) {
+                        mainsJson += ' , "habitats":"' + item.habitats + '" , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
+                    } else if (item.type === typeEnum.salmonide) {
+                        mainsJson += ' , "condition":"' + item.condition + '" }';
+                    } else if (item.type === typeEnum.bandeRiveraine) {
+                        mainsJson += ' , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
+                    } else if (item.type === typeEnum.speciale || item.type === typeEnum.action || item.type === typeEnum.reglementation || item.type === typeEnum.intervention) {
+                        mainsJson += ' }';
+                    } else if (item.type === typeEnum.perturbation) {
+                        mainsJson += ' , "tempsActif":' + item.tempsActif + ' }';
+                    } else if (item.type === typeEnum.macroInvertebre) {
+                        mainsJson += ' , "tolerance":' + item.tolerance + ' , "taille":' + item.taille + ' , "predateur":' + item.predateur + ' , "typeMacro":"' + item.typeMacro + '" , "condition":"' + item.condition + '" }';
+                    }
+                    if (index != mains[index1].length - 1) {
+                        mainsJson += ','
+                    }
+                });
+                mainsJson += ' ]';
+                if (index1 != mains.length - 1) {
+                    mainsJson += ',';
+                }
+            });
+            mainsJson += ' ]';
+
+            //Sauvegarde le jeu de chaque joueur.
+            carteBas.forEach(function (item1, index1) {
+                carteBasJson += '[';
+                carteBas[index1].forEach(function (item, index) {
+                    carteBasJson += '{ "type":"' + item.type + '" , "nom":"' + item.nom + '" , "nomImage":"' + item.nomImage + '" , "coutRessources":' + item.coutRessources + '';
+                    if (item.type === typeEnum.habitats) {
+                        carteBasJson += ' , "habitats":"' + item.habitats + '" , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
+                    } else if (item.type === typeEnum.salmonide) {
+                        carteBasJson += ' , "condition":"' + item.condition + '" }';
+                    } else if (item.type === typeEnum.bandeRiveraine) {
+                        carteBasJson += ' , "perturber":' + item.perturber + ' , "tempsPerturber":' + item.tempsPerturber + ' }';
+                    } else if (item.type === typeEnum.speciale || item.type === typeEnum.action || item.type === typeEnum.reglementation || item.type === typeEnum.intervention) {
+                        carteBasJson += ' }';
+                    } else if (item.type === typeEnum.perturbation) {
+                        carteBasJson += ' , "tempsActif":' + item.tempsActif + ' }';
+                    } else if (item.type === typeEnum.macroInvertebre) {
+                        carteBasJson += ' , "tolerance":' + item.tolerance + ' , "taille":' + item.taille + ' , "predateur":' + item.predateur + ' , "typeMacro":"' + item.typeMacro + '" , "condition":"' + item.condition + '" }';
+                    }
+                    if (index != carteBas[index1].length - 1) {
+                        carteBasJson += ','
+                    }
+                });
+                carteBasJson += ' ]';
+                if (index1 != carteBas.length - 1) {
+                    carteBasJson += ',';
+                }
+            });
+            carteBasJson += ' ]';
+
+            //Sauvegarder le nom des joueurs
+            nomJoueur.forEach(function (item, index) {
+                nomJoueurJson += '{ "nom":"' + item + '" }';
+                if(index != nomJoueur.length - 1) {
+                    nomJoueurJson += ','
+                }
+            });
+            nomJoueurJson += ' ]';
+
+            //Sauvegarder les exemplaires des cartes
+            exemplaireCarteBas.forEach(function (item1, index1) {
+                exemplaireCarteBasJson += '[';
+                exemplaireCarteBas[index1].forEach(function (item, index) {
+                    exemplaireCarteBasJson += '{ "exemplaire":' + item + ' }';
+                    if (index != exemplaireCarteBas[index1].length - 1) {
+                        exemplaireCarteBasJson += ',';
+                    }
+                });
+                exemplaireCarteBasJson += ' ]';
+                if (index1 != exemplaireCarteBas.length - 1) {
+                    exemplaireCarteBasJson += ',';
+                }
+            });
+            exemplaireCarteBasJson += ' ]';
+
+            var json = '{ "paquetCarte":' + paquetCarteJson + ',' +
+                '"paquetDecharge":' + paquetDechargeJson + ',' +
+                '"paquetIntervention":' + paquetInterventionJson + ',' +
+                '"mains":' + mainsJson + ',' +
+                '"carteBas":' + carteBasJson + ',' +
+                '"nomJoueur":' + nomJoueurJson + ',' +
+                '"exemplaireCarteBas":' + exemplaireCarteBasJson + '}';
+            console.log(json);
             var prout = JSON.parse(json);
             console.log(prout);
-            console.log(paquetCarte);
             var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
-            saveAs(blob, nom + '.asb');
+            saveAs(blob, nom + '.jcb');
         }
 
+        //Fonction appelé lors d'un clic sur le boutton charger
         function chargerPartie(file) {
             var fileReader = new FileReader();
             fileReader.readAsText(file[0]);
@@ -747,7 +887,7 @@
             var labelText = document.createElement('label');
             labelText.id = 'labelText';
             labelText.className = 'labelText';
-            labelText.innerHTML = '.Asb';
+            labelText.innerHTML = '.jcb';
             divOptions.appendChild(labelText);
 
             var buttonSauvegarder = document.createElement('button');
@@ -3479,7 +3619,7 @@
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.dechets) {
-                                        
+
                                         return true;
                                     }
                                 }
@@ -3492,7 +3632,7 @@
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
-                                        
+
                                         return true;
                                     }
                                 }
