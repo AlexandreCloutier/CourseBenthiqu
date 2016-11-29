@@ -3958,6 +3958,7 @@
                 ui.draggable.css('left', '0px');
                 ui.draggable.draggable('disable');
                 if ($(drop).children().length > 1) {
+                    ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
                     exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)]++;
                 } else {
                     exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = 1;
@@ -4883,7 +4884,7 @@
 
         //Fonction qui "update" le jeu.
         function updatePointsRessourcesJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 3;
+            pointsRessourcesBase[numeroJoueurActif] = 200;
             if (tableauRetention[numeroJoueurActif] != null) {
                 if (tableauRetention[numeroJoueurActif] === true) {
                     pointsRessourcesBase[numeroJoueurActif] += pointsRessourcesRestant[numeroJoueurActif];
