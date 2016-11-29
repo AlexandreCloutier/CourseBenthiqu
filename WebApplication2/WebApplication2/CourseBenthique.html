@@ -10,7 +10,8 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="scripts/FileSaver.min.js"></script>
     <script>
-
+        //TODO: pecheur.
+        //TODO: pris sur le fait, lorsque le pop-up apparais, parfois il ne dits pas que c'est pour nous offrir la possibilité d'utiliser la carte.s
         /* ------------------enum---------------------  */
         var typeEnum = {
             'habitats': 'habitats',
@@ -214,7 +215,7 @@
             bandeRiveraineEroder = [];
             //Partie pour la carte naturalisation.
             naturalisation = false;
-            //           etape = 1; *********************************************************************** PAS UTILE JE CROIT***********
+            calculer = false;
         }
 
         //Fonction qui va créer les diverse éléments du fond.
@@ -1529,6 +1530,9 @@
                             if (nombreJoueur > 3) {
                                 $('.emplacementJoueurD').removeClass('imageCarteJeuErosion');
                             }
+
+                            erosion = false;
+                            etapeErosion = 1;
                         } else {
                             var positionLibre = trouverPositionLibre();
                             var numeroLettrePosition = positionLibre.substr(positionLibre.length - 2);
@@ -1578,6 +1582,8 @@
                             }
                         }
 
+                        erosion = false;
+                        etapeErosion = 1;
                         griserZone(false, false, false);
                     } else {
                         popUpAvertissement('Vous devez sélectionner une carte habitats pour la transformer en sable.');
@@ -3537,22 +3543,25 @@
 
         //Fonction qui valide si le drop est accepter.
         function accepterDrop(event) {
-
-            if (carteDrag.coutResources <= pointsRessourcesRestant[numeroJoueurActif]) {//Si on a assez de points de ressources.
-                calculer = true;
+            console.log(calculer + 'a');
+            if (calculer) {
+                calculer = false;
+                return true;  
+            }
+            if (carteDrag.coutRessources <= pointsRessourcesRestant[numeroJoueurActif]) {//Si on a assez de points de ressources.
                 // Si c'est un macroInvertebre ou un salmonide, il y a des conditions.
                 if (carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.salmonide) {
                     if (verifierCondition(carteDrag)) {
                         if (carteDrag.predateur > 0) {
                             if (possibleManger()) {//Si il y a un macro-invertébrés mangeable.
-
+                                calculer = true;
                                 return true;
                             } else {
                                 popUpErreur('Un adversaire doit avoir une carte avec une taille inférieur au prédateur pour qu\'il est quelque choses à manger');
                                 return false;
                             }
                         } else {
-
+                            calculer = true;
                             return true;
                         }
                     } else {
@@ -3562,6 +3571,7 @@
                 } else if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.intervention || carteDrag.type === typeEnum.bandeRiveraine) {
                     if (carteDrag.type === typeEnum.habitats) {//Si on joue un habitats.
                         if (verifierNombreHabitats(numeroJoueurActif, 8)) {//Si on a pas 8 habitats déjà en jeu.
+                            calculer = true;
                             return true;
                         } else {
                             popUpAvertissement('Vous ne pouvez pas avoir plus de 8 habitats en jeu.');
@@ -3569,12 +3579,14 @@
                         }
                     } else if (carteDrag.type === typeEnum.bandeRiveraine) {//Si on joue une bande riveraine.
                         if (verifierNombreBandeRiveraine(numeroJoueurActif, 3)) {//Si on a pas 3 bande riveraine en jeu.
+                            calculer = true;
                             return true;
                         } else {
                             popUpAvertissement('Vous ne pouvez pas avoir plus de 3 bande riveraine en jeu.');
                             return false;
                         }
                     } else if (carteDrag.type === typeEnum.intervention) {//Si on joue une intervention.
+                        calculer = true;
                         return true;
                     }
                 } else if (carteDrag.type === typeEnum.perturbation) {//Si on joue une perturbation.
@@ -3592,6 +3604,7 @@
                         if (!verifier) {
                             verifier = true;
                             if (!deversement) {
+                                calculer = true;
                                 return true;
                             } else {
                                 popUpAvertissement('Un déversement aura déjà lieu à la fin du tour du joueur: ' + nomJoueur[numeroJoueurDeversement] + '.');
@@ -3599,12 +3612,14 @@
                             }
                         } else {
                             verifier = false;
+                            calculer = true;
                             return true;
                         }
                     }
                     var message = verifierConditionPerturbation(event);
 
                     if (message === 'ok') {
+                        calculer = true;
                         return true;
                     } else {
                         popUpAvertissement(message);
@@ -3612,6 +3627,7 @@
                     }
 
                 } else if (carteDrag.type === typeEnum.reglementation) {//Carte réglementation.
+                    calculer = true;
                     return true;
                 } else if (carteDrag.type === typeEnum.action) {//Carte action.
                     if (carteDrag.nom === nomEnum.corveNettoyage) {
@@ -3619,7 +3635,7 @@
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.dechets) {
-
+                                        calculer = true;
                                         return true;
                                     }
                                 }
@@ -3632,7 +3648,7 @@
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
-
+                                        calculer = true;
                                         return true;
                                     }
                                 }
@@ -3641,6 +3657,7 @@
                         for (var i = 0; i < paquetIntervention.length; i++) {
                             if (paquetIntervention[i] != null) {
                                 if (paquetIntervention[i].nom === nomEnum.amenageArbre || paquetIntervention[i].nom === nomEnum.amenageArbustes || paquetIntervention[i].nom === nomEnum.amenageHerbace) {
+                                    calculer = true;
                                     return true;
                                 }
                             }
@@ -3653,6 +3670,7 @@
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
                                     if (cartePerturbation[i][j].nom === nomEnum.erosion) {
+                                        calculer = true;
                                         return true;
                                     }
                                 }
@@ -3661,6 +3679,7 @@
                         for (var i = 0; i < paquetIntervention.length; i++) {
                             if (paquetIntervention[i] != null) {
                                 if (paquetIntervention[i].nom === nomEnum.amenageFosse || paquetIntervention[i].nom === nomEnum.amenageGalets || paquetIntervention[i].nom === nomEnum.amenageGravier || paquetIntervention[i].nom === nomEnum.amenageRapides || paquetIntervention[i].nom === nomEnum.amenageSable) {
+                                    calculer = true;
                                     return true;
                                 }
                             }
@@ -3675,6 +3694,7 @@
                             popUpAvertissement('Vous n\'avez plus de points ressources à garder.');
                             return false;
                         }
+                        calculer = true;
                         return true;
                     } else if (carteDrag.nom === nomEnum.predation) {//Si c'est une carte de prédation.
                         for (var i = 0; i < carteBas[numeroJoueurActif].length; i++) {
@@ -3688,6 +3708,7 @@
                                                 for (var k = 0; k < carteBas[j].length; k++) {
                                                     if (carteBas[j][k] != null) {
                                                         if (carteBas[j][k].type === typeEnum.macroInvertebre && carteBas[j][k].taille < taillePredateur) {
+                                                            calculer = true;
                                                             return true;
                                                         }
                                                     }
@@ -3713,6 +3734,7 @@
                                 }
                             }
                             if (compteur != 0) {
+                                calculer = true;
                                 return true;
                             }
                             popUpAvertissement('Les mains de tout vos adversaires sont vide.');
@@ -3724,6 +3746,7 @@
                         popUpAvertissement('Cette carte ne peut être jouée que lorsqu\'un adversaire joue une carte Perturbation.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.accumulation) {//Si c'est la carte accumlarion.
+                        calculer = true;
                         return true;
                     } else if (carteDrag.nom === nomEnum.emergence) {//Si c'est la carte émergence.
                         for (var i = 0; i < nombreJoueur; i++) {
@@ -3731,6 +3754,7 @@
                                 if (carteBas[i][j] != null) {
                                     if (carteBas[i][j].type === typeEnum.macroInvertebre) {
                                         if (carteBas[i][j].typeMacro === typeMacroEnum.ephemeroptere || carteBas[i][j].typeMacro === typeMacroEnum.trichoptere || carteBas[i][j].typeMacro === typeMacroEnum.plecoptere || carteBas[i][j].typeMacro === typeMacroEnum.odonate || carteBas[i][j].typeMacro === typeMacroEnum.diptere) {
+                                            calculer = true;
                                             return true;
                                         }
                                     }
@@ -3763,6 +3787,7 @@
                         }
                         return true;
                     } else if (carteDrag.nom === nomEnum.crueSoudaine) {//Si c'est la carte crue soudaine.
+                        calculer = true;
                         return true;
                     } else if (carteDrag.nom === nomEnum.zonage) {//Si c'est la carte zonage.
                         for (var i = 0; i < carteBas[numeroJoueurActif].length; i++) {
@@ -3773,6 +3798,7 @@
                                             for (var k = 0; k < carteBas[j].length; k++) {
                                                 if (carteBas[j][k] != null) {
                                                     if (carteBas[j][k].type === typeEnum.habitats) {
+                                                        calculer = true;
                                                         return true;
                                                     }
                                                 }
@@ -3787,7 +3813,6 @@
                         }
                         popUpAvertissement('Vous ne possédez pas d\'habitat.');
                         return false;
-
                     }
                 }
             } else {
@@ -4096,6 +4121,7 @@
                 ui.draggable.css('left', '0px');
                 ui.draggable.draggable('disable');
                 if ($(drop).children().length > 1) {
+                    ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
                     exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)]++;
                 } else {
                     exemplaireCarteBas[numeroJoueurActif][event.target.id.substr(event.target.id.length - 1)] = 1;
@@ -4845,10 +4871,7 @@
                 var id;
                 id = $(event).attr('id').substr($(event).attr('id').length - 1);
                 if (bonneZoneDrop(event)) {
-                    if (accepterDrop(event) || calculer) {
-                        if (calculer) {
-                            calculer = false;
-                        }
+                    if (accepterDrop(event)) {
                         if ($(event).attr('id') != 'plateau') {
                             if ($(event).children().length >= 1) {
                                 if (carteDrag.type === typeEnum.perturbation) {
@@ -5024,7 +5047,7 @@
 
         //Fonction qui "update" le jeu.
         function updatePointsRessourcesJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 3;
+            pointsRessourcesBase[numeroJoueurActif] = 200;
             if (tableauRetention[numeroJoueurActif] != null) {
                 if (tableauRetention[numeroJoueurActif] === true) {
                     pointsRessourcesBase[numeroJoueurActif] += pointsRessourcesRestant[numeroJoueurActif];
