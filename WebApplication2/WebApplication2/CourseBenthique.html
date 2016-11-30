@@ -183,6 +183,9 @@
         var positionCarte2;
         var lettreJoueur2;
 
+        //Vairable qui dits si les pop-up sont actif.
+        var popUpActif;
+
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
@@ -219,6 +222,9 @@
             //Partie pour la carte naturalisation.
             naturalisation = false;
             calculer = false;
+
+            //Pop-up sont actif au début du jeu.
+            popUpActif = true;
         }
 
         //Fonction qui va créer les diverse éléments du fond.
@@ -978,6 +984,18 @@
             option1.innerHTML = '1280 x 720';
             dropDownReso.appendChild(option1);
 
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'popUpActif"';
+            checkbox.value = "value";
+            checkbox.id = 'cbPopUp';
+            divOptions.appendChild(checkbox);
+
+            var labelCB = document.createElement('label')
+            labelCB.htmlFor = 'cbPopUp';
+            labelCB.appendChild(document.createTextNode('Désactiver les pop-ups'));
+            divOptions.appendChild(labelCB);
+
             var textBoxSauvegarder = document.createElement('input');
             textBoxSauvegarder.type = 'text';
             textBoxSauvegarder.id = 'textBoxSauvegarder';
@@ -1005,6 +1023,15 @@
                 resizable: false,
                 buttons: [{
                     text: 'Valider',
+                    click: function () {
+                        console.log($('#cbPopUp').is(":checked"));
+                        if ($('#cbPopUp').is(":checked")) {
+                            popUpActif = false;
+                        } else {
+                            popUpActif = true;
+                        }
+                        $(this).dialog('close');
+                    }
                 }, {
                     text: 'Annuler',
                     click: function () {
@@ -5040,53 +5067,59 @@
 
         //Fonction pour appeler le pop-up d'erreur.
         function popUpErreur(texte) {
-            $('#divTexteErreur').text(texte);
-            $('#divErreur').dialog({
-                classes: {
-                    'ui-dialog': 'ui-state-error no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 600,
-                hide: 'fade',
-                show: 'fade'
-            });
+            if (popUpActif) {
+                $('#divTexteErreur').text(texte);
+                $('#divErreur').dialog({
+                    classes: {
+                        'ui-dialog': 'ui-state-error no-close ui-corner-all',
+                        'ui-dialog-titlebar': 'no-header'
+                    },
+                    draggable: false,
+                    resizable: false,
+                    height: 80,
+                    width: 600,
+                    hide: 'fade',
+                    show: 'fade'
+                });
+            }
         }
 
         //Fonction pour appeler le pop-up d'avertissement.
         function popUpAvertissement(texte) {
-            $('#divTexteErreur').text(texte);
-            $('#divErreur').dialog({
-                classes: {
-                    'ui-dialog': 'ui-state-highlight no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 600,
-                hide: 'fade',
-                show: 'fade'
-            });
+            if (popUpActif) {
+                $('#divTexteErreur').text(texte);
+                $('#divErreur').dialog({
+                    classes: {
+                        'ui-dialog': 'ui-state-highlight no-close ui-corner-all',
+                        'ui-dialog-titlebar': 'no-header'
+                    },
+                    draggable: false,
+                    resizable: false,
+                    height: 80,
+                    width: 600,
+                    hide: 'fade',
+                    show: 'fade'
+                });
+            }
         }
 
         //Fonction pour appeler le pop-up de confirmation.
         function popUpConfirmation(texte) {
-            $('#divTexteErreur').text(texte);
-            $('#divErreur').dialog({
-                classes: {
-                    'ui-dialog': 'popUpConfirmation no-close ui-state-highlight ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 80,
-                width: 600,
-                hide: 'fade',
-                show: 'fade'
-            });
+            if (popUpActif) {
+                $('#divTexteErreur').text(texte);
+                $('#divErreur').dialog({
+                    classes: {
+                        'ui-dialog': 'popUpConfirmation no-close ui-state-highlight ui-corner-all',
+                        'ui-dialog-titlebar': 'no-header'
+                    },
+                    draggable: false,
+                    resizable: false,
+                    height: 80,
+                    width: 600,
+                    hide: 'fade',
+                    show: 'fade'
+                });
+            }
         }
 
         //Fonction qui appelle un pop-up qui indique le debut du tour d'un joueur
