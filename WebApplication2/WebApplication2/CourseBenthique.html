@@ -5406,6 +5406,58 @@
                 }
             }
         }
+
+        //Fonction qui va update le plateau
+        function updatePlateau() {
+            //Crée les cartes qui sont sur le platea.
+            for (var i = 0; i < 10; i++) {//Boucle dans les 10 emplacements.
+                for (var j = 0; j < nombreJoueur; j++) {//Boucle pour chaque joueur.
+                    $('#emplacementJoueur' + lettre + i).children().remove();
+
+                    if (carteBas[j][i] != null) {//Si la carte n'est pas null.
+                        for (var k = 0; k < exemplaireCarteBas; k++) {//Boucle dans le nombre d'exemplaire.
+                            var image = document.createElement('img');
+                            image.className = 'imageCarteJeu';
+                            image.setAttribute('src', 'ressources/' + carteBas[j][i].nomImage);
+                            image.setAttribute('margin-top', k * 10 + 'px');
+
+                            var lettre = lettreJoueur(j);
+                            $('#emplacementJoueur' + lettre + i).append(image);
+                        }
+                    } else {
+                        $('#emplacementJoueur' + lettre + i).children().remove();
+                    }
+                }
+            }
+
+            for (var i = 0; i < 10; i++) {//Boucle pour chaque emplacements.
+                for (var j = 0; j < nombreJoueur; j++) {//Boucle pour chaque joueur
+                    if (carteBas[j][i] != null) {//Si la carte n'est pas null
+                        if (carteBas[j][i].perturber) {//Si la carte est perturber.
+                            var lettre = lettreJoueur(j);
+                            $('#emplacementJoueur' + lettre + i).addClass('ui-perturber-highlight');//Ajoute la classe perturber.
+
+                            if (cartePerturbation[j][i] != null) {//Si il y a une carte perturbation à ajouter par dessus.
+                                var image = document.createElement('img');
+                                image.className = 'imageCarteJeu';
+                                image.setAttribute('src', 'ressources/' + cartePerturbation[j][i].nomImage);
+                                image.setAttribute('margin-top', ((exemplaireCarteBas[j][i] * 10) + 10) + 'px');
+
+                                $('#emplacementJoueur' + lettre + i).append(image);
+                            }
+                        }
+                    }
+                }
+            }
+
+            $(function () {
+                $('.imageCarteJeu').on({
+                    click: function (event, ui) {
+                        onClickImage($(this).parent().attr("id"), ui);
+                    }
+                })
+            });
+        }
     </script>
 </body>
 </html>
