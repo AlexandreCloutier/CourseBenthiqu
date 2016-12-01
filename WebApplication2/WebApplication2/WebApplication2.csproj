@@ -125,6 +125,7 @@
     <Content Include="ressources\chironomidae.png" />
     <Content Include="ressources\corveNettoyage.png" />
     <Content Include="ressources\corydalidae.png" />
+    <Content Include="ressources\credits.png" />
     <Content Include="ressources\crueSoudaine.png" />
     <Content Include="ressources\decapoda.png" />
     <Content Include="ressources\dechets.png" />
