@@ -189,8 +189,8 @@
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
-            instantierTableaux();//Instantie tout les tableaux.
-            instantierPaquetCarte();//Crée le paquet de carte de départ.
+            instancierTableaux();//instancie tout les tableaux.
+            instancierPaquetCarte();//Crée le paquet de carte de départ.
             updatePointsRessourcesJeu();//Update les points ressources.
             creerElementFond();//Crée touts les éléments du jeu.
             updateAffichageImage();//Update l'affichage de toutes les images.
@@ -234,26 +234,26 @@
             calculerPoints();//Calcul les points de départ.
             creerPartieDroite();//Crée la partie de droite.
             creerMain();//Crée les divisions de la main.
-            instantierDivPopUp();//Crée les pop-up pour plus tard.
+            instancierDivPopUp();//Crée les pop-up pour plus tard.
         }
 
         //Fonction qui s'occupe de créer le paquet de carte et de le mélanger au début de la partie.
-        function instantierPaquetCarte() {
+        function instancierPaquetCarte() {
             paquetCarte = creerPaquetCarte(difficulte);//Remplie le paquet de carte selon la difficulté.
             melangerPaquetCarte(paquetCarte);//Mélange le paquet de carte.
             remplirMain();//Remplie les tableau de main de chaque joueur.
         }
 
-        //Fonction qui appelle les fonctions qui instantie les différents tableaux.
-        function instantierTableaux() {
-            instantierTableauJoueur();
-            instantierTableauEmplacementBas();
-            instantierTableauPointsRessources();
-            instantierTableauExemplaire();
-            instantierTableauPerturbation();
+        //Fonction qui appelle les fonctions qui instancie les différents tableaux.
+        function instancierTableaux() {
+            instancierTableauJoueur();
+            instancierTableauEmplacementBas();
+            instancierTableauPointsRessources();
+            instancierTableauExemplaire();
+            instancierTableauPerturbation();
+            pointsJoueur = [];
             paquetDecharge = [];
             paquetIntervention = [];
-            pointsJoueur = new Array(nombreJoueur);
             tableauRetention = new Array(nombreJoueur);
             for (var i = 0; i < tableauRetention.length; i++) {
                 tableauRetention[i] = 0;
@@ -339,7 +339,6 @@
             nomJoueur = new Array();
             ageJoueur = new Array();
             pointsJoueur = new Array();
-
             difficulte = $('#dropDownDifficulte').val();
 
             if ($('#dropDownNombreJoueur').val() >= '2') {//Si 2 joueurs.
@@ -875,7 +874,7 @@
             //Sauvegarde les cartes perturbation.
             cartePerturbation.forEach(function (item1, index1) {
                 cartePerturbationJson += '[';
-                exemplaireCarteBas[index1].forEach(function (item, index) {
+                cartePerturbation[index1].forEach(function (item, index) {
                     if (item != null) {
                         cartePerturbationJson += '{ "type":"' + item.type + '" , "nom":"' + item.nom + '" , "nomImage":"' + item.nomImage + '" , "coutRessources":' + item.coutRessources + ' , "tempsActif":' + item.tempsActif + ' }';
                     } else {
@@ -944,6 +943,7 @@
                 '"carteBas":' + carteBasJson + ',' +
                 '"nomJoueur":' + nomJoueurJson + ',' +
                 '"exemplaireCarteBas":' + exemplaireCarteBasJson + ',' +
+                '"cartePerturbation":' + cartePerturbationJson + ',' +
                 '"tableauRetention":' + tableauRetentionJson + ',' +
                 '"difficulte":' + dificulteJson + ',' +
                 '"tableauPasserTour":' + tableauPasserTourJson + ',' +
@@ -954,7 +954,7 @@
                 '"deversement":' + deversementJson + ',' +
                 '"tempsDeversement":' + tempsDeversementJson + ',' +
                 '"numeroJoueurDeversement":' + numeroJoueurDeversementJson + ',' +
-                '"pointRessourcesUtiliser":' + pointsRessourcesUtiliserJson + '}';
+                '"pointsRessourcesUtiliser":' + pointsRessourcesUtiliserJson + '}';
             var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
             saveAs(blob, nom + '.jcb');
         }
@@ -969,6 +969,7 @@
                 json = JSON.parse(fileReader.result);
 
                 //Reinstancie les variables.
+                nomJoueur = [];
                 difficulte = json.difficulte;
                 nombreJoueur = json.nombreJoueur;
                 numeroJoueurActif = json.numeroJoueurActif;
@@ -978,7 +979,7 @@
                 tempsDeversement = json.tempsDeversement;
                 numeroJoueurDeversement = json.numeroJoueurDeversement;
                 paquetCarte = [];
-                instantierTableaux();
+                instancierTableaux();
 
                 //Recrée la paquet de jeu.
                 json.paquetCarte.forEach(function (item, index) {
@@ -1041,6 +1042,7 @@
                 //Recrée le nom des joueurs.
                 json.nomJoueur.forEach(function (item, index) {
                     if (item != null) {
+                        console.log(index + ',' + item);
                         nomJoueur[index] = item;
                     }
                 });
@@ -1122,10 +1124,13 @@
                 });
 
                 //Recrée l'affichage.
-                updatePointsRessourcesJeu();
+                $('#menuPrincipal').remove();
+                //TODO: REGLER LE PROB DES POINTS RESSOURCES
                 pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
+                updatePointsRessourcesJeu();
                 creerElementFond();
                 updateAffichageImage();
+                updatePlateau();
             };
         }
 
@@ -1218,8 +1223,8 @@
             });
         }
 
-        //Fonction qui va instantier et remplir le tableau des points de ressources.
-        function instantierTableauPointsRessources() {
+        //Fonction qui va instancier et remplir le tableau des points de ressources.
+        function instancierTableauPointsRessources() {
             pointsRessourcesBase = new Array(nombreJoueur);
             pointsRessourcesBase[0] = 6;
             pointsRessourcesBase[1] = 6;
@@ -1236,8 +1241,8 @@
             }
         }
 
-        //Fonction qui va instantier le tableau des pertubations.
-        function instantierTableauPerturbation() {
+        //Fonction qui va instancier le tableau des pertubations.
+        function instancierTableauPerturbation() {
             cartePerturbation = new Array(nombreJoueur);
             cartePerturbation[0] = [null, null, null, null, null, null, null, null, null, null];
             cartePerturbation[1] = [null, null, null, null, null, null, null, null, null, null];
@@ -1249,8 +1254,8 @@
             }
         }
 
-        //Fonction qui va instantier le tableau bi-dimensionel de mains.
-        function instantierTableauJoueur() {
+        //Fonction qui va instancier le tableau bi-dimensionel de mains.
+        function instancierTableauJoueur() {
             mains = new Array(nombreJoueur);
 
             //Minimum de 2 joueurs.
@@ -1265,8 +1270,8 @@
             }
         }
 
-        //Fonction qui va instantier le tableau des exemplaire du bas.
-        function instantierTableauExemplaire() {
+        //Fonction qui va instancier le tableau des exemplaire du bas.
+        function instancierTableauExemplaire() {
             exemplaireCarteBas = new Array(nombreJoueur);
             exemplaireCarteBas[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             exemplaireCarteBas[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -1279,8 +1284,8 @@
             }
         }
 
-        //Fonction qui va instantier le tableau bi-dimensionel d'emplacement bas.
-        function instantierTableauEmplacementBas() {
+        //Fonction qui va instancier le tableau bi-dimensionel d'emplacement bas.
+        function instancierTableauEmplacementBas() {
             carteBas = new Array(4);
 
             //Minimum de 2 joueurs.
@@ -1296,7 +1301,7 @@
         }
 
         //Fonction qui creer la div qui servira pour les pop-ups d'erreur.
-        function instantierDivPopUp() {
+        function instancierDivPopUp() {
             //Div Erreur
             var divErreur = document.createElement('div');
             divErreur.id = 'divErreur';
