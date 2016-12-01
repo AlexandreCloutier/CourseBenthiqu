@@ -253,7 +253,7 @@
             instantierTableauPerturbation();
             paquetDecharge = [];
             paquetIntervention = [];
-            pointsJoueur = new Array(6);
+            pointsJoueur = new Array(nombreJoueur);
             tableauRetention = new Array(nombreJoueur);
             for (var i = 0; i < tableauRetention.length; i++) {
                 tableauRetention[i] = 0;
@@ -713,6 +713,7 @@
             var deversementJson;
             var tempsDeversementJson;
             var numeroJoueurDeversementJson;
+            var pointsRessourcesUtiliserJson;
 
             //Sauvegarde le paquet de cartes principales.
             paquetCarte.forEach(function (item, index) {
@@ -933,6 +934,9 @@
             //Sauvegarde le numero du joueur qui à joué deversement;
             numeroJoueurDeversementJson = numeroJoueurDeversement;
 
+            //Sauvegarde les points ressources restant du joueur actif.
+            pointsRessourcesUtiliserJson = pointsRessourcesUtiliser[numeroJoueurActif];
+
             var json = '{ "paquetCarte":' + paquetCarteJson + ',' +
                 '"paquetDecharge":' + paquetDechargeJson + ',' +
                 '"paquetIntervention":' + paquetInterventionJson + ',' +
@@ -949,7 +953,8 @@
                 '"facteurRotation":' + facteurRotationJson + ',' +
                 '"deversement":' + deversementJson + ',' +
                 '"tempsDeversement":' + tempsDeversementJson + ',' +
-                '"numeroJoueurDeversement":' + numeroJoueurDeversementJson + '}';
+                '"numeroJoueurDeversement":' + numeroJoueurDeversementJson + ',' +
+                '"pointRessourcesUtiliser":' + pointsRessourcesUtiliserJson + '}';
             var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
             saveAs(blob, nom + '.jcb');
         }
@@ -957,9 +962,171 @@
         //Fonction appelé lors d'un clic sur le boutton charger
         function chargerPartie(file) {
             var fileReader = new FileReader();
-            fileReader.readAsText(file[0]);
-            fileReader.onload = function (e) { console.log(JSON.parse(fileReader.result)) };
+            var json;
 
+            fileReader.readAsText(file[0]);
+            fileReader.onload = function (e) {
+                json = JSON.parse(fileReader.result);
+
+                //Reinstancie les variables.
+                difficulte = json.difficulte;
+                nombreJoueur = json.nombreJoueur;
+                numeroJoueurActif = json.numeroJoueurActif;
+                tour = json.tour;
+                facteurRotation = json.facteurRotation;
+                deversement = json.deversement;
+                tempsDeversement = json.tempsDeversement;
+                numeroJoueurDeversement = json.numeroJoueurDeversement;
+                paquetCarte = [];
+                instantierTableaux();
+
+                //Recrée la paquet de jeu.
+                json.paquetCarte.forEach(function (item, index) {
+                    if (item != null) {
+                        var params;
+                        if (item.type === typeEnum.habitats) {
+                            params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                        } else if (item.type === typeEnum.macroInvertebre) {
+                            var cond = item.condition.split(',');
+                            params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                        } else if (item.type === typeEnum.perturbation) {
+                            params = { tempsActif: item.tempsActif };
+                        } else if (item.type === typeEnum.bandeRiveraine) {
+                            params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                        } else if (item.type === typeEnum.salmonide) {
+                            var cond = item.condition.split(',');
+                            params = { condition: cond };
+                        }
+                        var carte = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                        paquetCarte.push(carte);
+                    }
+                });
+
+                //Recrée le paquet de la défausse.
+                json.paquetDecharge.forEach(function (item, index) {
+                    if (item != null) {
+                        var params;
+                        if (item.type === typeEnum.habitats) {
+                            params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                        } else if (item.type === typeEnum.macroInvertebre) {
+                            var cond = item.condition.split(',');
+                            params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                        } else if (item.type === typeEnum.perturbation) {
+                            params = { tempsActif: item.tempsActif };
+                        } else if (item.type === typeEnum.bandeRiveraine) {
+                            params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                        } else if (item.type === typeEnum.salmonide) {
+                            var cond = item.condition.split(',');
+                            params = { condition: cond };
+                        }
+                        paquetDecharge[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                    } else {
+                        paquetDecharge[index] = null;
+                    }
+                });
+
+                //Recrée le paquet de cartes Interventions
+                json.paquetIntervention.forEach(function (item, index) {
+                    if (item != null) {
+                        var params;
+                        if (item.nom === nomEnum.amenageFosse || item.nom === nomEnum.amenageGalets || item.nom === nomEnum.amenageGravier || item.nom === nomEnum.amenageRapides || item.nom === nomEnum.amenageSable) {
+                            params = { habitats: item.habitats };
+                        }
+                        paquetIntervention[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                    } else {
+                        paquetIntervention[index] = null;
+                    }
+                });
+
+                //Recrée le nom des joueurs.
+                json.nomJoueur.forEach(function (item, index) {
+                    if (item != null) {
+                        nomJoueur[index] = item;
+                    }
+                });
+
+                //Récrée le tableau rétention
+                json.tableauRetention.forEach(function (item, index) {
+                    if (item != null) {
+                        tableauRetention[index] = item;
+                    }
+                });
+
+                //Récrée le tableau Passer Son Tour.
+                json.tableauPasserTour.forEach(function (item, index) {
+                    if (item != null) {
+                        tableauPasserTour = item;
+                    }
+                });
+
+                //Recrée la main de chaque joueur.
+                json.mains.forEach(function (item1, index1) {
+                    json.mains[index1].forEach(function (item, index) {
+                        if (item != null) {
+                            var params;
+                            if (item.type === typeEnum.habitats) {
+                                params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                            } else if (item.type === typeEnum.macroInvertebre) {
+                                var cond = item.condition.split(',');
+                                params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                            } else if (item.type === typeEnum.perturbation) {
+                                params = { tempsActif: item.tempsActif };
+                            } else if (item.type === typeEnum.bandeRiveraine) {
+                                params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                            } else if (item.type === typeEnum.salmonide) {
+                                var cond = item.condition.split(',');
+                                params = { condition: cond };
+                            }
+                            mains[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                        }
+                    });
+                });
+
+                //Recrée le jeu de chaque joueur.
+                json.carteBas.forEach(function (item1, index1) {
+                    json.carteBas[index1].forEach(function (item, index) {
+                        if (item != null) {
+                            var params;
+                            if (item.type === typeEnum.habitats) {
+                                params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                            } else if (item.type === typeEnum.macroInvertebre) {
+                                var cond = item.condition.split(',');
+                                params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                            } else if (item.type === typeEnum.perturbation) {
+                                params = { tempsActif: item.tempsActif };
+                            } else if (item.type === typeEnum.bandeRiveraine) {
+                                params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                            } else if (item.type === typeEnum.salmonide) {
+                                var cond = item.condition.split(',');
+                                params = { condition: cond };
+                            }
+                            carteBas[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                        }
+                    });
+                });
+
+                //Recrée le tableau des cartes perturbations.
+                json.cartePerturbation.forEach(function (item1, index1) {
+                    json.cartePerturbation[index1].forEach(function (item, index) {
+                        if (item != null) {
+                             cartePerturbation[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, { tempsActif: item.tempsActif });
+                        }
+                    });
+                });
+
+                //Recrée le tableau des exemplaires des cartes.
+                json.exemplaireCarteBas.forEach(function (item1, index1) {
+                    json.exemplaireCarteBas[index1].forEach(function (item, index) {
+                        exemplaireCarteBas[index1][index] = item;
+                    });
+                });
+
+                //Recrée l'affichage.
+                updatePointsRessourcesJeu();
+                pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
+                creerElementFond();
+                updateAffichageImage();
+            };
         }
 
         //Fonction appelé lors d'un clic sur le bouton Options en jeu
