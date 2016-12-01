@@ -385,14 +385,21 @@
             buttonNouvellePartie.className = 'buttonMenuPrincipal';
             buttonNouvellePartie.innerHTML = 'Nouvelle partie';
             buttonNouvellePartie.onclick = lancerOptionPartie;
-            buttonNouvellePartie.style.bottom = '215px';
+            buttonNouvellePartie.style.bottom = '155px';
             $('#menuPrincipal').append(buttonNouvellePartie);
+
+            //Div Règle
+            var divCredits = document.createElement('div');
+            divCredits.id = 'divCredits';
+            divCredits.className = 'divCredits';
+            divCredits.innerHTML = '<img class="imageRegle" src="ressources/credits.png">';
+            $('#menuPrincipal').append(divCredits);
 
             var buttonChargerPartie = document.createElement('button');
             buttonChargerPartie.id = 'buttonChargerPartie';
             buttonChargerPartie.className = 'buttonMenuPrincipal';
             buttonChargerPartie.innerHTML = 'Charger une partie';
-            buttonChargerPartie.style.bottom = '155px';
+            buttonChargerPartie.style.bottom = '95px';
             $('#menuPrincipal').append(buttonChargerPartie);
 
             var fileReader = document.createElement('input');
@@ -404,19 +411,18 @@
             }
             buttonChargerPartie.appendChild(fileReader);
 
-            var buttonOptions = document.createElement('button');
-            buttonOptions.id = 'buttonOptions';
-            buttonOptions.className = 'buttonMenuPrincipal';
-            buttonOptions.innerHTML = 'Options';
-            buttonOptions.style.bottom = '95px';
-            $('#menuPrincipal').append(buttonOptions);
-
             var buttonCredits = document.createElement('button');
             buttonCredits.id = 'buttonCredits';
             buttonCredits.className = 'buttonMenuPrincipal';
             buttonCredits.innerHTML = 'Crédits';
             buttonCredits.style.bottom = '35px';
+            buttonCredits.onclick = afficherCredits;
             $('#menuPrincipal').append(buttonCredits);
+        }
+
+        //Function qui affichera les crédits.
+        function afficherCredits() {
+            popUpCredits();
         }
 
         //Fonction qui affiche l'écran de création de partie.
@@ -984,17 +990,17 @@
             option1.innerHTML = '1280 x 720';
             dropDownReso.appendChild(option1);
 
-            var checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.name = 'popUpActif"';
-            checkbox.value = "value";
-            checkbox.id = 'cbPopUp';
-            divOptions.appendChild(checkbox);
+            //var checkbox = document.createElement('input');
+            //checkbox.type = 'checkbox';
+            //checkbox.name = 'popUpActif"';
+            //checkbox.value = "value";
+            //checkbox.id = 'cbPopUp';
+            //divOptions.appendChild(checkbox);
 
-            var labelCB = document.createElement('label')
-            labelCB.htmlFor = 'cbPopUp';
-            labelCB.appendChild(document.createTextNode('Désactiver les pop-ups'));
-            divOptions.appendChild(labelCB);
+            //var labelCB = document.createElement('label')
+            //labelCB.htmlFor = 'cbPopUp';
+            //labelCB.appendChild(document.createTextNode('Désactiver les pop-ups'));
+            //divOptions.appendChild(labelCB);
 
             var textBoxSauvegarder = document.createElement('input');
             textBoxSauvegarder.type = 'text';
@@ -1024,12 +1030,12 @@
                 buttons: [{
                     text: 'Valider',
                     click: function () {
-                        console.log($('#cbPopUp').is(":checked"));
-                        if ($('#cbPopUp').is(":checked")) {
-                            popUpActif = false;
-                        } else {
-                            popUpActif = true;
-                        }
+                        //console.log($('#cbPopUp').is(":checked"));
+                        //if ($('#cbPopUp').is(":checked")) {
+                        //    popUpActif = false;
+                        //} else {
+                        //    popUpActif = true;
+                        //}
                         $(this).dialog('close');
                     }
                 }, {
@@ -5143,6 +5149,22 @@
         //Fonction qui affiche un popUp contenant les règles du jeu.
         function popUpRegle() {
             $(divRegle).dialog({
+                classes: {
+                    'ui-dialog': 'popUpRegle no-close ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header'
+                },
+                draggable: false,
+                resizable: false,
+                height: 575,
+                width: 1150,
+                hide: 'fade',
+                show: 'fade'
+            });
+        }
+
+        //Fonction qui affiche un popUp contenant les crédits.
+        function popUpCredits() {
+            $(divCredits).dialog({
                 classes: {
                     'ui-dialog': 'popUpRegle no-close ui-corner-all',
                     'ui-dialog-titlebar': 'no-header'

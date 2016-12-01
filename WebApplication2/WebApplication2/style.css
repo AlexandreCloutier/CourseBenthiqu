@@ -477,6 +477,10 @@
     border-radius: 5px;
 }
 
+.divCredits{
+    display:none;
+}
+
 .imageTooltip {
     height: 270px;
     width: 177px;
