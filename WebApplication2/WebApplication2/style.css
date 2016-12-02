@@ -192,6 +192,15 @@
     transform: rotate(45deg);
 }
 
+.paquetIntervention {
+    position: absolute;
+    width: 60px;
+    height: 95px;
+    top: 280px;
+    right: 393px;
+    transform: rotate(45deg);
+}
+
 .divAnimee {
     position: absolute;
     width: 66px;

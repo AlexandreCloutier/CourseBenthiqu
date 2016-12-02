@@ -1042,7 +1042,6 @@
                 //Recrée le nom des joueurs.
                 json.nomJoueur.forEach(function (item, index) {
                     if (item != null) {
-                        console.log(index + ',' + item);
                         nomJoueur[index] = item;
                     }
                 });
@@ -1111,7 +1110,7 @@
                 json.cartePerturbation.forEach(function (item1, index1) {
                     json.cartePerturbation[index1].forEach(function (item, index) {
                         if (item != null) {
-                             cartePerturbation[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, { tempsActif: item.tempsActif });
+                            cartePerturbation[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, { tempsActif: item.tempsActif });
                         }
                     });
                 });
@@ -1125,9 +1124,9 @@
 
                 //Recrée l'affichage.
                 $('#menuPrincipal').remove();
-                //TODO: REGLER LE PROB DES POINTS RESSOURCES
-                pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
                 updatePointsRessourcesJeu();
+                pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
+                pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif] - pointsRessourcesUtiliser[numeroJoueurActif];
                 creerElementFond();
                 updateAffichageImage();
                 updatePlateau();
@@ -3090,6 +3089,17 @@
             paquetDefausse.id = 'paquetDefausse';
             paquetDefausse.className = 'paquetDefausse';
             $(plateau).append(paquetDefausse);
+
+            //Paquet Intervention
+            var paquetIntervention = document.createElement('div');
+            paquetIntervention.id = 'paquetIntervention';
+            paquetIntervention.className = 'paquetIntervention';
+            $(plateau).append(paquetIntervention);
+
+            var imageIntervention = document.createElement('img');
+            imageIntervention.src = 'ressources/petitPaquet.png';
+            imageIntervention.className = 'imageCarteJeu';
+            $(paquetIntervention).append(imageIntervention);
         }
 
         //Fonction qui change la taille du predateur pour trouver le plus gros du coté du joueur actif.
@@ -3227,17 +3237,19 @@
                                                             onDrop(event, ui, this);
                                                         } else {
                                                             popUpErreur('Vous ne pouvez pas empiller sur une carte perturber.')
+                                                            ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                                         }
                                                     } else {
                                                         popUpErreur('Vous ne pouvez pas empiller sur une carte perturber.')
+                                                        ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                                     }
                                                 } else {//Sinon, le drop est pas accepter.
                                                     ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                                     popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
                                                 }
-                                            } else {//Si un joueur à une care pris sur le fait.
+                                            } else {
                                                 var zoneDrop = this;
-                                                if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {
+                                                if (verifierPresencePrisSurFait().filter(function (value) { return value !== null }).length === 0) {//Si un joueur à une carte pris sur le fait.
                                                     if ($(this).children().length >= 2) {
                                                         deplacerCartePerturber(this, event, ui);
                                                     } else {
@@ -4363,6 +4375,7 @@
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
+                        console.log(carteBas[numeroJoueurActif][i])
                         for (var j = 0; j < carteBas[numeroJoueurActif][i].condition.length; j++) {
                             if (carteBas[numeroJoueurActif][i].condition[j] === habitats) {
                                 carteBas[numeroJoueurActif][i] = null;
@@ -4451,8 +4464,16 @@
                 this.habitats = params.habitats;
                 this.coutRessources = coutRessources;
                 this.nomImage = nomImage;
-                this.perturber = false;
-                this.tempsPerturber = 0;
+                if (params == null || params.perturber == null) {
+                    this.perturber = false;
+                } else {
+                    this.perturber = params.perturber;
+                }
+                if (params == null || params.tempsperturber == null) {
+                    this.tempsPerturber = 0;
+                } else {
+                    this.tempsPerturber = params.tempsPerturber;
+                }
             } else if (type === typeEnum.salmonide) {
                 this.nom = nom;
                 this.type = type;
@@ -4464,8 +4485,16 @@
                 this.type = type;
                 this.coutRessources = coutRessources;
                 this.nomImage = nomImage;
-                this.perturber = false;
-                this.tempsPerturber = 0;
+                if (params == null || params.perturber == null) {
+                    this.perturber = false;
+                } else {
+                    this.perturber = params.perturber;
+                }
+                if (params == null || params.tempsperturber == null) {
+                    this.tempsPerturber = 0;
+                } else {
+                    this.tempsPerturber = params.tempsPerturber;
+                }
             } else if (type === typeEnum.speciale) {
                 this.nom = nom;
                 this.type = type;
@@ -4588,151 +4617,208 @@
             var paquetCarte = new Array();
 
             //Dépendant du niveau de la partie, il n'y aura pas les mêmes cartes  dans le deck.
+            //On créer plusieurs fois la même carte car sinon, toute les cartes référence au même objet
+            //et lorsqu'on le modifie toutes les cartes identiques se modifient également
             //if (tour == 1) {
             //----------------------------------habitats-----------------------------------
 
+            carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse }); 
+            paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse });
             paquetCarte.push(carte);
-            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.habitats, nomEnum.sable, 'sable.png', 1, { habitats: nomEnum.sable });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.sable, 'sable.png', 1, { habitats: nomEnum.sable });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.sable, 'sable.png', 1, { habitats: nomEnum.sable });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.sable, 'sable.png', 1, { habitats: nomEnum.sable });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.habitats, nomEnum.gravier, 'gravier.png', 2, { habitats: nomEnum.gravier });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.gravier, 'gravier.png', 2, { habitats: nomEnum.gravier });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.gravier, 'gravier.png', 2, { habitats: nomEnum.gravier });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.gravier, 'gravier.png', 2, { habitats: nomEnum.gravier });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.gravier, 'gravier.png', 2, { habitats: nomEnum.gravier });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.gravier, 'gravier.png', 2, { habitats: nomEnum.gravier });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.habitats, nomEnum.galets, 'galets.png', 3, { habitats: 'galets' });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.galets, 'galets.png', 3, { habitats: 'galets' });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.galets, 'galets.png', 3, { habitats: 'galets' });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.galets, 'galets.png', 3, { habitats: 'galets' });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.habitats, nomEnum.galets, 'galets.png', 3, { habitats: 'galets' });
             paquetCarte.push(carte);
 
             // ----------------------------MacroInvertebre--------------------------------------------------
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.oligochaeta, 'oligochaeta.png', 1, { tolerance: 8, taille: 1, typeMacro: typeMacroEnum.annelide, condition: ['?'], predateur: 0 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.oligochaeta, 'oligochaeta.png', 1, { tolerance: 8, taille: 1, typeMacro: typeMacroEnum.annelide, condition: ['?'], predateur: 0 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.oligochaeta, 'oligochaeta.png', 1, { tolerance: 8, taille: 1, typeMacro: typeMacroEnum.annelide, condition: ['?'], predateur: 0 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.oligochaeta, 'oligochaeta.png', 1, { tolerance: 8, taille: 1, typeMacro: typeMacroEnum.annelide, condition: ['?'], predateur: 0 });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.simuliidae, 'simuliidae.png', 1, { tolerance: 6, taille: 2, typeMacro: typeMacroEnum.diptere, condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.simuliidae, 'simuliidae.png', 1, { tolerance: 6, taille: 2, typeMacro: typeMacroEnum.diptere, condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.simuliidae, 'simuliidae.png', 1, { tolerance: 6, taille: 2, typeMacro: typeMacroEnum.diptere, condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.chironomidae, 'chironomidae.png', 1, { tolerance: 8, taille: 2, typeMacro: typeMacroEnum.diptere, condition: ['?'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.chironomidae, 'chironomidae.png', 1, { tolerance: 8, taille: 2, typeMacro: typeMacroEnum.diptere, condition: ['?'], predateur: 0 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.chironomidae, 'chironomidae.png', 1, { tolerance: 8, taille: 2, typeMacro: typeMacroEnum.diptere, condition: ['?'], predateur: 0 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.chironomidae, 'chironomidae.png', 1, { tolerance: 8, taille: 2, typeMacro: typeMacroEnum.diptere, condition: ['?'], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.psephenidae, 'psephenidae.png', 2, { tolerance: 3, taille: 4, typeMacro: typeMacroEnum.coleoptere, condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.psephenidae, 'psephenidae.png', 2, { tolerance: 3, taille: 4, typeMacro: typeMacroEnum.coleoptere, condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.hydropsychidae, 'hydropsychidae.png', 2, { tolerance: 5, taille: 4, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.hydropsychidae, 'hydropsychidae.png', 2, { tolerance: 5, taille: 4, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides], predateur: 0 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.hydropsychidae, 'hydropsychidae.png', 2, { tolerance: 5, taille: 4, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides], predateur: 0 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.hydropsychidae, 'hydropsychidae.png', 2, { tolerance: 5, taille: 4, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.elmidae, 'elmidae.png', 2, { tolerance: 3, taille: 3, typeMacro: typeMacroEnum.coleoptere, condition: [nomEnum.rapides], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.elmidae, 'elmidae.png', 2, { tolerance: 3, taille: 3, typeMacro: typeMacroEnum.coleoptere, condition: [nomEnum.rapides], predateur: 0 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.elmidae, 'elmidae.png', 2, { tolerance: 3, taille: 3, typeMacro: typeMacroEnum.coleoptere, condition: [nomEnum.rapides], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.baetidae, 'baetidae.png', 2, { tolerance: 5, taille: 3, typeMacro: typeMacroEnum.ephemeroptere, condition: [nomEnum.rapides], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.baetidae, 'baetidae.png', 2, { tolerance: 5, taille: 3, typeMacro: typeMacroEnum.ephemeroptere, condition: [nomEnum.rapides], predateur: 0 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.baetidae, 'baetidae.png', 2, { tolerance: 5, taille: 3, typeMacro: typeMacroEnum.ephemeroptere, condition: [nomEnum.rapides], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.hydroptilidae, 'hydroptilidae.png', 2, { tolerance: 4, taille: 2, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides, nomEnum.sable, nomEnum.galets], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.hydroptilidae, 'hydroptilidae.png', 2, { tolerance: 4, taille: 2, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides, nomEnum.sable, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.hydroptilidae, 'hydroptilidae.png', 2, { tolerance: 4, taille: 2, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides, nomEnum.sable, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.hydroptilidae, 'hydroptilidae.png', 2, { tolerance: 4, taille: 2, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides, nomEnum.sable, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.ephemeridae, 'ephemeridae.png', 2, { tolerance: 3, taille: 5, typeMacro: typeMacroEnum.ephemeroptere, condition: [nomEnum.sable], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.ephemeridae, 'ephemeridae.png', 2, { tolerance: 3, taille: 5, typeMacro: typeMacroEnum.ephemeroptere, condition: [nomEnum.sable], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.prosobranchia, 'prosobranchia.png', 2, { tolerance: 8, taille: 5, typeMacro: typeMacroEnum.mollusque, condition: ['?'], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.prosobranchia, 'prosobranchia.png', 2, { tolerance: 8, taille: 5, typeMacro: typeMacroEnum.mollusque, condition: ['?'], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.sphaeridae, 'sphaeridae.png', 2, { tolerance: 5, taille: 3, typeMacro: typeMacroEnum.mollusque, condition: [nomEnum.rapides, nomEnum.gravier], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.sphaeridae, 'sphaeridae.png', 2, { tolerance: 5, taille: 3, typeMacro: typeMacroEnum.mollusque, condition: [nomEnum.rapides, nomEnum.gravier], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.anisoptera, 'anisoptera.png', 3, { tolerance: 5, taille: 6, typeMacro: typeMacroEnum.odonate, condition: [nomEnum.rapides], predateur: 1 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.anisoptera, 'anisoptera.png', 3, { tolerance: 5, taille: 6, typeMacro: typeMacroEnum.odonate, condition: [nomEnum.rapides], predateur: 1 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.glossosomatidae, 'glossosomatidae.png', 3, { tolerance: 0, taille: 5, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.glossosomatidae, 'glossosomatidae.png', 3, { tolerance: 0, taille: 5, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.heptageniidae, 'heptageniidae.png', 3, { tolerance: 2, taille: 4, typeMacro: typeMacroEnum.ephemeroptere, condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.heptageniidae, 'heptageniidae.png', 3, { tolerance: 2, taille: 4, typeMacro: typeMacroEnum.ephemeroptere, condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.ephemerellidae, 'ephemerellidae.png', 3, { tolerance: 1, taille: 4, typeMacro: typeMacroEnum.ephemeroptere, condition: [nomEnum.rapides, nomEnum.gravier], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.ephemerellidae, 'ephemerellidae.png', 3, { tolerance: 1, taille: 4, typeMacro: typeMacroEnum.ephemeroptere, condition: [nomEnum.rapides, nomEnum.gravier], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.brachycentrus, 'brachycentrus.png', 3, { tolerance: 3, taille: 4, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.brachycentrus, 'brachycentrus.png', 3, { tolerance: 3, taille: 4, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides, nomEnum.galets], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.rhyacophilidae, 'rhyacophilidae.png', 4, { tolerance: 0, taille: 4, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides], predateur: 1 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.rhyacophilidae, 'rhyacophilidae.png', 4, { tolerance: 0, taille: 4, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides], predateur: 1 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.rhyacophilidae, 'rhyacophilidae.png', 4, { tolerance: 0, taille: 4, typeMacro: typeMacroEnum.trichoptere, condition: [nomEnum.rapides], predateur: 1 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.tipulidae, 'tipulidae.png', 4, { tolerance: 3, taille: 8, typeMacro: typeMacroEnum.diptere, condition: [nomEnum.fosse], predateur: 0 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.tipulidae, 'tipulidae.png', 4, { tolerance: 3, taille: 8, typeMacro: typeMacroEnum.diptere, condition: [nomEnum.fosse], predateur: 0 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.gyrinidae, 'gyrinidae.png', 4, { tolerance: 4, taille: 5, typeMacro: typeMacroEnum.coleoptere, condition: [nomEnum.fosse], predateur: 1 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.gyrinidae, 'gyrinidae.png', 4, { tolerance: 4, taille: 5, typeMacro: typeMacroEnum.coleoptere, condition: [nomEnum.fosse], predateur: 1 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.perlidae, 'perlidae.png', 4, { tolerance: 1, taille: 5, typeMacro: typeMacroEnum.plecoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 1 });
-            paquetCarte.push(carte)
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.perlidae, 'perlidae.png', 4, { tolerance: 1, taille: 5, typeMacro: typeMacroEnum.plecoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 1 });
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.corydalidae, 'corydalidae.png', 5, { tolerance: 0, taille: 8, typeMacro: typeMacroEnum.megaloptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 1 });
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.nipidae, 'nepidae.png', 6, { tolerance: 6, taille: 9, typeMacro: typeMacroEnum.hemiptere, condition: [nomEnum.fosse], predateur: 1 });
-            paquetCarte.push(carte)
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.decapoda, 'decapoda.png', 6, { tolerance: 5, taille: 10, typeMacro: typeMacroEnum.crustace, condition: [nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.pteronarcyidae, 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: typeMacroEnum.plecoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.macroInvertebre, nomEnum.pteronarcyidae, 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: typeMacroEnum.plecoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte);
             //}
 
@@ -4741,23 +4827,30 @@
 
             carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
             paquetCarte.push(carte);
 
             //---------------------------------bandeRiveraine----------------------------
 
             carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
             paquetCarte.push(carte);
             //}
 
@@ -4766,8 +4859,11 @@
 
             carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.perturbation, nomEnum.erosion, 'erosion.png', 3, { tempsActif: 0 });
@@ -4775,20 +4871,26 @@
 
             carte = new Carte(typeEnum.perturbation, nomEnum.passageToutTerrain, 'passageToutTerrain.png', 3, { tempsActif: 1 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.perturbation, nomEnum.passageToutTerrain, 'passageToutTerrain.png', 3, { tempsActif: 1 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.perturbation, nomEnum.passageToutTerrain, 'passageToutTerrain.png', 3, { tempsActif: 1 });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.perturbation, nomEnum.artificialisation, 'artificialisation.png', 3, { tempsActif: 0 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.perturbation, nomEnum.artificialisation, 'artificialisation.png', 3, { tempsActif: 0 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.perturbation, nomEnum.artificialisation, 'artificialisation.png', 3, { tempsActif: 0 });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.perturbation, nomEnum.pollutionOrganique, 'pollutionOrganique.png', 4, { tempsActif: 2 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.perturbation, nomEnum.pollutionOrganique, 'pollutionOrganique.png', 4, { tempsActif: 2 });
             paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.perturbation, nomEnum.deversement, 'deversement.png', 2, { tempsActif: 1 });
             paquetCarte.push(carte);
+            carte = new Carte(typeEnum.perturbation, nomEnum.deversement, 'deversement.png', 2, { tempsActif: 1 });
             paquetCarte.push(carte);
 
 
@@ -4810,17 +4912,23 @@
 
                 carte = new Carte(typeEnum.action, nomEnum.corveNettoyage, 'corveNettoyage.png', 1);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.action, nomEnum.corveNettoyage, 'corveNettoyage.png', 1);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.action, nomEnum.corveNettoyage, 'corveNettoyage.png', 1);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.action, nomEnum.naturalisation, 'naturalisation.png', 2);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.action, nomEnum.naturalisation, 'naturalisation.png', 2);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.action, nomEnum.naturalisation, 'naturalisation.png', 2);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.action, nomEnum.amenagement, 'amenagement.png', 3);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.action, nomEnum.amenagement, 'amenagement.png', 3);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.action, nomEnum.amenagement, 'amenagement.png', 3);
                 paquetCarte.push(carte);
 
                 //---------------------------------intervention------------------------------
@@ -4856,46 +4964,63 @@
 
                 carte = new Carte(typeEnum.speciale, nomEnum.prisSurFait, 'prisSurFait.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.prisSurFait, 'prisSurFait.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.prisSurFait, 'prisSurFait.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.prisSurFait, 'prisSurFait.png', 0);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.speciale, nomEnum.pecheur, 'pecheur.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.pecheur, 'pecheur.png', 0);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.speciale, nomEnum.crueSoudaine, 'crueSoudaine.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.crueSoudaine, 'crueSoudaine.png', 0);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.speciale, nomEnum.zonage, 'zonage.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.zonage, 'zonage.png', 0);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.speciale, nomEnum.retention, 'retention.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.retention, 'retention.png', 0);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.speciale, nomEnum.emergence, 'emergence.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.emergence, 'emergence.png', 0);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.speciale, nomEnum.derivation, 'derivation.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.derivation, 'derivation.png', 0);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.speciale, nomEnum.accumulation, 'accumulation.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.accumulation, 'accumulation.png', 0);
                 paquetCarte.push(carte);
 
                 carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
+                carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
             }
             return paquetCarte;
@@ -5368,7 +5493,7 @@
 
         //Fonction qui "update" le jeu.
         function updatePointsRessourcesJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 200;
+            pointsRessourcesBase[numeroJoueurActif] = 6;
             pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel() + tableauRetention[numeroJoueurActif];
             tableauRetention[numeroJoueurActif] = 0;
             pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
@@ -5438,6 +5563,10 @@
                     imageDecharge.src = 'ressources/' + paquetDecharge[paquetDecharge.length - 1].nomImage;
                     imageDecharge.className = 'imageCarteJeu';
                     $('#paquetDefausse').append(imageDecharge);
+                }
+                if (paquetIntervention.length === 0) {
+                        $('#paquetIntervention').children().remove();
+                    
                 }
             }
             $(function () {
@@ -5582,46 +5711,32 @@
         //Fonction qui va update le plateau
         function updatePlateau() {
             //Crée les cartes qui sont sur le platea.
-            for (var i = 0; i < 10; i++) {//Boucle dans les 10 emplacements.
-                for (var j = 0; j < nombreJoueur; j++) {//Boucle pour chaque joueur.
-                    $('#emplacementJoueur' + lettre + i).children().remove();
+            for (var i = 0; i < nombreJoueur; i++) {//Boucle pour chaque joueur.
+                for (var j = 0; j < carteBas[i].length; j++) {//Boucle dans les 10 emplacements.
+                    $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
 
-                    if (carteBas[j][i] != null) {//Si la carte n'est pas null.
-                        for (var k = 0; k < exemplaireCarteBas; k++) {//Boucle dans le nombre d'exemplaire.
+                    if (carteBas[i][j] != null) {//Si la carte n'est pas null.
+                        for (var k = 0; k < exemplaireCarteBas[i][j]; k++) {//Boucle dans le nombre d'exemplaire.
                             var image = document.createElement('img');
                             image.className = 'imageCarteJeu';
-                            image.setAttribute('src', 'ressources/' + carteBas[j][i].nomImage);
-                            image.setAttribute('margin-top', k * 10 + 'px');
-
-                            var lettre = lettreJoueur(j);
-                            $('#emplacementJoueur' + lettre + i).append(image);
+                            image.setAttribute('src', 'ressources/' + carteBas[i][j].nomImage);
+                            $(image).css('margin-top', k * 10);
+                            $('#emplacementJoueur' + lettreJoueur(i) + j).append(image);
                         }
-                    } else {
-                        $('#emplacementJoueur' + lettre + i).children().remove();
-                    }
-                }
-            }
-
-            for (var i = 0; i < 10; i++) {//Boucle pour chaque emplacements.
-                for (var j = 0; j < nombreJoueur; j++) {//Boucle pour chaque joueur
-                    if (carteBas[j][i] != null) {//Si la carte n'est pas null
-                        if (carteBas[j][i].perturber) {//Si la carte est perturber.
-                            var lettre = lettreJoueur(j);
-                            $('#emplacementJoueur' + lettre + i).addClass('ui-perturber-highlight');//Ajoute la classe perturber.
-
-                            if (cartePerturbation[j][i] != null) {//Si il y a une carte perturbation à ajouter par dessus.
+                        if (carteBas[i][j].perturber) {//Si la carte est perturber.
+                            var lettre = lettreJoueur(i);
+                            $('#emplacementJoueur' + lettre + j).addClass('ui-perturber-highlight');//Ajoute la classe perturber.
+                            if (cartePerturbation[i][j] != null) {//Si il y a une carte perturbation à ajouter par dessus.
                                 var image = document.createElement('img');
                                 image.className = 'imageCarteJeu';
-                                image.setAttribute('src', 'ressources/' + cartePerturbation[j][i].nomImage);
-                                image.setAttribute('margin-top', ((exemplaireCarteBas[j][i] * 10) + 10) + 'px');
-
-                                $('#emplacementJoueur' + lettre + i).append(image);
+                                image.setAttribute('src', 'ressources/' + cartePerturbation[i][j].nomImage);
+                                $(image).css('margin-top',exemplaireCarteBas[i][j] * 10);
+                                $('#emplacementJoueur' + lettre + j).append(image);
                             }
                         }
                     }
                 }
             }
-
             $(function () {
                 $('.imageCarteJeu').on({
                     click: function (event, ui) {
