@@ -1462,7 +1462,7 @@
                 //pour assurer une chance egal à tous les joueurs d'avoir les mêmes cartes.
 
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.zonage, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
 
@@ -1927,53 +1927,65 @@
                                 etapeZonage = 2;
                                 brillanceHabitatsEnnemi(true);
                                 brillerCarte(typeEnum.habitats, numeroJoueurActif, false);
+                            } else {
+                                popUpAvertissement('Vous devez cliquer sur un de vos «Habitats».');
                             }
+                        } else {
+                            popUpAvertissement('Vous devez cliquer sur un de vos «Habitats».');
                         }
                     }
                 } else if (etapeZonage === 2) {//Étape de zonage 2.
-                    carteEchange2 = carteBas[numeroJoueurEnnemi][numeroEmplacement];
-                    lettreJoueur2 = lettreJoueur(numeroJoueurEnnemi);
-                    positionCarte2 = numeroEmplacement;
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement] != null) {
+                        if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
+                            if (numeroJoueurEnnemi !== numeroJoueurActif) {
+                                carteEchange2 = carteBas[numeroJoueurEnnemi][numeroEmplacement];
+                                lettreJoueur2 = lettreJoueur(numeroJoueurEnnemi);
+                                positionCarte2 = numeroEmplacement;
 
-                    $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
-                    $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().remove();
+                                var carte1 = document.createElement('img');
+                                carte1.className = 'imageCarteJeu imageCarteEchange';
+                                carte1.src = 'ressources/' + carteEchange1.nomImage;
 
-                    var carte1 = document.createElement('img');
-                    carte1.className = 'imageCarteJeu imageCarteEchange';
-                    carte1.src = 'ressources/' + carteEchange1.nomImage;
-                    $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).append(carte1);
+                                var carte2 = document.createElement('img');
+                                carte2.className = 'imageCarteJeu imageCarteEchange';
+                                carte2.src = 'ressources/' + carteEchange2.nomImage;
 
-                    var carte2 = document.createElement('img');
-                    carte2.className = 'imageCarteJeu imageCarteEchange';
-                    carte2.src = 'ressources/' + carteEchange2.nomImage;
-                    $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).append(carte2);
+                                if (verifierCartePresenteEchange(carteEchange1.nom, numeroJoueur(lettreJoueur2)) === '') {
 
-                    $(function () {
-                        $('.imageCarteEchange').on({
-                            click: function (event, ui) {
-                                onClickImage($(this).parent().attr("id"), ui);
+                                } else {
+                                    
+                                }
+
+                                if (verifierCartePresenteEchange(carteEchange2.nom, numeroJoueur(lettreJoueur1)) === '') {
+
+                                } else {
+
+                                }
+
+                                $(function () {
+                                    $('.imageCarteEchange').on({
+                                        click: function (event, ui) {
+                                            onClickImage($(this).parent().attr("id"), ui);
+                                        }
+                                    })
+                                });
+
+                                $('.imageCarteEchange').removeClass('imageCarteEchange');
+
+                                brillanceHabitatsEnnemi(false);
+                                etapeZonage = 1;
+                                zonage = false;
+                                griserZone(false, false, false);
+
+                                popUpConfirmation('La carte ' + carteEchange1.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur1)] + ' à été changer par la carte ' + carteEchange2.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur2)]);
+                            } else {
+                                popUpAvertissement('Vous devez cliquer sur une des cartes «Habitats» d\'un ennemi.')
                             }
-                        })
-                    });
-
-                    $('.emplacementJoueurA').removeClass('imageCarteEchange');
-                    $('.emplacementJoueurB').removeClass('imageCarteEchange');
-
-                    if (nombreJoueur > 2) {
-                        $('.emplacementJoueurC').removeClass('imageCarteEchange');
+                        } else {
+                            popUpAvertissement('Vous devez cliquer sur une carte «Habitats».')
+                        }
                     }
-
-                    if (nombreJoueur > 3) {
-                        $('.emplacementJoueurD').removeClass('imageCarteEchange');
-                    }
-
-                    brillanceHabitatsEnnemi(false);
-                    etapeZonage = 1;
-                    zonage = false;
-                    griserZone(false, false, false);
-
-                    popUpConfirmation('La carte ' + carteEchange1.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur1)] + ' à été changer par la carte ' + carteEchange2.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur2)]);
-                }
+                }           
                 // ----------------Carte Naturalisation --------------
             } else if (naturalisation) {
                 if (document.getElementById(event).classList.contains('ui-echange-highlight')) {
@@ -1989,6 +2001,25 @@
                 }
             }
         }
+
+        //Fonction qui vérifie si la carte est pas déjà la.
+        function verifierCartePresenteEchange(nomCarte, numero) {
+            var lettreActif = lettreJoueur(numero);
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numero][i] != null) {
+                    if (carteBas[numero][i].nomImage === nomCarte) {
+                        if (i < 6) {
+                            return ('#emplacementBasJoueur' + lettreActif + i);
+                        } else {
+                            return ('#emplacementHautJoueur' + lettreActif + i);
+                        }
+                    }
+                }
+            }
+
+            return '';
+        }
+
 
         //Fonction qui fais briller les carte d'un certain type pour le joueur donner.
         function brillerCarte(type, numero, brille) {
@@ -5615,33 +5646,6 @@
         function updatePointsRessources() {
             $('.divTextePointsRessource').html('<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources utilisés : ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
         }
-
-        //Fonction qui affiche l'écran de fin.
-        function afficherEcranFin() {
-            $(divEcranFin).dialog({
-                classes: {
-                    'ui-dialog': ' no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
-                },
-                draggable: false,
-                resizable: false,
-                height: 575,
-                width: 1050,
-                hide: 'fade',
-                show: 'fade'
-            });
-        }
-
-        var divEcranFin = document.createElement('div');
-        divEcranFin.id = 'divEcranFin';
-        divEcranFin.className = 'divEcranFin';
-        $('body').append(divEcranFin);
-
-        var texte1 = document.createElement('div');
-        texte1.id = 'texte1';
-        texte1.className = 'texte1';
-        texte1.innerHTML = 'Le gagnant est : (nom du joueur) avec X points. <p></p>2e: (nom du joueur)  avec X points. <p></p>3e: (nom du joueur)  avec X points. <p></p> 4e: (nom du joueur)  avec X points. <p></p> La partie a été terminé après 12 tours suite à la mise en jeu du salmonidé.';
-        divEcranFin.appendChild(texte1);
 
         //Fonction qui calcule les points de chaque joueurs.
         function calculerPoints() {
