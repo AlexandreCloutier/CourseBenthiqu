@@ -393,6 +393,10 @@
     border-radius: 10px !important;
 }
 
+.divEcranFin{
+    display:none;
+}
+
 /* ----------------Option-------------------------*/
 .divOptions label {
     display: block;
@@ -612,6 +616,15 @@
     position: absolute;
     bottom: 85px;
     height: 50px;
+    width: 250px;
+    left: 11%;
+}
+
+
+#divFin {
+    position: absolute;
+    bottom: 265px;
+    height: 40px;
     width: 250px;
     left: 11%;
 }

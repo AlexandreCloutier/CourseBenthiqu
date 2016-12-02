@@ -1661,6 +1661,13 @@
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
+            
+            var divFin = document.createElement('button');
+            divFin.id = 'divFin';
+            divFin.className = 'buttonJeu';
+            divFin.setAttribute('onclick', 'afficherEcranFin()');
+            divFin.textContent = 'Afficher le tableau de fin';
+            $('#divDroite').append(divFin);
 
             //Bouton du tableau des cartes
             var buttonTableauCarte = document.createElement('button');
@@ -5603,6 +5610,33 @@
         function updatePointsRessources() {
             $('.divTextePointsRessource').html('<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources utilisés : ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
         }
+
+        //Fonction qui affiche l'écran de fin.
+        function afficherEcranFin() {
+            $(divEcranFin).dialog({
+                classes: {
+                    'ui-dialog': ' no-close ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header'
+                },
+                draggable: false,
+                resizable: false,
+                height: 575,
+                width: 1050,
+                hide: 'fade',
+                show: 'fade'
+            });
+        }
+
+        var divEcranFin = document.createElement('div');
+        divEcranFin.id = 'divEcranFin';
+        divEcranFin.className = 'divEcranFin';
+        $('body').append(divEcranFin);
+
+        var texte1 = document.createElement('div');
+        texte1.id = 'texte1';
+        texte1.className = 'texte1';
+        texte1.innerHTML = 'Le gagnant est : (nom du joueur) avec X points. <p></p>2e: (nom du joueur)  avec X points. <p></p>3e: (nom du joueur)  avec X points. <p></p> 4e: (nom du joueur)  avec X points. <p></p> La partie a été terminé après 12 tours suite à la mise en jeu du salmonidé.';
+        divEcranFin.appendChild(texte1);
 
         //Fonction qui calcule les points de chaque joueurs.
         function calculerPoints() {
