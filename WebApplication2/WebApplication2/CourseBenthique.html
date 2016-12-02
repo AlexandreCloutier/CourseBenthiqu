@@ -1079,6 +1079,8 @@
                                 params = { condition: cond };
                             }
                             mains[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                        } else {
+                            mains[index1][index] = null;
                         }
                     });
                 });
@@ -4336,27 +4338,27 @@
         function tuerMacroSansHabitats() {
             //Tuer si rapides = perturber.
             if (!presence(nomEnum.rapides)) {
-                tuerMacroHabitats(nomEnum.rapides);
+                tuerMacroHabitats(nomEnum.rapides, numeroJoueurActif);
             }
 
             //Tuer si sables = perturber.
             if (!presence(nomEnum.sable)) {
-                tuerMacroHabitats(nomEnum.sable);
+                tuerMacroHabitats(nomEnum.sable, numeroJoueurActif);
             }
 
             //Tuer si galets = perturber.
             if (!presence(nomEnum.galets)) {
-                tuerMacroHabitats(nomEnum.galets);
+                tuerMacroHabitats(nomEnum.galets, numeroJoueurActif);
             }
 
             //tuer si gravier = perturber.
             if (!presence(nomEnum.gravier)) {
-                tuerMacroHabitats(nomEnum.gravier);
+                tuerMacroHabitats(nomEnum.gravier, numeroJoueurActif);
             }
 
             //Tuer si fosse = perturber.
             if (!presence(nomEnum.fosse)) {
-                tuerMacroHabitats(nomEnum.fosse);
+                tuerMacroHabitats(nomEnum.fosse, numeroJoueurActif);
             }
         }
 
@@ -4376,27 +4378,29 @@
         }
 
         //Fonction qui tue les macro qui ont besoin d'un habitats entrer en paramètre.
-        function tuerMacroHabitats(habitats) {
+        function tuerMacroHabitats(habitats, joueur) {
             var tuer = false;
-
             for (var i = 0; i < 10; i++) {
-                if (carteBas[numeroJoueurActif][i] != null) {
-                    if (carteBas[numeroJoueurActif][i].type === typeEnum.macroInvertebre) {
-                        console.log(carteBas[numeroJoueurActif][i])
-                        for (var j = 0; j < carteBas[numeroJoueurActif][i].condition.length; j++) {
-                            if (carteBas[numeroJoueurActif][i].condition[j] === habitats) {
-                                carteBas[numeroJoueurActif][i] = null;
-                                $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + i).children().remove();
-
-                                tuer = true;
+                if (carteBas[joueur][i] != null) {
+                    if (carteBas[joueur][i].type === typeEnum.macroInvertebre) {
+                        var tabCond = carteBas[joueur][i].condition;
+                        for (var j = 0; j < tabCond.length; j++) {
+                            if (carteBas[joueur][i] != null) {
+                                if (carteBas[joueur][i].condition[j] === habitats) {
+                                    carteBas[joueur][i] = null;
+                                    exemplaireCarteBas[joueur][i] = 0;
+                                    $('#emplacementJoueur' + lettreJoueur(joueur) + i).children().remove();
+                                    tuer = true;
+                                }
                             }
                         }
                     }
                 }
             }
-
             if (tuer) {
-                popUpConfirmation('Votre habitats ' + habitats + ' est perturber et le/les macroinvertébré(s) l\'utilisant sont mort');
+                console.log("dafuq");
+                popUpConfirmation('Votre habitat ' + habitats + ' est perturber et le/les macroinvertébré(s) l\'utilisant sont mort');
+                console.log("Ouin mais gilles");
             }
         }
 
@@ -4629,7 +4633,7 @@
             //if (tour == 1) {
             //----------------------------------habitats-----------------------------------
 
-            carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse }); 
+            carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse });
             paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse });
             paquetCarte.push(carte);
@@ -5377,7 +5381,6 @@
 
         //Fonction pour appeler le pop-up d'erreur.
         function popUpErreur(texte) {
-            if (popUpActif) {
                 $('#divTexteErreur').text(texte);
                 $('#divErreur').dialog({
                     classes: {
@@ -5386,17 +5389,16 @@
                     },
                     draggable: false,
                     resizable: false,
+                    modal: true,
                     height: 80,
                     width: 600,
                     hide: 'fade',
                     show: 'fade'
                 });
-            }
         }
 
         //Fonction pour appeler le pop-up d'avertissement.
         function popUpAvertissement(texte) {
-            if (popUpActif) {
                 $('#divTexteErreur').text(texte);
                 $('#divErreur').dialog({
                     classes: {
@@ -5405,17 +5407,16 @@
                     },
                     draggable: false,
                     resizable: false,
+                    modal: true,
                     height: 80,
                     width: 600,
                     hide: 'fade',
                     show: 'fade'
                 });
-            }
         }
 
         //Fonction pour appeler le pop-up de confirmation.
         function popUpConfirmation(texte) {
-            if (popUpActif) {
                 $('#divTexteErreur').text(texte);
                 $('#divErreur').dialog({
                     classes: {
@@ -5424,12 +5425,12 @@
                     },
                     draggable: false,
                     resizable: false,
+                    modal: true,
                     height: 80,
                     width: 600,
                     hide: 'fade',
                     show: 'fade'
-                });
-            }
+                });            
         }
 
         //Fonction qui appelle un pop-up qui indique le debut du tour d'un joueur
@@ -5443,6 +5444,7 @@
                 },
                 draggable: false,
                 resizable: false,
+                modal: true,
                 height: 80,
                 width: 400,
                 hide: 'fade',
@@ -5459,6 +5461,7 @@
                 },
                 draggable: false,
                 resizable: false,
+                modal: true,
                 height: 575,
                 width: 1150,
                 hide: 'fade',
@@ -5475,6 +5478,7 @@
                 },
                 draggable: false,
                 resizable: false,
+                modal: true,
                 height: 575,
                 width: 1150,
                 hide: 'fade',
@@ -5491,6 +5495,7 @@
                 },
                 draggable: false,
                 resizable: false,
+                modal: true,
                 height: 575,
                 width: 1050,
                 hide: 'fade',
@@ -5500,7 +5505,7 @@
 
         //Fonction qui "update" le jeu.
         function updatePointsRessourcesJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 6;
+            pointsRessourcesBase[numeroJoueurActif] = 200;
             pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel() + tableauRetention[numeroJoueurActif];
             tableauRetention[numeroJoueurActif] = 0;
             pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
@@ -5572,8 +5577,8 @@
                     $('#paquetDefausse').append(imageDecharge);
                 }
                 if (paquetIntervention.length === 0) {
-                        $('#paquetIntervention').children().remove();
-                    
+                    $('#paquetIntervention').children().remove();
+
                 }
             }
             $(function () {
@@ -5764,7 +5769,7 @@
                                 var image = document.createElement('img');
                                 image.className = 'imageCarteJeu';
                                 image.setAttribute('src', 'ressources/' + cartePerturbation[i][j].nomImage);
-                                $(image).css('margin-top',exemplaireCarteBas[i][j] * 10);
+                                $(image).css('margin-top', exemplaireCarteBas[i][j] * 10);
                                 $('#emplacementJoueur' + lettre + j).append(image);
                             }
                         }
