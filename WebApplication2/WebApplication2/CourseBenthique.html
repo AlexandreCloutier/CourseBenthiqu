@@ -1987,7 +1987,7 @@
                                     $(carte1).css('margin-top', exemplaireCarteBas[numeroJoueurCarte][positionCarte] * 10);
 
                                     $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().last().remove();
-                                    
+
                                     carteBas[numeroJoueurCarte][positionCarte] = carteEchange1;
                                     $(positionCartePresente).append(carte1);
                                 }
@@ -2019,7 +2019,7 @@
                                     $(carte2).css('margin-top', exemplaireCarteBas[numeroJoueurCarte][positionCarte] * 10);
 
                                     $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().last().remove();
-                                    
+
                                     carteBas[numeroJoueurCarte][positionCarte] = carteEchange2;
                                     $(positionCartePresente).append(carte2);
                                 }
@@ -2079,7 +2079,6 @@
 
             return '';
         }
-
 
         //Fonction qui fais briller les carte d'un certain type pour le joueur donner.
         function brillerCarte(type, numero, brille) {
@@ -3562,13 +3561,43 @@
             }
         }
 
+        //Fonction qui s'occupe de réempiller les cartes une fois qu'elle ne sont plus perturber.
+        function reempillerCartePasPerturber(numeroDuJoueur, positionCarteAEmpiler) {
+            for (var i = 0; i < 10; i++) {
+                if (carteBas[numeroDuJoueur][positionCarteAEmpiler] != null) {
+                    if (carteBas[numeroDuJoueur][i].nom === carteBas[numeroDuJoueur][positionCarteAEmpiler].nom) {
+                        if (carteBas[numeroDuJoueur][i].perturber === false) {
+                            exemplaireCarteBas[numeroDuJoueur][i]++;
+                            
+                            var image = document.createElement('img');
+                            image.className = 'imageCarteJeu ajoutOnClick';
+                            image.src = 'ressources/' + carteBas[numeroDuJoueur][i].nomImage;
+                            $(image).css('margin-top', exemplaireCarteBas[numeroDuJoueur][i] * 10);
+                            $('#emplacementJoueur' + lettreJoueur(numeroDuJoueur) + i).append(image);
+
+                            $(function () {
+                                $('.ajoutOnClick').on({
+                                    click: function (event, ui) {
+                                        onClickImage($(this).parent().attr("id"), ui);
+                                    }
+                                })
+                            });
+
+                            $('.ajoutOnClick').removeClass('ajoutOnClick');
+                        }
+                    }
+                }
+            }
+        }
+
         //Fonction qui va enlever la carte de perturbation de dessus la carte.
         function retirerCartePerturbation(numeroActif, positionCarte) {
             var lettreActif = lettreJoueur(numeroActif);
             paquetDecharge.push(cartePerturbation[numeroActif][positionCarte]);//Envoie la carte à la décharge.
+            reempillerCartePasPerturber(numeroActif, positionCarte);
             cartePerturbation[numeroActif][positionCarte] = null;//Rend la position où était la carte pertubation à null.
+            exemplaireCarteBas[numeroActif][positionCarte]--;
             $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
-            //TODO: reempillerCartePasPerturber(numeroActif, positionCarte);
         }
 
         //Fonction qui mes en brillances les trucs qui sont mangeable.
