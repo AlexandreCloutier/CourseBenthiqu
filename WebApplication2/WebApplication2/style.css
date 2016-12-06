@@ -614,7 +614,7 @@
 /*****Les boutons*****/
 #buttonPasserTour {
     position: absolute;
-    bottom: 85px;
+    bottom: 205px;
     height: 50px;
     width: 250px;
     left: 11%;
@@ -639,7 +639,7 @@
 
 #buttonTableauCarte {
     position: absolute;
-    bottom: 205px;
+    bottom: 85px;
     height: 40px;
     width: 250px;
     left: 11%;

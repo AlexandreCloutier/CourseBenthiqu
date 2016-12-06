@@ -199,7 +199,7 @@
         function valeurDepartVariable() {
             //Partie général.
             numeroJoueurActif = 0;
-            tour = 0;
+            tour = 1;
             facteurRotation = 0;
 
             //Partie prédateur.
@@ -253,11 +253,15 @@
             pointsJoueur = [];
             paquetDecharge = [];
             paquetIntervention = [];
+
             tableauRetention = new Array(nombreJoueur);
+
             for (var i = 0; i < tableauRetention.length; i++) {
                 tableauRetention[i] = 0;
             }
+
             tableauPasserTour = new Array(nombreJoueur);
+
             for (var i = 0; i < tableauPasserTour.length; i++) {
                 tableauPasserTour[i] = false;
             }
@@ -268,8 +272,7 @@
             if (verifierConditionCreationPartie() === '') {
                 $('#menuCreerPartie').remove();
                 startGame();//Commence la partie.
-            }
-            else {
+            } else {
                 $('#labelErreur').css('color', 'red');
                 $('#labelErreur').html('<p></p>' + verifierConditionCreationPartie());
             }
@@ -284,50 +287,41 @@
                     if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {
                         entrerValeurCreationPartie();
                         return '';
-                    }
-                    else {
+                    } else {
                         retour = 'Veuillez entrer l\'age de chacun des joueurs.';
                         return retour;
                     }
-                }
-                else {
+                } else {
                     retour = 'Veuillez entrer un nom pour chacun des joueurs.';
                     return retour;
                 }
-            }
-            else if ($('#dropDownNombreJoueur').val() === '3') {//Si 3 joueurs.
+            } else if ($('#dropDownNombreJoueur').val() === '3') {//Si 3 joueurs.
                 if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '' && $('#nomJoueurC').val() != '') {
                     if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '') {
                         entrerValeurCreationPartie();
                         return '';
-                    }
-                    else {
+                    } else {
                         retour = 'Veuillez entrer l\'age de chacun des joueurs.';
                         return retour;
                     }
-                }
-                else {
+                } else {
                     retour = 'Veuillez entrer un nom pour chacun des joueurs.';
                     return retour;
                 }
-            }
-            else if ($('#dropDownNombreJoueur').val() === '4') {//Si 4 joueurs.
+            } else if ($('#dropDownNombreJoueur').val() === '4') {//Si 4 joueurs.
                 if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() && $('#nomJoueurC').val() != '' && $('#nomJoueurD').val() != '') {
                     if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '' && $('#ageJoueurD').val() != '') {
                         entrerValeurCreationPartie();
                         return '';
-                    }
-                    else {
+                    } else {
                         retour = 'Veuillez entrer l\'age de chacun des joueurs.';
                         return retour;
                     }
-                }
-                else {
+                } else {
                     retour = 'Veuillez entrer un nom pour chacun des joueurs.';
                     return retour;
                 }
-            }
-            else {
+            } else {
                 retour = 'Veuillez entrer un nombre de joueur.';
                 return retour;
             }
@@ -349,12 +343,14 @@
                 pointsJoueur[0] = 0;
                 pointsJoueur[1] = 0;
             }
+
             if ($('#dropDownNombreJoueur').val() >= '3') {//Si 3 joueurs.
                 nombreJoueur = 3;
                 nomJoueur[2] = $('#nomJoueurC').val();
                 ageJoueur[2] = $('#ageJoueurC').val();
                 pointsJoueur[2] = 0;
             }
+
             if ($('#dropDownNombreJoueur').val() >= '4') {//Si 4 joueurs.
                 nombreJoueur = 4;
                 nomJoueur[3] = $('#nomJoueurD').val();
@@ -983,8 +979,90 @@
 
                     //Recrée la paquet de jeu.
                     json.paquetCarte.forEach(function (item, index) {
+                    if (item != null) {
+                        var params;
+                        if (item.type === typeEnum.habitats) {
+                            params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                        } else if (item.type === typeEnum.macroInvertebre) {
+                            var cond = item.condition.split(',');
+                            params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                        } else if (item.type === typeEnum.perturbation) {
+                            params = { tempsActif: item.tempsActif };
+                        } else if (item.type === typeEnum.bandeRiveraine) {
+                            params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                        } else if (item.type === typeEnum.salmonide) {
+                            var cond = item.condition.split(',');
+                            params = { condition: cond };
+                        }
+                        var carte = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                        paquetCarte.push(carte);
+                    }
+                });
+
+                //Recrée le paquet de la défausse.
+                json.paquetDecharge.forEach(function (item, index) {
+                    if (item != null) {
+                        var params;
+                        if (item.type === typeEnum.habitats) {
+                            params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                        } else if (item.type === typeEnum.macroInvertebre) {
+                            var cond = item.condition.split(',');
+                            params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                        } else if (item.type === typeEnum.perturbation) {
+                            params = { tempsActif: item.tempsActif };
+                        } else if (item.type === typeEnum.bandeRiveraine) {
+                            params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                        } else if (item.type === typeEnum.salmonide) {
+                            var cond = item.condition.split(',');
+                            params = { condition: cond };
+                        }
+                        paquetDecharge[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                    } else {
+                        paquetDecharge[index] = null;
+                    }
+                });
+
+                //Recrée le paquet de cartes Interventions
+                json.paquetIntervention.forEach(function (item, index) {
+                    if (item != null) {
+                        var params;
+
+                        if (item.nom === nomEnum.amenageFosse || item.nom === nomEnum.amenageGalets || item.nom === nomEnum.amenageGravier || item.nom === nomEnum.amenageRapides || item.nom === nomEnum.amenageSable) {
+                            params = { habitats: item.habitats };
+                        }
+                        paquetIntervention[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                    } else {
+                        paquetIntervention[index] = null;
+                    }
+                });
+
+                //Recrée le nom des joueurs.
+                json.nomJoueur.forEach(function (item, index) {
+                    if (item != null) {
+                        nomJoueur[index] = item;
+                    }
+                });
+
+                //Récrée le tableau rétention
+                json.tableauRetention.forEach(function (item, index) {
+                    if (item != null) {
+                        tableauRetention[index] = item;
+                    }
+                });
+
+                //Récrée le tableau Passer Son Tour.
+                json.tableauPasserTour.forEach(function (item, index) {
+                    if (item != null) {
+                        tableauPasserTour = item;
+                    }
+                });
+
+                //Recrée la main de chaque joueur.
+                json.mains.forEach(function (item1, index1) {
+                    json.mains[index1].forEach(function (item, index) {
                         if (item != null) {
                             var params;
+
                             if (item.type === typeEnum.habitats) {
                                 params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
                             } else if (item.type === typeEnum.macroInvertebre) {
@@ -1007,6 +1085,7 @@
                     json.paquetDecharge.forEach(function (item, index) {
                         if (item != null) {
                             var params;
+
                             if (item.type === typeEnum.habitats) {
                                 params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
                             } else if (item.type === typeEnum.macroInvertebre) {
@@ -1467,7 +1546,7 @@
 
         //Fonction qui sera fréquement appeler pour ré-emplir la main.
         function remplirMain() {
-            if (tour === 0) {//Avant de commencer, remplie toutes les mains.
+            if (tour === 1) {//Avant de commencer, remplie toutes les mains.
                 //On distrubue les rapides d'abord, puis les habitats au hasard et on termine par le reste de la main au hasard
                 //pour assurer une chance egal à tous les joueurs d'avoir les mêmes cartes.
 
@@ -1674,13 +1753,6 @@
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
-            var divFin = document.createElement('button');
-            divFin.id = 'divFin';
-            divFin.className = 'buttonJeu';
-            divFin.setAttribute('onclick', 'afficherEcranFin()');
-            divFin.textContent = 'Afficher le tableau de fin';
-            $('#divDroite').append(divFin);
-
             //Bouton du tableau des cartes
             var buttonTableauCarte = document.createElement('button');
             buttonTableauCarte.id = 'buttonTableauCarte';
@@ -1702,7 +1774,7 @@
             buttonPasserTour.id = 'buttonPasserTour';
             buttonPasserTour.className = 'buttonJeu';
             buttonPasserTour.setAttribute('onclick', 'passerTour()');
-            buttonPasserTour.textContent = 'Passer son tour';
+            buttonPasserTour.textContent = 'Joueur suivant';
             document.getElementById('divDroite').appendChild(buttonPasserTour);
 
             //Bouton pour les options.
@@ -1847,16 +1919,7 @@
                                 brillerCarte(typeEnum.habitats, 3, false);
                             }
 
-                            $('.emplacementJoueurA').removeClass('imageCarteJeuErosion');
-                            $('.emplacementJoueurB').removeClass('imageCarteJeuErosion');
-
-                            if (nombreJoueur > 2) {
-                                $('.emplacementJoueurC').removeClass('imageCarteJeuErosion');
-                            }
-
-                            if (nombreJoueur > 3) {
-                                $('.emplacementJoueurD').removeClass('imageCarteJeuErosion');
-                            }
+                            $('.imageCarteJeuErosion').removeClass('imageCarteJeuErosion');
 
                             erosion = false;
                             etapeErosion = 1;
@@ -3677,18 +3740,7 @@
                     }
                 }
             } else if (!brille) {//Sinon débrille tout.
-                for (var i = 0; i < 10; i++) {
-                    $('#emplacementJoueurA' + i).removeClass('ui-echange-highlight');
-                    $('#emplacementJoueurB' + i).removeClass('ui-echange-highlight');
-
-                    if (nombreJoueur > 2) {
-
-                        $('#emplacementJoueurC' + i).removeClass('ui-echange-highlight');
-                    }
-                    if (nombreJoueur > 3) {
-                        $('#emplacementJoueurD' + i).removeClass('ui-echange-highlight');
-                    }
-                }
+                    $('.ui-echange-highlight').removeClass('ui-echange-highlight');               
             }
         }
 
@@ -4751,16 +4803,49 @@
             }
         }
 
+        //Fonction qui ajoute des cartes selon le tour.
+        function ajoutCarte(numeroTour) {
+            var carte;
+
+            if(numeroTour === 4 && difficulte === 1){
+            //---------------------------------salmonide---------------------------------
+
+            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+            paquetCarte.push(carte);
+
+            //---------------------------------bandeRiveraine----------------------------
+
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+            paquetCarte.push(carte);
+
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+            paquetCarte.push(carte);
+
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+            paquetCarte.push(carte);
+            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+            paquetCarte.push(carte);
+
+            melangerPaquetCarte(paquetCarte);
+            }
+        }
+
         //function qui crée le paquet de carte.
         function creerPaquetCarte(difficulte) {
             var carte;
-            var paquetCarte = new Array();
-
-            //Dépendant du niveau de la partie, il n'y aura pas les mêmes cartes  dans le deck.
-            //On créer plusieurs fois la même carte car sinon, toute les cartes référence au même objet
-            //et lorsqu'on le modifie toutes les cartes identiques se modifient également
-            //if (tour == 1) {
-            //----------------------------------habitats-----------------------------------
+            var paquetCarte = [];
 
             carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse });
             paquetCarte.push(carte);
@@ -4796,19 +4881,19 @@
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
 
             carte = new Carte(typeEnum.habitats, nomEnum.galets, 'galets.png', 3, { habitats: 'galets' });
             paquetCarte.push(carte);
@@ -4960,93 +5045,74 @@
             paquetCarte.push(carte);
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.pteronarcyidae, 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: typeMacroEnum.plecoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte);
-            //}
 
-            //if (tour == 5) {
-            //---------------------------------salmonide---------------------------------
+            if (difficulte >= 2){//Moyen
+                //---------------------------------salmonide---------------------------------
 
-            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+                paquetCarte.push(carte);
 
-            //---------------------------------bandeRiveraine----------------------------
+                //---------------------------------bandeRiveraine----------------------------
 
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+                paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
-            paquetCarte.push(carte);
-            //}
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+                paquetCarte.push(carte);
+                //--------------------------perturbation--------------------------------------
 
+                carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
+                paquetCarte.push(carte);
 
-            //--------------------------perturbation--------------------------------------
+                carte = new Carte(typeEnum.perturbation, nomEnum.erosion, 'erosion.png', 3, { tempsActif: 0 });
+                paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.passageToutTerrain, 'passageToutTerrain.png', 3, { tempsActif: 1 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.passageToutTerrain, 'passageToutTerrain.png', 3, { tempsActif: 1 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.passageToutTerrain, 'passageToutTerrain.png', 3, { tempsActif: 1 });
+                paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.perturbation, nomEnum.erosion, 'erosion.png', 3, { tempsActif: 0 });
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.artificialisation, 'artificialisation.png', 3, { tempsActif: 0 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.artificialisation, 'artificialisation.png', 3, { tempsActif: 0 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.artificialisation, 'artificialisation.png', 3, { tempsActif: 0 });
+                paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.perturbation, nomEnum.passageToutTerrain, 'passageToutTerrain.png', 3, { tempsActif: 1 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.perturbation, nomEnum.passageToutTerrain, 'passageToutTerrain.png', 3, { tempsActif: 1 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.perturbation, nomEnum.passageToutTerrain, 'passageToutTerrain.png', 3, { tempsActif: 1 });
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.pollutionOrganique, 'pollutionOrganique.png', 4, { tempsActif: 2 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.pollutionOrganique, 'pollutionOrganique.png', 4, { tempsActif: 2 });
+                paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.perturbation, nomEnum.artificialisation, 'artificialisation.png', 3, { tempsActif: 0 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.perturbation, nomEnum.artificialisation, 'artificialisation.png', 3, { tempsActif: 0 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.perturbation, nomEnum.artificialisation, 'artificialisation.png', 3, { tempsActif: 0 });
-            paquetCarte.push(carte);
-
-            carte = new Carte(typeEnum.perturbation, nomEnum.pollutionOrganique, 'pollutionOrganique.png', 4, { tempsActif: 2 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.perturbation, nomEnum.pollutionOrganique, 'pollutionOrganique.png', 4, { tempsActif: 2 });
-            paquetCarte.push(carte);
-
-            carte = new Carte(typeEnum.perturbation, nomEnum.deversement, 'deversement.png', 2, { tempsActif: 1 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.perturbation, nomEnum.deversement, 'deversement.png', 2, { tempsActif: 1 });
-            paquetCarte.push(carte);
-
-
-            //--------------------------------reglementation----------------------------------------------
-
-            carte = new Carte(typeEnum.reglementation, nomEnum.assainissement, 'assainissement.png', 3);
-            paquetCarte.push(carte);
-
-            carte = new Carte(typeEnum.reglementation, nomEnum.interdiction, 'interdiction.png', 3);
-            paquetCarte.push(carte);
-
-            carte = new Carte(typeEnum.reglementation, nomEnum.politique, 'politique.png', 3);
-            paquetCarte.push(carte);
-
-            if (difficulte >= 2)//Moyen
-            {
+                carte = new Carte(typeEnum.perturbation, nomEnum.deversement, 'deversement.png', 2, { tempsActif: 1 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.perturbation, nomEnum.deversement, 'deversement.png', 2, { tempsActif: 1 });
+                paquetCarte.push(carte);
 
                 //---------------------------action--------------------------------------
 
@@ -5098,8 +5164,7 @@
                 paquetIntervention.push(carte);
             }
 
-            if (difficulte >= 3)//Difficile
-            {
+            if (difficulte >= 3){//Difficile 
                 //-----------------------------------speciale--------------------------------
 
                 carte = new Carte(typeEnum.speciale, nomEnum.prisSurFait, 'prisSurFait.png', 0);
@@ -5362,16 +5427,18 @@
                     numeroJoueurActif++;
                     if (numeroJoueurActif === nombreJoueur) {
                         numeroJoueurActif = 0;
+                        tour++;
+                        ajoutCarte(tour);
                     }
-
+                    
                     //Rends le bouton passer tour inactif lorsuq'on clique dessus pour éviter de "spam" le bouton.
                     setTimeout(function () {
                         $('#buttonPasserTour').prop('disabled', false);
                         $('#divMain').css('pointer-events', 'auto');
                     }, 2000);
-
-                    tour++;
-                    remplirMain();
+                    if (tour != 1) {
+                        remplirMain();
+                    }
                     updatePointsRessourcesJeu();
                     setTimeout(function () {
                         updateAffichageImage();
@@ -5604,7 +5671,8 @@
             $(divCredits).dialog({
                 classes: {
                     'ui-dialog': 'popUpRegle no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
+                    'ui-dialog-titlebar': 'no-header',
+                    'ui-dialog-buttonset': 'buttonJeu'
                 },
                 draggable: false,
                 resizable: false,
@@ -5621,7 +5689,8 @@
             $(divTableauCarte).dialog({
                 classes: {
                     'ui-dialog': 'popUpRegle no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header'
+                    'ui-dialog-titlebar': 'no-header',
+                    'ui-dialog-buttonset': 'buttonJeu'
                 },
                 draggable: false,
                 resizable: false,
@@ -5635,7 +5704,7 @@
 
         //Fonction qui "update" le jeu.
         function updatePointsRessourcesJeu() {
-            pointsRessourcesBase[numeroJoueurActif] = 8;
+            pointsRessourcesBase[numeroJoueurActif] = 5;
             pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel() + tableauRetention[numeroJoueurActif];
             tableauRetention[numeroJoueurActif] = 0;
             pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
