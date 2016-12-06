@@ -4941,38 +4941,37 @@
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.pteronarcyidae, 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: typeMacroEnum.plecoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte);
 
-            //---------------------------------salmonide---------------------------------
-
-            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
-            paquetCarte.push(carte);
-
-            //---------------------------------bandeRiveraine----------------------------
-
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
-
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
-            paquetCarte.push(carte);
-
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
-            paquetCarte.push(carte);
-
             if (difficulte >= 2)//Moyen
             {
+                //---------------------------------salmonide---------------------------------
+
+                carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+                paquetCarte.push(carte);
+
+                //---------------------------------bandeRiveraine----------------------------
+
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
+
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+                paquetCarte.push(carte);
+
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+                paquetCarte.push(carte);
                 //--------------------------perturbation--------------------------------------
 
                 carte = new Carte(typeEnum.perturbation, nomEnum.dechets, 'dechets.png', 2, { tempsActif: 0 });
@@ -5060,10 +5059,8 @@
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageArbre, 'bandeRiveraineArbre.png', 3);
                 paquetIntervention.push(carte);
             }
-            }
 
-            if (difficulte === 3)//Difficile
-            {
+            if (difficulte === 3){//Difficile 
 
                 //---------------------------------intervention------------------------------
 
@@ -5353,6 +5350,7 @@
                     if (numeroJoueurActif === nombreJoueur) {
                         numeroJoueurActif = 0;
                         tour++;
+                        ajoutCarte();
                     }
 
                     //Rends le bouton passer tour inactif lorsuq'on clique dessus pour éviter de "spam" le bouton.
