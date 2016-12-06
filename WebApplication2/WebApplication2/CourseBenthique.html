@@ -11,7 +11,6 @@
     <script src="scripts/FileSaver.min.js"></script>
     <script>
         //TODO: pecheur.
-        //TODO: pris sur le fait, lorsque le pop-up apparais, parfois il ne dits pas que c'est pour nous offrir la possibilité d'utiliser la carte.s
         /* ------------------enum---------------------  */
         var typeEnum = {
             'habitats': 'habitats',
@@ -966,103 +965,24 @@
 
             fileReader.readAsText(file[0]);
             fileReader.onload = function (e) {
-                json = JSON.parse(fileReader.result);
+                if (e == null) {
+                    json = JSON.parse(fileReader.result);
 
-                //Reinstancie les variables.
-                nomJoueur = [];
-                difficulte = json.difficulte;
-                nombreJoueur = json.nombreJoueur;
-                numeroJoueurActif = json.numeroJoueurActif;
-                tour = json.tour;
-                facteurRotation = json.facteurRotation;
-                deversement = json.deversement;
-                tempsDeversement = json.tempsDeversement;
-                numeroJoueurDeversement = json.numeroJoueurDeversement;
-                paquetCarte = [];
-                instancierTableaux();
+                    //Reinstancie les variables.
+                    nomJoueur = [];
+                    difficulte = json.difficulte;
+                    nombreJoueur = json.nombreJoueur;
+                    numeroJoueurActif = json.numeroJoueurActif;
+                    tour = json.tour;
+                    facteurRotation = json.facteurRotation;
+                    deversement = json.deversement;
+                    tempsDeversement = json.tempsDeversement;
+                    numeroJoueurDeversement = json.numeroJoueurDeversement;
+                    paquetCarte = [];
+                    instancierTableaux();
 
-                //Recrée la paquet de jeu.
-                json.paquetCarte.forEach(function (item, index) {
-                    if (item != null) {
-                        var params;
-                        if (item.type === typeEnum.habitats) {
-                            params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                        } else if (item.type === typeEnum.macroInvertebre) {
-                            var cond = item.condition.split(',');
-                            params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
-                        } else if (item.type === typeEnum.perturbation) {
-                            params = { tempsActif: item.tempsActif };
-                        } else if (item.type === typeEnum.bandeRiveraine) {
-                            params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                        } else if (item.type === typeEnum.salmonide) {
-                            var cond = item.condition.split(',');
-                            params = { condition: cond };
-                        }
-                        var carte = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                        paquetCarte.push(carte);
-                    }
-                });
-
-                //Recrée le paquet de la défausse.
-                json.paquetDecharge.forEach(function (item, index) {
-                    if (item != null) {
-                        var params;
-                        if (item.type === typeEnum.habitats) {
-                            params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                        } else if (item.type === typeEnum.macroInvertebre) {
-                            var cond = item.condition.split(',');
-                            params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
-                        } else if (item.type === typeEnum.perturbation) {
-                            params = { tempsActif: item.tempsActif };
-                        } else if (item.type === typeEnum.bandeRiveraine) {
-                            params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                        } else if (item.type === typeEnum.salmonide) {
-                            var cond = item.condition.split(',');
-                            params = { condition: cond };
-                        }
-                        paquetDecharge[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                    } else {
-                        paquetDecharge[index] = null;
-                    }
-                });
-
-                //Recrée le paquet de cartes Interventions
-                json.paquetIntervention.forEach(function (item, index) {
-                    if (item != null) {
-                        var params;
-                        if (item.nom === nomEnum.amenageFosse || item.nom === nomEnum.amenageGalets || item.nom === nomEnum.amenageGravier || item.nom === nomEnum.amenageRapides || item.nom === nomEnum.amenageSable) {
-                            params = { habitats: item.habitats };
-                        }
-                        paquetIntervention[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                    } else {
-                        paquetIntervention[index] = null;
-                    }
-                });
-
-                //Recrée le nom des joueurs.
-                json.nomJoueur.forEach(function (item, index) {
-                    if (item != null) {
-                        nomJoueur[index] = item;
-                    }
-                });
-
-                //Récrée le tableau rétention
-                json.tableauRetention.forEach(function (item, index) {
-                    if (item != null) {
-                        tableauRetention[index] = item;
-                    }
-                });
-
-                //Récrée le tableau Passer Son Tour.
-                json.tableauPasserTour.forEach(function (item, index) {
-                    if (item != null) {
-                        tableauPasserTour = item;
-                    }
-                });
-
-                //Recrée la main de chaque joueur.
-                json.mains.forEach(function (item1, index1) {
-                    json.mains[index1].forEach(function (item, index) {
+                    //Recrée la paquet de jeu.
+                    json.paquetCarte.forEach(function (item, index) {
                         if (item != null) {
                             var params;
                             if (item.type === typeEnum.habitats) {
@@ -1078,61 +998,145 @@
                                 var cond = item.condition.split(',');
                                 params = { condition: cond };
                             }
-                            mains[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                            var carte = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                            paquetCarte.push(carte);
+                        }
+                    });
+
+                    //Recrée le paquet de la défausse.
+                    json.paquetDecharge.forEach(function (item, index) {
+                        if (item != null) {
+                            var params;
+                            if (item.type === typeEnum.habitats) {
+                                params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                            } else if (item.type === typeEnum.macroInvertebre) {
+                                var cond = item.condition.split(',');
+                                params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                            } else if (item.type === typeEnum.perturbation) {
+                                params = { tempsActif: item.tempsActif };
+                            } else if (item.type === typeEnum.bandeRiveraine) {
+                                params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                            } else if (item.type === typeEnum.salmonide) {
+                                var cond = item.condition.split(',');
+                                params = { condition: cond };
+                            }
+                            paquetDecharge[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
                         } else {
-                            mains[index1][index] = null;
+                            paquetDecharge[index] = null;
                         }
                     });
-                });
 
-                //Recrée le jeu de chaque joueur.
-                json.carteBas.forEach(function (item1, index1) {
-                    json.carteBas[index1].forEach(function (item, index) {
+                    //Recrée le paquet de cartes Interventions
+                    json.paquetIntervention.forEach(function (item, index) {
                         if (item != null) {
                             var params;
-                            if (item.type === typeEnum.habitats) {
-                                params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                            } else if (item.type === typeEnum.macroInvertebre) {
-                                var cond = item.condition.split(',');
-                                params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
-                            } else if (item.type === typeEnum.perturbation) {
-                                params = { tempsActif: item.tempsActif };
-                            } else if (item.type === typeEnum.bandeRiveraine) {
-                                params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                            } else if (item.type === typeEnum.salmonide) {
-                                var cond = item.condition.split(',');
-                                params = { condition: cond };
+                            if (item.nom === nomEnum.amenageFosse || item.nom === nomEnum.amenageGalets || item.nom === nomEnum.amenageGravier || item.nom === nomEnum.amenageRapides || item.nom === nomEnum.amenageSable) {
+                                params = { habitats: item.habitats };
                             }
-                            carteBas[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                            paquetIntervention[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                        } else {
+                            paquetIntervention[index] = null;
                         }
                     });
-                });
 
-                //Recrée le tableau des cartes perturbations.
-                json.cartePerturbation.forEach(function (item1, index1) {
-                    json.cartePerturbation[index1].forEach(function (item, index) {
+                    //Recrée le nom des joueurs.
+                    json.nomJoueur.forEach(function (item, index) {
                         if (item != null) {
-                            cartePerturbation[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, { tempsActif: item.tempsActif });
+                            nomJoueur[index] = item;
                         }
                     });
-                });
 
-                //Recrée le tableau des exemplaires des cartes.
-                json.exemplaireCarteBas.forEach(function (item1, index1) {
-                    json.exemplaireCarteBas[index1].forEach(function (item, index) {
-                        exemplaireCarteBas[index1][index] = item;
+                    //Récrée le tableau rétention
+                    json.tableauRetention.forEach(function (item, index) {
+                        if (item != null) {
+                            tableauRetention[index] = item;
+                        }
                     });
-                });
 
-                //Recrée l'affichage.
-                $('#menuPrincipal').remove();
-                updatePointsRessourcesJeu();
-                pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
-                pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif] - pointsRessourcesUtiliser[numeroJoueurActif];
-                creerElementFond();
-                updateAffichageImage();
-                updatePlateau();
+                    //Récrée le tableau Passer Son Tour.
+                    json.tableauPasserTour.forEach(function (item, index) {
+                        if (item != null) {
+                            tableauPasserTour = item;
+                        }
+                    });
+
+                    //Recrée la main de chaque joueur.
+                    json.mains.forEach(function (item1, index1) {
+                        json.mains[index1].forEach(function (item, index) {
+                            if (item != null) {
+                                var params;
+                                if (item.type === typeEnum.habitats) {
+                                    params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                } else if (item.type === typeEnum.macroInvertebre) {
+                                    var cond = item.condition.split(',');
+                                    params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                                } else if (item.type === typeEnum.perturbation) {
+                                    params = { tempsActif: item.tempsActif };
+                                } else if (item.type === typeEnum.bandeRiveraine) {
+                                    params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                } else if (item.type === typeEnum.salmonide) {
+                                    var cond = item.condition.split(',');
+                                    params = { condition: cond };
+                                }
+                                mains[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                            } else {
+                                mains[index1][index] = null;
+                            }
+                        });
+                    });
+
+                    //Recrée le jeu de chaque joueur.
+                    json.carteBas.forEach(function (item1, index1) {
+                        json.carteBas[index1].forEach(function (item, index) {
+                            if (item != null) {
+                                var params;
+                                if (item.type === typeEnum.habitats) {
+                                    params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                } else if (item.type === typeEnum.macroInvertebre) {
+                                    var cond = item.condition.split(',');
+                                    params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                                } else if (item.type === typeEnum.perturbation) {
+                                    params = { tempsActif: item.tempsActif };
+                                } else if (item.type === typeEnum.bandeRiveraine) {
+                                    params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                } else if (item.type === typeEnum.salmonide) {
+                                    var cond = item.condition.split(',');
+                                    params = { condition: cond };
+                                }
+                                carteBas[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                            }
+                        });
+                    });
+
+                    //Recrée le tableau des cartes perturbations.
+                    json.cartePerturbation.forEach(function (item1, index1) {
+                        json.cartePerturbation[index1].forEach(function (item, index) {
+                            if (item != null) {
+                                cartePerturbation[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, { tempsActif: item.tempsActif });
+                            }
+                        });
+                    });
+
+                    //Recrée le tableau des exemplaires des cartes.
+                    json.exemplaireCarteBas.forEach(function (item1, index1) {
+                        json.exemplaireCarteBas[index1].forEach(function (item, index) {
+                            exemplaireCarteBas[index1][index] = item;
+                        });
+                    });
+
+                    //Recrée l'affichage.
+                    $('#menuPrincipal').remove();
+                    updatePointsRessourcesJeu();
+                    pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
+                    pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif] - pointsRessourcesUtiliser[numeroJoueurActif];
+                    creerElementFond();
+                    updateAffichageImage();
+                    updatePlateau();
+                } else {
+                    alert('Une erreur est survenue lors de la lecture de la sauvegarde. Veuillez réessayer ou charger une sauvegarde différente.');
+                }
             };
+
         }
 
         //Fonction appelé lors d'un clic sur le bouton Options en jeu
@@ -1190,7 +1194,13 @@
             var buttonSauvegarder = document.createElement('button');
             buttonSauvegarder.id = 'buttonSauvegarder';
             buttonSauvegarder.className = 'buttonSauvegarder';
-            $(buttonSauvegarder).click(function () { sauvegarderPartie(textBoxSauvegarder.value) });
+            $(buttonSauvegarder).click(function () {
+                if (!textBoxSauvegarder.value) {
+                    popUpErreur('Veuillez entrer un nom de fichier avant de sauvegarder.');
+                } else {
+                    sauvegarderPartie(textBoxSauvegarder.value);
+                }
+            });
             buttonSauvegarder.textContent = 'Sauvegarder';
             divOptions.appendChild(buttonSauvegarder);
 
@@ -1462,7 +1472,7 @@
                 //pour assurer une chance egal à tous les joueurs d'avoir les mêmes cartes.
 
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere(nomEnum.zonage, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
 
@@ -1728,10 +1738,10 @@
                         updateAffichageImage();
 
                     } else {
-                        popUpAvertissement('Le macroinvertebré doit être de taille inférieur à votre prédateur.');
+                        popUpAvertissement('Le «Macroinvertébré» doit être de taille inférieure à votre prédateur.');
                     }
                 } else {
-                    popUpAvertissement('Vous devez sélectionner un macroinvertebré à manger.');
+                    popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» à manger.');
                 }
                 /* ---------------Partie pollution organique--------------*/
             } else if (onPollu) {
@@ -1752,10 +1762,10 @@
                                 brillanceHabitatsEnnemi(false);
                             }
                         } else {
-                            popUpAvertissement('Cette carte est déjà perturbée');
+                            popUpAvertissement('Cette carte est déjà perturbée.');
                         }
                     } else {
-                        popUpAvertissement('Seulement les habitats peuvent être pollués');
+                        popUpAvertissement('Seul les «Habitats» peuvent être pollués.');
                     }
                 }
                 /* -----------------Partie érosion -------------------*/
@@ -1802,9 +1812,9 @@
                             brillerCarte(typeEnum.habitats, 3, true);
                         }
 
-                        popUpConfirmation('Vous devez désormais sélectionner un habitat que vous voulez transformer en sable.')
+                        popUpConfirmation('Vous devez désormais sélectionner un «Habitat» que vous voulez transformer en «Sable».')
                     } else {
-                        popUpAvertissement('Vous devez sélectionner une carte bande riveraine pour l\'envoyer à la décharge.');
+                        popUpAvertissement('Vous devez sélectionner une carte «Bande Riveraine» pour l\'envoyer à la décharge.');
                     }
                 } else if (etapeErosion === 2) {//Étape 2, transformer un habitats en sable.
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
@@ -1894,7 +1904,7 @@
                         etapeErosion = 1;
                         griserZone(false, false, false);
                     } else {
-                        popUpAvertissement('Vous devez sélectionner une carte habitat pour la transformer en sable.');
+                        popUpAvertissement('Vous devez sélectionner une carte «Habitat» pour la transformer en «Sable».');
                     }
                 }
                 /* --------------------- carte prédation -----------*/
@@ -1914,10 +1924,10 @@
 
                             updateAffichageImage();
                         } else {
-                            popUpAvertissement('Vous ne pouvez pas manger vos propres prédateurs');
+                            popUpAvertissement('Vous ne pouvez pas manger vos propres prédateurs.');
                         }
                     } else {
-                        popUpAvertissement('Le macroinvertébré doit être de taille inférieur au prédateur.')
+                        popUpAvertissement('Le «Macroinvertébré» doit être de taille inférieure au prédateur.')
                     }
                 } else {
                     popUpAvertissement('Vous devez sélectionner un prédateur de taille inférieure pour qu\'il soit mangé.');
@@ -2039,7 +2049,7 @@
                                 zonage = false;
                                 griserZone(false, false, false);
 
-                                popUpConfirmation('La carte ' + carteEchange1.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur1)] + ' à été changer par la carte ' + carteEchange2.nom + ' de : ' + nomJoueur[numeroJoueur(lettreJoueur2)]);
+                                popUpConfirmation('La carte «' + premiereLettreMaj(carteEchange1.nom) + '» de : ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur1)]) + ' à été changé par la carte «' + premiereLettreMaj(carteEchange2.nom) + '» de : ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur2)]));
                             } else {
                                 popUpAvertissement('Vous devez cliquer sur une des cartes «Habitats» d\'un ennemi.')
                             }
@@ -2142,7 +2152,7 @@
                                     updateAffichageImage();
                                 } else {//Code pour le pop-up qui demande si un joueur désire utiliser sa carte pris sur le fait.
                                     $('#divChoixContenu').children().remove('ul');
-                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
+                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte «Pris sur le fait!» pour annuler la carte «' + premiereLettreMaj(carteDrag.nom) + '»?');
                                     $('#divChoix').dialog({
                                         classes: {
                                             'ui-dialog': 'no-x ui-corner-all',
@@ -2222,7 +2232,7 @@
                             } else if (carteDrag.nom === nomEnum.zonage) {//Carte zonage.
                                 zonage = true;
                                 etapeZonage = 1;
-                                popUpConfirmation('Sélectionnez l\'habitats que vous voulez échanger');
+                                popUpConfirmation('Sélectionnez l\'«Habitats» que vous voulez échanger');
                                 supprimerCartePrecise(carteDragNumero);
                                 paquetDecharge.push(carteDrag);
                                 ui.draggable.remove();
@@ -2243,7 +2253,7 @@
                                             if (joueurSelectionne.id === '1') {
                                                 naturalisation = true;
                                                 griserZone(true, false, true);
-                                                popUpConfirmation('Choisissez la bande riveraine que vous voulez désartificialiser.');
+                                                popUpConfirmation('Choisissez la «Bande Riveraine» que vous voulez désartificialiser.');
                                                 for (var i = 0; i < nombreJoueur; i++) {
                                                     for (var j = 0; j < cartePerturbation[i].length; j++) {
                                                         if (cartePerturbation[i][j] != null) {
@@ -2548,7 +2558,7 @@
                             } else if (carteDrag.nom === nomEnum.erosion) {//Carte érosion.
                                 //Si personne à la carte pris sur le fait.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value != null }).length === 0) {
-                                    popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.');
+                                    popUpConfirmation('Vous devez sélectioner la «Bande Riveraine» à envoyer à la décharge.');
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     ui.draggable.remove();
@@ -2574,7 +2584,7 @@
                                     griserZone(true, false, true);
                                 } else {//Sinon, demande si un joueur veut utiliser sa carte et annuler la carte.
                                     $('#divChoixContenu').children().remove('ul');
-                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
+                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte «Pris sur le fait!» pour annuler la carte «' + premiereLettreMaj(carteDrag.nom) + '»?');
                                     $('#divChoix').dialog({
                                         classes: {
                                             'ui-dialog': 'no-x ui-corner-all',
@@ -2582,7 +2592,7 @@
                                         buttons: {
                                             Confirmer: function () {
                                                 if (joueurSelectionne.innerHTML === 'Aucun joueur') {
-                                                    popUpConfirmation('Vous devez sélectioner la bande riveraine à envoyer à la décharge.');
+                                                    popUpConfirmation('Vous devez sélectioner la «Bande Riveraine» à envoyer à la décharge.');
                                                     supprimerCartePrecise(carteDragNumero);
                                                     paquetDecharge.push(carteDrag);
                                                     erosion = true
@@ -2671,7 +2681,7 @@
                                 }
                             } else if (carteDrag.nom === nomEnum.pollutionOrganique) {//Carte pollution Organique.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value != null }).length === 0) {
-                                    popUpConfirmation('Vous devez sélectioner 3 habitats à polluer.');
+                                    popUpConfirmation('Vous devez sélectioner 3 «Habitats» à polluer.');
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     brillanceHabitatsEnnemi(true);
@@ -2682,7 +2692,7 @@
                                     griserZone(true, false, true);
                                 } else {
                                     $('#divChoixContenu').children().remove('ul');
-                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
+                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte «Pris sur le fait!» pour annuler la carte «' + premiereLettreMaj(carteDrag.nom) + '»?');
                                     $('#divChoix').dialog({
                                         classes: {
                                             'ui-dialog': 'no-x ui-corner-all',
@@ -2690,7 +2700,7 @@
                                         buttons: {
                                             Confirmer: function () {
                                                 if (joueurSelectionne.innerHTML === 'Aucun joueur') {
-                                                    popUpConfirmation('Vous devez sélectioner 3 habitats à polluer.');
+                                                    popUpConfirmation('Vous devez sélectioner 3 «Habitats» à polluer.');
                                                     supprimerCartePrecise(carteDragNumero);
                                                     paquetDecharge.push(carteDrag);
                                                     brillanceHabitatsEnnemi(true);
@@ -2789,7 +2799,7 @@
                                 paquetDecharge.push(carteDrag);
                                 ui.draggable.remove();
                                 updateAffichageImage();
-                                popUpConfirmation('Choississez le macroinvertébrés de taille inférieur à ' + taillePredateur + ' que vous voulez manger.');
+                                popUpConfirmation('Choississez le «Macroinvertébré» de taille inférieure à ' + taillePredateur + ' que vous voulez manger.');
                             } else if (carteDrag.nom === nomEnum.retention) {//Carte rétention.
                                 tableauRetention[numeroJoueurActif] = true;
                                 paquetDecharge.push(carteDrag);
@@ -3033,19 +3043,32 @@
                                 ul.id = 'listeJoueur';
                                 $('#divChoixContenu').append(ul);
 
-                                var li = document.createElement('li');
-                                li.style.listStyleType = 'none';
-                                li.className = 'listeJoueur';
-                                li.id = '1';
-                                li.innerHTML = 'Pêcher la carte Salmonidé d\'un adversaire et la placer dans votre main.';
-                                $(ul).append(li);
-
-                                var li = document.createElement('li');
-                                li.style.listStyleType = 'none';
-                                li.className = 'listeJoueur';
-                                li.id = '2';
-                                li.innerHTML = 'Choisir un carte dans la décharge.';
-                                $(ul).append(li);
+                                var poisson = false;
+                                for (var i = 0; i < nombreJoueur; i++) {
+                                    for (var j = 0; j < carteBas[i].length; j++) {
+                                        if (poisson !== true) {
+                                            if (carteBas[i][j] != null) {
+                                                if (carteBas[i][j].type === typeEnum.salmonide) {
+                                                    poisson = true;
+                                                    var li = document.createElement('li');
+                                                    li.style.listStyleType = 'none';
+                                                    li.className = 'listeJoueur';
+                                                    li.id = '1';
+                                                    li.innerHTML = 'Pêcher la carte Salmonidé d\'un adversaire et la placer dans votre main.';
+                                                    $(ul).append(li);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (paquetDecharge.length > 0) {
+                                    var li = document.createElement('li');
+                                    li.style.listStyleType = 'none';
+                                    li.className = 'listeJoueur';
+                                    li.id = '2';
+                                    li.innerHTML = 'Choisir un carte dans la décharge.';
+                                    $(ul).append(li);
+                                }
 
                                 $(function () {
                                     $(ul).selectable({
@@ -3065,7 +3088,7 @@
                                 supprimerCartePrecise(carteDragNumero);
                                 updateAffichageImage();
                                 $('#divChoixContenu').children().remove('ul');
-                                $('#labelChoix').text('Veuillez choisir un ordre de macroinvertébrés à retourner dans les mains de leurs joueurs respectifs.');
+                                $('#labelChoix').text('Veuillez choisir un ordre de «Macroinvertébrés» à retourner dans les mains de leurs joueurs respectifs.');
 
                                 var ul = document.createElement('ul');
                                 ul.id = 'listeJoueur';
@@ -3303,7 +3326,7 @@
                                                         taillePredateur = carteDrag.taille;
                                                         onDrop(event, ui, this);
                                                         mangerPredateur = true;
-                                                        popUpConfirmation('Vous devez sélectionnez un macro-invertébré à manger.');
+                                                        popUpConfirmation('Vous devez sélectionnez un «Macroinvertébré» à manger.');
                                                         brillanceCarteMangeable(true);
                                                         griserZone(true, false, true);
                                                     } else {//Sinon, met simplement la carte.
@@ -3318,7 +3341,7 @@
                                                         taillePredateur = carteDrag.taille;
                                                         onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
                                                         mangerPredateur = true;
-                                                        popUpConfirmation('Vous devez sélectionnez un macro-invertébré de taille inférieur à manger.');
+                                                        popUpConfirmation('Vous devez sélectionnez un «Macroinvertébré» de taille inférieure à manger.');
                                                         brillanceCarteMangeable(true);
                                                     } else {//Sinon, mes simplement la carte.
                                                         onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
@@ -3338,16 +3361,16 @@
                                                         if (!(carteBas[numeroJoueurActif][id].type === typeEnum.bandeRiveraine && carteBas[numeroJoueurActif][id].perturber)) {
                                                             onDrop(event, ui, this);
                                                         } else {
-                                                            popUpErreur('Vous ne pouvez pas empiller sur une carte perturber.')
+                                                            popUpErreur('Vous ne pouvez pas empiler sur une carte perturbée.')
                                                             ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                                         }
                                                     } else {
-                                                        popUpErreur('Vous ne pouvez pas empiller sur une carte perturber.')
+                                                        popUpErreur('Vous ne pouvez pas empiler sur une carte perturbée.')
                                                         ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                                     }
                                                 } else {//Sinon, le drop est pas accepter.
                                                     ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
-                                                    popUpErreur('Vous ne pouvez pas empiller des cartes différentes.');
+                                                    popUpErreur('Vous ne pouvez pas empiler des cartes différentes.');
                                                 }
                                             } else {
                                                 var zoneDrop = this;
@@ -3361,7 +3384,7 @@
                                                     updateAffichageImage();
                                                 } else {
                                                     $('#divChoixContenu').children().remove('ul');
-                                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte Pris sur le fait! pour annuler la carte ' + carteDrag.nom + '?');
+                                                    $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte «Pris sur le fait!» pour annuler la carte «' + premiereLettreMaj(carteDrag.nom) + '»?');
                                                     $('#divChoix').dialog({
                                                         classes: {
                                                             'ui-dialog': 'no-x ui-corner-all',
@@ -3448,9 +3471,9 @@
                                 ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
 
                                 if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.bandeRiveraine || carteDrag.type === typeEnum.salmonide) {
-                                    popUpErreur('Cette carte est jouable que dans votre zone.');
+                                    popUpErreur('Cette carte n\'est jouable que dans votre zone.');
                                 } else if (carteDrag.type === typeEnum.perturbation) {
-                                    popUpErreur('Cette carte est jouable que dans la zone d\'un de vos adversaire ou directement sur le plateau.');
+                                    popUpErreur('Cette carte n\'est jouable que dans la zone d\'un de vos adversaire ou directement sur le plateau.');
                                 }
                             }
                         },
@@ -3568,7 +3591,7 @@
                     if (carteBas[numeroDuJoueur][i].nom === carteBas[numeroDuJoueur][positionCarteAEmpiler].nom) {
                         if (carteBas[numeroDuJoueur][i].perturber === false) {
                             exemplaireCarteBas[numeroDuJoueur][i]++;
-                            
+
                             var image = document.createElement('img');
                             image.className = 'imageCarteJeu ajoutOnClick';
                             image.src = 'ressources/' + carteBas[numeroDuJoueur][i].nomImage;
@@ -3839,6 +3862,10 @@
             }
         }
 
+        function premiereLettreMaj(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
         //Fonction qui renvoie la lettre du joueur voulu
         function lettreJoueur(numero) {
             if (nombreJoueur === 2) {
@@ -3991,7 +4018,7 @@
                             calculer = true;
                             return true;
                         } else {
-                            popUpAvertissement('Vous ne pouvez pas avoir plus de 8 habitats en jeu.');
+                            popUpAvertissement('Vous ne pouvez pas avoir plus de 8 «Habitats» en jeu.');
                             return false;
                         }
                     } else if (carteDrag.type === typeEnum.bandeRiveraine) {//Si on joue une bande riveraine.
@@ -3999,7 +4026,7 @@
                             calculer = true;
                             return true;
                         } else {
-                            popUpAvertissement('Vous ne pouvez pas avoir plus de 3 bande riveraine en jeu.');
+                            popUpAvertissement('Vous ne pouvez pas avoir plus de 3 «Bandes Riveraines» en jeu.');
                             return false;
                         }
                     } else if (carteDrag.type === typeEnum.intervention) {//Si on joue une intervention.
@@ -4024,7 +4051,7 @@
                                 calculer = true;
                                 return true;
                             } else {
-                                popUpAvertissement('Un déversement aura déjà lieu à la fin du tour du joueur: ' + nomJoueur[numeroJoueurDeversement] + '.');
+                                popUpAvertissement('Un «Déversement» aura déjà lieu à la fin du tour du joueur: ' + premiereLettreMaj(nomJoueur[numeroJoueurDeversement]) + '.');
                                 return false;
                             }
                         } else {
@@ -4058,7 +4085,7 @@
                                 }
                             }
                         }
-                        popUpAvertissement('Il n\'y a pas de carte déchets en jeu.');
+                        popUpAvertissement('Il n\'y a pas de cartes «Déchets» en jeu.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.naturalisation) {//Si c'est une naturalisation.
                         for (var i = 0; i < nombreJoueur; i++) {
@@ -4072,6 +4099,7 @@
                             }
                         }
                         for (var i = 0; i < paquetIntervention.length; i++) {
+                            popUpAvertissement('Il n\'y a pas de cartes «Artificialisations» à retirer et il n\'y a plus de cartes «Bandes Riveraines» dans le paquet de cartes «Interventions».');
                             if (paquetIntervention[i] != null) {
                                 if (paquetIntervention[i].nom === nomEnum.amenageArbre || paquetIntervention[i].nom === nomEnum.amenageArbustes || paquetIntervention[i].nom === nomEnum.amenageHerbace) {
                                     calculer = true;
@@ -4079,8 +4107,6 @@
                                 }
                             }
                         }
-
-                        popUpAvertissement('Il n\'y a pas d\'artificialisation à retirer et il n\' y a plus de carte bande riveraine dans les cartes d\'intervention.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.amenagement) {//Si c'est une carte d'aménagement.
                         for (var i = 0; i < nombreJoueur; i++) {
@@ -4102,13 +4128,13 @@
                             }
                         }
 
-                        popUpAvertissement('Il n\'y a pas de carte érosion à annuler et il n\'y a plus de d\'habitats parmis les cartes d\'intervention.');
+                        popUpAvertissement('Il n\'y a pas de carte «Érosion» à annuler et il n\'y a plus de cartes «Habitats» dans le paquet de cartes «Interventions».');
                         return false;
                     }
                 } else if (carteDrag.type === typeEnum.speciale) {//Si c'est une carte spéciale.
                     if (carteDrag.nom === nomEnum.retention) {
                         if (pointsRessourcesRestant[numeroJoueurActif] === 0) {
-                            popUpAvertissement('Vous n\'avez plus de points ressources à garder.');
+                            popUpAvertissement('Vous n\'avez plus de points ressources à conserver.');
                             return false;
                         }
                         calculer = true;
@@ -4132,7 +4158,7 @@
                                                 }
                                             }
                                         }
-                                        popUpAvertissement('Aucun adversaire ne possède de macroinvertébrés de taille inférieure aux votres.');
+                                        popUpAvertissement('Aucun adversaire ne possède de «Macroinvertébrés» de taille inférieure aux vôtres.');
                                         return false;
                                     }
                                 }
@@ -4154,13 +4180,13 @@
                                 calculer = true;
                                 return true;
                             }
-                            popUpAvertissement('Les mains de tout vos adversaires sont vide.');
+                            popUpAvertissement('Les mains de tous vos adversaires sont vides.');
                             return false;
                         }
                         popUpAvertissement('Vous ne pouvez pas échanger votre main si elle est vide.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.prisSurFait) {//Si c'est la carte pris sur le fait.
-                        popUpAvertissement('Cette carte ne peut être jouée que lorsqu\'un adversaire joue une carte Perturbation.');
+                        popUpAvertissement('Cette carte ne peut être jouée que lorsqu\'un adversaire joue une carte «Perturbation».');
                         return false;
                     } else if (carteDrag.nom === nomEnum.accumulation) {//Si c'est la carte accumlarion.
                         calculer = true;
@@ -4178,7 +4204,7 @@
                                 }
                             }
                         }
-                        popUpAvertissement('Il n\'y a aucun macroinvertébrés d\'un des ordres spécifiés sur le jeu');
+                        popUpAvertissement('Il n\'y a aucun «Macroinvertébré» d\'un des ordres spécifiés sur le jeu.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.pecheur) {//Si c'est la carte pécheur.
                         var option1 = false;
@@ -4199,7 +4225,7 @@
                             option2 = true;
                         }
                         if (!option1 && !option2) {
-                            popUpAvertissement('La carte Salmonidé n\'est pas en jeu et la décharge est vide');
+                            popUpAvertissement('Il n\'y a pas de cartes «Salmonidés» en jeu et la décharge est vide.');
                             return false;
                         }
                         return true;
@@ -4222,13 +4248,13 @@
                                             }
                                         }
                                     }
-                                    popUpAvertissement('Aucun adversaire ne possède d\'habitat.');
+                                    popUpAvertissement('Aucun adversaire ne possède d\'«Habitats».');
                                     return false;
                                 }
                             }
 
                         }
-                        popUpAvertissement('Vous ne possédez pas d\'habitat.');
+                        popUpAvertissement('Vous ne possédez pas d\'«Habitats».');
                         return false;
                     }
                 }
@@ -4503,9 +4529,7 @@
                 }
             }
             if (tuer) {
-                console.log("dafuq");
-                popUpConfirmation('Votre habitat ' + habitats + ' est perturber et le/les macroinvertébré(s) l\'utilisant sont mort');
-                console.log("Ouin mais gilles");
+                popUpConfirmation('Votre habitat «' + premiereLettreMaj(habitats) + '» est perturbé et le/les «Macroinvertébré(s)» l\'utilisant sont mort(s).');
             }
         }
 
@@ -5255,14 +5279,14 @@
                     }, 600);
                 }
                 else {
-                    popUpAvertissement('Selectionner d\'abord la/les carte(s) à défausser');
+                    popUpAvertissement('Selectionnez d\'abord la/les carte(s) à défausser.');
                 }
             }
             else if ((sizeMain - sizeADefausse) > 4) {
-                popUpErreur('Vous n\'avez pas sélectionné assez de cartes à défausser');
+                popUpErreur('Vous n\'avez pas sélectionné assez de cartes à défausser.');
             }
             else {
-                popUpErreur('Vous avez sélectionner trop de cartes à défausser');
+                popUpErreur('Vous avez sélectionné trop de cartes à défausser.');
             }
         }
 
@@ -5318,7 +5342,7 @@
                             if (tempsDeversement === 0) {//Si le temps de déverseent est écouler, tue les macro et rends déversement à false.
                                 tuerDeversement();
                                 deversement = false;
-                                popUpAvertissement('Un déversement de produits chimiques vient d\'avoir lieu, tout les macroinvertébrés de résistance inférieur à 6 sont mort.');
+                                popUpAvertissement('Un «Déversement» de produits chimiques vient d\'avoir lieu, tous les «Macroinvertébrés» de résistance inférieure à 6 sont morts.');
                             }
                         }
                     }
@@ -5359,11 +5383,12 @@
                         setTimeout(function () {
                             passerTour();
                         }, 1500);
+                        popUpConfirmation('Le joueur ' + premiereLettreMaj(nomJoueur[numeroJoueurActif]) + ' a raté son tour.');
                     }
 
                 }
             } else {
-                popUpErreur('Vous devez d\'abord sélectionner un macro-invertébré d\'une taille inférieur à ' + taillePredateur + ' pour le manger.');
+                popUpErreur('Vous devez d\'abord sélectionner un «Macroinvertébré» d\'une taille inférieure à ' + taillePredateur + ' pour le manger.');
             }
         }
 
