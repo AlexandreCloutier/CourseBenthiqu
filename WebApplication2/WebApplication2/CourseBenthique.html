@@ -4701,6 +4701,7 @@
 
         //Fonction qui ajoute des cartes selon le tour.
         function ajoutCarte(numeroTour) {
+            var carte;
 
             if(numeroTour === 4 && difficulte === 1){
             //---------------------------------salmonide---------------------------------
@@ -4740,7 +4741,7 @@
         //function qui crée le paquet de carte.
         function creerPaquetCarte(difficulte) {
             var carte;
-            var paquetCarte = new Array();
+            var paquetCarte = [];
 
             carte = new Carte(typeEnum.habitats, nomEnum.fosse, 'fosse.png', 1, { habitats: nomEnum.fosse });
             paquetCarte.push(carte);
@@ -4776,19 +4777,19 @@
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte);
+            paquetCarte.push(carte); 
 
             carte = new Carte(typeEnum.habitats, nomEnum.galets, 'galets.png', 3, { habitats: 'galets' });
             paquetCarte.push(carte);
@@ -4941,8 +4942,7 @@
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.pteronarcyidae, 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: typeMacroEnum.plecoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte);
 
-            if (difficulte >= 2)//Moyen
-            {
+            if (difficulte >= 2){//Moyen
                 //---------------------------------salmonide---------------------------------
 
                 carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
@@ -5060,33 +5060,7 @@
                 paquetIntervention.push(carte);
             }
 
-            if (difficulte === 3){//Difficile 
-
-                //---------------------------------intervention------------------------------
-
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
-                paquetIntervention.push(carte);
-
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageRapides, 'habitatAmenageRapides.png', 1, { habitats: nomEnum.rapides });
-                paquetIntervention.push(carte);
-
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageFosse, 'habitatAmenageFosse.png', 1, { habitats: nomEnum.fosse });
-                paquetIntervention.push(carte);
-
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageGalets, 'habitatAmenageGalets.png', 1, { habitats: nomEnum.galets });
-                paquetIntervention.push(carte);
-
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageGravier, 'habitatAmenageGravier.png', 1, { habitats: nomEnum.gravier });
-                paquetIntervention.push(carte);
-
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageHerbace, 'bandeRiveraineHerbace.png', 1);
-                paquetIntervention.push(carte);
-
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageArbustes, 'bandeRiveraineArbuste.png', 2);
-                paquetIntervention.push(carte);
-
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageArbre, 'bandeRiveraineArbre.png', 3);
-                paquetIntervention.push(carte);
+            if (difficulte >= 3){//Difficile 
                 //-----------------------------------speciale--------------------------------
 
                 carte = new Carte(typeEnum.speciale, nomEnum.prisSurFait, 'prisSurFait.png', 0);
@@ -5350,16 +5324,17 @@
                     if (numeroJoueurActif === nombreJoueur) {
                         numeroJoueurActif = 0;
                         tour++;
-                        ajoutCarte();
+                        ajoutCarte(tour);
                     }
-
+                    
                     //Rends le bouton passer tour inactif lorsuq'on clique dessus pour éviter de "spam" le bouton.
                     setTimeout(function () {
                         $('#buttonPasserTour').prop('disabled', false);
                         $('#divMain').css('pointer-events', 'auto');
                     }, 2000);
-
-                    remplirMain();
+                    if (tour != 1) {
+                        remplirMain();
+                    }
                     updatePointsRessourcesJeu();
                     setTimeout(function () {
                         updateAffichageImage();
