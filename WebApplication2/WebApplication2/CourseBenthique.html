@@ -979,90 +979,8 @@
 
                     //Recrée la paquet de jeu.
                     json.paquetCarte.forEach(function (item, index) {
-                    if (item != null) {
-                        var params;
-                        if (item.type === typeEnum.habitats) {
-                            params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                        } else if (item.type === typeEnum.macroInvertebre) {
-                            var cond = item.condition.split(',');
-                            params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
-                        } else if (item.type === typeEnum.perturbation) {
-                            params = { tempsActif: item.tempsActif };
-                        } else if (item.type === typeEnum.bandeRiveraine) {
-                            params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                        } else if (item.type === typeEnum.salmonide) {
-                            var cond = item.condition.split(',');
-                            params = { condition: cond };
-                        }
-                        var carte = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                        paquetCarte.push(carte);
-                    }
-                });
-
-                //Recrée le paquet de la défausse.
-                json.paquetDecharge.forEach(function (item, index) {
-                    if (item != null) {
-                        var params;
-                        if (item.type === typeEnum.habitats) {
-                            params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                        } else if (item.type === typeEnum.macroInvertebre) {
-                            var cond = item.condition.split(',');
-                            params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
-                        } else if (item.type === typeEnum.perturbation) {
-                            params = { tempsActif: item.tempsActif };
-                        } else if (item.type === typeEnum.bandeRiveraine) {
-                            params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                        } else if (item.type === typeEnum.salmonide) {
-                            var cond = item.condition.split(',');
-                            params = { condition: cond };
-                        }
-                        paquetDecharge[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                    } else {
-                        paquetDecharge[index] = null;
-                    }
-                });
-
-                //Recrée le paquet de cartes Interventions
-                json.paquetIntervention.forEach(function (item, index) {
-                    if (item != null) {
-                        var params;
-
-                        if (item.nom === nomEnum.amenageFosse || item.nom === nomEnum.amenageGalets || item.nom === nomEnum.amenageGravier || item.nom === nomEnum.amenageRapides || item.nom === nomEnum.amenageSable) {
-                            params = { habitats: item.habitats };
-                        }
-                        paquetIntervention[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                    } else {
-                        paquetIntervention[index] = null;
-                    }
-                });
-
-                //Recrée le nom des joueurs.
-                json.nomJoueur.forEach(function (item, index) {
-                    if (item != null) {
-                        nomJoueur[index] = item;
-                    }
-                });
-
-                //Récrée le tableau rétention
-                json.tableauRetention.forEach(function (item, index) {
-                    if (item != null) {
-                        tableauRetention[index] = item;
-                    }
-                });
-
-                //Récrée le tableau Passer Son Tour.
-                json.tableauPasserTour.forEach(function (item, index) {
-                    if (item != null) {
-                        tableauPasserTour = item;
-                    }
-                });
-
-                //Recrée la main de chaque joueur.
-                json.mains.forEach(function (item1, index1) {
-                    json.mains[index1].forEach(function (item, index) {
                         if (item != null) {
                             var params;
-
                             if (item.type === typeEnum.habitats) {
                                 params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
                             } else if (item.type === typeEnum.macroInvertebre) {
@@ -1085,7 +1003,6 @@
                     json.paquetDecharge.forEach(function (item, index) {
                         if (item != null) {
                             var params;
-
                             if (item.type === typeEnum.habitats) {
                                 params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
                             } else if (item.type === typeEnum.macroInvertebre) {
@@ -1109,6 +1026,7 @@
                     json.paquetIntervention.forEach(function (item, index) {
                         if (item != null) {
                             var params;
+
                             if (item.nom === nomEnum.amenageFosse || item.nom === nomEnum.amenageGalets || item.nom === nomEnum.amenageGravier || item.nom === nomEnum.amenageRapides || item.nom === nomEnum.amenageSable) {
                                 params = { habitats: item.habitats };
                             }
@@ -1144,6 +1062,7 @@
                         json.mains[index1].forEach(function (item, index) {
                             if (item != null) {
                                 var params;
+
                                 if (item.type === typeEnum.habitats) {
                                     params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
                                 } else if (item.type === typeEnum.macroInvertebre) {
@@ -1157,18 +1076,16 @@
                                     var cond = item.condition.split(',');
                                     params = { condition: cond };
                                 }
-                                mains[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                            } else {
-                                mains[index1][index] = null;
+                                var carte = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                                paquetCarte.push(carte);
                             }
                         });
-                    });
 
-                    //Recrée le jeu de chaque joueur.
-                    json.carteBas.forEach(function (item1, index1) {
-                        json.carteBas[index1].forEach(function (item, index) {
+                        //Recrée le paquet de la défausse.
+                        json.paquetDecharge.forEach(function (item, index) {
                             if (item != null) {
                                 var params;
+
                                 if (item.type === typeEnum.habitats) {
                                     params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
                                 } else if (item.type === typeEnum.macroInvertebre) {
@@ -1182,40 +1099,123 @@
                                     var cond = item.condition.split(',');
                                     params = { condition: cond };
                                 }
-                                carteBas[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                                paquetDecharge[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                            } else {
+                                paquetDecharge[index] = null;
                             }
                         });
-                    });
 
-                    //Recrée le tableau des cartes perturbations.
-                    json.cartePerturbation.forEach(function (item1, index1) {
-                        json.cartePerturbation[index1].forEach(function (item, index) {
+                        //Recrée le paquet de cartes Interventions
+                        json.paquetIntervention.forEach(function (item, index) {
                             if (item != null) {
-                                cartePerturbation[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, { tempsActif: item.tempsActif });
+                                var params;
+                                if (item.nom === nomEnum.amenageFosse || item.nom === nomEnum.amenageGalets || item.nom === nomEnum.amenageGravier || item.nom === nomEnum.amenageRapides || item.nom === nomEnum.amenageSable) {
+                                    params = { habitats: item.habitats };
+                                }
+                                paquetIntervention[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                            } else {
+                                paquetIntervention[index] = null;
                             }
                         });
-                    });
 
-                    //Recrée le tableau des exemplaires des cartes.
-                    json.exemplaireCarteBas.forEach(function (item1, index1) {
-                        json.exemplaireCarteBas[index1].forEach(function (item, index) {
-                            exemplaireCarteBas[index1][index] = item;
+                        //Recrée le nom des joueurs.
+                        json.nomJoueur.forEach(function (item, index) {
+                            if (item != null) {
+                                nomJoueur[index] = item;
+                            }
                         });
-                    });
 
-                    //Recrée l'affichage.
-                    $('#menuPrincipal').remove();
-                    updatePointsRessourcesJeu();
-                    pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
-                    pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif] - pointsRessourcesUtiliser[numeroJoueurActif];
-                    creerElementFond();
-                    updateAffichageImage();
-                    updatePlateau();
-                } else {
+                        //Récrée le tableau rétention
+                        json.tableauRetention.forEach(function (item, index) {
+                            if (item != null) {
+                                tableauRetention[index] = item;
+                            }
+                        });
+
+                        //Récrée le tableau Passer Son Tour.
+                        json.tableauPasserTour.forEach(function (item, index) {
+                            if (item != null) {
+                                tableauPasserTour = item;
+                            }
+                        });
+
+                        //Recrée la main de chaque joueur.
+                        json.mains.forEach(function (item1, index1) {
+                            json.mains[index1].forEach(function (item, index) {
+                                if (item != null) {
+                                    var params;
+                                    if (item.type === typeEnum.habitats) {
+                                        params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                    } else if (item.type === typeEnum.macroInvertebre) {
+                                        var cond = item.condition.split(',');
+                                        params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                                    } else if (item.type === typeEnum.perturbation) {
+                                        params = { tempsActif: item.tempsActif };
+                                    } else if (item.type === typeEnum.bandeRiveraine) {
+                                        params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                    } else if (item.type === typeEnum.salmonide) {
+                                        var cond = item.condition.split(',');
+                                        params = { condition: cond };
+                                    }
+                                    mains[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                                } else {
+                                    mains[index1][index] = null;
+                                }
+                            });
+                        });
+
+                        //Recrée le jeu de chaque joueur.
+                        json.carteBas.forEach(function (item1, index1) {
+                            json.carteBas[index1].forEach(function (item, index) {
+                                if (item != null) {
+                                    var params;
+                                    if (item.type === typeEnum.habitats) {
+                                        params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                    } else if (item.type === typeEnum.macroInvertebre) {
+                                        var cond = item.condition.split(',');
+                                        params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                                    } else if (item.type === typeEnum.perturbation) {
+                                        params = { tempsActif: item.tempsActif };
+                                    } else if (item.type === typeEnum.bandeRiveraine) {
+                                        params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                    } else if (item.type === typeEnum.salmonide) {
+                                        var cond = item.condition.split(',');
+                                        params = { condition: cond };
+                                    }
+                                    carteBas[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                                }
+                            });
+                        });
+
+                        //Recrée le tableau des cartes perturbations.
+                        json.cartePerturbation.forEach(function (item1, index1) {
+                            json.cartePerturbation[index1].forEach(function (item, index) {
+                                if (item != null) {
+                                    cartePerturbation[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, { tempsActif: item.tempsActif });
+                                }
+                            });
+                        });
+
+                        //Recrée le tableau des exemplaires des cartes.
+                        json.exemplaireCarteBas.forEach(function (item1, index1) {
+                            json.exemplaireCarteBas[index1].forEach(function (item, index) {
+                                exemplaireCarteBas[index1][index] = item;
+                            });
+                        });
+
+                        //Recrée l'affichage.
+                        $('#menuPrincipal').remove();
+                        updatePointsRessourcesJeu();
+                        pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
+                        pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif] - pointsRessourcesUtiliser[numeroJoueurActif];
+                        creerElementFond();
+                        updateAffichageImage();
+                        updatePlateau();
+                    } else {
                     alert('Une erreur est survenue lors de la lecture de la sauvegarde. Veuillez réessayer ou charger une sauvegarde différente.');
                 }
-            };
-
+            });
+        
         }
 
         //Fonction appelé lors d'un clic sur le bouton Options en jeu
@@ -1418,7 +1418,8 @@
             var divRegle = document.createElement('div');
             divRegle.id = 'divRegle';
             divRegle.className = 'divRegle';
-            divRegle.innerHTML = '<img class="imageRegle" src="ressources/instructionPage2.png">';
+            divRegle.innerHTML = "<p>LA COURSE BENTHIQUE - instructions</p><p> <br />Dur&eacute;e<br />Pour 2 joueurs : 45 &agrave; 60 minutes<br />Pour 3 &agrave; 4 joueurs : 60 &agrave; 90 minutes</p><p>But du jeu<br />Le but de ce jeu est de b&acirc;tir le meilleur &eacute;cosyst&egrave;me riverain, en cr&eacute;ant un environnement favorable dans lequel pourront &eacute;voluer une grande vari&eacute;t&eacute; de macroinvert&eacute;br&eacute;s.</p><p>Fin du jeu<br />Le jeu peut se terminer de deux fa&ccedil;ons :</p><p>1. Lorsque les conditions des habitats permettent &agrave; la carte<br />Salmonid&eacute; de rester en jeu apr&egrave;s un tour complet.</p><p>2. Lorsqu&rsquo;il ne reste plus de cartes dans la charge.<br /><br />R&egrave;glements<br />D&Eacute;ROULEMENT DU JEU<br />Les joueurs utilisent deux paquets de cartes. Le premier paquet, nomm&eacute; la charge, correspond aux cartes non jou&eacute;es qui sont plac&eacute;es face contre table. Le deuxi&egrave;me paquet, nomm&eacute; la d&eacute;charge, correspond aux cartes jou&eacute;es et rejet&eacute;es. Les cartes en jeu sont plac&eacute;es sur la table, face vers le haut, devant le joueur qui les poss&egrave;de. Les cartes en main ne doivent en aucun temps &ecirc;tre vues par les autres joueurs. Les cartes Intervention (grises) ne sont pas dans la charge; elles sont mises de c&ocirc;t&eacute; jusqu&rsquo;&agrave; ce qu&rsquo;un joueur en ait besoin.</p><p>PR&Eacute;PARATION<br />1. S&eacute;parez les cartes Habitat et Intervention du reste du jeu.<br />2. Chaque joueur pige deux cartes Habitat au hasard. Les cartes Habitat en surplus sont m&eacute;lang&eacute;es au reste du jeu et cette pile devient la charge.<br /></p><p>&bull; Le nombre de points-ressources n&eacute;cessaire &agrave; la mise en jeu des cartes est inscrit dans le coin sup&eacute;rieur gauche de la carte (voir Configuration des cartes).<br />&bull; Pour jouer une carte macroinvert&eacute;br&eacute;, le joueur doit d&eacute;j&agrave; avoir en jeu la ou les cartes Habitat repr&eacute;sent&eacute;es en haut &agrave; gauche de la carte &agrave; jouer. Ce sont les habitats n&eacute;cessaires &agrave; la survie du macroinvert&eacute;br&eacute;. Si un habitat est perturb&eacute; par un adversaire et que le joueur vis&eacute; ne peut sauver la carte &agrave; son tour, les cartes macroinvert&eacute;br&eacute; qui en d&eacute;pendent vont &agrave; la d&eacute;charge.<br />&bull; Pour &ecirc;tre mis en jeu, les macroinvert&eacute;br&eacute;s pr&eacute;dateurs doivent manger un macroinvert&eacute;br&eacute; en jeu de taille inf&eacute;rieure.<br />&bull; &Agrave; la fin de son tour, le joueur doit avoir en main un maximum de quatre cartes. S&rsquo;il en poss&egrave;de davantage, il devra mettre &agrave; la d&eacute;charge les cartes exc&eacute;dentaires. Si le joueur poss&egrave;de<br /></p>";
+
             $('body').append(divRegle);
 
             //divTableauCarte
