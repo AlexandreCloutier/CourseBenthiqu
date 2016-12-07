@@ -323,9 +323,16 @@
 }
 
 .divTableauCarte {
-    width: 575px;
-    height: 1050px;
+    width: auto;
+    height: auto;
+    border: 2px solid black;
     display: none;
+}
+.divTableauCarte td {
+    border : 2px solid black;
+    text-align:center;
+}
+.divTableauCarte tr {
 }
 
 .listeChoixCarte {
