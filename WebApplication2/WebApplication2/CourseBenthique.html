@@ -954,7 +954,6 @@
             saveAs(blob, nom + '.jcb');
         }
 
-        //Fonction appelé lors d'un clic sur le boutton charger
         function chargerPartie(file) {
             var fileReader = new FileReader();
             var json;
@@ -1080,12 +1079,71 @@
                                 paquetCarte.push(carte);
                             }
                         });
+                    });
 
-                        //Recrée le paquet de la défausse.
-                        json.paquetDecharge.forEach(function (item, index) {
+                    //Recrée le paquet de la défausse.
+                    json.paquetDecharge.forEach(function (item, index) {
+                        if (item != null) {
+                            var params;
+
+                            if (item.type === typeEnum.habitats) {
+                                params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                            } else if (item.type === typeEnum.macroInvertebre) {
+                                var cond = item.condition.split(',');
+                                params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                            } else if (item.type === typeEnum.perturbation) {
+                                params = { tempsActif: item.tempsActif };
+                            } else if (item.type === typeEnum.bandeRiveraine) {
+                                params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                            } else if (item.type === typeEnum.salmonide) {
+                                var cond = item.condition.split(',');
+                                params = { condition: cond };
+                            }
+                            paquetDecharge[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                        } else {
+                            paquetDecharge[index] = null;
+                        }
+                    });
+
+                    //Recrée le paquet de cartes Interventions
+                    json.paquetIntervention.forEach(function (item, index) {
+                        if (item != null) {
+                            var params;
+                            if (item.nom === nomEnum.amenageFosse || item.nom === nomEnum.amenageGalets || item.nom === nomEnum.amenageGravier || item.nom === nomEnum.amenageRapides || item.nom === nomEnum.amenageSable) {
+                                params = { habitats: item.habitats };
+                            }
+                            paquetIntervention[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                        } else {
+                            paquetIntervention[index] = null;
+                        }
+                    });
+
+                    //Recrée le nom des joueurs.
+                    json.nomJoueur.forEach(function (item, index) {
+                        if (item != null) {
+                            nomJoueur[index] = item;
+                        }
+                    });
+
+                    //Récrée le tableau rétention
+                    json.tableauRetention.forEach(function (item, index) {
+                        if (item != null) {
+                            tableauRetention[index] = item;
+                        }
+                    });
+
+                    //Récrée le tableau Passer Son Tour.
+                    json.tableauPasserTour.forEach(function (item, index) {
+                        if (item != null) {
+                            tableauPasserTour = item;
+                        }
+                    });
+
+                    //Recrée la main de chaque joueur.
+                    json.mains.forEach(function (item1, index1) {
+                        json.mains[index1].forEach(function (item, index) {
                             if (item != null) {
                                 var params;
-
                                 if (item.type === typeEnum.habitats) {
                                     params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
                                 } else if (item.type === typeEnum.macroInvertebre) {
@@ -1099,123 +1157,64 @@
                                     var cond = item.condition.split(',');
                                     params = { condition: cond };
                                 }
-                                paquetDecharge[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
+                                mains[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
                             } else {
-                                paquetDecharge[index] = null;
+                                mains[index1][index] = null;
                             }
                         });
+                    });
 
-                        //Recrée le paquet de cartes Interventions
-                        json.paquetIntervention.forEach(function (item, index) {
+                    //Recrée le jeu de chaque joueur.
+                    json.carteBas.forEach(function (item1, index1) {
+                        json.carteBas[index1].forEach(function (item, index) {
                             if (item != null) {
                                 var params;
-                                if (item.nom === nomEnum.amenageFosse || item.nom === nomEnum.amenageGalets || item.nom === nomEnum.amenageGravier || item.nom === nomEnum.amenageRapides || item.nom === nomEnum.amenageSable) {
-                                    params = { habitats: item.habitats };
+                                if (item.type === typeEnum.habitats) {
+                                    params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                } else if (item.type === typeEnum.macroInvertebre) {
+                                    var cond = item.condition.split(',');
+                                    params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
+                                } else if (item.type === typeEnum.perturbation) {
+                                    params = { tempsActif: item.tempsActif };
+                                } else if (item.type === typeEnum.bandeRiveraine) {
+                                    params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
+                                } else if (item.type === typeEnum.salmonide) {
+                                    var cond = item.condition.split(',');
+                                    params = { condition: cond };
                                 }
-                                paquetIntervention[index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                            } else {
-                                paquetIntervention[index] = null;
+                                carteBas[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
                             }
                         });
+                    });
 
-                        //Recrée le nom des joueurs.
-                        json.nomJoueur.forEach(function (item, index) {
+                    //Recrée le tableau des cartes perturbations.
+                    json.cartePerturbation.forEach(function (item1, index1) {
+                        json.cartePerturbation[index1].forEach(function (item, index) {
                             if (item != null) {
-                                nomJoueur[index] = item;
+                                cartePerturbation[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, { tempsActif: item.tempsActif });
                             }
                         });
+                    });
 
-                        //Récrée le tableau rétention
-                        json.tableauRetention.forEach(function (item, index) {
-                            if (item != null) {
-                                tableauRetention[index] = item;
-                            }
+                    //Recrée le tableau des exemplaires des cartes.
+                    json.exemplaireCarteBas.forEach(function (item1, index1) {
+                        json.exemplaireCarteBas[index1].forEach(function (item, index) {
+                            exemplaireCarteBas[index1][index] = item;
                         });
+                    });
 
-                        //Récrée le tableau Passer Son Tour.
-                        json.tableauPasserTour.forEach(function (item, index) {
-                            if (item != null) {
-                                tableauPasserTour = item;
-                            }
-                        });
-
-                        //Recrée la main de chaque joueur.
-                        json.mains.forEach(function (item1, index1) {
-                            json.mains[index1].forEach(function (item, index) {
-                                if (item != null) {
-                                    var params;
-                                    if (item.type === typeEnum.habitats) {
-                                        params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                                    } else if (item.type === typeEnum.macroInvertebre) {
-                                        var cond = item.condition.split(',');
-                                        params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
-                                    } else if (item.type === typeEnum.perturbation) {
-                                        params = { tempsActif: item.tempsActif };
-                                    } else if (item.type === typeEnum.bandeRiveraine) {
-                                        params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                                    } else if (item.type === typeEnum.salmonide) {
-                                        var cond = item.condition.split(',');
-                                        params = { condition: cond };
-                                    }
-                                    mains[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                                } else {
-                                    mains[index1][index] = null;
-                                }
-                            });
-                        });
-
-                        //Recrée le jeu de chaque joueur.
-                        json.carteBas.forEach(function (item1, index1) {
-                            json.carteBas[index1].forEach(function (item, index) {
-                                if (item != null) {
-                                    var params;
-                                    if (item.type === typeEnum.habitats) {
-                                        params = { habitats: item.habitats, perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                                    } else if (item.type === typeEnum.macroInvertebre) {
-                                        var cond = item.condition.split(',');
-                                        params = { taille: item.taille, tolerance: item.tolerance, predateur: item.predateur, typeMacro: item.typeMacro, condition: cond };
-                                    } else if (item.type === typeEnum.perturbation) {
-                                        params = { tempsActif: item.tempsActif };
-                                    } else if (item.type === typeEnum.bandeRiveraine) {
-                                        params = { perturber: item.perturber, tempsPerturber: item.tempsPerturber };
-                                    } else if (item.type === typeEnum.salmonide) {
-                                        var cond = item.condition.split(',');
-                                        params = { condition: cond };
-                                    }
-                                    carteBas[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, params);
-                                }
-                            });
-                        });
-
-                        //Recrée le tableau des cartes perturbations.
-                        json.cartePerturbation.forEach(function (item1, index1) {
-                            json.cartePerturbation[index1].forEach(function (item, index) {
-                                if (item != null) {
-                                    cartePerturbation[index1][index] = new Carte(item.type, item.nom, item.nomImage, item.coutRessources, { tempsActif: item.tempsActif });
-                                }
-                            });
-                        });
-
-                        //Recrée le tableau des exemplaires des cartes.
-                        json.exemplaireCarteBas.forEach(function (item1, index1) {
-                            json.exemplaireCarteBas[index1].forEach(function (item, index) {
-                                exemplaireCarteBas[index1][index] = item;
-                            });
-                        });
-
-                        //Recrée l'affichage.
-                        $('#menuPrincipal').remove();
-                        updatePointsRessourcesJeu();
-                        pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
-                        pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif] - pointsRessourcesUtiliser[numeroJoueurActif];
-                        creerElementFond();
-                        updateAffichageImage();
-                        updatePlateau();
-                    } else {
+                    //Recrée l'affichage.
+                    $('#menuPrincipal').remove();
+                    updatePointsRessourcesJeu();
+                    pointsRessourcesUtiliser[numeroJoueurActif] = json.pointsRessourcesUtiliser;
+                    pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif] - pointsRessourcesUtiliser[numeroJoueurActif];
+                    creerElementFond();
+                    updateAffichageImage();
+                    updatePlateau();
+                } else {
                     alert('Une erreur est survenue lors de la lecture de la sauvegarde. Veuillez réessayer ou charger une sauvegarde différente.');
                 }
-            });
-        
+            };
         }
 
         //Fonction appelé lors d'un clic sur le bouton Options en jeu
@@ -3741,7 +3740,7 @@
                     }
                 }
             } else if (!brille) {//Sinon débrille tout.
-                    $('.ui-echange-highlight').removeClass('ui-echange-highlight');               
+                $('.ui-echange-highlight').removeClass('ui-echange-highlight');
             }
         }
 
@@ -4808,38 +4807,38 @@
         function ajoutCarte(numeroTour) {
             var carte;
 
-            if(numeroTour === 4 && difficulte === 1){
-            //---------------------------------salmonide---------------------------------
+            if (numeroTour === 4 && difficulte === 1) {
+                //---------------------------------salmonide---------------------------------
 
-            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
+                paquetCarte.push(carte);
 
-            //---------------------------------bandeRiveraine----------------------------
+                //---------------------------------bandeRiveraine----------------------------
 
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.herbace, 'herbaceesNaturelles.png', 1);
+                paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbustes, 'arbustes.png', 2);
+                paquetCarte.push(carte);
 
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
-            paquetCarte.push(carte);
-            carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
-            paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+                paquetCarte.push(carte);
+                carte = new Carte(typeEnum.bandeRiveraine, nomEnum.arbres, 'arbres.png', 3);
+                paquetCarte.push(carte);
 
-            melangerPaquetCarte(paquetCarte);
+                melangerPaquetCarte(paquetCarte);
             }
         }
 
@@ -4882,19 +4881,19 @@
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
             paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte); 
+            paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte); 
+            paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte); 
+            paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte); 
+            paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte); 
+            paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte); 
+            paquetCarte.push(carte);
             carte = new Carte(typeEnum.habitats, nomEnum.rapides, 'rapides.png', 3, { habitats: nomEnum.rapides });
-            paquetCarte.push(carte); 
+            paquetCarte.push(carte);
 
             carte = new Carte(typeEnum.habitats, nomEnum.galets, 'galets.png', 3, { habitats: 'galets' });
             paquetCarte.push(carte);
@@ -5047,7 +5046,7 @@
             carte = new Carte(typeEnum.macroInvertebre, nomEnum.pteronarcyidae, 'pteronarcyidae.png', 7, { tolerance: 0, taille: 8, typeMacro: typeMacroEnum.plecoptere, condition: [nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 0 });
             paquetCarte.push(carte);
 
-            if (difficulte >= 2){//Moyen
+            if (difficulte >= 2) {//Moyen
                 //---------------------------------salmonide---------------------------------
 
                 carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
@@ -5165,7 +5164,7 @@
                 paquetIntervention.push(carte);
             }
 
-            if (difficulte >= 3){//Difficile 
+            if (difficulte >= 3) {//Difficile
                 //-----------------------------------speciale--------------------------------
 
                 carte = new Carte(typeEnum.speciale, nomEnum.prisSurFait, 'prisSurFait.png', 0);
@@ -5431,7 +5430,7 @@
                         tour++;
                         ajoutCarte(tour);
                     }
-                    
+
                     //Rends le bouton passer tour inactif lorsuq'on clique dessus pour éviter de "spam" le bouton.
                     setTimeout(function () {
                         $('#buttonPasserTour').prop('disabled', false);
