@@ -2186,7 +2186,8 @@
                 drop: function (event, ui) {//Ajoute le code du drop pour la plateau.
                     if (bonneZoneDrop(event.target)) {//Si l'endroit que nous voulons droper est à la bonne place.
                         if (accepterDrop(event.target)) {
-                            pointsRessourcesUtiliser += carteDrag.coutRessources;
+                            console.log(carteDrag.coutRessources);
+                            pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutRessources;
                             /* -----------Perturbation--------------*/
                             if (carteDrag.nom === nomEnum.deversement) {
                                 //Si personne n'a de carte pris sur le fait.
