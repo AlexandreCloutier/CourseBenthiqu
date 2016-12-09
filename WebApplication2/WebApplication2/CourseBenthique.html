@@ -516,6 +516,8 @@
             ageJoueurA.type = 'text';
             ageJoueurA.id = 'ageJoueurA';
             ageJoueurA.className = 'textBoxJoueur';
+            ageJoueurA.onkeypress = function () { return isNumber(event) };
+            ageJoueurA.maxLength = 2;
             $(divJoueurA).append(ageJoueurA);
 
             //Div Joueur B
@@ -549,9 +551,11 @@
             $(divJoueurB).append(labelAgeJoueurB);
 
             var ageJoueurB = document.createElement('input');
-            ageJoueurB.type = 'text';
+            ageJoueurB.type = 'number';
             ageJoueurB.id = 'ageJoueurB';
             ageJoueurB.className = 'textBoxJoueur';
+            ageJoueurB.onkeypress = function () { return isNumber(event) };
+            ageJoueurB.maxLength = 2;
             $(divJoueurB).append(ageJoueurB);
 
             //Div Joueur C
@@ -585,9 +589,11 @@
             $(divJoueurC).append(labelAgeJoueurC);
 
             var ageJoueurC = document.createElement('input');
-            ageJoueurC.type = 'text';
+            ageJoueurC.type = 'number';
             ageJoueurC.id = 'ageJoueurC';
             ageJoueurC.className = 'textBoxJoueur';
+            ageJoueurC.onkeypress = function () { return isNumber(event) };
+            ageJoueurC.maxLength = 2;
             $(divJoueurC).append(ageJoueurC);
 
             //Div Joueur D
@@ -622,9 +628,11 @@
             $(divJoueurD).append(labelAgeJoueurD);
 
             var ageJoueurD = document.createElement('input');
-            ageJoueurD.type = 'text';
+            ageJoueurD.type = 'number';
             ageJoueurD.id = 'ageJoueurD';
             ageJoueurD.className = 'textBoxJoueur';
+            ageJoueurD.onkeypress = function () { return isNumber(event) };
+            ageJoueurD.maxLength = 2;
             $(divJoueurD).append(ageJoueurD);
 
             $(divJoueurA).hide();
@@ -3388,6 +3396,7 @@
                             if (carteDrag.nom != nomEnum.deversement && carteDrag.nom != nomEnum.erosion && carteDrag.nom != nomEnum.pollutionOrganique && carteDrag.type != typeEnum.speciale && carteDrag.type != typeEnum.action) {
                                 if (bonneZoneDrop(event.target)) {//Si l'endroit que nous voulons droper est à la bonne place.
                                     if (accepterDrop(event.target)) {
+                                        console.log('??');
                                         if ($(this).children().length < 1) {//Si l'endroit où on drope est vide.
                                             if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
                                                 if (carteDrag.type === typeEnum.macroInvertebre) {
@@ -3532,6 +3541,8 @@
                                                 }
                                             }
                                         }
+                                    } else {
+                                        ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
                                     }
                                 } else {//Respecte pas les conditions, donc drop pas accepté.
                                     ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
@@ -3920,10 +3931,20 @@
             }
         }
 
+        //function qui transforme la première lettre d'un string en majuscule.
         function premiereLettreMaj(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
+        //S'assurer que le caractère est un nombre.
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
         //Fonction qui renvoie la lettre du joueur voulu
         function lettreJoueur(numero) {
             if (nombreJoueur === 2) {
@@ -5288,18 +5309,20 @@
             $('.imageCarteMains').draggable('disable');
 
             mains[numeroJoueurActif].forEach(function (item, index) {
-                $('#divCarte' + index).click(function () {
-                    if (cartesDefausse[index] != null) {
-                        cartesDefausse[index] = null;
-                        $(this).removeAttr('style');
-                    }
-                    else {
-                        $(this).css('-moz-box-shadow', '0 0 15px 10px #fff');
-                        $(this).css('-webkit-box-shadow', '0 0 15px 10px #fff');
-                        $(this).css('box-shadow', '0px 0px 15px 10px #fff');
-                        cartesDefausse[index] = mains[numeroJoueurActif][index];
-                    }
-                });
+                if ($('#divCarte' + index).children().length === 1) {
+                    $('#divCarte' + index).click(function () {
+                        if (cartesDefausse[index] != null) {
+                            cartesDefausse[index] = null;
+                            $(this).removeAttr('style');
+                        }
+                        else {
+                            $(this).css('-moz-box-shadow', '0 0 15px 10px #fff');
+                            $(this).css('-webkit-box-shadow', '0 0 15px 10px #fff');
+                            $(this).css('box-shadow', '0px 0px 15px 10px #fff');
+                            cartesDefausse[index] = mains[numeroJoueurActif][index];
+                        }
+                    });
+                }
             });
         }
 
@@ -5328,11 +5351,7 @@
                                     $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
                                     $(this).css('transform', 'rotate(' + now + 'deg)');
                                 }
-                            }, { duration: 500 });
-                            setTimeout(function () {
-                                $(image).remove();
-                                updateAffichageImage();
-                            }, 500);
+                            });
                         }
                     });
                     griserZone(false, false, false);
@@ -5343,9 +5362,7 @@
                         $('#divCarte' + index).off('click');
                     });
                     $('#buttonDefausser').remove();
-                    setTimeout(function () {
-                        passerTour();
-                    }, 600);
+                    passerTour();
                 }
                 else {
                     popUpAvertissement('Selectionnez d\'abord la/les carte(s) à défausser.');

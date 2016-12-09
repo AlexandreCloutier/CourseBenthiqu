@@ -64,6 +64,13 @@
     width: 25px;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
 .divDifficulte {
     margin: auto;
     width: 35%;
@@ -703,7 +710,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bcbdbf', endColorstr='#6e6f73',GradientType=0);
 }
 
-    .buttonJeu:hover {
+    .buttonJeu:hover:enabled {
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #6e6f73), color-stop(1, #bcbdbf));
         background: -moz-linear-gradient(top, #6e6f73 5%, #bcbdbf 100%);
         background: -webkit-linear-gradient(top, #6e6f73 5%, #bcbdbf 100%);
@@ -714,4 +721,8 @@
         background-color: #6e6f73;
         cursor: pointer;
         cursor: hand;
+    }
+
+    .buttonJeu:disabled {
+        opacity: 0.2;
     }
