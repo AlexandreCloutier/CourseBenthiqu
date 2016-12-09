@@ -1360,7 +1360,7 @@
 
         //Fonction qui va instancier le tableau bi-dimensionel des emplacements du jeu.
         function instancierTableauEmplacementBas() {
-            carteBas = new Array(4);
+            carteBas = new Array(nombreJoueur);
 
             //Minimum de 2 joueurs.
             carteBas[0] = [null, null, null, null, null, null, null, null, null, null];
@@ -1536,7 +1536,7 @@
                 //pour assurer une chance egale à tous les joueurs d'avoir les mêmes cartes.
 
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.zonage, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
 
@@ -1992,6 +1992,7 @@
                                 etapeZonage = 2;
                                 brillanceHabitatsEnnemi(true);
                                 brillerCarte(typeEnum.habitats, numeroJoueurActif, false);
+                                popUpAvertissement('Vous devez maintenant cliquer sur une des cartes «Habitats» d\'un ennemi.')
                             } else {
                                 popUpAvertissement('Vous devez cliquer sur un de vos «Habitats».');
                             }
@@ -2120,6 +2121,8 @@
                     naturalisation = false;
                 }
             }
+      
+            calculerPoints();
         }
 
         //Fonction qui vérifie si la carte est pas déjà présente.
@@ -3971,7 +3974,7 @@
                     return 2;
                 }
             } else if (nombreJoueur === 2) {
-                if (lettreJoueur === 'A') {
+                if (lettre === 'A') {
                     return 0;
                 } else if (lettre === 'B') {
                     return 1;
@@ -4402,7 +4405,7 @@
             } else if (nombreJoueur === 2) {
                 if (lettrePositionJoueur === 'A') {
                     numeroPositionJoueur = 0;
-                } else if (lettrePositionJoueur === 'C') {
+                } else if (lettrePositionJoueur === 'B') {
                     numeroPositionJoueur = 1;
                 }
             }

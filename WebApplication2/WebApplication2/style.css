@@ -281,6 +281,11 @@
     box-shadow: 0px 0px 15px 10px #ffdb4d;
 }
 
+    .ui-echange-highlight:hover {
+        cursor: pointer;
+        cursor: hand;
+    }
+
 .ui-perturber-highlight {
     -moz-box-shadow: 0 0 15px 10px #ff0000;
     -webkit-box-shadow: 0 0 15px 10px #ff0000;
@@ -328,12 +333,14 @@
     border: 2px solid black;
     display: none;
 }
-.divTableauCarte td {
-    border : 2px solid black;
-    text-align:center;
-}
-.divTableauCarte tr {
-}
+
+    .divTableauCarte td {
+        border: 2px solid black;
+        text-align: center;
+    }
+
+    .divTableauCarte tr {
+    }
 
 .listeChoixCarte {
     list-style: none;
@@ -400,8 +407,8 @@
     border-radius: 10px !important;
 }
 
-.divEcranFin{
-    display:none;
+.divEcranFin {
+    display: none;
 }
 
 /* ----------------Option-------------------------*/
@@ -497,8 +504,8 @@
     border-radius: 5px;
 }
 
-.divCredits{
-    display:none;
+.divCredits {
+    display: none;
 }
 
 .imageTooltip {
