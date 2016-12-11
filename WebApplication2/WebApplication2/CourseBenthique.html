@@ -180,9 +180,9 @@
         var carteEchange2;
         var positionCarte2;
         var lettreJoueur2;
+        var mangerSalmonide;
+        var nombreMangerSalmonide;
 
-        //Vairable qui dits si les pop-up sont actif.
-        var popUpActif;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -223,6 +223,10 @@
 
             //Pop-up sont actif au début du jeu.
             popUpActif = true;
+
+            //Partie salmonide
+            mangerSalmonide = false;
+            nombreMangerSalmonide = 0;
         }
 
         //Fonction qui va créer les diverse éléments du fond.
@@ -1809,28 +1813,54 @@
                     popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» à manger.');
                 }
                 /* ---------------Partie pollution organique--------------*/
-            } else if (onPollu) {
+            } else if (mangerSalmonide) {
                 if (numeroJoueurEnnemi !== numeroJoueurActif) {
-                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
-                        if (carteBas[numeroJoueurEnnemi][numeroEmplacement].perturber != true) {
-                            if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] >= 2) {
-                                deplacerCartePerturber(document.getElementById('emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement), event, ui);
-                            } else {
-                                rendrePerturber(document.getElementById('emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement));
-                            }
-                            nombrePolluer++;
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.macroInvertebre) {
+                        
+                        $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();//Supprime le macro
+                        paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
+                        exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;//Baisse le nombre d'exemplaire.
 
-                            if (nombrePolluer === 3) {
-                                onPollu = false;
-                                nombrePolluer === 0;
-                                griserZone(false, false, false);
-                                brillanceHabitatsEnnemi(false);
-                            }
-                        } else {
-                            popUpAvertissement('Cette carte est déjà perturbée.');
+                        if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] === 0) {//Si il n'y a plus d'exemplaire, supprime la carte.
+                            carteBas[numeroJoueurEnnemi][numeroEmplacement] = null;
+                        }
+
+                        if (nombreMangerSalmonide === 2) {
+                            nombreMangerSalmonide = 0;
+                            mangerSalmonide = false;
+
+                            brillanceCarteMangeable(false);
+                            griserZone(false, false, false);
+                            updateAffichageImage();
                         }
                     } else {
-                        popUpAvertissement('Seul les «Habitats» peuvent être pollués.');
+                        popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» à manger.');
+                    }
+                }
+            } else if (onPollu) {
+                if (numeroJoueurEnnemi !== numeroJoueurActif) {
+                    if (carteBas[numeroJoueurEnnemi][numeroEmplacement] != null) {
+                        if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
+                            if (carteBas[numeroJoueurEnnemi][numeroEmplacement].perturber != true) {
+                                if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] >= 2) {
+                                    deplacerCartePerturber(document.getElementById('emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement), event, ui);
+                                } else {
+                                    rendrePerturber(document.getElementById('emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement));
+                                }
+                                nombrePolluer++;
+
+                                if (nombrePolluer === 3) {
+                                    onPollu = false;
+                                    nombrePolluer === 0;
+                                    griserZone(false, false, false);
+                                    brillanceHabitatsEnnemi(false);
+                                }
+                            } else {
+                                popUpAvertissement('Cette carte est déjà perturbée.');
+                            }
+                        } else {
+                            popUpAvertissement('Seul les «Habitats» peuvent être pollués.');
+                        }
                     }
                 }
                 /* -----------------Partie érosion -------------------*/
@@ -3396,7 +3426,6 @@
                             if (carteDrag.nom != nomEnum.deversement && carteDrag.nom != nomEnum.erosion && carteDrag.nom != nomEnum.pollutionOrganique && carteDrag.type != typeEnum.speciale && carteDrag.type != typeEnum.action) {
                                 if (bonneZoneDrop(event.target)) {//Si l'endroit que nous voulons droper est à la bonne place.
                                     if (accepterDrop(event.target)) {
-                                        console.log('??');
                                         if ($(this).children().length < 1) {//Si l'endroit où on drope est vide.
                                             if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
                                                 if (carteDrag.type === typeEnum.macroInvertebre) {
@@ -3409,7 +3438,14 @@
                                                         griserZone(true, false, true);
                                                     } else {//Sinon, met simplement la carte.
                                                         onDrop(event, ui, this);
+                                                        onDrop(event, ui, this);
+                                                        mangerSalmonide = true;
+                                                        popUpConfirmation('Vous devez sélectionnez deux «Macroinvertébré» à manger.');
+                                                        brillanceCarteMangeable(true);
+                                                        griserZone(true, false, true);
                                                     }
+                                                } else if (carteDrag.type === typeEnum.salmonide) {
+                                                    taillPredateur = carteDrag.taille;
                                                 } else {//Sinon, met simplement la carte.
                                                     onDrop(event, ui, this);
                                                 }
@@ -4020,21 +4056,21 @@
 
         //Fonction qui retourne true si il y a un macroinvertébré à manger.
         function possibleManger() {
-            var possible = false;
+            var nombrePossible = 0;
             var tailleMacro = carteDrag.taille;
 
             for (var i = 0; i < 10; i++) {
                 if (numeroJoueurActif != 0) {
                     if (carteBas[0][i] != null) {
                         if (carteBas[0][i].taille < tailleMacro) {
-                            possible = true;
+                            nombrePossible++;
                         }
                     }
                 }
                 if (numeroJoueurActif != 1) {
                     if (carteBas[1][i] != null) {
                         if (carteBas[1][i].taille < tailleMacro) {
-                            possible = true;
+                            nombrePossible++;
                         }
                     }
                 }
@@ -4042,7 +4078,7 @@
                     if (nombreJoueur > 2) {
                         if (carteBas[2][i] != null) {
                             if (carteBas[2][i].taille < tailleMacro) {
-                                possible = true;
+                                nombrePossible++;
                             }
                         }
                     }
@@ -4051,14 +4087,14 @@
                     if (nombreJoueur > 3) {
                         if (carteBas[3][i] != null) {
                             if (carteBas[3][i].taille < tailleMacro) {
-                                possible = true;
+                                nombrePossible++;
                             }
                         }
                     }
                 }
             }
 
-            if (possible) {
+            if (nomrePossible >= carteDrag.predateur) {
                 return true;
             } else {
                 return false;
@@ -4756,15 +4792,25 @@
 
         //function pour piger une carte.
         function pigerCarte(paquetCarte) {
-            var carte = paquetCarte.pop();
-            if (paquetCarte.length <= 70) {
-                $('.imageCharge').attr('src', 'ressources/moyenPaquet.png');
-            }
-            if (paquetCarte.length <= 20) {
-                $('.imageCharge').attr('src', 'ressources/petitPaquet.png')
-            }
+            if (paquetCarte.length > 0) {
+                if (paquetCarte.length === 31) {
+                    popUpConfirmation("Il reste seulement 30 cartes dans le paquet.");
+                } else if (paquetCarte.length === 6) {
+                    popUpConfirmation("Il reste seulement 5 cartes avant la fin de la partie.");
+                }
 
-            return carte;
+                var carte = paquetCarte.pop();
+                if (paquetCarte.length <= 70) {
+                    $('.imageCharge').attr('src', 'ressources/moyenPaquet.png');
+                }
+                if (paquetCarte.length <= 20) {
+                    $('.imageCharge').attr('src', 'ressources/petitPaquet.png')
+                }
+
+                return carte;
+            } else {
+                //TODO: Afficher le pop-up de fin causer par les 0 cartes.
+            }
         }
 
         //Fonction qui anime les cartes du paquet jusqu'à la main.
@@ -4864,6 +4910,8 @@
                 paquetCarte.push(carte);
 
                 melangerPaquetCarte(paquetCarte);
+
+                popUpConfirmation('Les carte de type «Bande Riveraine» et «Salmonide» sont ajoutées au paquet de carte.');
             }
         }
 
