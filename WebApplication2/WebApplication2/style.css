@@ -515,6 +515,10 @@ input::-webkit-inner-spin-button {
     display: none;
 }
 
+.divFin{
+    display:none;
+}
+
 .imageTooltip {
     height: 270px;
     width: 177px;

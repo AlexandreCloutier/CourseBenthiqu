@@ -401,6 +401,31 @@
             divCredits.innerHTML = "<p><span style='font-size: 20pt;'>Production :</span> Groupe d'&eacute;ducation et d'&eacute;cosurveillance de l'eau (G3E)</p><p><span style='font-size: 20pt;'>Coordination, recherche et r&eacute;dation :</span> Tiphanie Rivi&egrave;re</p><p><span style='font-size: 20pt;'>Illustration :</span> Pierre-Olivier Boucher</p><p><span style='font-size: 20pt;'>Conception et d&eacute;vellopement :</span> Samuel Brien et Alexandre Cloutier</p><p><span style='font-size: 20pt;'>Cr&eacute;ation :</span> Jonathan Pedneau</p><p><span style='font-size: 20pt;'>Illustration des cartes :</span> G3E</p><p><span style='font-size: 20pt;'>Partenaire financier :</span> &nbsp;Le fonds d'action qu&eacute;b&eacute;cois pour le&nbsp;</p><p>d&eacute;veloppement durable (FAQDD), et son partenaire financier</p><p>le gouvernement du Qu&eacute;bec.</p>";
             $('#menuPrincipal').append(divCredits);
 
+            //Div Fin
+            var divFin = document.createElement('div');
+            divFin.id = 'divFin';
+            divFin.className = 'divFin';
+            var meilleur = placementFinal();
+            var ordre = ordreJoueur();
+            if (aucuneCarte) {
+                if (nombreJoueur === 2) {
+                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; "+ordre[0]+" </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                } else if (nombreJoueur === 3) {
+                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; "+ordre[0]+" </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                } else if (nombreJoueur === 4) {
+                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; "+ordre[0]+" </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                }
+            } else {
+                if (nombreJoueur === 2) {
+                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; "+gagnanPoisson()+" </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                } else if (nombreJoueur === 3) {
+                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnanPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                } else if (nombreJoueur === 4) {
+                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnanPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                }
+            }
+            $('#menuPrincipal').append(divCredits);
+
             var buttonChargerPartie = document.createElement('button');
             buttonChargerPartie.id = 'buttonChargerPartie';
             buttonChargerPartie.className = 'buttonMenuPrincipal';
@@ -425,6 +450,46 @@
             buttonCredits.style.bottom = '35px';
             buttonCredits.onclick = afficherCredits;
             $('#menuPrincipal').append(buttonCredits);
+        }
+
+        //Fonction qui retourne le nom du gagnant du poisson.
+        function gagnanPoisson() {
+            for (var i = 0; i < salmonide.length; i++) {
+                if (salmonide[i] != null) {
+                    if (salmonide[i]) {
+                        if (tourSalmonide[i] != 0) {
+                            return nomJoueur[i];
+                        }
+                    }
+                }
+            }
+        }
+
+        //Function qui retournera l'ordre des joueurs
+        function placementFinal(){
+            var placement = [nombreJoueur];
+            for(var i = 0;i<nombreJoueur;i++){
+                placement[i] = pointsJoueur[i];
+            }
+
+            placement.sort(function(a, b){return a-b});
+
+            return placement;
+        }
+
+        //Fonction qui retournera le nom des joueurs en ordre
+        function ordreJoueur(){
+            var placement = placementFinal();
+            var ordreJoueur = [nombreJoueur];
+            for(var i = 0; i<nombreJoueur;i++){
+                for(var j = 0;j<placement.length;j++){
+                    if(placement[j] === pointsJoueur[i]){
+                        ordreJoueur[i] = nomJoueur[i];
+                    }
+                }
+            }
+
+            return ordreJoueur;
         }
 
         //Function qui affichera les crédits.
@@ -5773,6 +5838,24 @@
         //Fonction qui affiche un popUp contenant les crédits.
         function popUpCredits() {
             $(divCredits).dialog({
+                classes: {
+                    'ui-dialog': 'popUpRegle no-close ui-corner-all',
+                    'ui-dialog-titlebar': 'no-header',
+                    'ui-dialog-buttonset': 'buttonJeu'
+                },
+                draggable: false,
+                resizable: false,
+                modal: true,
+                height: 575,
+                width: 1150,
+                hide: 'fade',
+                show: 'fade'
+            });
+        }
+
+        //Fonction qui affiche un popUp pour la fin
+        function popUpFin() {
+            $(divFin).dialog({
                 classes: {
                     'ui-dialog': 'popUpRegle no-close ui-corner-all',
                     'ui-dialog-titlebar': 'no-header',
