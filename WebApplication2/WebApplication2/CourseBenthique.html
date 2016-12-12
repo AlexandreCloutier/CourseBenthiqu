@@ -401,6 +401,7 @@
             fileReader.type = 'file';
             fileReader.id = 'fileReader';
             fileReader.className = 'fileReader';
+            fileReader.accept = '.jcb';
             fileReader.onchange = function () {
                 chargerPartie(fileReader.files);
             }
@@ -973,8 +974,7 @@
 
             fileReader.readAsText(file[0]);
             fileReader.onload = function (e) {
-                if (e.error == null) { //Si il n'y a pas d'erreur.
-                    console.log(e);
+                try { //Si il n'y a pas d'erreur.
                     json = JSON.parse(fileReader.result);
 
                     //Reinstancie les variables.
@@ -1225,9 +1225,9 @@
                     creerElementFond();
                     updateAffichageImage();
                     updatePlateau();
-                } else {//Si une erreur s'est produit.
+                } 
+                catch (e) {//Si une erreur s'est produit.
                     alert('Une erreur est survenue lors de la lecture de la sauvegarde. Veuillez réessayer ou charger une sauvegarde différente.');
-                    console.log(e);
                 }
             };
         }
