@@ -422,6 +422,7 @@
 
         //Fonction qui affiche l'écran de création de partie.
         function menuCreerPartie() {
+
             var menuCreerPartie = document.createElement('div');
             menuCreerPartie.id = 'menuCreerPartie';
             menuCreerPartie.className = 'menuCreerPartie';
@@ -555,7 +556,7 @@
             $(divJoueurB).append(labelAgeJoueurB);
 
             var ageJoueurB = document.createElement('input');
-            ageJoueurB.type = 'number';
+            ageJoueurB.type = 'text';
             ageJoueurB.id = 'ageJoueurB';
             ageJoueurB.className = 'textBoxJoueur';
             ageJoueurB.onkeypress = function () { return isNumber(event) };
@@ -593,7 +594,7 @@
             $(divJoueurC).append(labelAgeJoueurC);
 
             var ageJoueurC = document.createElement('input');
-            ageJoueurC.type = 'number';
+            ageJoueurC.type = 'text';
             ageJoueurC.id = 'ageJoueurC';
             ageJoueurC.className = 'textBoxJoueur';
             ageJoueurC.onkeypress = function () { return isNumber(event) };
@@ -632,7 +633,7 @@
             $(divJoueurD).append(labelAgeJoueurD);
 
             var ageJoueurD = document.createElement('input');
-            ageJoueurD.type = 'number';
+            ageJoueurD.type = 'text';
             ageJoueurD.id = 'ageJoueurD';
             ageJoueurD.className = 'textBoxJoueur';
             ageJoueurD.onkeypress = function () { return isNumber(event) };
@@ -972,7 +973,8 @@
 
             fileReader.readAsText(file[0]);
             fileReader.onload = function (e) {
-                if (e == null) { //Si il n'y a pas d'erreur.
+                if (e.error == null) { //Si il n'y a pas d'erreur.
+                    console.log(e);
                     json = JSON.parse(fileReader.result);
 
                     //Reinstancie les variables.
@@ -1225,6 +1227,7 @@
                     updatePlateau();
                 } else {//Si une erreur s'est produit.
                     alert('Une erreur est survenue lors de la lecture de la sauvegarde. Veuillez réessayer ou charger une sauvegarde différente.');
+                    console.log(e);
                 }
             };
         }
@@ -1548,7 +1551,7 @@
                 //pour assurer une chance egale à tous les joueurs d'avoir les mêmes cartes.
 
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere(nomEnum.zonage, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
 
@@ -4203,6 +4206,7 @@
                         popUpAvertissement('Il n\'y a pas de cartes «Déchets» en jeu.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.naturalisation) {//Si c'est une naturalisation.
+                        console.log(test);
                         for (var i = 0; i < nombreJoueur; i++) {
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
@@ -5430,6 +5434,7 @@
                 var size = mains[numeroJoueurActif].filter(function (value) { return value != null }).length;
 
                 if (size > 4 && tableauPasserTour[numeroJoueurActif] != true) {
+                    $('#buttonPasserTour').prop('disabled', true);
                     defausserCarte();
                 } else {
                     tableauPasserTour[numeroJoueurActif] = false;
@@ -5566,15 +5571,15 @@
         }
 
         //Fonction qui remet les dimensions de la carte à son état original.
-        function revertCarte(event, ui) {
+        function revertCarte(e, ui) {
             $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD, .plateau').removeClass('droppable-hover');
-            if (event != false) {
+            if (e != false) {
                 var id;
-                id = $(event).attr('id').substr($(event).attr('id').length - 1);
-                if (bonneZoneDrop(event)) {
-                    if (accepterDrop(event)) {
-                        if ($(event).attr('id') != 'plateau') {
-                            if ($(event).children().length >= 1) {
+                id = $(e).attr('id').substr($(e).attr('id').length - 1);
+                if (bonneZoneDrop(e)) {
+                    if (accepterDrop(e)) {
+                        if ($(e).attr('id') != 'plateau') {
+                            if ($(e).children().length >= 1) {
                                 if (carteDrag.type === typeEnum.perturbation) {
                                     return false;
                                 }
