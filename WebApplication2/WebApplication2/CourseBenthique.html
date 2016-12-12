@@ -182,7 +182,11 @@
         var lettreJoueur2;
         var mangerSalmonide;
         var nombreMangerSalmonide;
-
+        //Variable de fin de partie pour le salmonide.
+        var salmonide;
+        var tourSalmonide;
+        //Variable de fin de partie pour le manque de carte
+        var aucuneCarte;
 
         //Fonction appeler au début, elle "start" le jeu.
         function startGame() {
@@ -216,6 +220,13 @@
 
             //Partie Érosion
             bandeRiveraineEroder = [];
+
+            //Partie fin salmonide
+            salmonide = [nombreJoueur];
+            tourSalmonide = [nombreJoueur];
+
+            //Partie fin aucune carte
+            aucuneCarte = false;
 
             //Partie pour la carte naturalisation.
             naturalisation = false;
@@ -415,7 +426,7 @@
             buttonCredits.onclick = afficherCredits;
             $('#menuPrincipal').append(buttonCredits);
         }
-        
+
         //Function qui affichera les crédits.
         function afficherCredits() {
             popUpCredits();
@@ -1225,7 +1236,7 @@
                     creerElementFond();
                     updateAffichageImage();
                     updatePlateau();
-                } 
+                }
                 catch (e) {//Si une erreur s'est produit.
                     alert('Une erreur est survenue lors de la lecture de la sauvegarde. Veuillez réessayer ou charger une sauvegarde différente.');
                 }
@@ -1623,6 +1634,9 @@
                         annimationPigerCarte(i);
                     }
                 }
+                if (aucuneCarte) {
+                    popUpConfirmation('Il n\'y a plus de cartes dans le paquet, c\'est donc votre dernier tour.');
+                }
             }
         }
 
@@ -1819,7 +1833,7 @@
             } else if (mangerSalmonide) {
                 if (numeroJoueurEnnemi !== numeroJoueurActif) {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.macroInvertebre) {
-                        
+
                         $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();//Supprime le macro
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
                         exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;//Baisse le nombre d'exemplaire.
@@ -2162,7 +2176,7 @@
                     naturalisation = false;
                 }
             }
-      
+
             calculerPoints();
         }
 
@@ -3441,14 +3455,16 @@
                                                         griserZone(true, false, true);
                                                     } else {//Sinon, met simplement la carte.
                                                         onDrop(event, ui, this);
-                                                        onDrop(event, ui, this);
-                                                        mangerSalmonide = true;
-                                                        popUpConfirmation('Vous devez sélectionnez deux «Macroinvertébré» à manger.');
-                                                        brillanceCarteMangeable(true);
-                                                        griserZone(true, false, true);
                                                     }
                                                 } else if (carteDrag.type === typeEnum.salmonide) {
-                                                    taillPredateur = carteDrag.taille;
+                                                    taillePredateur = carteDrag.taille;
+                                                    onDrop(event, ui, this);
+                                                    salmonide[numeroJoueurActif] = true;
+                                                    mangerSalmonide = true;
+                                                    tourSalmonide = 0;
+                                                    popUpConfirmation('Vous devez sélectionnez deux «Macroinvertébré» à manger.');
+                                                    brillanceCarteMangeable(true);
+                                                    griserZone(true, false, true);
                                                 } else {//Sinon, met simplement la carte.
                                                     onDrop(event, ui, this);
                                                 }
@@ -4632,7 +4648,7 @@
             var tuer = false;
             for (var i = 0; i < 10; i++) {
                 if (carteBas[joueur][i] != null) {
-                    if (carteBas[joueur][i].type === typeEnum.macroInvertebre) {
+                    if (carteBas[joueur][i].type === typeEnum.macroInvertebre || carteBas[joueur][i].type === typeEnum.salmonide) {
                         var tabCond = carteBas[joueur][i].condition;
                         for (var j = 0; j < tabCond.length; j++) {
                             if (carteBas[joueur][i] != null) {
@@ -4813,7 +4829,7 @@
 
                 return carte;
             } else {
-                //TODO: Afficher le pop-up de fin causer par les 0 cartes.
+                aucuneCarte = true;
             }
         }
 
@@ -5430,107 +5446,115 @@
 
         //Fonction appelé lors d'un clic sur le boutton Passer son tour.
         function passerTour() {
-            if (!mangerPredateur) {
-                var size = mains[numeroJoueurActif].filter(function (value) { return value != null }).length;
+            var size = mains[numeroJoueurActif].filter(function (value) { return value != null }).length;
 
-                if (size > 4 && tableauPasserTour[numeroJoueurActif] != true) {
-                    $('#buttonPasserTour').prop('disabled', true);
-                    defausserCarte();
-                } else {
-                    tableauPasserTour[numeroJoueurActif] = false;
-                    $('#buttonPasserTour').prop('disabled', true);
-                    $('#divMain').css('pointer-events', 'none');
+            if (size > 4 && tableauPasserTour[numeroJoueurActif] != true) {
+                $('#buttonPasserTour').prop('disabled', true);
+                defausserCarte();
+            } else {
+                tableauPasserTour[numeroJoueurActif] = false;
+                $('#buttonPasserTour').prop('disabled', true);
+                $('#divMain').css('pointer-events', 'none');
 
-                    //Change le facteur de rotation selon le nombre de joueur.
-                    if (nombreJoueur === 4) {
+                //Change le facteur de rotation selon le nombre de joueur.
+                if (nombreJoueur === 4) {
+                    facteurRotation += 1;
+                    if (facteurRotation > 4) {
+                        facteurRotation = 1;
+                    }
+                } else if (nombreJoueur === 2) {
+                    facteurRotation += 2;
+                    if (facteurRotation > 4) {
+                        facteurRotation = 2
+                    }
+                } else if (nombreJoueur === 3) {
+                    facteurRotation += 1;
+                    if (facteurRotation > 4) {
+                        facteurRotation = 1;
+                    }
+                    if (facteurRotation === 1) {
                         facteurRotation += 1;
-                        if (facteurRotation > 4) {
-                            facteurRotation = 1;
-                        }
-                    } else if (nombreJoueur === 2) {
-                        facteurRotation += 2;
-                        if (facteurRotation > 4) {
-                            facteurRotation = 2
-                        }
-                    } else if (nombreJoueur === 3) {
-                        facteurRotation += 1;
-                        if (facteurRotation > 4) {
-                            facteurRotation = 1;
-                        }
-                        if (facteurRotation === 1) {
-                            facteurRotation += 1;
-                        }
                     }
+                }
 
-                    var angleRotationDebut = (90 * (facteurRotation - 1));
-                    var angleRotationFin = (90 * facteurRotation);
+                var angleRotationDebut = (90 * (facteurRotation - 1));
+                var angleRotationFin = (90 * facteurRotation);
 
-                    var $plateau = $('#plateau');
-                    $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
-                        duration: 1000,
-                        step: function (now) {
-                            $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
-                            $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
-                            $plateau.css('transform', 'rotate(' + now + 'deg)');
-                        }
-                    });
+                var $plateau = $('#plateau');
+                $({ deg: angleRotationDebut }).animate({ deg: angleRotationFin }, {
+                    duration: 1000,
+                    step: function (now) {
+                        $plateau.css('-webkit-transform', 'rotate(' + now + 'deg)');
+                        $plateau.css('-moz-transform', 'rotate(' + now + 'deg)');
+                        $plateau.css('transform', 'rotate(' + now + 'deg)');
+                    }
+                });
 
-                    if (deversement) {//Si un déversement est en cour.
-                        if (numeroJoueurActif === numeroJoueurDeversement) {//Si c'est la fin du tour du joueur qui a déversé.
-                            tempsDeversement--;
-                            if (tempsDeversement === 0) {//Si le temps de déverseent est écoulé, tue les macros et rend déversement à false.
-                                tuerDeversement();
-                                deversement = false;
-                                popUpAvertissement('Un «Déversement» de produits chimiques vient d\'avoir lieu, tous les «Macroinvertébrés» de résistance inférieure à 6 sont morts.');
-                            }
+                if (deversement) {//Si un déversement est en cour.
+                    if (numeroJoueurActif === numeroJoueurDeversement) {//Si c'est la fin du tour du joueur qui a déversé.
+                        tempsDeversement--;
+                        if (tempsDeversement === 0) {//Si le temps de déverseent est écoulé, tue les macros et rend déversement à false.
+                            tuerDeversement();
+                            deversement = false;
+                            popUpAvertissement('Un «Déversement» de produits chimiques vient d\'avoir lieu, tous les «Macroinvertébrés» de résistance inférieure à 6 sont morts.');
                         }
                     }
-                    if (tableauRetention[numeroJoueurActif] === true) {
-                        tableauRetention[numeroJoueurActif] = pointsRessourcesRestant[numeroJoueurActif];
-                    }
+                }
+                if (tableauRetention[numeroJoueurActif] === true) {
+                    tableauRetention[numeroJoueurActif] = pointsRessourcesRestant[numeroJoueurActif];
+                }
 
-                    for (var i = mains[numeroJoueurActif].length - 1; i > 5; i--) {
-                        mains[numeroJoueurActif].length--;
-                        $('#liMain' + i).remove();
-                    }
+                for (var i = mains[numeroJoueurActif].length - 1; i > 5; i--) {
+                    mains[numeroJoueurActif].length--;
+                    $('#liMain' + i).remove();
+                }
 
-                    //On tue les macroinvertébrés qui n'ont plus leurs habitats ou que leurs habitats est perturbés.
-                    tuerMacroSansHabitats();
+                //On tue les macroinvertébrés qui n'ont plus leurs habitats ou que leurs habitats est perturbés.
+                tuerMacroSansHabitats();
 
-                    //Partie qui passe au prochain joueur.
-                    numeroJoueurActif++;
-                    if (numeroJoueurActif === nombreJoueur) {
-                        numeroJoueurActif = 0;
-                        tour++;
-                        ajoutCarte(tour);
+                if (salmonide[numeroJoueurActif]) {
+                    if (tourSalmonide[numeroJoueurActif] === 0) {
+                        tourSalmonide[numeroJoueurActif] = 1;
+                    } else {
+                        //TODO: afficher fin.
                     }
-
-                    //Rend le bouton passer tour inactif lorsqu'on clique dessus pour éviter de "spam" le bouton.
-                    setTimeout(function () {
-                        $('#buttonPasserTour').prop('disabled', false);
-                        $('#divMain').css('pointer-events', 'auto');
-                    }, 2000);
-                    if (tour != 1) {
-                        remplirMain();
-                    }
-                    updatePointsRessourcesJeu();
-                    setTimeout(function () {
-                        updateAffichageImage();
-                    }, 500);
-
-                    popUpDebutTour(numeroJoueurActif);
-                    debutTourDeperturber();
-                    if (tableauPasserTour[numeroJoueurActif] === true) {
-                        setTimeout(function () {
-                            passerTour();
-                        }, 1500);
-                        popUpConfirmation('Le joueur ' + premiereLettreMaj(nomJoueur[numeroJoueurActif]) + ' a raté son tour.');
-                    }
+                }
+                if (aucuneCarte) {
 
                 }
-            } else {
-                popUpErreur('Vous devez d\'abord sélectionner un «Macroinvertébré» d\'une taille inférieure à ' + taillePredateur + ' pour le manger.');
+
+                //Partie qui passe au prochain joueur.
+                numeroJoueurActif++;
+                if (numeroJoueurActif === nombreJoueur) {
+                    numeroJoueurActif = 0;
+                    tour++;
+                    ajoutCarte(tour);
+                }
+
+                //Rend le bouton passer tour inactif lorsqu'on clique dessus pour éviter de "spam" le bouton.
+                setTimeout(function () {
+                    $('#buttonPasserTour').prop('disabled', false);
+                    $('#divMain').css('pointer-events', 'auto');
+                }, 2000);
+                if (tour != 1) {
+                    remplirMain();
+                }
+                updatePointsRessourcesJeu();
+                setTimeout(function () {
+                    updateAffichageImage();
+                }, 500);
+
+                popUpDebutTour(numeroJoueurActif);
+                debutTourDeperturber();
+                if (tableauPasserTour[numeroJoueurActif] === true) {
+                    setTimeout(function () {
+                        passerTour();
+                    }, 1500);
+                    popUpConfirmation('Le joueur ' + premiereLettreMaj(nomJoueur[numeroJoueurActif]) + ' a raté son tour.');
+                }
+
             }
+
         }
 
         //Fonction qui va regarder si le joueur à droit à des points de ressources additionels.
