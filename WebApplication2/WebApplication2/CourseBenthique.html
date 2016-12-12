@@ -415,7 +415,7 @@
             buttonCredits.onclick = afficherCredits;
             $('#menuPrincipal').append(buttonCredits);
         }
-        
+
         //Function qui affichera les crédits.
         function afficherCredits() {
             popUpCredits();
@@ -1225,7 +1225,7 @@
                     creerElementFond();
                     updateAffichageImage();
                     updatePlateau();
-                } 
+                }
                 catch (e) {//Si une erreur s'est produit.
                     alert('Une erreur est survenue lors de la lecture de la sauvegarde. Veuillez réessayer ou charger une sauvegarde différente.');
                 }
@@ -1819,7 +1819,7 @@
             } else if (mangerSalmonide) {
                 if (numeroJoueurEnnemi !== numeroJoueurActif) {
                     if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.macroInvertebre) {
-                        
+
                         $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();//Supprime le macro
                         paquetDecharge.push(carteBas[numeroJoueurEnnemi][numeroEmplacement]);
                         exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement]--;//Baisse le nombre d'exemplaire.
@@ -2162,7 +2162,7 @@
                     naturalisation = false;
                 }
             }
-      
+
             calculerPoints();
         }
 
@@ -2535,8 +2535,9 @@
                                                 });
                                                 $(this).dialog('close');
                                                 updateAffichageImage();
-                                            } else {
-                                                $('#divChoixContenu').children().remove();
+                                            } else if (joueurSelectionne.id === '2') {
+                                                $('#labelChoix').text('Choisissez la carte Intervention désirée.')
+                                                $('#divChoixContenu').children().remove('ul');
                                                 $(this).dialog({
                                                     width: 575,
                                                     buttons: {
@@ -2594,6 +2595,9 @@
                                                     }
                                                 });
                                             }
+                                            else {
+                                                popAvertissement('Veuillez d\'abord choisir un option');
+                                            }
                                         }
                                     },
                                     draggable: false,
@@ -2612,14 +2616,14 @@
                                 var stop = false;
                                 for (var i = 0; i < nombreJoueur; i++) {
                                     for (var j = 0; j < cartePerturbation[i].length; j++) {
-                                        if (!conte) {
+                                        if (!stop) {
                                             if (cartePerturbation[i][j] != null) {
                                                 if (cartePerturbation[i][j].nom === nomEnum.erosion) {
                                                     var li = document.createElement('li');
                                                     li.style.listStyleType = 'none';
                                                     li.className = 'listeJoueur';
                                                     li.id = '1';
-                                                    li.innerHTML = 'Annuler l\'effet de la carte Érosion.';
+                                                    li.innerHTML = 'Annuler l\'effet de la carte «Érosion».';
                                                     $(ul).append(li);
                                                     stop = true;
                                                 }
@@ -2631,14 +2635,16 @@
                                 if (paquetIntervention.filter(
                                     function (value) {
                                         if (value.nom === nomEnum.amenageFosse || value.nom === nomEnum.amenageGalets || value.nom === nomEnum.amenageGravier || value.nom === nomEnum.amenageRapides || value.nom === nomEnum.amenageSable) {
-                                            return value;
+                                    console.log(value);
+                                    return value;
+
                                 }
                                 }).length > 0) {
                                     var li = document.createElement('li');
                                     li.style.listStyleType = 'none';
                                     li.className = 'listeJoueur';
                                     li.id = '2';
-                                    li.innerHTML = 'Choisir un habitat dans les cartes Interventions.';
+                                    li.innerHTML = 'Choisir un habitat dans les cartes «Interventions».';
                                     $(ul).append(li);
                                 }
 
@@ -2656,7 +2662,7 @@
                             } else if (carteDrag.nom === nomEnum.erosion) {
                                 //Si personne à la carte pris sur le fait.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value != null }).length === 0) {
-                                    popUpConfirmation('Vous devez sélectioner la «Bande Riveraine» à envoyer à la décharge.');
+                                    popUpConfirmation('Vous devez sélectioner la «Bande Riveraine»« à envoyer à la décharge.');
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     ui.draggable.remove();
