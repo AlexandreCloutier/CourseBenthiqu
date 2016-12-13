@@ -10,6 +10,7 @@
     <script src="scripts/jquery-ui.min.js"></script>
     <script src="scripts/FileSaver.min.js"></script>
     <script>
+        //TODO: ui perturber a remettre?
         /* ------------------enum---------------------  */
         var typeEnum = {
             'habitats': 'habitats',
@@ -127,7 +128,7 @@
         var exemplaireCarteBas;
         //Tableau contenant les position des cartes perturbation.
         var cartePerturbation;
-        //Tableau pour savoir si le joueur garder ses points ressources.
+        //Tableau pour savoir si le joueur garder ses points-ressources.
         var tableauRetention;
         //Tableau contenant les points de ressources.
         var pointsRessourcesBase;
@@ -193,7 +194,7 @@
             valeurDepartVariable();//Donne les valeurs de départs à nos variables.
             instancierTableaux();//instancie tout les tableaux.
             instancierPaquetCarte();//Crée le paquet de carte de départ.
-            updatePointsRessourcesJeu();//Update les points ressources.
+            updatePointsRessourcesJeu();//Update les points-ressources.
             creerElementFond();//Crée touts les éléments du jeu.
             updateAffichageImage();//Update l'affichage de toutes les images.
         }
@@ -300,7 +301,7 @@
                         entrerValeurCreationPartie();
                         return '';
                     } else {
-                        retour = 'Veuillez entrer l\'age de chacun des joueurs.';
+                        retour = 'Veuillez entrer l\'âge de chacun des joueurs.';
                         return retour;
                     }
                 } else {
@@ -398,7 +399,7 @@
             var divCredits = document.createElement('div');
             divCredits.id = 'divCredits';
             divCredits.className = 'divCredits';
-            divCredits.innerHTML = "<p><span style='font-size: 20pt;'>Production :</span> Groupe d'&eacute;ducation et d'&eacute;cosurveillance de l'eau (G3E)</p><p><span style='font-size: 20pt;'>Coordination, recherche et r&eacute;dation :</span> Tiphanie Rivi&egrave;re</p><p><span style='font-size: 20pt;'>Illustration :</span> Pierre-Olivier Boucher</p><p><span style='font-size: 20pt;'>Conception et d&eacute;vellopement :</span> Samuel Brien et Alexandre Cloutier</p><p><span style='font-size: 20pt;'>Cr&eacute;ation :</span> Jonathan Pedneau</p><p><span style='font-size: 20pt;'>Illustration des cartes :</span> G3E</p><p><span style='font-size: 20pt;'>Partenaire financier :</span> &nbsp;Le fonds d'action qu&eacute;b&eacute;cois pour le&nbsp;</p><p>d&eacute;veloppement durable (FAQDD), et son partenaire financier</p><p>le gouvernement du Qu&eacute;bec.</p>";
+            divCredits.innerHTML = "<p><span style='font-size: 20pt;'>Production&nbsp;:</span> Groupe d'&eacute;ducation et d'&eacute;cosurveillance de l'eau (G3E)</p><p><span style='font-size: 20pt;'>Coordination, recherche et r&eacute;dation&nbsp;:</span> Tiphanie Rivi&egrave;re</p><p><span style='font-size: 20pt;'>Illustration&nbsp;:</span> Pierre-Olivier Boucher</p><p><span style='font-size: 20pt;'>Conception et d&eacute;vellopement&nbsp;:</span> Samuel Brien et Alexandre Cloutier</p><p><span style='font-size: 20pt;'>Cr&eacute;ation&nbsp;:</span> Jonathan Pedneau</p><p><span style='font-size: 20pt;'>Illustration des cartes&nbsp;:</span> G3E</p><p><span style='font-size: 20pt;'>Partenaire financier&nbsp;:</span> &nbsp;Le fonds d'action qu&eacute;b&eacute;cois pour le&nbsp;</p><p>d&eacute;veloppement durable (FAQDD), et son partenaire financier</p><p>le gouvernement du Qu&eacute;bec.</p>";
             $('#menuPrincipal').append(divCredits);
 
             //Div Fin
@@ -514,7 +515,7 @@
             var labelTexteNombreJoueur = document.createElement('label');
             labelTexteNombreJoueur.id = 'labelTexteNombreJoueur';
             labelTexteNombreJoueur.className = 'labelTexteNombreJoueur';
-            labelTexteNombreJoueur.innerHTML = 'Nombre de joueur : ';
+            labelTexteNombreJoueur.innerHTML = 'Nombre de joueurs&nbsp;: ';
             $(divContreVJ).append(labelTexteNombreJoueur);
 
             var dropDownNombreJoueur = document.createElement('select');
@@ -579,7 +580,7 @@
             var labelNomJoueurA = document.createElement('label');
             labelNomJoueurA.id = 'labelNomJoueurA';
             labelNomJoueurA.className = 'labelJoueur';
-            labelNomJoueurA.innerHTML = 'Nom : ';
+            labelNomJoueurA.innerHTML = 'Nom&nbsp;: ';
             $(divJoueurA).append(labelNomJoueurA);
 
             var nomJoueurA = document.createElement('input');
@@ -591,14 +592,14 @@
             var labelAgeJoueurA = document.createElement('label');
             labelAgeJoueurA.id = 'labelAgeJoueurA';
             labelAgeJoueurA.className = 'labelJoueur';
-            labelAgeJoueurA.innerHTML = 'Âge : ';
+            labelAgeJoueurA.innerHTML = 'Âge&nbsp;: ';
             $(divJoueurA).append(labelAgeJoueurA);
 
             var ageJoueurA = document.createElement('input');
             ageJoueurA.type = 'text';
             ageJoueurA.id = 'ageJoueurA';
             ageJoueurA.className = 'textBoxJoueur';
-            ageJoueurA.onkeypress = function () { return isNumber(event) };
+            ageJoueurA.onkeypress = function () { return EstChiffre(event) };
             ageJoueurA.maxLength = 2;
             $(divJoueurA).append(ageJoueurA);
 
@@ -617,7 +618,7 @@
             var labelNomJoueurB = document.createElement('label');
             labelNomJoueurB.id = 'labelNomJoueurB';
             labelNomJoueurB.className = 'labelJoueur';
-            labelNomJoueurB.innerHTML = 'Nom : ';
+            labelNomJoueurB.innerHTML = 'Nom&nbsp;: ';
             $(divJoueurB).append(labelNomJoueurB);
 
             var nomJoueurB = document.createElement('input');
@@ -629,14 +630,14 @@
             var labelAgeJoueurB = document.createElement('label');
             labelAgeJoueurB.id = 'labelAgeJoueurB';
             labelAgeJoueurB.className = 'labelJoueur';
-            labelAgeJoueurB.innerHTML = 'Âge : ';
+            labelAgeJoueurB.innerHTML = 'Âge&nbsp;: ';
             $(divJoueurB).append(labelAgeJoueurB);
 
             var ageJoueurB = document.createElement('input');
             ageJoueurB.type = 'text';
             ageJoueurB.id = 'ageJoueurB';
             ageJoueurB.className = 'textBoxJoueur';
-            ageJoueurB.onkeypress = function () { return isNumber(event) };
+            ageJoueurB.onkeypress = function () { return EstChiffre(event) };
             ageJoueurB.maxLength = 2;
             $(divJoueurB).append(ageJoueurB);
 
@@ -655,7 +656,7 @@
             var labelNomJoueurC = document.createElement('label');
             labelNomJoueurC.id = 'labelNomJoueurC';
             labelNomJoueurC.className = 'labelJoueur';
-            labelNomJoueurC.innerHTML = 'Nom : ';
+            labelNomJoueurC.innerHTML = 'Nom&nbsp;: ';
             $(divJoueurC).append(labelNomJoueurC);
 
             var nomJoueurC = document.createElement('input');
@@ -667,14 +668,14 @@
             var labelAgeJoueurC = document.createElement('label');
             labelAgeJoueurC.id = 'labelAgeJoueurC';
             labelAgeJoueurC.className = 'labelJoueur';
-            labelAgeJoueurC.innerHTML = 'Âge : ';
+            labelAgeJoueurC.innerHTML = 'Âge&nbsp;: ';
             $(divJoueurC).append(labelAgeJoueurC);
 
             var ageJoueurC = document.createElement('input');
             ageJoueurC.type = 'text';
             ageJoueurC.id = 'ageJoueurC';
             ageJoueurC.className = 'textBoxJoueur';
-            ageJoueurC.onkeypress = function () { return isNumber(event) };
+            ageJoueurC.onkeypress = function () { return EstChiffre(event) };
             ageJoueurC.maxLength = 2;
             $(divJoueurC).append(ageJoueurC);
 
@@ -694,7 +695,7 @@
             var labelNomJoueurD = document.createElement('label');
             labelNomJoueurD.id = 'labelNomJoueurD';
             labelNomJoueurD.className = 'labelJoueur';
-            labelNomJoueurD.innerHTML = 'Nom : ';
+            labelNomJoueurD.innerHTML = 'Nom&nbsp;: ';
             $(divJoueurD).append(labelNomJoueurD);
 
             var nomJoueurD = document.createElement('input');
@@ -706,14 +707,14 @@
             var labelAgeJoueurD = document.createElement('label');
             labelAgeJoueurD.id = 'labelAgeJoueurD';
             labelAgeJoueurD.className = 'labelJoueur';
-            labelAgeJoueurD.innerHTML = 'Âge : ';
+            labelAgeJoueurD.innerHTML = 'Âge&nbsp;: ';
             $(divJoueurD).append(labelAgeJoueurD);
 
             var ageJoueurD = document.createElement('input');
             ageJoueurD.type = 'text';
             ageJoueurD.id = 'ageJoueurD';
             ageJoueurD.className = 'textBoxJoueur';
-            ageJoueurD.onkeypress = function () { return isNumber(event) };
+            ageJoueurD.onkeypress = function () { return EstChiffre(event) };
             ageJoueurD.maxLength = 2;
             $(divJoueurD).append(ageJoueurD);
 
@@ -731,7 +732,7 @@
             var labelTexteDifficulte = document.createElement('label');
             labelTexteDifficulte.id = 'labelTexteDifficulte';
             labelTexteDifficulte.className = 'labelTexteDifficulte';
-            labelTexteDifficulte.innerHTML = 'Difficulté de la partie : ';
+            labelTexteDifficulte.innerHTML = 'Difficulté de la partie&nbsp;: ';
             $(divDifficulte).append(labelTexteDifficulte);
 
             var dropDownDifficulte = document.createElement('select');
@@ -1014,7 +1015,7 @@
             //Sauvegarde le numero du joueur qui à joué deversement;
             numeroJoueurDeversementJson = numeroJoueurDeversement;
 
-            //Sauvegarde les points ressources restant du joueur actif.
+            //Sauvegarde les points-ressources restant du joueur actif.
             pointsRessourcesUtiliserJson = pointsRessourcesUtiliser[numeroJoueurActif];
 
             //Créer un grand fichier texte dans le format Json
@@ -1300,7 +1301,10 @@
                     pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif] - pointsRessourcesUtiliser[numeroJoueurActif];
                     creerElementFond();
                     updateAffichageImage();
-                    updatePlateau();
+                    setTimeout(function () {
+                        updatePlateau();
+                    }, 200);
+
                 }
                 catch (e) {//Si une erreur s'est produit.
                     alert('Une erreur est survenue lors de la lecture de la sauvegarde. Veuillez réessayer ou charger une sauvegarde différente.');
@@ -1325,7 +1329,7 @@
             var labelResolution = document.createElement('label');
             labelResolution.id = 'labelResolution';
             labelResolution.className = 'labelResolution';
-            labelResolution.innerHTML = '<span>Résolution : </span>'
+            labelResolution.innerHTML = '<span>Résolution&nbsp;: </span>'
             divOptions.appendChild(labelResolution);
 
             var dropDownReso = document.createElement('select');
@@ -1493,7 +1497,7 @@
             var divRegle = document.createElement('div');
             divRegle.id = 'divRegle';
             divRegle.className = 'divRegle';
-            divRegle.innerHTML = "<p>Dur&eacute;e<br />Pour 2 joueurs : 45 &agrave; 60 minutes<br />Pour 3 &agrave; 4 joueurs : 60 &agrave; 90 minutes</p><p>But du jeu<br />Le but de ce jeu est de b&acirc;tir le meilleur &eacute;cosyst&egrave;me riverain, en cr&eacute;ant un environnement favorable dans lequel pourront &eacute;voluer une grande vari&eacute;t&eacute; de macroinvert&eacute;br&eacute;s.</p><p>Fin du jeu<br />Le jeu peut se terminer de deux fa&ccedil;ons :</p><p>1. Lorsque les conditions des habitats permettent &agrave; la carte<br />Salmonid&eacute; de rester en jeu apr&egrave;s un tour complet.</p><p>2. Lorsqu&rsquo;il ne reste plus de cartes dans la charge.</p> <p>Pointage<br />Chaque joueur compte ses points selon la m&eacute;thode qui suit.</p><p>&bull; La valeur de chacune des cartes est indiqu&eacute;e dans le coin sup&eacute;rieur gauche. Seules les cartes en jeu peuvent &ecirc;tre comptabilis&eacute;es.</p><p>&bull; Les cartes subissant une perturbation et les cartes<br />Perturbation ne valent aucun point.</p><p>&bull; Lorsqu&rsquo;il y a des cartes identiques, la premi&egrave;re vaut tous ses points et les suivantes valent seulement un point chacune.<br />Le gagnant est celui qui poss&egrave;de le plus grand nombre de points, &eacute;tant g&eacute;n&eacute;ralement celui avec la plus grande vari&eacute;t&eacute; de cartes en jeu.</p><p>R&egrave;glements<br />D&Eacute;ROULEMENT DU JEU<br />Les joueurs utilisent deux paquets de cartes. Le premier paquet, nomm&eacute; la charge, correspond aux cartes non jou&eacute;es qui sont plac&eacute;es face contre table. Le deuxi&egrave;me paquet, nomm&eacute; la d&eacute;charge, correspond aux cartes jou&eacute;es et rejet&eacute;es. Les cartes en jeu sont plac&eacute;es sur la table, face vers le haut, devant le joueur qui les poss&egrave;de. Les cartes en main ne doivent en aucun temps &ecirc;tre vues par les autres joueurs. Les cartes Intervention (grises) ne sont pas dans la charge; elles sont mises de c&ocirc;t&eacute; jusqu&rsquo;&agrave; ce qu&rsquo;un joueur en ait besoin.</p><p>&bull; Le nombre de points-ressources n&eacute;cessaire &agrave; la mise en jeu des cartes est inscrit dans le coin sup&eacute;rieur gauche de la carte (voir Configuration des cartes).<br />&bull; Pour jouer une carte macroinvert&eacute;br&eacute;, le joueur doit d&eacute;j&agrave; avoir en jeu la ou les cartes Habitat repr&eacute;sent&eacute;es en haut &agrave; gauche de la carte &agrave; jouer. Ce sont les habitats n&eacute;cessaires &agrave; la survie du macroinvert&eacute;br&eacute;. Si un habitat est perturb&eacute; par un adversaire et que le joueur vis&eacute; ne peut sauver la carte &agrave; son tour, les cartes macroinvert&eacute;br&eacute; qui en d&eacute;pendent vont &agrave; la d&eacute;charge.<br />&bull; Pour &ecirc;tre mis en jeu, les macroinvert&eacute;br&eacute;s pr&eacute;dateurs doivent manger un macroinvert&eacute;br&eacute; en jeu de taille inf&eacute;rieure.<br />&bull; &Agrave; la fin de son tour, le joueur doit avoir en main un maximum de quatre cartes. S&rsquo;il en poss&egrave;de davantage, il devra mettre &agrave; la d&eacute;charge les cartes exc&eacute;dentaires. Si le joueur poss&egrave;de<br /> moins de quatre cartes en main, il ne peut pas se d&eacute;barrasser<br />des cartes non d&eacute;sir&eacute;es.</p><p>&bull; Lorsque le joueur d&eacute;clare son jeu termin&eacute;, ou s&rsquo;il joue toutes ses cartes, le joueur suivant peut commencer son tour.</p><p>CARTES EN JEU<br />AU JEU<br />&bull; Au d&eacute;but de son tour, le joueur pige des cartes dans la charge afin d&rsquo;avoir six cartes en main.<br />&bull; Le joueur place les cartes qu&rsquo;il d&eacute;sire jouer sur la table, &agrave; la vue de tous. Ces cartes resteront ainsi, devant le joueur, sauf si elles sont envoy&eacute;es &agrave; la d&eacute;charge par d&rsquo;autres cartes ou si leur dur&eacute;e de vie se termine.<br />&bull; Les cartes ne peuvent &ecirc;tre mises en jeu qu&rsquo;au moment de jouer, &agrave; l&rsquo;exception des cartes Sp&eacute;ciale qui peuvent &ecirc;tre jou&eacute;es &agrave; n&rsquo;importe quel moment.<br /> &bull; &Agrave; chaque tour, le joueur poss&egrave;de cinq points-ressources. Un joueur peut choisir de ne pas utiliser tous les points-ressources auxquels il a droit; les points non utilis&eacute;s sont alors perdus et ne peuvent &ecirc;tre utilis&eacute;s au prochain tour.<br />&bull; Des points-ressources suppl&eacute;mentaires peuvent &ecirc;tre utilis&eacute;s si le joueur a mis en jeu une ou des cartes Bande riveraine ou la carte r&eacute;tention (voir les instructions au bas de ces cartes).<br /><br />Chaque carte poss&egrave;de des crit&egrave;res diff&eacute;rents d&rsquo;utilisation. R&eacute;f&eacute;rez- vous &agrave; la section Configuration des cartes et au tableau des Types de cartes pour en prendre connaissance.<br />Un m&ecirc;me joueur ne peut pas avoir en jeu plus de trois cartes Bande riveraine et huit cartes Habitat. De plus, une fois sur la table, ces cartes ne peuvent pas &ecirc;tre retir&eacute;es du jeu. Elles peuvent cependant &ecirc;tre modifi&eacute;es ou d&eacute;sactiv&eacute;es par des cartes Perturbation, ou restaur&eacute;es par des cartes action.<br /></p>";
+            divRegle.innerHTML = "<p>Dur&eacute;e<br />Pour 2 joueurs&nbsp;: 45 &agrave; 60 minutes<br />Pour 3 &agrave; 4 joueurs&nbsp;: 60 &agrave; 90 minutes</p><p>But du jeu<br />Le but de ce jeu est de b&acirc;tir le meilleur &eacute;cosyst&egrave;me riverain, en cr&eacute;ant un environnement favorable dans lequel pourront &eacute;voluer une grande vari&eacute;t&eacute; de macroinvert&eacute;br&eacute;s.</p><p>Fin du jeu<br />Le jeu peut se terminer de deux fa&ccedil;ons&nbsp;:</p><p>1. Lorsque les conditions des habitats permettent &agrave; la carte<br />Salmonid&eacute; de rester en jeu apr&egrave;s un tour complet.</p><p>2. Lorsqu&rsquo;il ne reste plus de cartes dans la charge.</p> <p>Pointage<br />Chaque joueur compte ses points selon la m&eacute;thode qui suit.</p><p>&bull; La valeur de chacune des cartes est indiqu&eacute;e dans le coin sup&eacute;rieur gauche. Seules les cartes en jeu peuvent &ecirc;tre comptabilis&eacute;es.</p><p>&bull; Les cartes subissant une perturbation et les cartes<br />Perturbation ne valent aucun point.</p><p>&bull; Lorsqu&rsquo;il y a des cartes identiques, la premi&egrave;re vaut tous ses points et les suivantes valent seulement un point chacune.<br />Le gagnant est celui qui poss&egrave;de le plus grand nombre de points, &eacute;tant g&eacute;n&eacute;ralement celui avec la plus grande vari&eacute;t&eacute; de cartes en jeu.</p><p>R&egrave;glements<br />D&Eacute;ROULEMENT DU JEU<br />Les joueurs utilisent deux paquets de cartes. Le premier paquet, nomm&eacute; la charge, correspond aux cartes non jou&eacute;es qui sont plac&eacute;es face contre table. Le deuxi&egrave;me paquet, nomm&eacute; la d&eacute;charge, correspond aux cartes jou&eacute;es et rejet&eacute;es. Les cartes en jeu sont plac&eacute;es sur la table, face vers le haut, devant le joueur qui les poss&egrave;de. Les cartes en main ne doivent en aucun temps &ecirc;tre vues par les autres joueurs. Les cartes Intervention (grises) ne sont pas dans la charge; elles sont mises de c&ocirc;t&eacute; jusqu&rsquo;&agrave; ce qu&rsquo;un joueur en ait besoin.</p><p>&bull; Le nombre de points-ressources n&eacute;cessaire &agrave; la mise en jeu des cartes est inscrit dans le coin sup&eacute;rieur gauche de la carte (voir Configuration des cartes).<br />&bull; Pour jouer une carte macroinvert&eacute;br&eacute;, le joueur doit d&eacute;j&agrave; avoir en jeu la ou les cartes Habitat repr&eacute;sent&eacute;es en haut &agrave; gauche de la carte &agrave; jouer. Ce sont les habitats n&eacute;cessaires &agrave; la survie du macroinvert&eacute;br&eacute;. Si un habitat est perturb&eacute; par un adversaire et que le joueur vis&eacute; ne peut sauver la carte &agrave; son tour, les cartes macroinvert&eacute;br&eacute; qui en d&eacute;pendent vont &agrave; la d&eacute;charge.<br />&bull; Pour &ecirc;tre mis en jeu, les macroinvert&eacute;br&eacute;s pr&eacute;dateurs doivent manger un macroinvert&eacute;br&eacute; en jeu de taille inf&eacute;rieure.<br />&bull; &Agrave; la fin de son tour, le joueur doit avoir en main un maximum de quatre cartes. S&rsquo;il en poss&egrave;de davantage, il devra mettre &agrave; la d&eacute;charge les cartes exc&eacute;dentaires. Si le joueur poss&egrave;de<br /> moins de quatre cartes en main, il ne peut pas se d&eacute;barrasser<br />des cartes non d&eacute;sir&eacute;es.</p><p>&bull; Lorsque le joueur d&eacute;clare son jeu termin&eacute;, ou s&rsquo;il joue toutes ses cartes, le joueur suivant peut commencer son tour.</p><p>CARTES EN JEU<br />AU JEU<br />&bull; Au d&eacute;but de son tour, le joueur pige des cartes dans la charge afin d&rsquo;avoir six cartes en main.<br />&bull; Le joueur place les cartes qu&rsquo;il d&eacute;sire jouer sur la table, &agrave; la vue de tous. Ces cartes resteront ainsi, devant le joueur, sauf si elles sont envoy&eacute;es &agrave; la d&eacute;charge par d&rsquo;autres cartes ou si leur dur&eacute;e de vie se termine.<br />&bull; Les cartes ne peuvent &ecirc;tre mises en jeu qu&rsquo;au moment de jouer, &agrave; l&rsquo;exception des cartes Sp&eacute;ciale qui peuvent &ecirc;tre jou&eacute;es &agrave; n&rsquo;importe quel moment.<br /> &bull; &Agrave; chaque tour, le joueur poss&egrave;de cinq points-ressources. Un joueur peut choisir de ne pas utiliser tous les points-ressources auxquels il a droit; les points non utilis&eacute;s sont alors perdus et ne peuvent &ecirc;tre utilis&eacute;s au prochain tour.<br />&bull; Des points-ressources suppl&eacute;mentaires peuvent &ecirc;tre utilis&eacute;s si le joueur a mis en jeu une ou des cartes Bande riveraine ou la carte r&eacute;tention (voir les instructions au bas de ces cartes).<br /><br />Chaque carte poss&egrave;de des crit&egrave;res diff&eacute;rents d&rsquo;utilisation. R&eacute;f&eacute;rez- vous &agrave; la section Configuration des cartes et au tableau des Types de cartes pour en prendre connaissance.<br />Un m&ecirc;me joueur ne peut pas avoir en jeu plus de trois cartes Bande riveraine et huit cartes Habitat. De plus, une fois sur la table, ces cartes ne peuvent pas &ecirc;tre retir&eacute;es du jeu. Elles peuvent cependant &ecirc;tre modifi&eacute;es ou d&eacute;sactiv&eacute;es par des cartes Perturbation, ou restaur&eacute;es par des cartes action.<br /></p>";
 
             $('body').append(divRegle);
 
@@ -1501,7 +1505,7 @@
             var divTableauCarte = document.createElement('div');
             divTableauCarte.id = 'divTableauCarte';
             divTableauCarte.className = 'divTableauCarte';
-            divTableauCarte.innerHTML = "<table><tbody><tr><td><p><strong>NOM</strong></p><p>&nbsp;</p></td><td><p><strong>DESCRIPTION</strong></p></td><td><p><strong>CONDITIONS</strong></p></td><td><p><strong>ASTUCES</strong></p></td></tr><tr><td><p>Habitat</p><p>&nbsp;</p></td><td><p>5 types de cartes <strong>Habitat</strong> :&nbsp;</p><p>Sable</p><p>Gravier</p><p>Galets</p><p>Rapides</p><p>Fosse</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Chaque joueur peut avoir un maximum de 8 cartes <strong>Habitat</strong> en jeu, actives ou perturb&eacute;es.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une carte <strong>Habitat</strong> peut &ecirc;tre transform&eacute;e ou rendue inutilisable par une carte <strong>Perturbation</strong>. Une carte perturb&eacute;e reste en jeu, mais ne vaut aucun point tant qu&rsquo;elle n&rsquo;est pas restaur&eacute;e.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; &Agrave; la fin du tour, si le joueur ne peut pas restaurer l&rsquo;habitat perturb&eacute; avec les cartes qu&rsquo;il a en main, tous les macroinvert&eacute;br&eacute;s d&eacute;pendant de cette carte <strong>Habitat</strong> meurent et sont jet&eacute;s dans la d&eacute;charge.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une carte perturb&eacute;e peut &ecirc;tre utilis&eacute;e en tenant compte des indications et contraintes inscrites sur la carte <strong>Perturbation</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une carte perturb&eacute;e peut &ecirc;tre restaur&eacute;e par une carte <strong>Action </strong>ou lorsque la dur&eacute;e de vie de la <strong>Perturbation</strong> est &eacute;chue.</p></td><td><p>Une combinaison d&rsquo;habitats diversifi&eacute;s est souhaitable pour mettre en jeu plusieurs organismes diff&eacute;rents.</p><p>&nbsp;</p></td></tr><tr><td><p>Bande riveraine</p><p>&nbsp;</p></td><td><p>3 types de cartes <strong>Bande riveraine :</strong> Arbres, Arbustes, Herbac&eacute;es naturelles&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Chaque joueur peut mettre en jeu un maximum de 3 cartes <strong>Bande riveraine</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Leur mise en jeu permet d&rsquo;obtenir des points-ressources suppl&eacute;mentaires &agrave; chaque tour suivant. Une carte <strong>Bande riveraine</strong> en jeu &eacute;quivaut &agrave; 1 point-ressource suppl&eacute;mentaire. 2 cartes ajoutent 2 points-ressources. 3 cartes offrent 3 points-ressources, mais si elles sont diff&eacute;rentes, le joueur obtient 5 points-ressources suppl&eacute;mentaires (pour un total de 10 points par tour)!</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une carte <strong>Bande riveraine</strong> peut &ecirc;tre rendue inutilisable ou d&eacute;truite par une carte <strong>Perturbation</strong>. La carte inutilisable reste en jeu et peut &ecirc;tre restaur&eacute;e par une carte <strong>Action</strong>.</p></td><td><p>Des points-ressources suppl&eacute;mentaires sont n&eacute;cessaires pour la mise en jeu de certaines cartes. Il s&rsquo;av&egrave;re donc avantageux de poss&eacute;der les 3 types de cartes <strong>Bande riveraine</strong>.</p><p>&nbsp;</p></td></tr><tr><td><p>Macroinvert&eacute;br&eacute;</p><p>&nbsp;</p></td><td><p>25 types de cartes</p><p>Pr&eacute;dateur : pour mettre cette carte en jeu, le joueur doit envoyer</p><p>&agrave; la d&eacute;charge un <strong>Macroinvert&eacute;br&eacute;</strong> dont la taille est inf&eacute;rieure au pr&eacute;dateur. Cette proie peut &ecirc;tre dans le jeu du joueur ou dans celui de l&rsquo;adversaire.</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Pour mettre en jeu une carte <strong>Macroinvert&eacute;br&eacute;</strong>, tous les habitats requis doivent &ecirc;tre dans le jeu du joueur (voir Configuration des cartes).</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Ce symbole indique que n&rsquo;importe quel habitat convient au macroinvert&eacute;br&eacute;.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Si un adversaire transforme ou rend inutilisable une carte <strong>Habitat</strong> essentielle pour certains des macroinvert&eacute;br&eacute;s mis en jeu, le joueur concern&eacute; doit attendre son tour pour tenter de restaurer la carte <strong>Habitat</strong> et sauver ainsi ses macroinvert&eacute;br&eacute;s. Si aucune carte de sa main ne lui permet de restaurer l&rsquo;habitat, les macroinvert&eacute;br&eacute;s d&eacute;pendant de cette carte <strong>Habitat</strong> vont &agrave; la d&eacute;charge.</p><p>&nbsp;</p></td><td><p>Mangez les macroinvert&eacute;br&eacute;s de vos adversaires valant le plus de points!</p><p>&nbsp;</p></td></tr><tr><td><p>Salmonid&eacute;</p><p>&nbsp;</p></td><td><p>1 type de carte</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elle est utilis&eacute;e dans les m&ecirc;mes conditions que les cartes <strong>Macroinvert&eacute;br&eacute;</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elle permet de mettre fin &agrave; la partie si elle reste en jeu apr&egrave;s un tour complet.</p></td><td><p>M&eacute;fiez-vous de la carte <strong>P&ecirc;cheur</strong>!</p><p>&nbsp;</p></td></tr><tr><td><p>Action</p><p>&nbsp;</p></td><td><p>3 types de cartes <strong>Action</strong> : Naturalisation, Am&eacute;nagement, Corv&eacute;e de nettoyage</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elle permet de restaurer les cartes <strong>Habitat</strong> et les cartes <strong>Bande riveraine</strong> qui sont perturb&eacute;es.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une fois mise en jeu, elle est jet&eacute;e dans la d&eacute;charge avec la carte <strong>Perturbation</strong> qu&rsquo;elle annule. La carte <strong>Habitat</strong> ou <strong>Bande riveraine</strong> restaur&eacute;e demeure en jeu.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Pour l&rsquo;am&eacute;nagement de nouveaux habitats et de bandes riveraines, vous devez utiliser les cartes Intervention.</p></td><td><p>Leur nombre &eacute;tant restreint, assurez-vous de les utiliser &agrave; bon escient.</p><p>&nbsp;</p></td></tr><tr><td><p>R&egrave;glementation</p><p>&nbsp;</p></td><td><p>3 types de cartes <strong>R&egrave;glementation</strong>&nbsp;: Interdiction de jeter des ordures, Politiques de protection des rives, du littoral et des plaines inondables, Attestation d&rsquo;assainissement</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Ces cartes permettent de pr&eacute;venir les perturbations.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Un joueur qui met en jeu une de ces cartes emp&ecirc;che de futures attaques provenant des cartes <strong>Perturbation</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Ces cartes sont permanentes et restent en jeu toute la partie.</p></td><td><p>Mettez-les en jeu le plus rapidement possible.</p><p>&nbsp;</p></td></tr><tr><td><p>Perturbation</p><p>&nbsp;</p></td><td><p>6 types de cartes <strong>Perturbation</strong>&nbsp;: D&eacute;versement, D&eacute;chets, Artificialisation, &Eacute;rosion, Pollution organique, <br /> Passage de tout-terrain</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Ces cartes nuisent &agrave; l&rsquo;adversaire soit en rendant inutilisables ses cartes <strong>Habitat</strong> et <strong>Bande riveraine</strong>, soit en faisant fuir les macroinvert&eacute;br&eacute;s mis en jeu.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Le joueur choisit la ou les cartes qu&rsquo;il perturbe.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; La dur&eacute;e de ces cartes est variable, allant d&rsquo;un tour &agrave; permanente.</p></td><td><p>Une perturbation jou&eacute;e au bon moment permet de nuire efficacement &agrave; un adversaire!</p><p>&nbsp;</p></td></tr><tr><td><p>Sp&eacute;ciale</p><p>&nbsp;</p></td><td><p>9 types de cartes <strong>Sp&eacute;ciale</strong> : <br /> D&eacute;rivation, P&ecirc;cheur, Pr&eacute;dation, <br /> Pris sur le fait, &Eacute;mergence, <br /> Crue soudaine, Accumulation, Zonage, R&eacute;tention</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Chaque carte <strong>Sp&eacute;ciale</strong> a des caract&eacute;ristiques propres qui peuvent nuire &agrave; l&rsquo;adversaire ou permettre d&rsquo;am&eacute;liorer le jeu du joueur.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Toutes les cartes sp&eacute;ciales vont directement &agrave; la d&eacute;charge apr&egrave;s leur utilisation.</p></td><td><p>Elles sont utilisables &agrave; n&rsquo;importe quel moment du jeu, que ce soit ou non votre tour.</p><p>&nbsp;</p></td></tr><tr><td><p>Intervention</p><p>&nbsp;</p></td><td><p>8 types de cartes <strong>Intervention</strong>&nbsp;: <br /> 5 cartes de type <strong>Habitat am&eacute;nag&eacute;</strong> et 3 cartes de type <strong>Bande riveraine am&eacute;nag&eacute;e</strong></p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elles sont retir&eacute;es du paquet au d&eacute;but de la partie.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elles sont mises en jeu lorsqu&rsquo;un joueur cr&eacute;e un habitat ou une bande riveraine gr&acirc;ce aux cartes <strong>Action</strong>, <strong>Am&eacute;nagement</strong> ou <strong>Naturalisation</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Le joueur prend la carte de son choix, selon les cartes <strong>Intervention</strong> disponibles.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Les cartes Intervention poss&egrave;dent les m&ecirc;mes caract&eacute;ristiques que les cartes <strong>Habitat</strong> et <strong>Bande riveraine</strong> qu&rsquo;elles repr&eacute;sentent.</p></td><td><p>Premier arriv&eacute;, premier servi! Une carte <strong>Intervention</strong> ne peut servir qu&rsquo;une seule fois dans le jeu.</p><p>&nbsp;</p></td></tr></tbody></table><p>&nbsp;</p>";
+            divTableauCarte.innerHTML = "<table><tbody><tr><td><p><strong>NOM</strong></p><p>&nbsp;</p></td><td><p><strong>DESCRIPTION</strong></p></td><td><p><strong>CONDITIONS</strong></p></td><td><p><strong>ASTUCES</strong></p></td></tr><tr><td><p>Habitat</p><p>&nbsp;</p></td><td><p>5 types de cartes <strong>Habitat</strong>&nbsp;:&nbsp;</p><p>Sable</p><p>Gravier</p><p>Galets</p><p>Rapides</p><p>Fosse</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Chaque joueur peut avoir un maximum de 8 cartes <strong>Habitat</strong> en jeu, actives ou perturb&eacute;es.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une carte <strong>Habitat</strong> peut &ecirc;tre transform&eacute;e ou rendue inutilisable par une carte <strong>Perturbation</strong>. Une carte perturb&eacute;e reste en jeu, mais ne vaut aucun point tant qu&rsquo;elle n&rsquo;est pas restaur&eacute;e.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; &Agrave; la fin du tour, si le joueur ne peut pas restaurer l&rsquo;habitat perturb&eacute; avec les cartes qu&rsquo;il a en main, tous les macroinvert&eacute;br&eacute;s d&eacute;pendant de cette carte <strong>Habitat</strong> meurent et sont jet&eacute;s dans la d&eacute;charge.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une carte perturb&eacute;e peut &ecirc;tre utilis&eacute;e en tenant compte des indications et contraintes inscrites sur la carte <strong>Perturbation</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une carte perturb&eacute;e peut &ecirc;tre restaur&eacute;e par une carte <strong>Action </strong>ou lorsque la dur&eacute;e de vie de la <strong>Perturbation</strong> est &eacute;chue.</p></td><td><p>Une combinaison d&rsquo;habitats diversifi&eacute;s est souhaitable pour mettre en jeu plusieurs organismes diff&eacute;rents.</p><p>&nbsp;</p></td></tr><tr><td><p>Bande riveraine</p><p>&nbsp;</p></td><td><p>3 types de cartes <strong>Bande riveraine&nbsp;:</strong> Arbres, Arbustes, Herbac&eacute;es naturelles&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Chaque joueur peut mettre en jeu un maximum de 3 cartes <strong>Bande riveraine</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Leur mise en jeu permet d&rsquo;obtenir des points-ressources suppl&eacute;mentaires &agrave; chaque tour suivant. Une carte <strong>Bande riveraine</strong> en jeu &eacute;quivaut &agrave; 1 point-ressource suppl&eacute;mentaire. 2 cartes ajoutent 2 points-ressources. 3 cartes offrent 3 points-ressources, mais si elles sont diff&eacute;rentes, le joueur obtient 5 points-ressources suppl&eacute;mentaires (pour un total de 10 points par tour)!</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une carte <strong>Bande riveraine</strong> peut &ecirc;tre rendue inutilisable ou d&eacute;truite par une carte <strong>Perturbation</strong>. La carte inutilisable reste en jeu et peut &ecirc;tre restaur&eacute;e par une carte <strong>Action</strong>.</p></td><td><p>Des points-ressources suppl&eacute;mentaires sont n&eacute;cessaires pour la mise en jeu de certaines cartes. Il s&rsquo;av&egrave;re donc avantageux de poss&eacute;der les 3 types de cartes <strong>Bande riveraine</strong>.</p><p>&nbsp;</p></td></tr><tr><td><p>Macroinvert&eacute;br&eacute;</p><p>&nbsp;</p></td><td><p>25 types de cartes</p><p>Pr&eacute;dateur&nbsp;: pour mettre cette carte en jeu, le joueur doit envoyer</p><p>&agrave; la d&eacute;charge un <strong>Macroinvert&eacute;br&eacute;</strong> dont la taille est inf&eacute;rieure au pr&eacute;dateur. Cette proie peut &ecirc;tre dans le jeu du joueur ou dans celui de l&rsquo;adversaire.</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Pour mettre en jeu une carte <strong>Macroinvert&eacute;br&eacute;</strong>, tous les habitats requis doivent &ecirc;tre dans le jeu du joueur (voir Configuration des cartes).</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Ce symbole indique que n&rsquo;importe quel habitat convient au macroinvert&eacute;br&eacute;.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Si un adversaire transforme ou rend inutilisable une carte <strong>Habitat</strong> essentielle pour certains des macroinvert&eacute;br&eacute;s mis en jeu, le joueur concern&eacute; doit attendre son tour pour tenter de restaurer la carte <strong>Habitat</strong> et sauver ainsi ses macroinvert&eacute;br&eacute;s. Si aucune carte de sa main ne lui permet de restaurer l&rsquo;habitat, les macroinvert&eacute;br&eacute;s d&eacute;pendant de cette carte <strong>Habitat</strong> vont &agrave; la d&eacute;charge.</p><p>&nbsp;</p></td><td><p>Mangez les macroinvert&eacute;br&eacute;s de vos adversaires valant le plus de points!</p><p>&nbsp;</p></td></tr><tr><td><p>Salmonid&eacute;</p><p>&nbsp;</p></td><td><p>1 type de carte</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elle est utilis&eacute;e dans les m&ecirc;mes conditions que les cartes <strong>Macroinvert&eacute;br&eacute;</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elle permet de mettre fin &agrave; la partie si elle reste en jeu apr&egrave;s un tour complet.</p></td><td><p>M&eacute;fiez-vous de la carte <strong>P&ecirc;cheur</strong>!</p><p>&nbsp;</p></td></tr><tr><td><p>Action</p><p>&nbsp;</p></td><td><p>3 types de cartes <strong>Action</strong>&nbsp;: Naturalisation, Am&eacute;nagement, Corv&eacute;e de nettoyage</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elle permet de restaurer les cartes <strong>Habitat</strong> et les cartes <strong>Bande riveraine</strong> qui sont perturb&eacute;es.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Une fois mise en jeu, elle est jet&eacute;e dans la d&eacute;charge avec la carte <strong>Perturbation</strong> qu&rsquo;elle annule. La carte <strong>Habitat</strong> ou <strong>Bande riveraine</strong> restaur&eacute;e demeure en jeu.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Pour l&rsquo;am&eacute;nagement de nouveaux habitats et de bandes riveraines, vous devez utiliser les cartes Intervention.</p></td><td><p>Leur nombre &eacute;tant restreint, assurez-vous de les utiliser &agrave; bon escient.</p><p>&nbsp;</p></td></tr><tr><td><p>R&egrave;glementation</p><p>&nbsp;</p></td><td><p>3 types de cartes <strong>R&egrave;glementation</strong>&nbsp;: Interdiction de jeter des ordures, Politiques de protection des rives, du littoral et des plaines inondables, Attestation d&rsquo;assainissement</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Ces cartes permettent de pr&eacute;venir les perturbations.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Un joueur qui met en jeu une de ces cartes emp&ecirc;che de futures attaques provenant des cartes <strong>Perturbation</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Ces cartes sont permanentes et restent en jeu toute la partie.</p></td><td><p>Mettez-les en jeu le plus rapidement possible.</p><p>&nbsp;</p></td></tr><tr><td><p>Perturbation</p><p>&nbsp;</p></td><td><p>6 types de cartes <strong>Perturbation</strong>&nbsp;: D&eacute;versement, D&eacute;chets, Artificialisation, &Eacute;rosion, Pollution organique, <br /> Passage de tout-terrain</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Ces cartes nuisent &agrave; l&rsquo;adversaire soit en rendant inutilisables ses cartes <strong>Habitat</strong> et <strong>Bande riveraine</strong>, soit en faisant fuir les macroinvert&eacute;br&eacute;s mis en jeu.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Le joueur choisit la ou les cartes qu&rsquo;il perturbe.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; La dur&eacute;e de ces cartes est variable, allant d&rsquo;un tour &agrave; permanente.</p></td><td><p>Une perturbation jou&eacute;e au bon moment permet de nuire efficacement &agrave; un adversaire!</p><p>&nbsp;</p></td></tr><tr><td><p>Sp&eacute;ciale</p><p>&nbsp;</p></td><td><p>9 types de cartes <strong>Sp&eacute;ciale</strong>&nbsp;: <br /> D&eacute;rivation, P&ecirc;cheur, Pr&eacute;dation, <br /> Pris sur le fait, &Eacute;mergence, <br /> Crue soudaine, Accumulation, Zonage, R&eacute;tention</p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Chaque carte <strong>Sp&eacute;ciale</strong> a des caract&eacute;ristiques propres qui peuvent nuire &agrave; l&rsquo;adversaire ou permettre d&rsquo;am&eacute;liorer le jeu du joueur.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Toutes les cartes sp&eacute;ciales vont directement &agrave; la d&eacute;charge apr&egrave;s leur utilisation.</p></td><td><p>Elles sont utilisables &agrave; n&rsquo;importe quel moment du jeu, que ce soit ou non votre tour.</p><p>&nbsp;</p></td></tr><tr><td><p>Intervention</p><p>&nbsp;</p></td><td><p>8 types de cartes <strong>Intervention</strong>&nbsp;: <br /> 5 cartes de type <strong>Habitat am&eacute;nag&eacute;</strong> et 3 cartes de type <strong>Bande riveraine am&eacute;nag&eacute;e</strong></p><p>&nbsp;</p></td><td><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elles sont retir&eacute;es du paquet au d&eacute;but de la partie.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Elles sont mises en jeu lorsqu&rsquo;un joueur cr&eacute;e un habitat ou une bande riveraine gr&acirc;ce aux cartes <strong>Action</strong>, <strong>Am&eacute;nagement</strong> ou <strong>Naturalisation</strong>.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Le joueur prend la carte de son choix, selon les cartes <strong>Intervention</strong> disponibles.</p><p>&middot;&nbsp;&nbsp;&nbsp;&nbsp; Les cartes Intervention poss&egrave;dent les m&ecirc;mes caract&eacute;ristiques que les cartes <strong>Habitat</strong> et <strong>Bande riveraine</strong> qu&rsquo;elles repr&eacute;sentent.</p></td><td><p>Premier arriv&eacute;, premier servi! Une carte <strong>Intervention</strong> ne peut servir qu&rsquo;une seule fois dans le jeu.</p><p>&nbsp;</p></td></tr></tbody></table><p>&nbsp;</p>";
             $('body').append(divTableauCarte);
 
             //Div Choix
@@ -1800,21 +1804,21 @@
             divNomJoueurs.className = 'divNomJoueurs';
 
             if (nombreJoueur === 4) {//Selon le nombre de joueur, écrit les noms.
-                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + nomJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + nomJoueur[3] + '</li></ul>';
+                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + nomJoueur[2] + '</li><li class=listeEquipe>Équipe D&nbsp;: ' + nomJoueur[3] + '</li></ul>';
             } else if (nombreJoueur === 3) {
-                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + nomJoueur[2] + '</li></ul>';
+                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + nomJoueur[2] + '</li></ul>';
             } else if (nombreJoueur === 2) {
-                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + nomJoueur[1] + '</li></ul>';
+                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + nomJoueur[1] + '</li></ul>';
             } else if (nombreJoueur === 1) {
-                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + nomJoueur[0] + '</li></ul>';
+                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divNomJoueurs);
 
-            //Div points ressources.
+            //Div points-ressources.
             var divTextePointsRessource = document.createElement('div');
             divTextePointsRessource.id = 'divTextePointsRessource';
             divTextePointsRessource.className = 'divTextePointsRessource';
-            divTextePointsRessource.innerHTML = '<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources utilisés : ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
+            divTextePointsRessource.innerHTML = '<p class=titreRessource>Points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources total&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
             document.getElementById('divDroite').appendChild(divTextePointsRessource);
 
             //Div des points de joueurs.
@@ -1822,13 +1826,13 @@
             divTextePointsJoueurs.id = 'divTextePointsJoueurs';
             divTextePointsJoueurs.className = 'divTextePointsJoueurs';
             if (nombreJoueur === 4) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D&nbsp;: ' + pointsJoueur[3] + '</li></ul>';
             } else if (nombreJoueur === 3) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + pointsJoueur[2] + '</li></ul>';
             } else if (nombreJoueur === 2) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li></ul>';
             } else if (nombreJoueur === 1) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
@@ -2020,7 +2024,7 @@
                                 brillerCarte(typeEnum.habitats, 2, false);
                             }
 
-                            if (nombrePolluer > 3) {
+                            if (nombreJoueur > 3) {
                                 brillerCarte(typeEnum.habitats, 3, false);
                             }
 
@@ -2218,7 +2222,7 @@
                                 zonage = false;
                                 griserZone(false, false, false);
 
-                                popUpConfirmation('La carte «' + premiereLettreMaj(carteEchange1.nom) + '» de : ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur1)]) + ' à été changé par la carte «' + premiereLettreMaj(carteEchange2.nom) + '» de : ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur2)]));
+                                popUpConfirmation('La carte «' + premiereLettreMaj(carteEchange1.nom) + '» de&nbsp;: ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur1)]) + ' à été changé par la carte «' + premiereLettreMaj(carteEchange2.nom) + '» de&nbsp;: ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur2)]));
                             } else {
                                 popUpAvertissement('Vous devez cliquer sur une des cartes «Habitats» d\'un ennemi.')
                             }
@@ -2309,8 +2313,9 @@
                 drop: function (event, ui) {//Ajoute le code du drop pour la plateau.
                     if (bonneZoneDrop(event.target)) {//Si l'endroit que nous voulons droper est à la bonne place.
                         if (accepterDrop(event.target)) {
-                            console.log(carteDrag.coutRessources);
+                            pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutRessources;
                             pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutRessources;
+                            updatePointsRessources();
                             /* -----------Perturbation--------------*/
                             if (carteDrag.nom === nomEnum.deversement) {
                                 //Si personne n'a de carte pris sur le fait.
@@ -2331,33 +2336,37 @@
                                         },
                                         buttons: {
                                             Confirmer: function () {//Confirmation du résultats du pop-up.
-                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {//Si personne désire utiliser sa carte.
-                                                    supprimerCartePrecise(carteDragNumero);
-                                                    paquetDecharge.push(carteDrag);
-                                                    deversement = true;
-                                                    tempsDeversement = 2;
-                                                    numeroJoueurDeversement = numeroJoueurActif;
-                                                    ui.draggable.remove();
-                                                    updateAffichageImage();
-                                                    $(this).dialog('close');
-                                                } else {//Sinon la personne qui désire utiliser sa carte, l'utiliser et annule les effets de la carte.
-                                                    paquetDecharge.push(carteDrag);
-                                                    supprimerCartePrecise(carteDragNumero);
-                                                    ui.draggable.remove();
+                                                if (joueurSelectionne != null) {
+                                                    if (joueurSelectionne.innerHTML === 'Aucun joueur') {//Si personne désire utiliser sa carte.
+                                                        supprimerCartePrecise(carteDragNumero);
+                                                        paquetDecharge.push(carteDrag);
+                                                        deversement = true;
+                                                        tempsDeversement = 2;
+                                                        numeroJoueurDeversement = numeroJoueurActif;
+                                                        ui.draggable.remove();
+                                                        updateAffichageImage();
+                                                        $(this).dialog('close');
+                                                    } else {//Sinon la personne qui désire utiliser sa carte, l'utiliser et annule les effets de la carte.
+                                                        paquetDecharge.push(carteDrag);
+                                                        supprimerCartePrecise(carteDragNumero);
+                                                        ui.draggable.remove();
 
-                                                    for (var i = 0; i < nombreJoueur; i++) {
-                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
-                                                            for (var j = 0; j < mains[i].length; j++) {
-                                                                if (mains[i][j] != null) {
-                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
-                                                                        paquetDecharge.push(mains[i][j]);
-                                                                        mains[i][j] = null;
+                                                        for (var i = 0; i < nombreJoueur; i++) {
+                                                            if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                                for (var j = 0; j < mains[i].length; j++) {
+                                                                    if (mains[i][j] != null) {
+                                                                        if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                                                            paquetDecharge.push(mains[i][j]);
+                                                                            mains[i][j] = null;
+                                                                        }
                                                                     }
                                                                 }
                                                             }
                                                         }
+                                                        $(this).dialog('close');
                                                     }
-                                                    $(this).dialog('close');
+                                                } else {
+                                                    popUpAvertissement('Veuillez choisir un option.');
                                                 }
                                             }
                                         },
@@ -2439,8 +2448,9 @@
                                                     }
                                                 }
                                                 $(this).dialog('close');
-                                            } else {//Si le joueur décide de choisir une carte intervention.
-                                                $('#divChoixContenu').children().remove();
+                                            } else if (joueurSelectionne.id == '2') {//Si le joueur décide de choisir une carte intervention.
+                                                $('#labelChoix').text('Choisissez la carte «Intervention» désirée')
+                                                $('#divChoixContenu').children().remove('ul');
                                                 $(this).dialog({
                                                     width: 575,
                                                     buttons: {
@@ -2498,6 +2508,8 @@
                                                         }
                                                     }
                                                 });
+                                            } else {
+                                                popUpAvertissement('Veuillez choisir un option.');
                                             }
                                         }
                                     },
@@ -2515,17 +2527,17 @@
                                 ul.id = 'listeJoueur';
                                 $('#divChoixContenu').append(ul);
 
-                                var conte = false;
+                                var stop = false;
                                 for (var i = 0; i < nombreJoueur; i++) {
                                     for (var j = 0; j < cartePerturbation[i].length; j++) {
-                                        if (!conte) {
+                                        if (!stop) {
                                             if (cartePerturbation[i][j] != null) {
                                                 if (cartePerturbation[i][j].nom === nomEnum.artificialisation) {
                                                     var li = document.createElement('li');
                                                     li.style.listStyleType = 'none';
                                                     li.className = 'listeJoueur';
                                                     li.id = '1';
-                                                    li.innerHTML = 'Annuler l\'effet d\'une carte Artificialisation.';
+                                                    li.innerHTML = 'Annuler l\'effet d\'une carte «Artificialisation».';
                                                     $(ul).append(li);
                                                     conte = true;
                                                 }
@@ -2544,7 +2556,7 @@
                                     li.style.listStyleType = 'none';
                                     li.className = 'listeJoueur';
                                     li.id = '2';
-                                    li.innerHTML = 'Choisir une bande riveraine dans les cartes Interventions.';
+                                    li.innerHTML = 'Choisir une «Bande Riveraine» dans les cartes «Interventions».';
                                     $(ul).append(li);
                                 }
 
@@ -2615,7 +2627,7 @@
                                                 $(this).dialog('close');
                                                 updateAffichageImage();
                                             } else if (joueurSelectionne.id === '2') {
-                                                $('#labelChoix').text('Choisissez la carte Intervention désirée.')
+                                                $('#labelChoix').text('Choisissez la carte «Intervention» désirée.')
                                                 $('#divChoixContenu').children().remove('ul');
                                                 $(this).dialog({
                                                     width: 575,
@@ -2673,8 +2685,7 @@
                                                         }
                                                     }
                                                 });
-                                            }
-                                            else {
+                                            } else {
                                                 popAvertissement('Veuillez d\'abord choisir un option');
                                             }
                                         }
@@ -2741,7 +2752,7 @@
                             } else if (carteDrag.nom === nomEnum.erosion) {
                                 //Si personne à la carte pris sur le fait.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value != null }).length === 0) {
-                                    popUpConfirmation('Vous devez sélectioner la «Bande Riveraine»« à envoyer à la décharge.');
+                                    popUpConfirmation('Vous devez sélectioner la «Bande Riveraine» à envoyer à la décharge.');
                                     supprimerCartePrecise(carteDragNumero);
                                     paquetDecharge.push(carteDrag);
                                     ui.draggable.remove();
@@ -2774,51 +2785,55 @@
                                         },
                                         buttons: {
                                             Confirmer: function () {
-                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
-                                                    popUpConfirmation('Vous devez sélectioner la «Bande Riveraine» à envoyer à la décharge.');
-                                                    supprimerCartePrecise(carteDragNumero);
-                                                    paquetDecharge.push(carteDrag);
-                                                    erosion = true
-                                                    etapeErosion = 1;
-                                                    griserZone(true, false, true);
-                                                    ui.draggable.remove();
-                                                    updateAffichageImage();
+                                                if (joueurSelectionne != null) {
+                                                    if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                                        popUpConfirmation('Vous devez sélectioner la «Bande Riveraine» à envoyer à la décharge.');
+                                                        supprimerCartePrecise(carteDragNumero);
+                                                        paquetDecharge.push(carteDrag);
+                                                        erosion = true
+                                                        etapeErosion = 1;
+                                                        griserZone(true, false, true);
+                                                        ui.draggable.remove();
+                                                        updateAffichageImage();
 
-                                                    if (numeroJoueurActif != 0) {
-                                                        brillerCarte(typeEnum.bandeRiveraine, 0, true);
-                                                    }
-                                                    if (numeroJoueurActif != 1) {
-                                                        brillerCarte(typeEnum.bandeRiveraine, 1, true);
-                                                    }
-                                                    if (nombreJoueur > 2) {
-                                                        if (numeroJoueurActif != 2) {
-                                                            brillerCarte(typeEnum.bandeRiveraine, 2, true);
+                                                        if (numeroJoueurActif != 0) {
+                                                            brillerCarte(typeEnum.bandeRiveraine, 0, true);
                                                         }
-                                                    }
-                                                    if (nombreJoueur > 3) {
-                                                        if (numeroJoueurActif != 3) {
-                                                            brillerCarte(typeEnum.bandeRiveraine, 3, true);
+                                                        if (numeroJoueurActif != 1) {
+                                                            brillerCarte(typeEnum.bandeRiveraine, 1, true);
                                                         }
-                                                    }
-                                                    $(this).dialog('close');
-                                                } else {
-                                                    paquetDecharge.push(carteDrag);
-                                                    supprimerCartePrecise(carteDragNumero);
-                                                    ui.draggable.remove();
+                                                        if (nombreJoueur > 2) {
+                                                            if (numeroJoueurActif != 2) {
+                                                                brillerCarte(typeEnum.bandeRiveraine, 2, true);
+                                                            }
+                                                        }
+                                                        if (nombreJoueur > 3) {
+                                                            if (numeroJoueurActif != 3) {
+                                                                brillerCarte(typeEnum.bandeRiveraine, 3, true);
+                                                            }
+                                                        }
+                                                        $(this).dialog('close');
+                                                    } else {
+                                                        paquetDecharge.push(carteDrag);
+                                                        supprimerCartePrecise(carteDragNumero);
+                                                        ui.draggable.remove();
 
-                                                    for (var i = 0; i < nombreJoueur; i++) {
-                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
-                                                            for (var j = 0; j < mains[i].length; j++) {
-                                                                if (mains[i][j] != null) {
-                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
-                                                                        paquetDecharge.push(mains[i][j]);
-                                                                        mains[i][j] = null;
+                                                        for (var i = 0; i < nombreJoueur; i++) {
+                                                            if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                                for (var j = 0; j < mains[i].length; j++) {
+                                                                    if (mains[i][j] != null) {
+                                                                        if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                                                            paquetDecharge.push(mains[i][j]);
+                                                                            mains[i][j] = null;
+                                                                        }
                                                                     }
                                                                 }
                                                             }
                                                         }
+                                                        $(this).dialog('close');
                                                     }
-                                                    $(this).dialog('close');
+                                                } else {
+                                                    popUpAvertissement('Veuillez choisir un option.');
                                                 }
                                             }
                                         },
@@ -2884,35 +2899,39 @@
                                         },
                                         buttons: {
                                             Confirmer: function () {
-                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
-                                                    popUpConfirmation('Vous devez sélectioner 3 «Habitats» à polluer.');
-                                                    supprimerCartePrecise(carteDragNumero);
-                                                    paquetDecharge.push(carteDrag);
-                                                    brillanceHabitatsEnnemi(true);
-                                                    onPollu = true;
-                                                    nombrePolluer = 0;
-                                                    ui.draggable.remove();
-                                                    updateAffichageImage();
-                                                    griserZone(true, false, true);
-                                                    $(this).dialog('close');
-                                                } else {
-                                                    paquetDecharge.push(carteDrag);
-                                                    supprimerCartePrecise(carteDragNumero);
-                                                    ui.draggable.remove();
+                                                if (joueurSelectionne != null) {
+                                                    if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                                        popUpConfirmation('Vous devez sélectioner 3 «Habitats» à polluer.');
+                                                        supprimerCartePrecise(carteDragNumero);
+                                                        paquetDecharge.push(carteDrag);
+                                                        brillanceHabitatsEnnemi(true);
+                                                        onPollu = true;
+                                                        nombrePolluer = 0;
+                                                        ui.draggable.remove();
+                                                        updateAffichageImage();
+                                                        griserZone(true, false, true);
+                                                        $(this).dialog('close');
+                                                    } else {
+                                                        paquetDecharge.push(carteDrag);
+                                                        supprimerCartePrecise(carteDragNumero);
+                                                        ui.draggable.remove();
 
-                                                    for (var i = 0; i < nombreJoueur; i++) {
-                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
-                                                            for (var j = 0; j < mains[i].length; j++) {
-                                                                if (mains[i][j] != null) {
-                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
-                                                                        paquetDecharge.push(mains[i][j]);
-                                                                        mains[i][j] = null;
+                                                        for (var i = 0; i < nombreJoueur; i++) {
+                                                            if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                                for (var j = 0; j < mains[i].length; j++) {
+                                                                    if (mains[i][j] != null) {
+                                                                        if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                                                            paquetDecharge.push(mains[i][j]);
+                                                                            mains[i][j] = null;
+                                                                        }
                                                                     }
                                                                 }
                                                             }
                                                         }
+                                                        $(this).dialog('close');
                                                     }
-                                                    $(this).dialog('close');
+                                                } else {
+                                                    popUpAvertissement('Veuillez choisir un option.');
                                                 }
                                             }
                                         },
@@ -3136,90 +3155,98 @@
                                     },
                                     buttons: {
                                         Confirmer: function () {
-                                            if (joueurSelectionne.id === '1') {// si le joueur décide de voler un salmonidé.
-                                                for (var i = 0; i < nombreJoueur; i++) {
-                                                    if (i != numeroJoueurActif) {
-                                                        for (var j = 0; j < carteBas[i].length; j++) {
-                                                            if (carteBas[i][j] != null) {
-                                                                if (carteBas[i][j].type = typeEnum.salmonide) {
-                                                                    for (var k = 0; k < mains[numeroJoueurActif].length; k++) {
-                                                                        if (mains[numeroJoueurActif][k] == null) {
-                                                                            mains[numeroJoueurActif][k] = carteBas[i][j];
-                                                                            carteBas[i][j] = null;
-                                                                            exemplaireCarteBas[i][j] = 0;
-                                                                            $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
-                                                                            break;
-                                                                        }
-                                                                    }
+                                            if (joueurSelectionne != null) {
+                                                if (joueurSelectionne.id === '1') {// si le joueur décide de voler un salmonidé.
+                                                    var stop = false;
+                                                    for (var i = 0; i < nombreJoueur; i++) {
+                                                        if (i != numeroJoueurActif) {
+                                                            for (var j = 0; j < carteBas[i].length; j++) {
+                                                                if (!stop) {
                                                                     if (carteBas[i][j] != null) {
-                                                                        mains[numeroJoueurActif][mains[numeroJoueurActif].length] = carteBas[i][j];
-                                                                        carteBas[i][j] = null;
-                                                                        exemplaireCarteBas[i][j] = 0;
-                                                                        $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                updateAffichageImage();
-                                                $(this).dialog('close');
-                                            } else { //Si le joueur décide de choisir une carte dans la défausse.
-                                                $('#divChoixContenu').children().remove();
-                                                $(this).dialog({
-                                                    width: 575,
-                                                    buttons: {
-                                                        Confirmer: function () {
-                                                            if (carteSelectionne == null) {
-                                                                popUpAvertissement('Veuillez d\'abord choisir une carte.');
-                                                            } else {
-                                                                for (var i = 0; i < mains[numeroJoueurActif].length; i++) {
-                                                                    if (mains[numeroJoueurActif][i] == null) {
-                                                                        if (paquetDecharge[carteSelectionne] != null) {
-                                                                            mains[numeroJoueurActif][i] = paquetDecharge[carteSelectionne];
-                                                                            paquetDecharge[carteSelectionne] = null;
+                                                                        if (carteBas[i][j].type === typeEnum.salmonide) {
+                                                                            for (var k = 0; k < mains[numeroJoueurActif].length; k++) {
+                                                                                if (mains[numeroJoueurActif][k] == null) {
+                                                                                    mains[numeroJoueurActif][k] = carteBas[i][j];
+                                                                                    carteBas[i][j] = null;
+                                                                                    exemplaireCarteBas[i][j] = 0;
+                                                                                    $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
+                                                                                    stop = true;
+                                                                                }
+                                                                            }
+                                                                            if (carteBas[i][j] != null) {
+                                                                                mains[numeroJoueurActif][mains[numeroJoueurActif].length] = carteBas[i][j];
+                                                                                carteBas[i][j] = null;
+                                                                                exemplaireCarteBas[i][j] = 0;
+                                                                                $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
-                                                                if (paquetDecharge[carteSelectionne] != null) {
-                                                                    mains[numeroJoueurActif][mains[numeroJoueurActif.length]] = paquetDecharge[joueurSelectionne];
-                                                                    paquetDecharge[carteSelectionne] = null;
-                                                                }
-                                                                $(this).dialog('close');
-                                                                updateAffichageImage();
                                                             }
                                                         }
                                                     }
-                                                });
-                                                //Crée la liste des cartes de la défausse.
-                                                var ul = document.createElement('ul');
-                                                ul.id = 'listeCartes';
-                                                $('#divChoixContenu').append(ul);
-
-                                                var carteSelectionne;
-                                                paquetDecharge.forEach(function (item, index) {
-                                                    if (paquetDecharge[index] != null) {
-                                                        var li = document.createElement('li');
-                                                        li.className = 'listeChoixCarte';
-                                                        var carte = document.createElement('img');
-                                                        carte.id = index;
-                                                        carte.className = 'cartesListe'
-                                                        carte.src = 'ressources/' + item.nomImage;
-                                                        $(carte).click(function () {
-                                                            if (carteSelectionne != null) {
-                                                                $('.cartesListe').removeAttr('style');
+                                                    updateAffichageImage();
+                                                    $(this).dialog('close');
+                                                } else { //Si le joueur décide de choisir une carte dans la défausse.
+                                                    $('#labelChoix').text('Choisissez la carte de la défausse désirée.');
+                                                    $('#divChoixContenu').children().remove('ul');
+                                                    $(this).dialog({
+                                                        width: 575,
+                                                        buttons: {
+                                                            Confirmer: function () {
+                                                                if (carteSelectionne == null) {
+                                                                    popUpAvertissement('Veuillez d\'abord choisir une carte.');
+                                                                } else {
+                                                                    for (var i = 0; i < mains[numeroJoueurActif].length; i++) {
+                                                                        if (mains[numeroJoueurActif][i] == null) {
+                                                                            if (paquetDecharge[carteSelectionne] != null) {
+                                                                                mains[numeroJoueurActif][i] = paquetDecharge[carteSelectionne];
+                                                                                paquetDecharge[carteSelectionne] = null;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    if (paquetDecharge[carteSelectionne] != null) {
+                                                                        mains[numeroJoueurActif][mains[numeroJoueurActif.length]] = paquetDecharge[joueurSelectionne];
+                                                                        paquetDecharge[carteSelectionne] = null;
+                                                                    }
+                                                                    $(this).dialog('close');
+                                                                    updateAffichageImage();
+                                                                }
                                                             }
+                                                        }
+                                                    });
+                                                    //Crée la liste des cartes de la défausse.
+                                                    var ul = document.createElement('ul');
+                                                    ul.id = 'listeCartes';
+                                                    $('#divChoixContenu').append(ul);
 
-                                                            $(this).css('-moz-box-shadow', '0 0 15px 10px #000');
-                                                            $(this).css('-webkit-box-shadow', '0 0 15px 10px #000');
-                                                            $(this).css('box-shadow', '0px 0px 15px 10px #000');
-                                                            carteSelectionne = index;
-                                                        });
+                                                    var carteSelectionne;
+                                                    paquetDecharge.forEach(function (item, index) {
+                                                        if (paquetDecharge[index] != null) {
+                                                            var li = document.createElement('li');
+                                                            li.className = 'listeChoixCarte';
+                                                            var carte = document.createElement('img');
+                                                            carte.id = index;
+                                                            carte.className = 'cartesListe'
+                                                            carte.src = 'ressources/' + item.nomImage;
+                                                            $(carte).click(function () {
+                                                                if (carteSelectionne != null) {
+                                                                    $('.cartesListe').removeAttr('style');
+                                                                }
 
-                                                        $(ul).append(li);
-                                                        $(li).append(carte);
-                                                    }
-                                                });
+                                                                $(this).css('-moz-box-shadow', '0 0 15px 10px #000');
+                                                                $(this).css('-webkit-box-shadow', '0 0 15px 10px #000');
+                                                                $(this).css('box-shadow', '0px 0px 15px 10px #000');
+                                                                carteSelectionne = index;
+                                                            });
+
+                                                            $(ul).append(li);
+                                                            $(li).append(carte);
+                                                        }
+                                                    });
+                                                }
+                                            } else {
+                                                popUpAvertissement('Veuillez choisir un option.');
                                             }
                                         }
                                     },
@@ -3239,17 +3266,19 @@
 
                                 var poisson = false;
                                 for (var i = 0; i < nombreJoueur; i++) {
-                                    for (var j = 0; j < carteBas[i].length; j++) {
-                                        if (poisson !== true) {
-                                            if (carteBas[i][j] != null) {
-                                                if (carteBas[i][j].type === typeEnum.salmonide) {
-                                                    poisson = true;
-                                                    var li = document.createElement('li');
-                                                    li.style.listStyleType = 'none';
-                                                    li.className = 'listeJoueur';
-                                                    li.id = '1';
-                                                    li.innerHTML = 'Pêcher la carte Salmonidé d\'un adversaire et la placer dans votre main.';
-                                                    $(ul).append(li);
+                                    if (i != numeroJoueurActif) {
+                                        for (var j = 0; j < carteBas[i].length; j++) {
+                                            if (poisson !== true) {
+                                                if (carteBas[i][j] != null) {
+                                                    if (carteBas[i][j].type === typeEnum.salmonide) {
+                                                        poisson = true;
+                                                        var li = document.createElement('li');
+                                                        li.style.listStyleType = 'none';
+                                                        li.className = 'listeJoueur';
+                                                        li.id = '1';
+                                                        li.innerHTML = 'Pêcher la carte «Salmonidé» d\'un adversaire et la placer dans votre main.';
+                                                        $(ul).append(li);
+                                                    }
                                                 }
                                             }
                                         }
@@ -3595,33 +3624,37 @@
                                                         },
                                                         buttons: {
                                                             Confirmer: function () {
-                                                                if (joueurSelectionne.innerHTML === 'Aucun joueur') {
-                                                                    if ($(this).children().length >= 2) {
-                                                                        deplacerCartePerturber(this, event, ui);
+                                                                if (joueurSelectionne != null) {
+                                                                    if (joueurSelectionne.innerHTML === 'Aucun joueur') {
+                                                                        if ($(this).children().length >= 2) {
+                                                                            deplacerCartePerturber(this, event, ui);
+                                                                        } else {
+                                                                            rendrePerturber(event.target);
+                                                                            onDrop(event, ui, zoneDrop);
+                                                                        }
+                                                                        updateAffichageImage();
+                                                                        $(this).dialog('close');
                                                                     } else {
-                                                                        rendrePerturber(event.target);
-                                                                        onDrop(event, ui, zoneDrop);
-                                                                    }
-                                                                    updateAffichageImage();
-                                                                    $(this).dialog('close');
-                                                                } else {
-                                                                    paquetDecharge.push(carteDrag);
-                                                                    supprimerCartePrecise(carteDragNumero);
-                                                                    ui.draggable.remove();
+                                                                        paquetDecharge.push(carteDrag);
+                                                                        supprimerCartePrecise(carteDragNumero);
+                                                                        ui.draggable.remove();
 
-                                                                    for (var i = 0; i < nombreJoueur; i++) {
-                                                                        if (nomJoueur[i] === joueurSelectionne.innerHTML) {
-                                                                            for (var j = 0; j < mains[i].length; j++) {
-                                                                                if (mains[i][j] != null) {
-                                                                                    if (mains[i][j].nom === nomEnum.prisSurFait) {
-                                                                                        paquetDecharge.push(mains[i][j]);
-                                                                                        mains[i][j] = null;
+                                                                        for (var i = 0; i < nombreJoueur; i++) {
+                                                                            if (nomJoueur[i] === joueurSelectionne.innerHTML) {
+                                                                                for (var j = 0; j < mains[i].length; j++) {
+                                                                                    if (mains[i][j] != null) {
+                                                                                        if (mains[i][j].nom === nomEnum.prisSurFait) {
+                                                                                            paquetDecharge.push(mains[i][j]);
+                                                                                            mains[i][j] = null;
+                                                                                        }
                                                                                     }
                                                                                 }
                                                                             }
                                                                         }
+                                                                        $(this).dialog('close');
                                                                     }
-                                                                    $(this).dialog('close');
+                                                                } else {
+                                                                    popUpAvertissement('Veuillez choisir un option.');
                                                                 }
                                                             }
                                                         },
@@ -4063,7 +4096,7 @@
         }
 
         //S'assurer que le caractère est un nombre.
-        function isNumber(evt) {
+        function EstChiffre(evt) {
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
             if (charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -4184,7 +4217,7 @@
                 }
             }
 
-            if (nomrePossible >= carteDrag.predateur) {
+            if (nombrePossible >= carteDrag.predateur) {
                 return true;
             } else {
                 return false;
@@ -4293,7 +4326,6 @@
                         popUpAvertissement('Il n\'y a pas de cartes «Déchets» en jeu.');
                         return false;
                     } else if (carteDrag.nom === nomEnum.naturalisation) {//Si c'est une naturalisation.
-                        console.log(test);
                         for (var i = 0; i < nombreJoueur; i++) {
                             for (var j = 0; j < cartePerturbation[i].length; j++) {
                                 if (cartePerturbation[i][j] != null) {
@@ -4305,7 +4337,6 @@
                             }
                         }
                         for (var i = 0; i < paquetIntervention.length; i++) {
-                            popUpAvertissement('Il n\'y a pas de cartes «Artificialisations» à retirer et il n\'y a plus de cartes «Bandes Riveraines» dans le paquet de cartes «Interventions».');
                             if (paquetIntervention[i] != null) {
                                 if (paquetIntervention[i].nom === nomEnum.amenageArbre || paquetIntervention[i].nom === nomEnum.amenageArbustes || paquetIntervention[i].nom === nomEnum.amenageHerbace) {
                                     calculer = true;
@@ -4313,6 +4344,7 @@
                                 }
                             }
                         }
+                        popUpAvertissement('Il n\'y a pas de cartes «Artificialisations» à retirer et il n\'y a plus de cartes «Bandes Riveraines» dans le paquet de cartes «Interventions».');
                         return false;
                     } else if (carteDrag.nom === nomEnum.amenagement) {//Si c'est une carte d'aménagement.
                         for (var i = 0; i < nombreJoueur; i++) {
@@ -4340,7 +4372,7 @@
                 } else if (carteDrag.type === typeEnum.speciale) {//Si c'est une carte spéciale.
                     if (carteDrag.nom === nomEnum.retention) {
                         if (pointsRessourcesRestant[numeroJoueurActif] === 0) {
-                            popUpAvertissement('Vous n\'avez plus de points ressources à conserver.');
+                            popUpAvertissement('Vous n\'avez plus de points-ressources à conserver.');
                             return false;
                         }
                         calculer = true;
@@ -4465,7 +4497,7 @@
                     }
                 }
             } else {
-                popUpAvertissement('Vous manquez de points ressources pour jouer la carte.');
+                popUpAvertissement('Vous manquez de points-ressources pour jouer la carte.');
                 return false;
             }
         }
@@ -5314,8 +5346,10 @@
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageGalets, 'habitatAmenageGalets.png', 1, { habitats: nomEnum.galets });
                 paquetIntervention.push(carte);
+                carte = new Carte(typeEnum.intervention, nomEnum.amenageGalets, 'habitatAmenageGalets.png', 1, { habitats: nomEnum.galets });
+                paquetIntervention.push(carte);
 
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageGravier, 'habitatAmenageGravier.png', 1, { habitats: nomEnum.gravier });
+                carte = new Carte(typeEnum.intervention, nomEnum.amenageGravier, 'habitatAmenageGravier.png', 2, { habitats: nomEnum.gravier });
                 paquetIntervention.push(carte);
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageHerbace, 'bandeRiveraineHerbace.png', 1);
@@ -5520,6 +5554,7 @@
             var size = mains[numeroJoueurActif].filter(function (value) { return value != null }).length;
 
             if (size > 4 && tableauPasserTour[numeroJoueurActif] != true) {
+                popUpConfirmation('Vous devez défausser ' + (size - 4) + ' carte(s) avant de terminer votre tour');
                 $('#buttonPasserTour').prop('disabled', true);
                 defausserCarte();
             } else {
@@ -5889,14 +5924,14 @@
             });
         }
 
-        //Fonction qui "update" les points ressources du jeu.
+        //Fonction qui "update" les points-ressources du jeu.
         function updatePointsRessourcesJeu() {
             pointsRessourcesBase[numeroJoueurActif] = 5;
             pointsRessourcesSuplementaire[numeroJoueurActif] = pointsRessourcesAdditionel() + tableauRetention[numeroJoueurActif];
             tableauRetention[numeroJoueurActif] = 0;
             pointsRessourcesTotal[numeroJoueurActif] = pointsRessourcesBase[numeroJoueurActif] + pointsRessourcesSuplementaire[numeroJoueurActif];
             pointsRessourcesUtiliser[numeroJoueurActif] = 0;
-            pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif];
+            pointsRessourcesRestant[numeroJoueurActif] = pointsRessourcesTotal[numeroJoueurActif] - pointsRessourcesUtiliser[numeroJoueurActif];
 
             calculerPoints();
             updatePointsRessources();
@@ -5981,6 +6016,9 @@
                         //Les if qui vont envoyer l'objet carte dans la variable.
                         carteDrag = mains[numeroJoueurActif][id];
                         carteDragNumero = id;
+                        if (carteDrag == null) {
+                            return false;
+                        }
                     },
                     stop: function () {
                         $('.ui-tooltip').hide();
@@ -5997,9 +6035,9 @@
             });
         }
 
-        //Fonction qui update les points ressources après avoir jouer une carte.
+        //Fonction qui update les points-ressources après avoir jouer une carte.
         function updatePointsRessources() {
-            $('.divTextePointsRessource').html('<p class=titreRessource>Points ressources de base : ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources additionnels : ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources total : ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points ressources utilisés : ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points ressources restant : ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
+            $('.divTextePointsRessource').html('<p class=titreRessource>points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources total&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
         }
 
         //Fonction qui calcule les points de chaque joueurs.
@@ -6051,13 +6089,13 @@
         //fonction qui va update les points des joueurs.
         function updateZonePoints() {
             if (nombreJoueur === 4) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D : ' + pointsJoueur[3] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D&nbsp;: ' + pointsJoueur[3] + '</li></ul>';
             } else if (nombreJoueur === 3) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C : ' + pointsJoueur[2] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + pointsJoueur[2] + '</li></ul>';
             } else if (nombreJoueur === 2) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B : ' + pointsJoueur[1] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li></ul>';
             } else if (nombreJoueur === 1) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A : ' + pointsJoueur[0] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li></ul>';
             }
         }
 
