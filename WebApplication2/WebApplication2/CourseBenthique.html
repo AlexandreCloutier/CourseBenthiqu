@@ -418,11 +418,11 @@
                 }
             } else {
                 if (nombreJoueur === 2) {
-                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; "+gagnanPoisson()+" </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; "+gagnantPoisson()+" </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
                 } else if (nombreJoueur === 3) {
-                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnanPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
                 } else if (nombreJoueur === 4) {
-                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnanPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
                 }
             }
             $('#menuPrincipal').append(divCredits);
@@ -454,7 +454,7 @@
         }
 
         //Fonction qui retourne le nom du gagnant du poisson.
-        function gagnanPoisson() {
+        function gagnantPoisson() {
             for (var i = 0; i < salmonide.length; i++) {
                 if (salmonide[i] != null) {
                     if (salmonide[i]) {
@@ -586,6 +586,7 @@
             var nomJoueurA = document.createElement('input');
             nomJoueurA.type = 'text';
             nomJoueurA.id = 'nomJoueurA';
+            nomJoueurA.maxLength = 20;
             nomJoueurA.className = 'textBoxJoueur';
             $(divJoueurA).append(nomJoueurA);
 
@@ -624,6 +625,7 @@
             var nomJoueurB = document.createElement('input');
             nomJoueurB.type = 'text';
             nomJoueurB.id = 'nomJoueurB';
+            nomJoueurB.maxLength = 20;
             nomJoueurB.className = 'textBoxJoueur';
             $(divJoueurB).append(nomJoueurB);
 
@@ -662,6 +664,7 @@
             var nomJoueurC = document.createElement('input');
             nomJoueurC.type = 'text';
             nomJoueurC.id = 'nomJoueurC';
+            nomJoueurC.maxLength = 20;
             nomJoueurC.className = 'textBoxJoueur';
             $(divJoueurC).append(nomJoueurC);
 
@@ -701,6 +704,7 @@
             var nomJoueurD = document.createElement('input');
             nomJoueurD.type = 'text';
             nomJoueurD.id = 'nomJoueurD';
+            nomJoueurD.maxLength = 20;
             nomJoueurD.className = 'textBoxJoueur';
             $(divJoueurD).append(nomJoueurD);
 
@@ -1818,7 +1822,7 @@
             var divTextePointsRessource = document.createElement('div');
             divTextePointsRessource.id = 'divTextePointsRessource';
             divTextePointsRessource.className = 'divTextePointsRessource';
-            divTextePointsRessource.innerHTML = '<p class=titreRessource>Points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources total&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
+            divTextePointsRessource.innerHTML = '<p class=titreRessource>Points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources totaux&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
             document.getElementById('divDroite').appendChild(divTextePointsRessource);
 
             //Div des points de joueurs.
@@ -2222,7 +2226,7 @@
                                 zonage = false;
                                 griserZone(false, false, false);
 
-                                popUpConfirmation('La carte «' + premiereLettreMaj(carteEchange1.nom) + '» de&nbsp;: ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur1)]) + ' à été changé par la carte «' + premiereLettreMaj(carteEchange2.nom) + '» de&nbsp;: ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur2)]));
+                                popUpConfirmation('La carte «' + premiereLettreMaj(carteEchange1.nom) + '» de : ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur1)]) + ' à été changé par la carte «' + premiereLettreMaj(carteEchange2.nom) + '» de: ' + premiereLettreMaj(nomJoueur[numeroJoueur(lettreJoueur2)]));
                             } else {
                                 popUpAvertissement('Vous devez cliquer sur une des cartes «Habitats» d\'un ennemi.')
                             }
@@ -3151,7 +3155,7 @@
                                 $('#labelChoix').text('Choisissez un des effets suivants.');
                                 $('#divChoix').dialog({
                                     classes: {
-                                        'ui-dialog': 'no-x ui-corner-all',
+                                        'ui-dialog': 'no-x popUpChoix ui-corner-all',
                                     },
                                     buttons: {
                                         Confirmer: function () {
@@ -4104,6 +4108,7 @@
             }
             return true;
         }
+
         //Fonction qui renvoie la lettre du joueur voulu
         function lettreJoueur(numero) {
             if (nombreJoueur === 2) {
@@ -5435,7 +5440,7 @@
                 var divMainGrise = document.createElement('div');
                 divMainGrise.id = 'divMainGrise';
                 divMainGrise.className = 'zoneGrise';
-                $('#divMain').append(divMainGrise);
+                $('#divMain').prepend(divMainGrise);
                 $('#divMain').css('pointer-events', 'none');
             } else {
                 $('#divMainGrise').remove();
@@ -5446,7 +5451,7 @@
                 var plateauGrise = document.createElement('div');
                 plateauGrise.id = 'plateauGrise';
                 plateauGrise.className = 'zoneGrise';
-                $('#plateau').append(plateauGrise);
+                $('#plateau').prepend(plateauGrise);
                 $('#plateau').css('pointer-events', 'none');
             } else {
                 $('#plateauGrise').remove();
@@ -5457,7 +5462,7 @@
                 var divDroiteGrise = document.createElement('div');
                 divDroiteGrise.id = 'divDroiteGrise';
                 divDroiteGrise.className = 'zoneGrise'
-                $('#divDroite').append(divDroiteGrise);
+                $('#divDroite').prepend(divDroiteGrise);
                 $('#divDroite').css('pointer-events', 'none');
             } else {
                 $('#divDroiteGrise').remove();
@@ -6026,6 +6031,7 @@
                     drag: function () {
                         $('.ui-tooltip').hide();
                     },
+                    scroll: false,
                     revert: function (socketObj) {
                         return revertCarte(socketObj, this);
                     },
@@ -6037,7 +6043,7 @@
 
         //Fonction qui update les points-ressources après avoir jouer une carte.
         function updatePointsRessources() {
-            $('.divTextePointsRessource').html('<p class=titreRessource>points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources total&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
+            $('.divTextePointsRessource').html('<p class=titreRessource>points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources totaux&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
         }
 
         //Fonction qui calcule les points de chaque joueurs.

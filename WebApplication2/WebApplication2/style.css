@@ -5,6 +5,8 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /* -------------Menu Créer Partie----------------------*/
@@ -268,7 +270,7 @@ input::-webkit-inner-spin-button {
 
 .zoneGrise {
     opacity: 0.75;
-    position: relative;
+    position: absolute;
     height: inherit;
     width: inherit;
     background-color: black;
@@ -332,6 +334,17 @@ input::-webkit-inner-spin-button {
     width: 575px;
     height: 1150px;
     display: none;
+}
+
+.popUpRegle {
+    overflow: auto !important;
+    max-height: 750px;
+
+}
+
+.popUpChoix {
+    overflow: auto !important;
+    max-height: 750px;
 }
 
 .divTableauCarte {
@@ -552,10 +565,13 @@ input::-webkit-inner-spin-button {
     padding: 2px;
     margin: 5px;
     width: 278px;
-    height: 75px;
+    overflow: auto;
+    min-height: 75px;
+    height: auto;
     text-align: center;
-    position: absolute;
+    position: relative;
     top: 15px;
+    left: 4%;
 }
 
 .titreEquipe {
@@ -569,7 +585,7 @@ input::-webkit-inner-spin-button {
 
 .listeEquipe {
     list-style: none;
-    display: inline-block;
+    display: inline;
     margin-left: 25px;
     float: left;
 }
@@ -581,9 +597,10 @@ input::-webkit-inner-spin-button {
     margin: 5px;
     padding: 2px;
     width: 278px;
-    height: 75px;
-    position: absolute;
-    top: 110px;
+    min-height: 75px;
+    position: relative;
+    top: 15px;
+    left: 4%;
 }
 
 .titrePoint {
@@ -604,42 +621,19 @@ input::-webkit-inner-spin-button {
     height: 155px;
     margin: 5px;
     padding: 2px;
-    position: absolute;
-    top: 215px;
+    position: relative;
+    top: 15px;
+    left: 4%;
 }
 
 .titreRessource {
     margin: 10px;
 }
 
-/*****Zone Message*****/
-.divTexteMessageJeu {
-    border: solid 3px black;
-    padding: 2px;
-    margin: 3px;
-    background-color: white;
-    position: absolute;
-    bottom: 200px;
-}
-
-.titreMessage {
-    text-align: center;
-    margin: 3px;
-}
-
-.zoneMessage {
-    width: 267px;
-    height: 181px;
-    resize: none;
-    outline: none;
-    overflow: auto;
-    vertical-align: 90%;
-    align-content: flex-end;
-}
 /*****Les boutons*****/
 #buttonPasserTour {
     position: absolute;
-    bottom: 205px;
+    bottom: 195px;
     height: 50px;
     width: 250px;
     left: 11%;
@@ -656,7 +650,7 @@ input::-webkit-inner-spin-button {
 
 #buttonRegle {
     position: absolute;
-    bottom: 150px;
+    bottom: 140px;
     height: 40px;
     width: 250px;
     left: 11%;
