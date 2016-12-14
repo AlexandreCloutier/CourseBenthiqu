@@ -1903,7 +1903,7 @@
                         popUpAvertissement('Le «Macroinvertébré» doit être de taille inférieure à votre prédateur.');
                     }
                 } else {
-                    popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» à manger.');
+                    popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à '+taillePredateur +' à manger.');
                 }
                 /* ---------------Partie pollution organique--------------*/
             } else if (mangerSalmonide) {
@@ -1927,7 +1927,7 @@
                             updateAffichageImage();
                         }
                     } else {
-                        popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» à manger.');
+                        popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                     }
                 }
             } else if (onPollu) {
@@ -2109,7 +2109,7 @@
                         popUpAvertissement('Le «Macroinvertébré» doit être de taille inférieure au prédateur.')
                     }
                 } else {
-                    popUpAvertissement('Vous devez sélectionner un prédateur de taille inférieure pour qu\'il soit mangé.');
+                    popUpAvertissement('Vous devez sélectionner un macroinvertébrés de taille inférieure à ' + taillePredateur+' pour qu\'il soit mangé.');
                 }
                 /* -------------------- carte zonage---------------- */
             } else if (zonage) {
@@ -3557,7 +3557,7 @@
                                                         taillePredateur = carteDrag.taille;
                                                         onDrop(evt, ui, this);
                                                         mangerPredateur = true;
-                                                        popUpConfirmation('Vous devez sélectionnez un «Macroinvertébré» à manger.');
+                                                        popUpConfirmation('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                                                         brillanceCarteMangeable(true);
                                                         griserZone(true, false, true);
                                                     } else {//Sinon, met simplement la carte.
@@ -3569,7 +3569,7 @@
                                                     salmonide[numeroJoueurActif] = true;
                                                     mangerSalmonide = true;
                                                     tourSalmonide = 0;
-                                                    popUpConfirmation('Vous devez sélectionnez deux «Macroinvertébré» à manger.');
+                                                    popUpConfirmation('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                                                     brillanceCarteMangeable(true);
                                                     griserZone(true, false, true);
                                                 } else {//Sinon, met simplement la carte.
@@ -3581,7 +3581,7 @@
                                                         taillePredateur = carteDrag.taille;
                                                         onDrop(evt, ui, verifierCartePresente(carteDrag.nomImage));
                                                         mangerPredateur = true;
-                                                        popUpConfirmation('Vous devez sélectionnez un «Macroinvertébré» de taille inférieure à manger.');
+                                                        popUpConfirmation('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                                                         brillanceCarteMangeable(true);
                                                     } else {//Sinon, mes simplement la carte.
                                                         onDrop(evt, ui, verifierCartePresente(carteDrag.nomImage));
