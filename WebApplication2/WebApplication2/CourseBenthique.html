@@ -11,6 +11,9 @@
     <script src="scripts/FileSaver.min.js"></script>
     <script>
         //TODO: ui perturber a remettre?
+        //TODO: popup au debut de deverssement
+        //TODO: Charger sur firfox marche pas
+        //TODO: Afficher les noms des joueurs
         /* ------------------enum---------------------  */
         var typeEnum = {
             'habitats': 'habitats',
@@ -600,7 +603,7 @@
             ageJoueurA.type = 'text';
             ageJoueurA.id = 'ageJoueurA';
             ageJoueurA.className = 'textBoxJoueur';
-            ageJoueurA.onkeypress = function () { return EstChiffre(event) };
+            ageJoueurA.onkeypress = function (evt) { return EstChiffre(evt) };
             ageJoueurA.maxLength = 2;
             $(divJoueurA).append(ageJoueurA);
 
@@ -639,7 +642,7 @@
             ageJoueurB.type = 'text';
             ageJoueurB.id = 'ageJoueurB';
             ageJoueurB.className = 'textBoxJoueur';
-            ageJoueurB.onkeypress = function () { return EstChiffre(event) };
+            ageJoueurB.onkeypress = function (evt) { return EstChiffre(evt) };
             ageJoueurB.maxLength = 2;
             $(divJoueurB).append(ageJoueurB);
 
@@ -678,7 +681,7 @@
             ageJoueurC.type = 'text';
             ageJoueurC.id = 'ageJoueurC';
             ageJoueurC.className = 'textBoxJoueur';
-            ageJoueurC.onkeypress = function () { return EstChiffre(event) };
+            ageJoueurC.onkeypress = function (evt) { return EstChiffre(evt) };
             ageJoueurC.maxLength = 2;
             $(divJoueurC).append(ageJoueurC);
 
@@ -718,7 +721,7 @@
             ageJoueurD.type = 'text';
             ageJoueurD.id = 'ageJoueurD';
             ageJoueurD.className = 'textBoxJoueur';
-            ageJoueurD.onkeypress = function () { return EstChiffre(event) };
+            ageJoueurD.onkeypress = function (evt) { return EstChiffre(evt) };
             ageJoueurD.maxLength = 2;
             $(divJoueurD).append(ageJoueurD);
 
@@ -1703,7 +1706,7 @@
             } else {//Sinon, remplie les positions vides dans la main.
                 //Boucle pour toutes les positions de la main.
                 for (var i = 0; i < mains[numeroJoueurActif].length; i++) {
-                    if (mains[numeroJoueurActif][i] === null) {
+                    if (mains[numeroJoueurActif][i] == null) {
                         annimationPigerCarte(i);
                     }
                 }
@@ -1874,8 +1877,8 @@
         }
 
         //Fonction qui sera appelée lors du clique sur une image.
-        function onClickImage(event, ui) {
-            var emplacement = event.substr(event.length - 2);//2 derniers caractères de l'emplacement ex: A9.
+        function onClickImage(evt, ui) {
+            var emplacement = evt.substr(evt.length - 2);//2 derniers caractères de l'emplacement ex: A9.
             var lettreEmplacement = emplacement.substr(0, 1);//Lettre de l'emplacement ex:A.
             var numeroEmplacement = emplacement.substr(1, 2);//Chiffre de l'emplacement ex:9.
             var numeroJoueurEnnemi = numeroJoueur(lettreEmplacement);//Numero selon la lettre ex: A = 0.
@@ -1933,7 +1936,7 @@
                         if (carteBas[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
                             if (carteBas[numeroJoueurEnnemi][numeroEmplacement].perturber != true) {
                                 if (exemplaireCarteBas[numeroJoueurEnnemi][numeroEmplacement] >= 2) {
-                                    deplacerCartePerturber(document.getElementById('emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement), event, ui);
+                                    deplacerCartePerturber(document.getElementById('emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement), evt, ui);
                                 } else {
                                     rendrePerturber(document.getElementById('emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement));
                                 }
@@ -2015,7 +2018,7 @@
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).append(carteSable);
                             $(function () {
                                 $('.imageCarteJeuErosion').on({
-                                    click: function (event, ui) {
+                                    click: function (evt, ui) {
                                         onClickImage($(this).parent().attr("id"), ui);
                                     }
                                 })
@@ -2056,7 +2059,7 @@
 
                             $(function () {
                                 $('.imageCarteJeuErosion').on({
-                                    click: function (event, ui) {
+                                    click: function (evt, ui) {
                                         onClickImage($(this).parent().attr("id"), ui);
                                     }
                                 })
@@ -2171,7 +2174,7 @@
                                     var positionCarte = emplacement.substr(1, 2);
 
                                     exemplaireCarteBas[numeroJoueurCarte][positionCarte]++;
-                                    $(carte1).css('margin-top', exemplaireCarteBas[numeroJoueurCarte][positionCarte] * 10);
+                                    $(carte1).css('margin-top', (exemplaireCarteBas[numeroJoueurCarte][positionCarte] - 1) * 10);
 
                                     $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().last().remove();
 
@@ -2203,7 +2206,7 @@
                                     var positionCarte = emplacement.substr(1, 2);
 
                                     exemplaireCarteBas[numeroJoueurCarte][positionCarte]++;
-                                    $(carte2).css('margin-top', exemplaireCarteBas[numeroJoueurCarte][positionCarte] * 10);
+                                    $(carte2).css('margin-top', (exemplaireCarteBas[numeroJoueurCarte][positionCarte] - 1) * 10);
 
                                     $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().last().remove();
 
@@ -2213,7 +2216,7 @@
 
                                 $(function () {
                                     $('.imageCarteEchange').on({
-                                        click: function (event, ui) {
+                                        click: function (evt, ui) {
                                             onClickImage($(this).parent().attr("id"), ui);
                                         }
                                     })
@@ -2237,7 +2240,7 @@
                 }
                 // ----------------Carte Naturalisation --------------
             } else if (naturalisation) {
-                if (document.getElementById(event).classList.contains('ui-echange-highlight')) {
+                if (document.getElementById(evt).classList.contains('ui-echange-highlight')) {
                     cartePerturbation[numeroJoueur(lettreEmplacement)][numeroEmplacement] = null;
                     $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
                     carteBas[numeroJoueur(lettreEmplacement)][numeroEmplacement].perturber = false;
@@ -2314,9 +2317,9 @@
             $('body').append(plateau);
             $(plateau).droppable({
                 tolerance: 'pointer',
-                drop: function (event, ui) {//Ajoute le code du drop pour la plateau.
-                    if (bonneZoneDrop(event.target)) {//Si l'endroit que nous voulons droper est à la bonne place.
-                        if (accepterDrop(event.target)) {
+                drop: function (evt, ui) {//Ajoute le code du drop pour la plateau.
+                    if (bonneZoneDrop(evt.target)) {//Si l'endroit que nous voulons droper est à la bonne place.
+                        if (accepterDrop(evt.target)) {
                             pointsRessourcesRestant[numeroJoueurActif] -= carteDrag.coutRessources;
                             pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutRessources;
                             updatePointsRessources();
@@ -2405,10 +2408,10 @@
 
                                     $(function () {
                                         $(ul).selectable({
-                                            stop: function (event, ui) {
-                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                            stop: function (evt, ui) {
+                                                $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                             },
-                                            selected: function (event, ui) {
+                                            selected: function (evt, ui) {
                                                 joueurSelectionne = ui.selected;
                                             }
                                         });
@@ -2566,10 +2569,10 @@
 
                                 $(function () {
                                     $(ul).selectable({
-                                        stop: function (event, ui) {
-                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        stop: function (evt, ui) {
+                                            $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                         },
-                                        selected: function (event, ui) {
+                                        selected: function (evt, ui) {
                                             joueurSelectionne = ui.selected;
                                         }
                                     });
@@ -2604,7 +2607,7 @@
 
                                                                 $(function () {
                                                                     $(carteHabitat).on({
-                                                                        click: function (event, ui) {
+                                                                        click: function (evt, ui) {
                                                                             onClickImage($(this).parent().attr("id"), ui);
                                                                         }
                                                                     })
@@ -2623,7 +2626,7 @@
                                                 $(posLibre).append(carte);
                                                 $(function () {
                                                     $(carte).on({
-                                                        click: function (event, ui) {
+                                                        click: function (evt, ui) {
                                                             onClickImage($(this).parent().attr("id"), ui);
                                                         }
                                                     })
@@ -2744,10 +2747,10 @@
 
                                 $(function () {
                                     $(ul).selectable({
-                                        stop: function (event, ui) {
-                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        stop: function (evt, ui) {
+                                            $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                         },
-                                        selected: function (event, ui) {
+                                        selected: function (evt, ui) {
                                             joueurSelectionne = ui.selected;
                                         }
                                     });
@@ -2872,10 +2875,10 @@
 
                                     $(function () {
                                         $(ul).selectable({
-                                            stop: function (event, ui) {
-                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                            stop: function (evt, ui) {
+                                                $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                             },
-                                            selected: function (event, ui) {
+                                            selected: function (evt, ui) {
                                                 joueurSelectionne = ui.selected;
                                             }
                                         });
@@ -2971,10 +2974,10 @@
 
                                     $(function () {
                                         $(ul).selectable({
-                                            stop: function (event, ui) {
-                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                            stop: function (evt, ui) {
+                                                $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                             },
-                                            selected: function (event, ui) {
+                                            selected: function (evt, ui) {
                                                 joueurSelectionne = ui.selected;
                                             }
                                         });
@@ -3041,10 +3044,10 @@
                                 }
                                 $(function () {
                                     $(ul).selectable({
-                                        stop: function (event, ui) {
-                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        stop: function (evt, ui) {
+                                            $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                         },
-                                        selected: function (event, ui) {
+                                        selected: function (evt, ui) {
                                             joueurSelectionne = ui.selected;
                                         }
                                     });
@@ -3109,10 +3112,10 @@
                                 }
                                 $(function () {
                                     $(ul).selectable({
-                                        stop: function (event, ui) {
-                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        stop: function (evt, ui) {
+                                            $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                         },
-                                        selected: function (event, ui) {
+                                        selected: function (evt, ui) {
                                             joueurSelectionne = ui.selected;
                                         }
                                     });
@@ -3299,10 +3302,10 @@
 
                                 $(function () {
                                     $(ul).selectable({
-                                        stop: function (event, ui) {
-                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        stop: function (evt, ui) {
+                                            $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                         },
-                                        selected: function (event, ui) {
+                                        selected: function (evt, ui) {
                                             joueurSelectionne = ui.selected;
                                         }
                                     });
@@ -3356,10 +3359,10 @@
 
                                 $(function () {
                                     $(ul).selectable({
-                                        stop: function (event, ui) {
-                                            $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                        stop: function (evt, ui) {
+                                            $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                         },
-                                        selected: function (event, ui) {
+                                        selected: function (evt, ui) {
                                             ordreSelectionne = ui.selected.innerHTML;
                                         }
                                     });
@@ -3411,13 +3414,13 @@
                         }
                     }
                 },
-                over: function (event, ui) {
-                    if (bonneZoneDrop(event.target)) {
-                        $(event.target).addClass('droppable-hover');
+                over: function (evt, ui) {
+                    if (bonneZoneDrop(evt.target)) {
+                        $(evt.target).addClass('droppable-hover');
                     }
                 },
-                out: function (event, ui) {
-                    $(event.target).removeClass('droppable-hover');
+                out: function (evt, ui) {
+                    $(evt.target).removeClass('droppable-hover');
                 }
             });
 
@@ -3543,26 +3546,26 @@
                 $(function () {//Ajoute le droppable à chaque zone.
                     $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD').droppable({
                         tolerance: 'pointer',
-                        drop: function (event, ui) {
+                        drop: function (evt, ui) {
                             if (carteDrag.nom != nomEnum.deversement && carteDrag.nom != nomEnum.erosion && carteDrag.nom != nomEnum.pollutionOrganique && carteDrag.type != typeEnum.speciale && carteDrag.type != typeEnum.action) {
-                                if (bonneZoneDrop(event.target)) {//Si l'endroit que nous voulons droper est à la bonne place.
-                                    if (accepterDrop(event.target)) {
+                                if (bonneZoneDrop(evt.target)) {//Si l'endroit que nous voulons droper est à la bonne place.
+                                    if (accepterDrop(evt.target)) {
                                         if ($(this).children().length < 1) {//Si l'endroit où on drope est vide.
                                             if (verifierCartePresente(carteDrag.nomImage) === '') {//Si la carte n'est pas déjà présente.
                                                 if (carteDrag.type === typeEnum.macroInvertebre) {
                                                     if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
                                                         taillePredateur = carteDrag.taille;
-                                                        onDrop(event, ui, this);
+                                                        onDrop(evt, ui, this);
                                                         mangerPredateur = true;
                                                         popUpConfirmation('Vous devez sélectionnez un «Macroinvertébré» à manger.');
                                                         brillanceCarteMangeable(true);
                                                         griserZone(true, false, true);
                                                     } else {//Sinon, met simplement la carte.
-                                                        onDrop(event, ui, this);
+                                                        onDrop(evt, ui, this);
                                                     }
                                                 } else if (carteDrag.type === typeEnum.salmonide) {
                                                     taillePredateur = carteDrag.taille;
-                                                    onDrop(event, ui, this);
+                                                    onDrop(evt, ui, this);
                                                     salmonide[numeroJoueurActif] = true;
                                                     mangerSalmonide = true;
                                                     tourSalmonide = 0;
@@ -3570,53 +3573,53 @@
                                                     brillanceCarteMangeable(true);
                                                     griserZone(true, false, true);
                                                 } else {//Sinon, met simplement la carte.
-                                                    onDrop(event, ui, this);
+                                                    onDrop(evt, ui, this);
                                                 }
                                             } else {
                                                 if (carteDrag.type === typeEnum.macroInvertebre) {
                                                     if (carteDrag.predateur === 1) {//Si c'est un prédateur, démarre le processus de miam miam.
                                                         taillePredateur = carteDrag.taille;
-                                                        onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
+                                                        onDrop(evt, ui, verifierCartePresente(carteDrag.nomImage));
                                                         mangerPredateur = true;
                                                         popUpConfirmation('Vous devez sélectionnez un «Macroinvertébré» de taille inférieure à manger.');
                                                         brillanceCarteMangeable(true);
                                                     } else {//Sinon, mes simplement la carte.
-                                                        onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
+                                                        onDrop(evt, ui, verifierCartePresente(carteDrag.nomImage));
                                                     }
                                                 } else {//Sinon, mes simplement la carte.
-                                                    onDrop(event, ui, verifierCartePresente(carteDrag.nomImage));
+                                                    onDrop(evt, ui, verifierCartePresente(carteDrag.nomImage));
                                                 }
                                             }
                                             //sinon si l'endroit contient une carte.
                                         } else if ($(this).children().length >= 1) {
                                             if (carteDrag.type != typeEnum.perturbation) {
                                                 var id;
-                                                id = event.target.id.substr(event.target.id.length - 1);
+                                                id = evt.target.id.substr(evt.target.id.length - 1);
 
                                                 if (carteDrag.nom === carteBas[numeroJoueurActif][id].nom) {
                                                     if (!(carteBas[numeroJoueurActif][id].type === typeEnum.habitats && carteBas[numeroJoueurActif][id].perturber)) {
                                                         if (!(carteBas[numeroJoueurActif][id].type === typeEnum.bandeRiveraine && carteBas[numeroJoueurActif][id].perturber)) {
-                                                            onDrop(event, ui, this);
+                                                            onDrop(evt, ui, this);
                                                         } else {
                                                             popUpErreur('Vous ne pouvez pas empiler sur une carte perturbée.')
-                                                            ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
+                                                            ui.draggable.draggable({ revert: function (evt) { return revertCarte(evt, ui.draggable) } });
                                                         }
                                                     } else {
                                                         popUpErreur('Vous ne pouvez pas empiler sur une carte perturbée.')
-                                                        ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
+                                                        ui.draggable.draggable({ revert: function (evt) { return revertCarte(evt, ui.draggable) } });
                                                     }
                                                 } else {//Sinon, le drop n'est pas accepté.
-                                                    ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
+                                                    ui.draggable.draggable({ revert: function (evt) { return revertCarte(evt, ui.draggable) } });
                                                     popUpErreur('Vous ne pouvez pas empiler des cartes différentes.');
                                                 }
                                             } else {
                                                 var zoneDrop = this;
                                                 if (verifierPresencePrisSurFait().filter(function (value) { return value != null }).length === 0) {//Si un joueur a une carte pris sur le fait.
-                                                    if ($(this).children().length >= 2) {
-                                                        deplacerCartePerturber(this, event, ui);
+                                                    if ($(zoneDrop).children().length >= 2) {
+                                                        deplacerCartePerturber(zoneDrop, evt, ui);
                                                     } else {
-                                                        rendrePerturber(event.target);
-                                                        onDrop(event, ui, zoneDrop);
+                                                        rendrePerturber(evt.target);
+                                                        onDrop(evt, ui, zoneDrop);
                                                     }
                                                     updateAffichageImage();
                                                 } else {
@@ -3631,10 +3634,10 @@
                                                                 if (joueurSelectionne != null) {
                                                                     if (joueurSelectionne.innerHTML === 'Aucun joueur') {
                                                                         if ($(this).children().length >= 2) {
-                                                                            deplacerCartePerturber(this, event, ui);
+                                                                            deplacerCartePerturber(this, evt, ui);
                                                                         } else {
-                                                                            rendrePerturber(event.target);
-                                                                            onDrop(event, ui, zoneDrop);
+                                                                            rendrePerturber(evt.target);
+                                                                            onDrop(evt, ui, zoneDrop);
                                                                         }
                                                                         updateAffichageImage();
                                                                         $(this).dialog('close');
@@ -3693,10 +3696,10 @@
 
                                                     $(function () {
                                                         $(ul).selectable({
-                                                            stop: function (event, ui) {
-                                                                $(event.target).children('.ui-selected').not(':first').removeClass('ui-selected');
+                                                            stop: function (evt, ui) {
+                                                                $(evt.target).children('.ui-selected').not(':first').removeClass('ui-selected');
                                                             },
-                                                            selected: function (event, ui) {
+                                                            selected: function (evt, ui) {
                                                                 joueurSelectionne = ui.selected;
                                                             }
                                                         });
@@ -3705,13 +3708,13 @@
                                             }
                                         }
                                     } else {
-                                        ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
+                                        ui.draggable.draggable({ revert: function (evt) { return revertCarte(evt, ui.draggable) } });
                                     }
                                 } else {//Respecte pas les conditions, donc drop pas accepté.
-                                    ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
+                                    ui.draggable.draggable({ revert: function (evt) { return revertCarte(evt, ui.draggable) } });
                                 }
                             } else {
-                                ui.draggable.draggable({ revert: function (event) { return revertCarte(event, ui.draggable) } });
+                                ui.draggable.draggable({ revert: function (evt) { return revertCarte(evt, ui.draggable) } });
 
                                 if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.bandeRiveraine || carteDrag.type === typeEnum.salmonide) {
                                     popUpErreur('Cette carte n\'est jouable que dans votre zone.');
@@ -3720,13 +3723,13 @@
                                 }
                             }
                         },
-                        over: function (event, ui) {
-                            if (bonneZoneDrop(event.target)) {
-                                $(event.target).addClass('droppable-hover');
+                        over: function (evt, ui) {
+                            if (bonneZoneDrop(evt.target)) {
+                                $(evt.target).addClass('droppable-hover');
                             }
                         },
-                        out: function (event, ui) {
-                            $(event.target).removeClass('droppable-hover');
+                        out: function (evt, ui) {
+                            $(evt.target).removeClass('droppable-hover');
                         }
                     });
                 });
@@ -3734,7 +3737,7 @@
         }
 
         //Fonction qui va déplacer une carte et droper la perturbation dessus pour pas qu'une carte perturbée soit empilée sur une carte non-perturbée.
-        function deplacerCartePerturber(positionCarteDepart, event, ui) {
+        function deplacerCartePerturber(positionCarteDepart, evt, ui) {
             var emplacement = positionCarteDepart.id.substr(positionCarteDepart.id.length - 2);
             var numeroJoueurPositionDrop = numeroJoueur(emplacement.substr(0, 1));
             var numeroPosition = emplacement.substr(1, 2);
@@ -3759,8 +3762,10 @@
 
             if (carteDrag.nom === nomEnum.dechets || carteDrag.nom === nomEnum.artificialisation) {//Si c'est un déchet ou artificialisation.
                 carteBas[numeroJoueurPositionDrop][numeroPositionDropper].tempsPerturber = 10;//Le temps de perturbation de 10 fait en sorte qu'il ne baisse jamais.
+                cartePerturbation[numeroJoueurPositionDrop][numeroPositionDropper] = carteDrag;
             } else if (carteDrag.nom === nomEnum.passageToutTerrain) {//Si c'est passage tout-terrain.
                 carteBas[numeroJoueurPositionDrop][numeroPositionDropper].tempsPerturber = 2;
+                cartePerturbation[numeroJoueurPositionDrop][numeroPositionDropper] = carteDrag;
             } else if (carteDrag.nom === nomEnum.pollutionOrganique) {//Si c'est Pollution Organique
                 carteBas[numeroJoueurPositionDrop][numeroPositionDropper].tempsPerturber = 2;
             }
@@ -3768,7 +3773,7 @@
 
             $(function () {
                 $('.imageCarteNouvelleCarte').on({
-                    click: function (event, ui) {
+                    click: function (evt, ui) {
                         onClickImage($(this).parent().attr("id"), ui);
                     }
                 })
@@ -3776,13 +3781,13 @@
 
             $('.imageCarteNouvelleCarte').removeClass('imageCarteNouvelleCarte');
             if (carteDrag.nom !== nomEnum.pollutionOrganique) {
-                onDrop(event, ui, $(positionDropable));
+                onDrop(evt, ui, $(positionDropable));
             }
         }
 
         //Fonction qui va mettre la variable perturber à true.
-        function rendrePerturber(event) {
-            var position = event.id.substr(event.id.length - 2);//2 derniers caractères de l'emplacement ex: A9.
+        function rendrePerturber(evt) {
+            var position = evt.id.substr(evt.id.length - 2);//2 derniers caractères de l'emplacement ex: A9.
             var lettrePositionJoueur = position.substr(0, 1);//Lettre de l'emplacement ex: A.
             var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);//Numero du joueur selon l'emplacement.
             var numeroPosition = position.substr(position.length - 1);// Numero de la position ex:9.
@@ -3806,7 +3811,7 @@
 
         //Fonction qui enleve 1 tour au temps de perturbation et si le temps est rendu à 0, retire la carte perturbation et l'état perturbé.
         function debutTourDeperturber() {
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < carteBas[numeroJoueurActif].length; i++) {
                 if (carteBas[numeroJoueurActif][i] != null) {
                     if (carteBas[numeroJoueurActif][i].type === typeEnum.habitats || carteBas[numeroJoueurActif][i].type === typeEnum.bandeRiveraine) {
                         if (carteBas[numeroJoueurActif][i].tempsPerturber != 10 && carteBas[numeroJoueurActif][i].tempsPerturber > 0) {
@@ -3814,6 +3819,7 @@
                             if (carteBas[numeroJoueurActif][i].tempsPerturber === 0) {//si le temps est écoulé.
                                 carteBas[numeroJoueurActif][i].perturber = false;//Déperturbe.
                                 if (cartePerturbation[numeroJoueurActif][i] != null) {
+                                    console.log('debutTourDePerturber');
                                     //Retire la carte dans le tableau de perturbation et sur le plateau.
                                     retirerCartePerturbation(numeroJoueurActif, i);
                                 }
@@ -3827,10 +3833,10 @@
             }
         }
 
-        //Fonction qui s'occupe de rempiler les cartes une fois qu'elle ne sont plus perturbée.
+        //Fonction qui s'occupe de rempiler les cartes une fois qu'elles ne sont plus perturbées.
         function reempillerCartePasPerturber(numeroDuJoueur, positionCarteAEmpiler) {
-            for (var i = 0; i < 10; i++) {
-                if (carteBas[numeroDuJoueur][positionCarteAEmpiler] != null) {
+            for (var i = 0; i < carteBas[numeroDuJoueur].length; i++) {
+                if (carteBas[numeroDuJoueur][i] != null) {
                     if (carteBas[numeroDuJoueur][i].nom === carteBas[numeroDuJoueur][positionCarteAEmpiler].nom) {
                         if (carteBas[numeroDuJoueur][i].perturber === false) {
                             exemplaireCarteBas[numeroDuJoueur][i]++;
@@ -3838,12 +3844,13 @@
                             var image = document.createElement('img');
                             image.className = 'imageCarteJeu ajoutOnClick';
                             image.src = 'ressources/' + carteBas[numeroDuJoueur][i].nomImage;
-                            $(image).css('margin-top', exemplaireCarteBas[numeroDuJoueur][i] * 10);
+                            $(image).css('margin-top', (exemplaireCarteBas[numeroDuJoueur][i] - 1) * 10);
                             $('#emplacementJoueur' + lettreJoueur(numeroDuJoueur) + i).append(image);
+                            $('#emplacementJoueur' + lettreJoueur(numeroDuJoueur) + positionCarteAEmpiler).children().first().remove();
 
                             $(function () {
                                 $('.ajoutOnClick').on({
-                                    click: function (event, ui) {
+                                    click: function (evt, ui) {
                                         onClickImage($(this).parent().attr("id"), ui);
                                     }
                                 })
@@ -3860,6 +3867,7 @@
         function retirerCartePerturbation(numeroActif, positionCarte) {
             var lettreActif = lettreJoueur(numeroActif);
             paquetDecharge.push(cartePerturbation[numeroActif][positionCarte]);//Envoie la carte à la décharge.
+            console.log('retirerCartePerturbation');
             reempillerCartePasPerturber(numeroActif, positionCarte);
             cartePerturbation[numeroActif][positionCarte] = null;//Rend la position où était la carte pertubation à null.
             exemplaireCarteBas[numeroActif][positionCarte]--;
@@ -4050,8 +4058,8 @@
         }
 
         //Fonction qui validera que c'est la bonne zone pour droper notre carte.
-        function bonneZoneDrop(event) {
-            var identification = $(event).attr('id').substr($(event).attr('id').length - 2);
+        function bonneZoneDrop(evt) {
+            var identification = $(evt).attr('id').substr($(evt).attr('id').length - 2);
             var lettreEmplacement = identification.substr(0, 1);
 
             var lettre = lettreJoueur(numeroJoueurActif);
@@ -4101,7 +4109,7 @@
 
         //S'assurer que le caractère est un nombre.
         function EstChiffre(evt) {
-            evt = (evt) ? evt : window.event;
+            evt = (evt) ? evt : window.evt;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
             if (charCode > 31 && (charCode < 48 || charCode > 57)) {
                 return false;
@@ -4230,7 +4238,7 @@
         }
 
         //Fonction qui valide si le drop est accepté.
-        function accepterDrop(event) {
+        function accepterDrop(evt) {
             if (calculer) {
                 calculer = false;
                 return true;
@@ -4278,12 +4286,12 @@
                     }
                 } else if (carteDrag.type === typeEnum.perturbation) {//Si on joue une perturbation.
                     if (carteDrag.nom === nomEnum.dechets) {//Carte déchets.
-                        if (presenceReglementation(nomEnum.interdiction, event)) {
+                        if (presenceReglementation(nomEnum.interdiction, evt)) {
                             popUpAvertissement('Il y a une interdiction de jeter des ordures pour cet écosystème.');
                             return false;
                         }
                     } else if (carteDrag.nom === nomEnum.artificialisation) {//Carte artificialisation.
-                        if (presenceReglementation(nomEnum.politique, event)) {
+                        if (presenceReglementation(nomEnum.politique, evt)) {
                             popUpAvertissement('Il y a une politique de protection pour cet écosystème.');
                             return false;
                         }
@@ -4303,7 +4311,7 @@
                             return true;
                         }
                     }
-                    var message = verifierConditionPerturbation(event);
+                    var message = verifierConditionPerturbation(evt);
 
                     if (message === 'ok') {
                         calculer = true;
@@ -4527,8 +4535,8 @@
         }
 
         //Fonction qui vérifie si il y a la présence d'une réglementation qui empècherait la mise en place d'une carte perturbation.
-        function presenceReglementation(nomReglementation, event) {
-            var position = $(event).attr('id').substr($(event).attr('id').length - 2);
+        function presenceReglementation(nomReglementation, evt) {
+            var position = $(evt).attr('id').substr($(evt).attr('id').length - 2);
             var lettrePositionJoueur = position.substr(0, 1);
             var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);
 
@@ -4563,8 +4571,8 @@
         }
 
         //Fonction qui va vérifier si la carte perturbation respecte son emplacement.
-        function verifierConditionPerturbation(event, ui) {
-            var position = $(event).attr('id').substr($(event).attr('id').length - 2);
+        function verifierConditionPerturbation(evt, ui) {
+            var position = $(evt).attr('id').substr($(evt).attr('id').length - 2);
             var numeroPositionEmplacement = position.substr(position.length - 1);
             var lettrePositionJoueur = position.substr(0, 1);
             var numeroPositionJoueur;
@@ -4795,7 +4803,7 @@
         }
 
         //Fonction qui se produit lorsque l'on drop.
-        function onDrop(event, ui, drop) {
+        function onDrop(evt, ui, drop) {
             $(function () {
                 $(ui.draggable).click(function () { onClickImage($(this).parent().attr('id'), ui) });
                 ui.draggable.appendTo(drop);
@@ -5441,10 +5449,10 @@
                 divMainGrise.id = 'divMainGrise';
                 divMainGrise.className = 'zoneGrise';
                 $('#divMain').prepend(divMainGrise);
-                $('#divMain').css('pointer-events', 'none');
+                $('#divMain').css('pointer-evts', 'none');
             } else {
                 $('#divMainGrise').remove();
-                $('#divMain').css('pointer-events', 'auto');
+                $('#divMain').css('pointer-evts', 'auto');
             }
 
             if (divPlateau) {
@@ -5452,10 +5460,10 @@
                 plateauGrise.id = 'plateauGrise';
                 plateauGrise.className = 'zoneGrise';
                 $('#plateau').prepend(plateauGrise);
-                $('#plateau').css('pointer-events', 'none');
+                $('#plateau').css('pointer-evts', 'none');
             } else {
                 $('#plateauGrise').remove();
-                $('#plateau').css('pointer-events', 'auto');
+                $('#plateau').css('pointer-evts', 'auto');
             }
 
             if (divDroite) {
@@ -5463,10 +5471,10 @@
                 divDroiteGrise.id = 'divDroiteGrise';
                 divDroiteGrise.className = 'zoneGrise'
                 $('#divDroite').prepend(divDroiteGrise);
-                $('#divDroite').css('pointer-events', 'none');
+                $('#divDroite').css('pointer-evts', 'none');
             } else {
                 $('#divDroiteGrise').remove();
-                $('#divDroite').css('pointer-events', 'auto');
+                $('#divDroite').css('pointer-evts', 'auto');
             }
         }
 
@@ -5565,7 +5573,7 @@
             } else {
                 tableauPasserTour[numeroJoueurActif] = false;
                 $('#buttonPasserTour').prop('disabled', true);
-                $('#divMain').css('pointer-events', 'none');
+                $('#divMain').css('pointer-evts', 'none');
 
                 //Change le facteur de rotation selon le nombre de joueur.
                 if (nombreJoueur === 4) {
@@ -5645,7 +5653,7 @@
                 //Rend le bouton passer tour inactif lorsqu'on clique dessus pour éviter de "spam" le bouton.
                 setTimeout(function () {
                     $('#buttonPasserTour').prop('disabled', false);
-                    $('#divMain').css('pointer-events', 'auto');
+                    $('#divMain').css('pointer-evts', 'auto');
                 }, 2000);
                 if (tour != 1) {
                     remplirMain();
@@ -6009,14 +6017,14 @@
             }
             $(function () {
                 $('.imageCarteMains').draggable({
-                    start: function () {
+                    start: function (evt) {
                         $(this).animate({
                             height: 90,
                             width: 58
                         }, { duration: 400, queue: false }
                         );
                         var id;
-                        id = event.target.parentNode.id.substr(event.target.id.length - 1);
+                        id = evt.target.parentNode.id.substr(evt.target.id.length - 1);
 
                         //Les if qui vont envoyer l'objet carte dans la variable.
                         carteDrag = mains[numeroJoueurActif][id];
@@ -6107,49 +6115,21 @@
 
         //Fonction qui va retirer toutes les cartes déchets.
         function retirerDechets() {
-            for (var i = 0; i < 10; i++) {
-                if (cartePerturbation[0][i] != null) {
-                    if (cartePerturbation[0][i].nom === nomEnum.dechets) {
-                        cartePerturbation[0][i] = null;
-                        carteBas[0][i].perturber = false;
-                        carteBas[0][i].tempsPerturber = 0;
-                        $('#emplacementJoueur' + lettreJoueur(0) + i).children().last().remove();
-                        $('#emplacementJoueur' + lettreJoueur(0) + i).removeclass('ui-perturber-highlight');
-                    }
-                }
-
-                if (cartePerturbation[1][i] != null) {
-                    if (cartePerturbation[1][i].nom === nomEnum.dechets) {
-                        cartePerturbation[1][i] = null;
-                        carteBas[1][i].perturber = false;
-                        carteBas[1][i].tempsPerturber = 0;
-                        $('#emplacementJoueur' + lettreJoueur(1) + i).children().last().remove();
-                        $('#emplacementJoueur' + lettreJoueur(1) + i).removeclass('ui-perturber-highlight');
-                    }
-                }
-
-                if (nombreJoueur > 2) {
-                    if (cartePerturbation[2][i] != null) {
-                        if (cartePerturbation[2][i].nom === nomEnum.dechets) {
-                            cartePerturbation[2][i] = null;
-                            carteBas[2][i].perturber = false;
-                            carteBas[2][i].tempsPerturber = 0;
-                            $('#emplacementJoueur' + lettreJoueur(2) + i).children().last().remove();
-                            $('#emplacementJoueur' + lettreJoueur(2) + i).removeclass('ui-perturber-highlight');
+            for (var i = 0; i < nombreJoueur; i++) {
+                console.log('penis1');
+                for (var j = 0; j < carteBas[i].length; j++) {
+                    console.log('penis2');
+                    if (cartePerturbation[i][j] != null) {
+                        console.log('penis3');
+                        if (cartePerturbation[i][j].nom === nomEnum.dechets) {
+                            console.log('penis4');
+                            cartePerturbation[i][j] = null;
+                            carteBas[i][j].perturber = false;
+                            carteBas[i][j].tempsPerturber = 0;
+                            $('#emplacementJoueur' + lettreJoueur(i) + j).children().last().remove();
+                            $('#emplacementJoueur' + lettreJoueur(i) + j).removeClass('ui-perturber-highlight');
                         }
-                    }
-                }
-
-                if (nombreJoueur > 3) {
-                    if (cartePerturbation[3][i] != null) {
-                        if (cartePerturbation[3][i].nom === nomEnum.dechets) {
-                            cartePerturbation[3][i] = null;
-                            carteBas[3][i].perturber = false;
-                            carteBas[3][i].tempsPerturber = 0;
-                            $('#emplacementJoueur' + lettreJoueur(3) + i).children().last().remove();
-                            $('#emplacementJoueur' + lettreJoueur(3) + i).removeclass('ui-perturber-highlight');
-                        }
-                    }
+                    }                   
                 }
             }
         }
@@ -6185,7 +6165,7 @@
             }
             $(function () {
                 $('.imageCarteJeu').on({
-                    click: function (event, ui) {
+                    click: function (evt, ui) {
                         onClickImage($(this).parent().attr("id"), ui);
                     }
                 })
