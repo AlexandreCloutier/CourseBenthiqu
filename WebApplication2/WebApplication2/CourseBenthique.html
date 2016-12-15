@@ -10,9 +10,7 @@
     <script src="scripts/jquery-ui.min.js"></script>
     <script src="scripts/FileSaver.min.js"></script>
     <script>
-        //TODO: ui perturber a remettre?
         //TODO: popup au debut de deverssement
-        //TODO: Charger sur firfox marche pas
         //TODO: Afficher les noms des joueurs
         /* ------------------enum---------------------  */
         var typeEnum = {
@@ -430,10 +428,10 @@
             }
             $('#menuPrincipal').append(divCredits);
 
-            var buttonChargerPartie = document.createElement('button');
+            var buttonChargerPartie = document.createElement('div');
             buttonChargerPartie.id = 'buttonChargerPartie';
             buttonChargerPartie.className = 'buttonMenuPrincipal';
-            buttonChargerPartie.innerHTML = 'Charger une partie';
+            buttonChargerPartie.innerHTML = '<p class="buttonCharger">Charger une partie</p>';
             buttonChargerPartie.style.bottom = '95px';
             $('#menuPrincipal').append(buttonChargerPartie);
 
@@ -442,10 +440,11 @@
             fileReader.id = 'fileReader';
             fileReader.className = 'fileReader';
             fileReader.accept = '.jcb';
-            fileReader.onchange = function () {
+            $(fileReader).attr('title', ' ');
+            fileReader.addEventListener("change", function () {
                 chargerPartie(fileReader.files);
-            }
-            buttonChargerPartie.appendChild(fileReader);
+            });
+            $('#buttonChargerPartie').append(fileReader);
 
             var buttonCredits = document.createElement('button');
             buttonCredits.id = 'buttonCredits';
@@ -802,6 +801,8 @@
             var tempsDeversementJson;
             var numeroJoueurDeversementJson;
             var pointsRessourcesUtiliserJson;
+            var habitatEroderJson;
+            var bandeRiveraineEroderJson = '[';
 
             //Sauvegarde le paquet de cartes principales.
             paquetCarte.forEach(function (item, index) {
@@ -1025,6 +1026,20 @@
             //Sauvegarde les points-ressources restant du joueur actif.
             pointsRessourcesUtiliserJson = pointsRessourcesUtiliser[numeroJoueurActif];
 
+            //Sauvegarde l'habitat érodé
+            if (habitatEroder != null) {
+                habitatEroderJson += '{ "type":"' + habitatEroder.type + '" , "nom":"' + habitatEroder.nom + '" , "nomImage":"' + habitatEroder.nomImage + '" , "coutRessources":' + habitatEroder.coutRessources + '" , "habitats":"' + habitatEroder.habitats + '" , "perturber":' + habitatEroder.perturber + ' , "tempsPerturber":' + habitatEroder.tempsPerturber + ' }';
+            } else {
+                habitatEroderJson += null;
+            }
+
+            //Sauvegarde la bandeRiveraine érodée
+            if (bandeRiveraineEroder[0] != null) {
+                bandeRiveraineEroderJson += '{ "type":"' + bandeRiveraineEroder[0].type + '" , "nom":"' + bandeRiveraineEroder[0].nom + '" , "nomImage":"' + bandeRiveraineEroder[0].nomImage + '" , "coutRessources":' + bandeRiveraineEroder[0].coutRessources + ' , "perturber":' + bandeRiveraineEroder[0].perturber + ' , "tempsPerturber":' + bandeRiveraineEroder[0].tempsPerturber + ' } , ' + bandeRiveraineEroder[1] + ' ]';
+            } else {
+                bandeRiveraineEroderJson += null + ', ' + null + ' ]';
+            }
+
             //Créer un grand fichier texte dans le format Json
             var json = '{ "paquetCarte":' + paquetCarteJson + ',' +
                 '"paquetDecharge":' + paquetDechargeJson + ',' +
@@ -1044,7 +1059,9 @@
                 '"deversement":' + deversementJson + ',' +
                 '"tempsDeversement":' + tempsDeversementJson + ',' +
                 '"numeroJoueurDeversement":' + numeroJoueurDeversementJson + ',' +
-                '"pointsRessourcesUtiliser":' + pointsRessourcesUtiliserJson + '}';
+                '"pointsRessourcesUtiliser":' + pointsRessourcesUtiliserJson + ',' +
+                '"habitatEroder":' + habitatEroderJson + ',' +
+                '"bandeRiveraineEroder":' + bandeRiveraineEroderJson + '}';
 
             //Enregistre le fichier.
             var blob = new Blob([json], { type: "text/plain;charset=utf-8" });
@@ -1063,7 +1080,7 @@
 
                     //Reinstancie les variables.
                     nomJoueur = [];
-                    difficulte = json.difficulte;
+                    difficulte = '"' + json.difficulte + '"';
                     nombreJoueur = json.nombreJoueur;
                     numeroJoueurActif = json.numeroJoueurActif;
                     tour = json.tour;
@@ -1071,7 +1088,20 @@
                     deversement = json.deversement;
                     tempsDeversement = json.tempsDeversement;
                     numeroJoueurDeversement = json.numeroJoueurDeversement;
+                    habitatEroder = json.habitatEroder;
+
                     paquetCarte = [];
+                    mangerPredateur = false;
+                    verifier = false;
+                    nombrePolluer = 0;
+                    predation = false;
+                    salmonide = [nombreJoueur];
+                    tourSalmonide = [nombreJoueur];
+                    aucuneCarte = false;
+                    naturalisation = false;
+                    calculer = false;
+                    mangerSalmonide = false;
+                    nombreMangerSalmonide = 0;
                     instancierTableaux();
 
                     //Recrée la paquet de jeu.
@@ -1132,6 +1162,10 @@
                             paquetIntervention[index] = null;
                         }
                     });
+
+                    //Recrée la Bande Riveraine érodée
+                    bandeRiveraineEroder[0] = new Carte(json.bandeRiveraineEroder[0].type, json.bandeRiveraineEroder[0].nom, json.bandeRiveraineEroder[0].nomImage, json.bandeRiveraineEroder[0].coutRessources, { perturber: json.bandeRiveraineEroder[0].perturber, tempsPerturber: json.bandeRiveraineEroder[0].tempsPerturber });
+                    bandeRiveraineEroder[1] = json.bandeRiveraineEroder[1];
 
                     //Recrée le nom des joueurs.
                     json.nomJoueur.forEach(function (item, index) {
@@ -2628,6 +2662,7 @@
                                                                 carteHabitat.className = 'imageCarteJeu';
                                                                 carteHabitat.src = 'ressources/' + habitatEroder.nomImage;
                                                                 $('#emplacementJoueur' + lettreJoueur(i) + j).append(carteHabitat);
+                                                                habitatEroder = null;
 
                                                                 $(function () {
                                                                     $(carteHabitat).on({
@@ -2648,6 +2683,10 @@
                                                 carte.className = 'imageCarteJeu';
                                                 carte.src = 'ressources/' + bandeRiveraineEroder[0].nomImage;
                                                 $(posLibre).append(carte);
+
+                                                bandeRiveraineEroder[0] = null;
+                                                bandeRiveraineEroder[1] = null;
+
                                                 $(function () {
                                                     $(carte).on({
                                                         click: function (evt, ui) {
@@ -6002,7 +6041,7 @@
                     $(image).tooltip({
                         items: 'img',
                         content: cloneImage,
-                        position: { my: "right" },
+                        position: { my: "right", at:"left" },
                         show: { delay: 1000 }
                     });
                 }
@@ -6072,7 +6111,7 @@
 
         //Fonction qui update les points-ressources après avoir jouer une carte.
         function updatePointsRessources() {
-            $('.divTextePointsRessource').html('<p class=titreRessource>points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>points-ressources totaux&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
+            $('.divTextePointsRessource').html('<p class=titreRessource>Points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources totaux&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>');
         }
 
         //Fonction qui calcule les points de chaque joueurs.
