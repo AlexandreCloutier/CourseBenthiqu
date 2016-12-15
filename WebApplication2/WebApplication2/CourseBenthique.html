@@ -1854,7 +1854,6 @@
             var divTexteDifficulte = document.createElement('div');
             divTexteDifficulte.id = 'divTextePointsRessource';
             divTexteDifficulte.className = 'divNomJoueurs';
-            console.log(difficulte);
             divTexteDifficulte.innerHTML = 'Difficulté : ' + retourDifficulte();
             document.getElementById('divDroite').appendChild(divTexteDifficulte);
 
@@ -2287,9 +2286,7 @@
             var lettreActif = lettreJoueur(numero);
             for (var i = 0; i < 10; i++) {
                 if (carteBas[numero][i] != null) {
-                    console.log('1');
                     if (carteBas[numero][i].nom === nomCarte) {
-                        console.log('2');
                         return ('#emplacementJoueur' + lettreActif + i);
                     }
                 }
@@ -2759,7 +2756,6 @@
                                 if (paquetIntervention.filter(
                                     function (value) {
                                         if (value.nom === nomEnum.amenageFosse || value.nom === nomEnum.amenageGalets || value.nom === nomEnum.amenageGravier || value.nom === nomEnum.amenageRapides || value.nom === nomEnum.amenageSable) {
-                                    console.log(value);
                                     return value;
 
                                 }
@@ -3846,7 +3842,6 @@
                             if (carteBas[numeroJoueurActif][i].tempsPerturber === 0) {//si le temps est écoulé.
                                 carteBas[numeroJoueurActif][i].perturber = false;//Déperturbe.
                                 if (cartePerturbation[numeroJoueurActif][i] != null) {
-                                    console.log('debutTourDePerturber');
                                     //Retire la carte dans le tableau de perturbation et sur le plateau.
                                     retirerCartePerturbation(numeroJoueurActif, i);
                                 }
@@ -3894,7 +3889,6 @@
         function retirerCartePerturbation(numeroActif, positionCarte) {
             var lettreActif = lettreJoueur(numeroActif);
             paquetDecharge.push(cartePerturbation[numeroActif][positionCarte]);//Envoie la carte à la décharge.
-            console.log('retirerCartePerturbation');
             reempillerCartePasPerturber(numeroActif, positionCarte);
             cartePerturbation[numeroActif][positionCarte] = null;//Rend la position où était la carte pertubation à null.
             exemplaireCarteBas[numeroActif][positionCarte]--;
@@ -6143,13 +6137,9 @@
         //Fonction qui va retirer toutes les cartes déchets.
         function retirerDechets() {
             for (var i = 0; i < nombreJoueur; i++) {
-                console.log('penis1');
                 for (var j = 0; j < carteBas[i].length; j++) {
-                    console.log('penis2');
                     if (cartePerturbation[i][j] != null) {
-                        console.log('penis3');
                         if (cartePerturbation[i][j].nom === nomEnum.dechets) {
-                            console.log('penis4');
                             cartePerturbation[i][j] = null;
                             carteBas[i][j].perturber = false;
                             carteBas[i][j].tempsPerturber = 0;

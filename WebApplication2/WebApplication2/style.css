@@ -389,6 +389,11 @@ input::-webkit-inner-spin-button {
     margin: 2px;
 }
 
+.ui-selectee:hover {
+    cursor: pointer;
+    cursor: hand;
+}
+
 .imageRegle {
     width: 1100px;
     height: 786px;
@@ -527,8 +532,8 @@ input::-webkit-inner-spin-button {
     display: none;
 }
 
-.divFin{
-    display:none;
+.divFin {
+    display: none;
 }
 
 .imageTooltip {
