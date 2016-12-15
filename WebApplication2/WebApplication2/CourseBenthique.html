@@ -1843,6 +1843,21 @@
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
+            //Div du nom du joueur en cour
+            var divTexteJoueurEnCour = document.createElement('div');
+            divTexteJoueurEnCour.id = 'divTextePointsRessource';
+            divTexteJoueurEnCour.className = 'divNomJoueurs';
+            divTexteJoueurEnCour.innerHTML = 'Tour de : ' + nomJoueur[numeroJoueurActif];
+            document.getElementById('divDroite').appendChild(divTexteJoueurEnCour);
+
+            //Div de la difficulté en cour.
+            var divTexteDifficulte = document.createElement('div');
+            divTexteDifficulte.id = 'divTextePointsRessource';
+            divTexteDifficulte.className = 'divNomJoueurs';
+            console.log(difficulte);
+            divTexteDifficulte.innerHTML = 'Difficulté : ' + retourDifficulte();
+            document.getElementById('divDroite').appendChild(divTexteDifficulte);
+
             //Bouton du tableau des cartes
             var buttonTableauCarte = document.createElement('button');
             buttonTableauCarte.id = 'buttonTableauCarte';
@@ -1874,6 +1889,17 @@
             buttonOption.textContent = 'Options';
             buttonOption.setAttribute('onclick', 'ouvrirOptionsEnJeu()');
             document.getElementById('divDroite').appendChild(buttonOption);
+        }
+
+        //Fonction qui retourne la difficulte sous forme de texte.
+        function retourDifficulte() {
+            if (difficulte === '1') {
+                return 'Facile';
+            } else if (difficulte === '2') {
+                return 'Moyen';
+            } else if (difficulte === '3') {
+                return 'Difficile';
+            }
         }
 
         //Fonction qui sera appelée lors du clique sur une image.
@@ -2334,6 +2360,7 @@
                                     numeroJoueurDeversement = numeroJoueurActif;
                                     ui.draggable.remove();
                                     updateAffichageImage();
+                                    popUpConfirmation('Un déversement aura lieu à la fin de votre prochain tour.');
                                 } else {//Code pour le pop-up qui demande si un joueur désire utiliser sa carte pris sur le fait.
                                     $('#divChoixContenu').children().remove('ul');
                                     $('#labelChoix').text('Est-ce qu\'il y a un joueur qui désire utiliser sa carte «Pris sur le fait!» pour annuler la carte «' + premiereLettreMaj(carteDrag.nom) + '»?');
@@ -5014,7 +5041,7 @@
         function ajoutCarte(numeroTour) {
             var carte;
 
-            if (numeroTour === 4 && difficulte === 1) {
+            if (numeroTour === 4 && difficulte === '1') {
                 //---------------------------------salmonide---------------------------------
 
                 carte = new Carte(typeEnum.salmonide, nomEnum.ombleFontaine, 'ombleFontaine.png', 10, { tolerance: 4, condition: [nomEnum.fosse, nomEnum.rapides, nomEnum.gravier, nomEnum.galets], predateur: 2 });
