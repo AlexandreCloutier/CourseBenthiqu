@@ -1855,13 +1855,6 @@
             }
             document.getElementById('divDroite').appendChild(divNomJoueurs);
 
-            //Div points-ressources.
-            var divTextePointsRessource = document.createElement('div');
-            divTextePointsRessource.id = 'divTextePointsRessource';
-            divTextePointsRessource.className = 'divTextePointsRessource';
-            divTextePointsRessource.innerHTML = '<p class=titreRessource>Points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources totaux&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
-            document.getElementById('divDroite').appendChild(divTextePointsRessource);
-
             //Div des points de joueurs.
             var divTextePointsJoueurs = document.createElement('div');
             divTextePointsJoueurs.id = 'divTextePointsJoueurs';
@@ -1877,21 +1870,28 @@
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
-            //Div du nom du joueur en cour
+            //Div points-ressources.
+            var divTextePointsRessource = document.createElement('div');
+            divTextePointsRessource.id = 'divTextePointsRessource';
+            divTextePointsRessource.className = 'divTextePointsRessource';
+            divTextePointsRessource.innerHTML = '<p class=titreRessource>Points-ressources de base&nbsp;: ' + pointsRessourcesBase[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources additionnels&nbsp;: ' + pointsRessourcesSuplementaire[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources totaux&nbsp;: ' + pointsRessourcesTotal[numeroJoueurActif] + '</p><p class=titreRessource>Points-ressources utilisés&nbsp;: ' + pointsRessourcesUtiliser[numeroJoueurActif] + '</p><p class=titreRessource><strong>Points-ressources restants&nbsp;: ' + pointsRessourcesRestant[numeroJoueurActif] + '</strong></p>';
+            document.getElementById('divDroite').appendChild(divTextePointsRessource);
+
+            //Div du nom du joueur en cours.
             var divTexteJoueurEnCour = document.createElement('div');
-            divTexteJoueurEnCour.id = 'divTextePointsRessource';
-            divTexteJoueurEnCour.className = 'divNomJoueurs';
-            divTexteJoueurEnCour.innerHTML = 'Tour de : ' + nomJoueur[numeroJoueurActif];
+            divTexteJoueurEnCour.id = 'divJoueurEnCours';
+            divTexteJoueurEnCour.className = 'divJoueurEnCours';
+            divTexteJoueurEnCour.innerHTML = 'Tour de : <strong>' + nomJoueur[numeroJoueurActif] + '</strong>';
             document.getElementById('divDroite').appendChild(divTexteJoueurEnCour);
 
-            //Div de la difficulté en cour.
+            //Div de la difficulté en cours.
             var divTexteDifficulte = document.createElement('div');
-            divTexteDifficulte.id = 'divTextePointsRessource';
-            divTexteDifficulte.className = 'divNomJoueurs';
-            divTexteDifficulte.innerHTML = 'Difficulté : ' + retourDifficulte();
+            divTexteDifficulte.id = 'divDifficultePartie';
+            divTexteDifficulte.className = 'divDifficultePartie';
+            divTexteDifficulte.innerHTML = 'Difficulté de la partie : <strong>' + retourDifficulte() + '</strong>';
             document.getElementById('divDroite').appendChild(divTexteDifficulte);
 
-            //Bouton du tableau des cartes
+            //Bouton du tableau des cartes.
             var buttonTableauCarte = document.createElement('button');
             buttonTableauCarte.id = 'buttonTableauCarte';
             buttonTableauCarte.className = 'buttonJeu';
@@ -5509,10 +5509,10 @@
                 divMainGrise.id = 'divMainGrise';
                 divMainGrise.className = 'zoneGrise';
                 $('#divMain').prepend(divMainGrise);
-                $('#divMain').css('pointer-evts', 'none');
+                $('#divMain').css('pointer-events', 'none');
             } else {
                 $('#divMainGrise').remove();
-                $('#divMain').css('pointer-evts', 'auto');
+                $('#divMain').css('pointer-events', 'auto');
             }
 
             if (divPlateau) {
@@ -5520,10 +5520,10 @@
                 plateauGrise.id = 'plateauGrise';
                 plateauGrise.className = 'zoneGrise';
                 $('#plateau').prepend(plateauGrise);
-                $('#plateau').css('pointer-evts', 'none');
+                $('#plateau').css('pointer-events', 'none');
             } else {
                 $('#plateauGrise').remove();
-                $('#plateau').css('pointer-evts', 'auto');
+                $('#plateau').css('pointer-events', 'auto');
             }
 
             if (divDroite) {
@@ -5531,10 +5531,10 @@
                 divDroiteGrise.id = 'divDroiteGrise';
                 divDroiteGrise.className = 'zoneGrise'
                 $('#divDroite').prepend(divDroiteGrise);
-                $('#divDroite').css('pointer-evts', 'none');
+                $('#divDroite').css('pointer-events', 'none');
             } else {
                 $('#divDroiteGrise').remove();
-                $('#divDroite').css('pointer-evts', 'auto');
+                $('#divDroite').css('pointer-events', 'auto');
             }
         }
 
@@ -5633,7 +5633,7 @@
             } else {
                 tableauPasserTour[numeroJoueurActif] = false;
                 $('#buttonPasserTour').prop('disabled', true);
-                $('#divMain').css('pointer-evts', 'none');
+                $('#divMain').css('pointer-events', 'none');
 
                 //Change le facteur de rotation selon le nombre de joueur.
                 if (nombreJoueur === 4) {
@@ -5713,7 +5713,7 @@
                 //Rend le bouton passer tour inactif lorsqu'on clique dessus pour éviter de "spam" le bouton.
                 setTimeout(function () {
                     $('#buttonPasserTour').prop('disabled', false);
-                    $('#divMain').css('pointer-evts', 'auto');
+                    $('#divMain').css('pointer-events', 'auto');
                 }, 2000);
                 if (tour != 1) {
                     remplirMain();
@@ -5722,6 +5722,7 @@
                 setTimeout(function () {
                     updateAffichageImage();
                 }, 500);
+                $('#divJoueurEnCours').html('Tour de : <strong>' + nomJoueur[numeroJoueurActif] + '</strong>');
 
                 popUpDebutTour(numeroJoueurActif);
                 debutTourDeperturber();

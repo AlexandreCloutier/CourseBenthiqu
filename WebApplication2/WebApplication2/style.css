@@ -616,6 +616,7 @@ input::-webkit-inner-spin-button {
     list-style: none;
     display: inline;
     margin-left: 25px;
+    margin-bottom: 4px;
     float: left;
 }
 
@@ -628,7 +629,7 @@ input::-webkit-inner-spin-button {
     width: 278px;
     min-height: 75px;
     position: relative;
-    top: 15px;
+    top: 20px;
     left: 4%;
 }
 
@@ -651,12 +652,35 @@ input::-webkit-inner-spin-button {
     margin: 5px;
     padding: 2px;
     position: relative;
-    top: 15px;
+    top: 25px;
     left: 4%;
 }
 
 .titreRessource {
     margin: 10px;
+}
+
+/*****Zone Joueur en cours ****/
+.divJoueurEnCours {
+    border: 2px solid black;
+    width: 280px;
+    height: 18px;
+    margin: 5px;
+    padding: 2px;
+    position: relative;
+    top: 25px;
+    left: 4%;
+}
+
+.divDifficultePartie {
+    border: 2px solid black;
+    width: 280px;
+    height: 18px;
+    margin: 5px;
+    padding: 2px;
+    position: relative;
+    top: 25px;
+    left: 4%;
 }
 
 /*****Les boutons*****/
