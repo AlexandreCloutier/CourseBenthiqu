@@ -2688,7 +2688,7 @@
             if (habitatEroder != null) {
                 habitatEroderJson += '{ "type":"' + habitatEroder.type + '" , "nom":"' + habitatEroder.nom + '" , "nomImage":"' + habitatEroder.nomImage + '" , "coutRessources":' + habitatEroder.coutRessources + '" , "habitats":"' + habitatEroder.habitats + '" , "perturber":' + habitatEroder.perturber + ' , "tempsPerturber":' + habitatEroder.tempsPerturber + ' }';
             } else {
-                habitatEroderJson += null;
+                habitatEroderJson = null;
             }
 
             //Sauvegarde la bandeRiveraine érodée
@@ -2738,7 +2738,7 @@
 
                     //Reinstancie les variables.
                     nomJoueur = [];
-                    difficulte = '"' + json.difficulte + '"';
+                    difficulte = json.difficulte;
                     nombreJoueur = json.nombreJoueur;
                     numeroJoueurActif = json.numeroJoueurActif;
                     tour = json.tour;
@@ -2747,7 +2747,7 @@
                     tempsDeversement = json.tempsDeversement;
                     numeroJoueurDeversement = json.numeroJoueurDeversement;
                     habitatEroder = json.habitatEroder;
-
+                    bandeRiveraineEroder = [];
                     paquetCarte = [];
                     mangerPredateur = false;
                     verifier = false;
@@ -2822,8 +2822,13 @@
                     });
 
                     //Recrée la Bande Riveraine érodée
-                    bandeRiveraineEroder[0] = new Carte(json.bandeRiveraineEroder[0].type, json.bandeRiveraineEroder[0].nom, json.bandeRiveraineEroder[0].nomImage, json.bandeRiveraineEroder[0].coutRessources, { perturber: json.bandeRiveraineEroder[0].perturber, tempsPerturber: json.bandeRiveraineEroder[0].tempsPerturber });
-                    bandeRiveraineEroder[1] = json.bandeRiveraineEroder[1];
+                    if (json.bandeRiveraineEroder[0] != null) {
+                        bandeRiveraineEroder[0] = new Carte(json.bandeRiveraineEroder[0].type, json.bandeRiveraineEroder[0].nom, json.bandeRiveraineEroder[0].nomImage, json.bandeRiveraineEroder[0].coutRessources, { perturber: json.bandeRiveraineEroder[0].perturber, tempsPerturber: json.bandeRiveraineEroder[0].tempsPerturber });
+                        bandeRiveraineEroder[1] = json.bandeRiveraineEroder[1];
+                    } else {
+                        bandeRiveraineEroder[0] = null;
+                        bandeRiveraineEroder[1] = null;
+                    }
 
                     //Recrée le nom des joueurs.
                     json.nomJoueur.forEach(function (item, index) {
@@ -3007,6 +3012,7 @@
                 }
                 catch (e) {//Si une erreur s'est produit.
                     alert('Une erreur est survenue lors de la lecture de la sauvegarde. Veuillez réessayer ou charger une sauvegarde différente.');
+                    console.log(e);
                 }
             };
         }

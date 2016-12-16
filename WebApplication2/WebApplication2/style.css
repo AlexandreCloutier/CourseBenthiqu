@@ -37,10 +37,16 @@ body {
     margin: auto;
 }
 
+.labelTexteNombreJoueur {
+    font-size: 20px;
+}
+
 .divContreVJ {
     width: 35%;
     margin: auto;
     padding: 5px;
+    position:relative;
+    top:200px;
 }
 
 .divJoueurs {
@@ -59,6 +65,7 @@ body {
 .labelJoueur {
     margin: 5px;
     padding: 5px;
+    font-size: 20px;
 }
 
 .textBoxJoueur {
@@ -80,11 +87,20 @@ input::-webkit-inner-spin-button {
     margin: auto;
     width: 35%;
     padding: 5px;
+    position:relative;
+    top:210px;
 }
 
 .labelTexteDifficulte {
     font-size: medium;
     padding: 5px;
+    font-size: 20px;
+}
+
+.labelErreur {
+    position: absolute;
+    top: 500px;
+    left: 41%;
 }
 
 /*  --------------Menu Principal ------------*/
@@ -604,6 +620,7 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 15px;
     left: 4%;
+    color: white;
 }
 
 .titreEquipe {
@@ -634,6 +651,7 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 20px;
     left: 4%;
+    color: white;
 }
 
 .titrePoint {
@@ -657,6 +675,7 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 25px;
     left: 4%;
+    color: white;
 }
 
 .titreRessource {
@@ -673,6 +692,7 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 25px;
     left: 4%;
+    color: white;
 }
 
 .divDifficultePartie {
@@ -684,6 +704,7 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 25px;
     left: 4%;
+    color: white;
 }
 
 /*****Les boutons*****/
