@@ -154,6 +154,7 @@
     <Content Include="ressources\instructionPage1.png" />
     <Content Include="ressources\interdiction.png" />
     <Content Include="ressources\logo.png" />
+    <Content Include="ressources\logo_g3e.png" />
     <Content Include="ressources\moyenPaquet.png" />
     <Content Include="ressources\naturalisation.png" />
     <Content Include="ressources\nepidae.png" />

@@ -560,6 +560,7 @@
             if (verifierConditionCreationPartie() === '') {
                 $('#menuCreerPartie').remove();
                 startGame();//Commence la partie.
+                popUpRegle();//Règles ouvre avant le début de la partie.
             } else {
                 $('#labelErreur').css('color', 'red');
                 $('#labelErreur').html('<p></p>' + verifierConditionCreationPartie());
@@ -3067,6 +3068,7 @@
                     popUpErreur('Veuillez entrer un nom de fichier avant de sauvegarder.');
                 } else {
                     sauvegarderPartie(textBoxSauvegarder.value);
+                    $(divOptions).dialog('close');
                 }
             });
             buttonSauvegarder.textContent = 'Sauvegarder';
