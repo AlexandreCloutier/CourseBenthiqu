@@ -1,4 +1,20 @@
-﻿window.onload = menuPrincipal;
+﻿<!DOCTYPE html>
+<!-- CourseBenthique.html -->
+<!-- Par Samuel Brien et Alexandre Cloutier -->
+<!-- Le 10 septembre 2016 -->
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="scripts/jquery-ui.min.css">
+</head>
+<body onload="menuPrincipal()">
+    <script src="scripts/jquery-3.1.1.min.js"></script>
+    <script src="scripts/jquery-ui.min.js"></script>
+    <script src="scripts/FileSaver.min.js"></script>
+    <script>
+        //TODO: popup au debut de deverssement
+        //TODO: Afficher les noms des joueurs
         /* ------------------enum---------------------  */
         var typeEnum = {
             'habitats': 'habitats',
@@ -2229,17 +2245,13 @@
             divNomJoueurs.className = 'divNomJoueurs';
 
             if (nombreJoueur === 4) {//Selon le nombre de joueur, écrit les noms.
-                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p>
-<ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + nomJoueur[2] + '</li><li class=listeEquipe>Équipe D&nbsp;: ' + nomJoueur[3] + '</li></ul>';
+                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + nomJoueur[2] + '</li><li class=listeEquipe>Équipe D&nbsp;: ' + nomJoueur[3] + '</li></ul>';
             } else if (nombreJoueur === 3) {
-                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p>
-<ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + nomJoueur[2] + '</li></ul>';
+                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + nomJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + nomJoueur[2] + '</li></ul>';
             } else if (nombreJoueur === 2) {
-                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p>
-<ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + nomJoueur[1] + '</li></ul>';
+                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + nomJoueur[1] + '</li></ul>';
             } else if (nombreJoueur === 1) {
-                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p>
-<ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li></ul>';
+                divNomJoueurs.innerHTML = '<p class=titreEquipe><strong>Nom des équipes</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + nomJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divNomJoueurs);
 
@@ -2248,17 +2260,13 @@
             divTextePointsJoueurs.id = 'divTextePointsJoueurs';
             divTextePointsJoueurs.className = 'divTextePointsJoueurs';
             if (nombreJoueur === 4) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p>
-<ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D&nbsp;: ' + pointsJoueur[3] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D&nbsp;: ' + pointsJoueur[3] + '</li></ul>';
             } else if (nombreJoueur === 3) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p>
-<ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + pointsJoueur[2] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + pointsJoueur[2] + '</li></ul>';
             } else if (nombreJoueur === 2) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p>
-<ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li></ul>';
             } else if (nombreJoueur === 1) {
-                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p>
-<ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li></ul>';
+                divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li></ul>';
             }
             document.getElementById('divDroite').appendChild(divTextePointsJoueurs);
 
@@ -2401,17 +2409,21 @@
         //Function qui retournera l'ordre des joueurs
         function placementFinal(){
             var placement = [nombreJoueur];
-            for(var i = 0;i<nombreJoueur;i++){ placement[i]=pointsJoueur[i];
-                                               }
-                                               placement.sort(function(a, b){return a-b});
-                                               return placement;
-                                               }
+            for(var i = 0;i<nombreJoueur;i++){
+                placement[i] = pointsJoueur[i];
+            }
+
+            placement.sort(function(a, b){return a-b});
+
+            return placement;
+        }
 
         //Fonction qui retournera le nom des joueurs en ordre
         function ordreJoueur(){
             var placement = placementFinal();
             var ordreJoueur = [nombreJoueur];
-            for(var i = 0; i<nombreJoueur;i++){ for(var j=0;j<placement.length;j++){
+            for(var i = 0; i<nombreJoueur;i++){
+                for(var j = 0;j<placement.length;j++){
                     if(placement[j] === pointsJoueur[i]){
                         ordreJoueur[i] = nomJoueur[i];
                     }
@@ -6225,3 +6237,6 @@
                 })
             });
         }
+    </script>
+</body>
+</html>
