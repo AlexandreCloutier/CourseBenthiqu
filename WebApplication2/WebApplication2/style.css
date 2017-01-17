@@ -620,7 +620,6 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 15px;
     left: 4%;
-    color: white;
 }
 
 .titreEquipe {
@@ -651,7 +650,6 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 20px;
     left: 4%;
-    color: white;
 }
 
 .titrePoint {
@@ -675,7 +673,6 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 25px;
     left: 4%;
-    color: white;
 }
 
 .titreRessource {
@@ -692,7 +689,6 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 25px;
     left: 4%;
-    color: white;
 }
 
 .divDifficultePartie {
@@ -704,7 +700,6 @@ input::-webkit-inner-spin-button {
     position: relative;
     top: 25px;
     left: 4%;
-    color: white;
 }
 
 /*****Les boutons*****/
