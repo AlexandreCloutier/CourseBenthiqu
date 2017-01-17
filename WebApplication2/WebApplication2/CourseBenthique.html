@@ -217,6 +217,12 @@
             divCredits.innerHTML = "<img class='imageCredits' src='ressources/logo_g3e.png' /><p></p><p><span style='font-size: 20pt;'>Conception du jeu&nbsp;:</span> Jonathan Pedneau</p><p><span style='font-size: 20pt;'>Graphisme&nbsp;:</span> Pierre-Olivier Boucher</p><p><span style='font-size: 20pt;'>Illustrations&nbsp;:</span> Groupe d&rsquo;&eacute;ducation et d&rsquo;&eacute;cosurveillance de l&rsquo;eau</p><p><span style='font-size: 20pt;'>Conception et d&eacute;veloppement du jeu interactif&nbsp;:</span> Samuel Brien et Alexandre Cloutier</p><p><span style='font-size: 20pt;'>Production&nbsp;:</span> Groupe d&rsquo;&eacute;ducation et d&rsquo;&eacute;cosurveillance de l&rsquo;eau (G3E), 2017</p>";
             $('#menuPrincipal').append(divCredits);
 
+            var divTexteEcranAcceuil = document.createElement('div');
+            divTexteEcranAcceuil.id = 'divTexteEcranAcceuil';
+            divTexteEcranAcceuil.className = 'divTexteEcranAcceuil';
+            divTexteEcranAcceuil.innerHTML = 'Un jeu du Groupe d’éducation et d’écosurveillance de l’eau.';
+            $('#menuPrincipal').append(divTexteEcranAcceuil);
+
             //Div Fin
             var divFin = document.createElement('div');
             divFin.id = 'divFin';
@@ -240,7 +246,7 @@
                     divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
                 }
             }
-            $('#menuPrincipal').append(divCredits);
+            $('#menuPrincipal').append(divFin);
 
             var buttonChargerPartie = document.createElement('div');
             buttonChargerPartie.id = 'buttonChargerPartie';

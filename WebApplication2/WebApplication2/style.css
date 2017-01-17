@@ -196,6 +196,14 @@ input::-webkit-inner-spin-button {
     padding: 3px;
 }
 
+.divTexteEcranAcceuil{
+    text-align:center;
+    position:absolute;
+    left:36.5%;
+    bottom:0px;
+    font-family:Arial;
+}
+
 
 
 /*  --------------- Zone centre -------------*/
