@@ -39,6 +39,7 @@ body {
 
 .labelTexteNombreJoueur {
     font-size: 20px;
+    font-family: Arial; 
 }
 
 .divContreVJ {
@@ -58,6 +59,7 @@ body {
 .labelTitreJoueur {
     float: left;
     font-size: medium;
+    font-family: Arial;
     font-weight: 600;
     padding: 5px;
 }
@@ -65,7 +67,8 @@ body {
 .labelJoueur {
     margin: 5px;
     padding: 5px;
-    font-size: 20px;
+    font-family: Arial;
+    font-size: 16px;
 }
 
 .textBoxJoueur {
@@ -93,12 +96,14 @@ input::-webkit-inner-spin-button {
 
 .labelTexteDifficulte {
     font-size: medium;
+    font-family: Arial;
     padding: 5px;
     font-size: 20px;
 }
 
 .labelErreur {
     position: absolute;
+    font-family: Arial;
     top: 500px;
     left: 41%;
 }
@@ -140,6 +145,7 @@ input::-webkit-inner-spin-button {
     /*Code fourni par G3E, même couleur et police que les boutons sur le site dans la zone de la course benthique. */
     /*http://www.bestcssbuttongenerator.com/#/1 */
     font-size: 14px;
+    font-family: Arial;
     /*padding: 7px 10px;*/
     margin: 2px;
     letter-spacing: 0px;
@@ -372,6 +378,7 @@ input::-webkit-inner-spin-button {
     background: #3892ba !important;
     border: 3px white solid !important;
     font-size: 28px !important;
+    font-family: Arial;
 }
 
 .divRegle {
@@ -382,16 +389,19 @@ input::-webkit-inner-spin-button {
 
 .popUpRegle {
     overflow: auto !important;
+    font-family: Arial;
     max-height: 750px;
 }
 
 .popUpChoix {
     overflow: auto !important;
+    font-family: Arial;
     max-height: 750px;
 }
 
 .divTableauCarte {
     width: auto;
+    font-family: Arial;
     height: auto;
     border: 2px solid black;
     display: none;
@@ -408,6 +418,7 @@ input::-webkit-inner-spin-button {
 .listeChoixCarte {
     list-style: none;
     display: inline-block;
+    font-family: Arial;
     float: left;
     margin: 15px;
     table-layout: fixed;
@@ -480,6 +491,10 @@ input::-webkit-inner-spin-button {
 }
 
 /* ----------------Option-------------------------*/
+.divOptions {
+    font-family: Arial;
+}
+
 .divOptions label {
     display: block;
     margin: 15px 0px 0px 0px;
@@ -628,6 +643,7 @@ input::-webkit-inner-spin-button {
 
 .titreEquipe {
     margin: 5px;
+    font-family: Arial;
 }
 
 .listeUlEquipe {
@@ -640,6 +656,7 @@ input::-webkit-inner-spin-button {
     display: inline;
     margin-left: 25px;
     margin-bottom: 4px;
+    font-family: Arial;
     float: left;
 }
 
@@ -681,11 +698,13 @@ input::-webkit-inner-spin-button {
 
 .titreRessource {
     margin: 10px;
+    font-family: Arial;
 }
 
 /*****Zone Joueur en cours ****/
 .divJoueurEnCours {
     border: 2px solid black;
+    font-family: Arial;
     width: 280px;
     height: 18px;
     margin: 5px;
@@ -697,6 +716,7 @@ input::-webkit-inner-spin-button {
 
 .divDifficultePartie {
     border: 2px solid black;
+    font-family: Arial;
     width: 280px;
     height: 18px;
     margin: 5px;
@@ -766,6 +786,7 @@ input::-webkit-inner-spin-button {
     /*Code fourni par G3E, même couleur et police que les boutons sur le site dans la zone de la course benthique. */
     /*http://www.bestcssbuttongenerator.com/#/1 */
     font-size: 14px;
+    font-family: Arial;
     padding: 7px 10px;
     margin: 2px;
     letter-spacing: 0px;
