@@ -27,7 +27,7 @@ body {
     padding: 5px;
     text-align: center;
     background-color: #3892ba !important;
-    width: 100%;
+    width: 99%;
     height: 675px;
 }
 
@@ -115,7 +115,6 @@ input::-webkit-inner-spin-button {
     float: left;
     background-color: /*#004556*/ #3892ba !important;
     width: 99%;
-    height: 675px;
 }
 
 .imageMenuPrincipal {
@@ -188,6 +187,7 @@ input::-webkit-inner-spin-button {
 }
 #buttonChargerPartie {
     width: 247px;
+    height: 48px;
     cursor:pointer;
 }
 

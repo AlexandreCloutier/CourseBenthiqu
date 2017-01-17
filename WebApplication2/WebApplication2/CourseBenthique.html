@@ -207,10 +207,10 @@
             buttonNouvellePartie.className = 'buttonMenuPrincipal';
             buttonNouvellePartie.innerHTML = 'Nouvelle partie';
             buttonNouvellePartie.onclick = lancerOptionPartie;
-            buttonNouvellePartie.style.bottom = '155px';
+            buttonNouvellePartie.style.top = '435px';
             $('#menuPrincipal').append(buttonNouvellePartie);
 
-            //Div Règle
+            //Div Crédits
             var divCredits = document.createElement('div');
             divCredits.id = 'divCredits';
             divCredits.className = 'divCredits';
@@ -246,7 +246,7 @@
             buttonChargerPartie.id = 'buttonChargerPartie';
             buttonChargerPartie.className = 'buttonMenuPrincipal';
             buttonChargerPartie.innerHTML = '<p class="buttonCharger">Charger une partie</p>';
-            buttonChargerPartie.style.bottom = '95px';
+            buttonChargerPartie.style.top = '490px';
             $('#menuPrincipal').append(buttonChargerPartie);
 
             var fileReader = document.createElement('input');
@@ -264,7 +264,7 @@
             buttonCredits.id = 'buttonCredits';
             buttonCredits.className = 'buttonMenuPrincipal';
             buttonCredits.innerHTML = 'Crédits';
-            buttonCredits.style.bottom = '35px';
+            buttonCredits.style.top = '545px';
             buttonCredits.onclick = afficherCredits;
             $('#menuPrincipal').append(buttonCredits);
         }
