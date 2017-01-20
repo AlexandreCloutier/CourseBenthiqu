@@ -740,8 +740,15 @@ input::-webkit-inner-spin-button {
 }
 
 
-#divFin {
 
+@media print {
+   #buttonImprimer {
+      display:none;
+   }
+}
+
+#divFin {
+text-align:center;
 }
 
 #buttonRegle {
