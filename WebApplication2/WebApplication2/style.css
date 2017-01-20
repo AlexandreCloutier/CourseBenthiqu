@@ -325,6 +325,10 @@ input::-webkit-inner-spin-button {
     border-radius: 5px;
     transform: rotate(-90deg);
 }
+#emplacementJoueurA0, #emplacementJoueurA7, #emplacementJoueurA8, #emplacementJoueurB0, #emplacementJoueurB7, #emplacementJoueurB12, #emplacementJoueurC0, #emplacementJoueurC7, #emplacementJoueurC8, #emplacementJoueurD0,#emplacementJoueurD7, #emplacementJoueurD12 {
+    background: rgba(255, 255, 255, .37);
+    border : 2px solid rgba(255,255,255, 0.5);
+}
 
 .zoneGrise {
     opacity: 0.75;
@@ -641,7 +645,7 @@ input::-webkit-inner-spin-button {
     height: auto;
     text-align: center;
     position: relative;
-    top: 15px;
+    top: 0px;
     left: 4%;
 }
 
@@ -673,7 +677,7 @@ input::-webkit-inner-spin-button {
     width: 278px;
     min-height: 75px;
     position: relative;
-    top: 20px;
+    top: 2px;
     left: 4%;
 }
 
@@ -696,7 +700,7 @@ input::-webkit-inner-spin-button {
     margin: 5px;
     padding: 2px;
     position: relative;
-    top: 25px;
+    top: 5px;
     left: 4%;
 }
 
@@ -714,7 +718,7 @@ input::-webkit-inner-spin-button {
     margin: 5px;
     padding: 2px;
     position: relative;
-    top: 25px;
+    top: 4px;
     left: 4%;
 }
 
@@ -726,7 +730,7 @@ input::-webkit-inner-spin-button {
     margin: 5px;
     padding: 2px;
     position: relative;
-    top: 25px;
+    top: 3px;
     left: 4%;
 }
 
