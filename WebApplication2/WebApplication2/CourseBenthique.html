@@ -3791,8 +3791,14 @@
         //Fonction qui va déplacer une carte et droper la perturbation dessus pour pas qu'une carte perturbée soit empilée sur une carte non-perturbée.
         function deplacerCartePerturber(positionCarteDepart, evt, ui) {
             var emplacement = positionCarteDepart.id.substr(positionCarteDepart.id.length - 2);
+            if (!(emplacement.substr(0, 1) === "A" || emplacement.substr(0, 1) === "B" || emplacement.substr(0, 1) === "C" || emplacement.substr(0, 1) === "D")) {
+                emplacement = positionCarteDepart.id.substr(positionCarteDepart.id.length - 3);
+                var numeroPosition = emplacement.substr(1, 3);
+            } else {
+                var numeroPosition = emplacement.substr(1, 2);
+            }
             var numeroJoueurPositionDrop = numeroJoueur(emplacement.substr(0, 1));
-            var numeroPosition = emplacement.substr(1, 2);
+            
 
             $(positionCarteDepart).children().last().remove();
 
@@ -3805,7 +3811,12 @@
 
             $(positionDropable).append(carte);
             var emplacementDropper = positionDropable.substr(positionDropable.length - 2);//2 derniers caractères de l'emplacement ex: A9.
-            var numeroPositionDropper = emplacementDropper.substr(1, 2);
+            if (!(emplacementDropper.substr(0, 1) === "A" || emplacementDropper.substr(0, 1) === "B" || emplacementDropper.substr(0, 1) === "C" || emplacementDropper.substr(0, 1) === "D")) {
+                var numeroPositionDropper = emplacementDropper.substr(1, 3);
+            } else {
+                var numeroPositionDropper = emplacementDropper.substr(1, 2);
+            }
+            
 
             exemplaireCarteJeu[numeroJoueurPositionDrop][numeroPositionDropper] = 1;
             var carteCopie = jQuery.extend(new Carte(), CarteJeu[numeroJoueurPositionDrop][numeroPosition]);
