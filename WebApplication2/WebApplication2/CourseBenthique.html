@@ -107,6 +107,7 @@
             'crustace': 'crustace'
         };
 
+        var fin = false;
         //Tableau contenant l'âge des joueurs.
         var ageJoueur;
         //Tableau contenant les noms des joueurs.
@@ -115,13 +116,13 @@
         var pointsJoueur;
         //Tableau pour savoir si le joueur passe son tour.
         var tableauPasserTour;
-        //Niveau de difficulté de la partie
+        //Niveau de difficulté de la partie.
         var difficulte;
         //Paquet de cartes principales.
         var paquetCarte;
-        //Paquet de cartes de la décharge
+        //Paquet de cartes de la décharge.
         var paquetDecharge;
-        //Paquet de cartes interventions
+        //Paquet de cartes interventions.
         var paquetIntervention;
         /*-----------------------------Partie tableau de données---------------*/
         //Tableau contenant les mains.
@@ -145,7 +146,7 @@
         var numeroJoueurActif;
         //Variable comptant le nombre de tour.
         var tour;
-        //Variable content le nb de clic sur le bouton Passer son tour
+        //Variable content le nb de clic sur le bouton Passer son tour.
         var facteurRotation;
         //Variable de la carte qui sera transférer de la main à la zone du bas, ou ailleurs.
         var carteDrag;
@@ -172,7 +173,7 @@
         var habitatEroder;
         //Variable pour prédation.
         var predation;
-        //Variable pour Naturalisation
+        //Variable pour Naturalisation.
         var naturalisation;
         //Variable qui contient le joueur selectioner par le popUp de choix de joueur.
         var joueurSelectionne;
@@ -222,31 +223,6 @@
             divTexteEcranAccueil.className = 'divTexteEcranAccueil';
             divTexteEcranAccueil.innerHTML = 'Un jeu du Groupe d’éducation et d’écosurveillance de l’eau.';
             $('#menuPrincipal').append(divTexteEcranAccueil);
-
-            //Div Fin
-            var divFin = document.createElement('div');
-            divFin.id = 'divFin';
-            divFin.className = 'divFin';
-            var meilleur = placementFinal();
-            var ordre = ordreJoueur();
-            if (aucuneCarte) {
-                if (nombreJoueur === 2) {
-                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
-                } else if (nombreJoueur === 3) {
-                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
-                } else if (nombreJoueur === 4) {
-                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
-                }
-            } else {
-                if (nombreJoueur === 2) {
-                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
-                } else if (nombreJoueur === 3) {
-                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
-                } else if (nombreJoueur === 4) {
-                    divCredits.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
-                }
-            }
-            $('#menuPrincipal').append(divFin);
 
             var buttonChargerPartie = document.createElement('div');
             buttonChargerPartie.id = 'buttonChargerPartie';
@@ -693,8 +669,8 @@
             bandeRiveraineEroder = [];
 
             //Partie fin salmonide
-            salmonide = [nombreJoueur];
-            tourSalmonide = [nombreJoueur];
+            salmonide = new Array(nombreJoueur);
+            tourSalmonide = new Array(nombreJoueur);
 
             //Partie fin aucune carte
             aucuneCarte = false;
@@ -2420,7 +2396,8 @@
 
         //Function qui retournera l'ordre des joueurs
         function placementFinal() {
-            var placement = [nombreJoueur];
+            var placement = new Array(nombreJoueur);
+
             for (var i = 0; i < nombreJoueur; i++) {
                 placement[i] = pointsJoueur[i];
             }
@@ -2433,7 +2410,8 @@
         //Fonction qui retournera le nom des joueurs en ordre
         function ordreJoueur() {
             var placement = placementFinal();
-            var ordreJoueur = [nombreJoueur];
+            var ordreJoueur = new Array(nombreJoueur);
+
             for (var i = 0; i < nombreJoueur; i++) {
                 for (var j = 0; j < placement.length; j++) {
                     if (placement[j] === pointsJoueur[i]) {
@@ -2765,8 +2743,8 @@
                     verifier = false;
                     nombrePolluer = 0;
                     predation = false;
-                    salmonide = [nombreJoueur];
-                    tourSalmonide = [nombreJoueur];
+                    salmonide = new Array(nombreJoueur);
+                    tourSalmonide = new Array(nombreJoueur);
                     aucuneCarte = false;
                     naturalisation = false;
                     calculer = false;
@@ -3029,7 +3007,7 @@
             };
         }
 
-        //Fonction appelée lors d'un clic sur le bouton Options en jeu
+        //Fonction appelée lors d'un clic sur le bouton Sauvegarder
         function ouvrirSauvegarder() {
             var divSauvegarder = document.createElement('div');
             divSauvegarder.id = 'divSauvegarder';
@@ -3047,18 +3025,13 @@
             divTexteExplication.className = 'divTexteExplication';
             divTexteExplication.innerHTML = '<p>Entrez un nom à votre sauvegarde et cliquez sur Valider.</p>';
             divSauvegarder.appendChild(divTexteExplication);
-            //Sauvegarder
+
             var textBoxSauvegarder = document.createElement('input');
             textBoxSauvegarder.type = 'text';
             textBoxSauvegarder.id = 'textBoxSauvegarder';
             textBoxSauvegarder.className = 'textBoxSauvegarder';
             divSauvegarder.appendChild(textBoxSauvegarder);
 
-            //var labelText = document.createElement('label');
-            //labelText.id = 'labelText';
-            //labelText.className = 'labelText';
-            //labelText.innerHTML = '.jcb';
-            //divSauvegarder.appendChild(labelText);
 
             //Ouverture du popUp.
             $(divSauvegarder).dialog({
@@ -5040,7 +5013,9 @@
             var divCarteAnimee = document.createElement('div');
             divCarteAnimee.id = 'carte' + position;
             divCarteAnimee.className = 'divAnimee';
-            divCarteAnimee.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
+            if (carte != null) {
+                divCarteAnimee.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
+            }
             $('body').append(divCarteAnimee);
 
             var x = $('#' + carteMain).offset().left;
@@ -5518,6 +5493,8 @@
                 carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
             }
+            
+
             return paquetCarte;
         }
 
@@ -5714,46 +5691,50 @@
                     if (tourSalmonide[numeroJoueurActif] === 0) {
                         tourSalmonide[numeroJoueurActif] = 1;
                     } else {
-                        //TODO: afficher fin.
+                        fin = true;
+                        popUpFin();
                     }
                 }
                 if (aucuneCarte) {
-
+                    fin = true;
+                    popUpFin();
                 }
 
-                //Partie qui passe au prochain joueur.
-                numeroJoueurActif++;
-                if (numeroJoueurActif === nombreJoueur) {
-                    numeroJoueurActif = 0;
-                    tour++;
-                    ajoutCarte(tour);
-                }
+                if (!fin) {
 
-                //Rend le bouton passer tour inactif lorsqu'on clique dessus pour éviter de "spam" le bouton.
-                setTimeout(function () {
-                    $('#buttonPasserTour').prop('disabled', false);
-                    $('#divMain').css('pointer-events', 'auto');
-                }, 2000);
-                if (tour != 1) {
-                    remplirMain();
-                }
-                updatePointsRessourcesJeu();
-                setTimeout(function () {
-                    updateAffichageImage();
-                }, 500);
-                $('#divJoueurEnCours').html('Tour de : <strong>' + nomJoueur[numeroJoueurActif] + '</strong>');
+                    //Partie qui passe au prochain joueur.
+                    numeroJoueurActif++;
+                    if (numeroJoueurActif === nombreJoueur) {
+                        numeroJoueurActif = 0;
+                        tour++;
+                        ajoutCarte(tour);
+                    }
 
-                popUpDebutTour(numeroJoueurActif);
-                debutTourDeperturber();
-                if (tableauPasserTour[numeroJoueurActif] === true) {
+                    //Rend le bouton passer tour inactif lorsqu'on clique dessus pour éviter de "spam" le bouton.
                     setTimeout(function () {
-                        passerTour();
-                    }, 1500);
-                    popUpConfirmation('Le joueur ' + premiereLettreMaj(nomJoueur[numeroJoueurActif]) + ' a raté son tour.');
+                        $('#buttonPasserTour').prop('disabled', false);
+                        $('#divMain').css('pointer-events', 'auto');
+                    }, 2000);
+                    if (tour != 1) {
+                        remplirMain();
+                    }
+                    updatePointsRessourcesJeu();
+                    setTimeout(function () {
+                        updateAffichageImage();
+                    }, 500);
+                    $('#divJoueurEnCours').html('Tour de : <strong>' + nomJoueur[numeroJoueurActif] + '</strong>');
+
+                    popUpDebutTour(numeroJoueurActif);
+                    debutTourDeperturber();
+                    if (tableauPasserTour[numeroJoueurActif] === true) {
+                        setTimeout(function () {
+                            passerTour();
+                        }, 1500);
+                        popUpConfirmation('Le joueur ' + premiereLettreMaj(nomJoueur[numeroJoueurActif]) + ' a raté son tour.');
+                    }
+
                 }
-
             }
-
         }
 
         //Fonction qui va regarder si le joueur à droit à des points de ressources additionels.
@@ -5983,20 +5964,31 @@
 
         //Fonction qui affiche un popUp pour la fin
         function popUpFin() {
-            $(divFin).dialog({
-                classes: {
-                    'ui-dialog': 'popUpRegle no-close ui-corner-all',
-                    'ui-dialog-titlebar': 'no-header',
-                    'ui-dialog-buttonset': 'buttonJeu'
-                },
-                draggable: false,
-                resizable: false,
-                modal: true,
-                height: 575,
-                width: 1150,
-                hide: 'fade',
-                show: 'fade'
-            });
+            document.body.innerHTML = "";
+
+            var divFin = document.createElement('div');
+            divFin.id = 'divFin';
+            divFin.className = 'divFin';
+            var meilleur = placementFinal();
+            var ordre = ordreJoueur();
+            if (aucuneCarte) {
+                if (nombreJoueur === 2) {
+                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                } else if (nombreJoueur === 3) {
+                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                } else if (nombreJoueur === 4) {
+                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                }
+            } else {
+                if (nombreJoueur === 2) {
+                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                } else if (nombreJoueur === 3) {
+                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                } else if (nombreJoueur === 4) {
+                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                }
+            }
+            $('body').append(divFin);
         }
 
         //Fonction qui affiche un popup contenant le tableau d'aide des cartes.
