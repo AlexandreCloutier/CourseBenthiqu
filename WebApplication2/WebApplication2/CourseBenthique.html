@@ -1120,7 +1120,15 @@
                                                 }
                                                 //Reajoute la carte bande riveraine
                                                 var posLibre = trouverPositionLibre(bandeRiveraineEroder[1]);
-                                                var numeroPosLibre = posLibre.substr(posLibre.length - 1);
+                                                var substrTemporaire = posLibre.substr(posLibre.length - 2);
+                                                var numeroPosLibre;
+                                                if (substrTemporaire.substr(0, 1) === 'A' || substrTemporaire.substr(0, 1) === 'B' || substrTemporaire.substr(0, 1) === 'C' || substrTemporaire.substr(0, 1) === 'D') {
+                                                    numeroPosLibre = posLibre.substr(posLibre.length - 1);
+                                                } else {
+                                                    numeroPosLibre = substrTemporaire;
+                                                }
+                                                
+                                                
                                                 carteJeu[bandeRiveraineEroder[1]][numeroPosLibre] = bandeRiveraineEroder[0];
                                                 var carte = document.createElement('img');
                                                 carte.className = 'imagecarteJeu';
@@ -2082,7 +2090,13 @@
                                         } else if ($(this).children().length >= 1) {
                                             if (carteDrag.type != typeEnum.perturbation) {
                                                 var id;
-                                                id = evt.target.id.substr(evt.target.id.length - 1);
+                                                var idTemp;
+                                                idTemp = evt.target.id.substr(evt.target.id.length - 2);
+                                                if (idTemp.substr(0, 1) === 'A' || idTemp.substr(0, 1) === 'B' || idTemp.substr(0, 1) === 'C' || idTemp.substr(0, 1) === 'D') {
+                                                    id = evt.target.id.substr(evt.target.id.length - 1);
+                                                } else {
+                                                    id = idTemp;
+                                                }
 
                                                 if (carteDrag.nom === carteJeu[numeroJoueurActif][id].nom) {
                                                     if (!(carteJeu[numeroJoueurActif][id].type === typeEnum.habitats && carteJeu[numeroJoueurActif][id].perturber)) {
@@ -3361,8 +3375,13 @@
         //Fonction qui sera appelée lors du clique sur une image.
         function onClickImage(evt, ui) {
             var emplacement = evt.substr(evt.length - 2);//2 derniers caractères de l'emplacement ex: A9.
+            console.log(emplacement.substr(0, 1));
+            if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
+                emplacement = evt.substr(evt.length - 3);
+            }
             var lettreEmplacement = emplacement.substr(0, 1);//Lettre de l'emplacement ex:A.
-            var numeroEmplacement = emplacement.substr(1, 2);//Chiffre de l'emplacement ex:9.
+            var numeroEmplacement = emplacement.substr(1);//Chiffre de l'emplacement ex:9.
+            console.log(numeroEmplacement);
             var numeroJoueurEnnemi = numeroJoueur(lettreEmplacement);//Numero selon la lettre ex: A = 0.
 
             if (mangerPredateur) {//Si nous sommes en train de manger un macroinvertébré de taille inférieure.
