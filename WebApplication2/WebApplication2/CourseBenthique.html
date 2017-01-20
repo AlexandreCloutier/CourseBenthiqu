@@ -2401,7 +2401,7 @@
                 placement[i] = pointsJoueur[i];
             }
 
-            placement.sort(function (a, b) { return a - b });
+            placement.sort(function (a, b) { return b - a });
 
             return placement;
         }
@@ -2409,17 +2409,46 @@
         //Fonction qui retournera le nom des joueurs en ordre
         function ordreJoueur() {
             var placement = placementFinal();
-            var ordreJoueur = new Array(nombreJoueur);
+            var ordreJoueura = new Array(nombreJoueur);
 
             for (var i = 0; i < nombreJoueur; i++) {
                 for (var j = 0; j < placement.length; j++) {
-                    if (placement[j] === pointsJoueur[i]) {
-                        ordreJoueur[i] = nomJoueur[i];
+                    if (joueurPasPresent(ordreJoueura, nomJoueur[i])) {
+                        if (placement[j] === pointsJoueur[i]) {
+                            if (ordreJoueura[j] == null) {
+                                console.log("entrer le nom " + nomJoueur[i] + " à la position " + j);
+                                ordreJoueura[j] = nomJoueur[i];
+                            }
+                        }
                     }
                 }
             }
 
-            return ordreJoueur;
+            return ordreJoueura;
+        }
+
+        function joueurPasPresent(ordreJoueure, nomJoueur) {
+            var present = true;
+
+            console.log("Nom du joueur " + nomJoueur);
+
+            for (var i = 0; i < ordreJoueure.length; i++) {
+                if (ordreJoueure[i] != null) {
+                    console.log("compteur " + i);
+                    console.log(ordreJoueure[i]);
+                    if (ordreJoueure[i] === nomJoueur) {
+                        present = false;
+                    }
+                }
+            }
+
+            if (present === false) {
+                console.log("false");
+                return false;
+            } else {
+                console.log("true");
+                return true;
+            }
         }
 
         //Function qui affichera les crédits.
@@ -3018,7 +3047,7 @@
             divTitreSauvegarder.className = 'divTitreSauvegarder';
             divTitreSauvegarder.innerHTML = '<p>Sauvegarder</p>';
             divSauvegarder.appendChild(divTitreSauvegarder);
-            
+
             var divTexteExplication = document.createElement('div');
             divTexteExplication.id = 'divTitreExplication';
             divTexteExplication.className = 'divTexteExplication';
@@ -5492,7 +5521,7 @@
                 carte = new Carte(typeEnum.speciale, nomEnum.predation, 'predation.png', 0);
                 paquetCarte.push(carte);
             }
-            
+
 
             return paquetCarte;
         }
@@ -5972,22 +6001,34 @@
             var ordre = ordreJoueur();
             if (aucuneCarte) {
                 if (nombreJoueur === 2) {
-                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                    divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s " + tour + " tours</p>";
                 } else if (nombreJoueur === 3) {
-                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                    divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s " + tour + " tours</p>";
                 } else if (nombreJoueur === 4) {
-                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                    divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s " + tour + " tours</p>";
                 }
             } else {
                 if (nombreJoueur === 2) {
-                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                    divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave; " + tour + " tours</p>";
                 } else if (nombreJoueur === 3) {
-                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                    divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s " + tour + " tours</p>";
                 } else if (nombreJoueur === 4) {
-                    divFin.innerHTML = "<p>Fin de la partie !</p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s XX tours</p>";
+                    divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s " + tour + " tours</p>";
                 }
             }
             $('body').append(divFin);
+
+            var buttonImprimer = document.createElement('button');
+            buttonImprimer.id = "buttonImprimer";
+            buttonImprimer.className = "buttonJeu";
+            buttonImprimer.onclick = imprimerPageFin;
+            buttonImprimer.innerHTML = "Imprimer les résultats";
+            $('#divFin').append(buttonImprimer);
+        }
+
+        //Fonction qui s'occupe d'ouvrir la page d'imprimante pour pouvoir imprimer la page de fin.
+        function imprimerPageFin() {
+            window.print();
         }
 
         //Fonction qui affiche un popup contenant le tableau d'aide des cartes.

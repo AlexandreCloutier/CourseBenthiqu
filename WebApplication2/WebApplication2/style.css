@@ -744,12 +744,15 @@ input::-webkit-inner-spin-button {
 }
 
 
+
+@media print {
+   #buttonImprimer {
+      display:none;
+   }
+}
+
 #divFin {
-    position: absolute;
-    bottom: 265px;
-    height: 40px;
-    width: 250px;
-    left: 11%;
+text-align:center;
 }
 
 #buttonRegle {
