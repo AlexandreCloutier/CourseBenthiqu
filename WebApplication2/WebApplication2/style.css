@@ -10,6 +10,8 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    margin: 2px;
+    overflow: hidden;
 }
 
 /* -------------Menu Créer Partie----------------------*/
@@ -19,7 +21,7 @@ body {
     height: 250px;
     position: absolute;
     top: 10px;
-    left: 22%;
+    left: 275px;
 }
 
 .menuCreerPartie {
@@ -28,7 +30,7 @@ body {
     text-align: center;
     background-color: #3892ba !important;
     width: 99%;
-    height: 675px;
+    height: 610px;
 }
 
 .divModePartie {
@@ -39,15 +41,15 @@ body {
 
 .labelTexteNombreJoueur {
     font-size: 20px;
-    font-family: Arial; 
+    font-family: Arial;
 }
 
 .divContreVJ {
     width: 35%;
     margin: auto;
     padding: 5px;
-    position:relative;
-    top:200px;
+    position: relative;
+    top: 200px;
 }
 
 .divJoueurs {
@@ -90,8 +92,8 @@ input::-webkit-inner-spin-button {
     margin: auto;
     width: 35%;
     padding: 5px;
-    position:relative;
-    top:210px;
+    position: relative;
+    top: 210px;
 }
 
 .labelTexteDifficulte {
@@ -101,11 +103,14 @@ input::-webkit-inner-spin-button {
     font-size: 20px;
 }
 
-.labelErreur {
+.divLabelErreur {
     position: absolute;
+    bottom: 160px;
+    width: 100%;
+}
+
+.labelErreur {
     font-family: Arial;
-    top: 500px;
-    left: 41%;
 }
 
 /*  --------------Menu Principal ------------*/
@@ -115,6 +120,7 @@ input::-webkit-inner-spin-button {
     float: left;
     background-color: /*#004556*/ #3892ba !important;
     width: 99%;
+    height: 630px;
 }
 
 .imageMenuPrincipal {
@@ -122,7 +128,7 @@ input::-webkit-inner-spin-button {
     height: 400px;
     position: absolute;
     top: 10px;
-    left: 22%;
+    left: 275px;
 }
 
 .dropDown:hover {
@@ -185,23 +191,24 @@ input::-webkit-inner-spin-button {
     height: 100%;
     cursor: pointer;
 }
+
 #buttonChargerPartie {
     width: 247px;
     height: 48px;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .buttonCharger {
-    text-align:center;
+    text-align: center;
     padding: 3px;
 }
 
-.divTexteEcranAcceuil{
-    text-align:center;
-    position:absolute;
-    left:36.5%;
-    bottom:0px;
-    font-family:Arial;
+.divTexteEcranAccueil {
+    text-align: center;
+    position: absolute;
+    left: 35%;
+    bottom: 2px;
+    font-family: Arial;
 }
 
 
@@ -209,18 +216,18 @@ input::-webkit-inner-spin-button {
 /*  --------------- Zone centre -------------*/
 
 .plateau {
-    margin-top: 10px;
     margin-bottom: 10px;
     border: 1px solid black;
     background-image: url(ressources/PlateauJeu.jpg);
+    background-size: 100% 100%;
     float: left;
     position: relative;
-    height: 753px;
-    width: 752px;
+    height: 630px;
+    width: 630px;
     z-index: 0;
 }
 
-.nomJoueurPlateau{
+.nomJoueurPlateau {
     color: white;
     font-size: 24px;
     position: absolute;
@@ -229,18 +236,21 @@ input::-webkit-inner-spin-button {
 #nomJoueurPlateauB {
     transform: rotate(180deg);
 }
+
 #nomJoueurPlateauC {
     transform: rotate(90deg);
 }
+
 #nomJoueurPlateauD {
     transform: rotate(-90deg);
 }
+
 .paquetCharge {
     position: absolute;
-    width: 66px;
-    height: 100px;
-    top: 326px;
-    right: 343px;
+    width: 54px;
+    height: 82px;
+    top: 274px;
+    right: 287px;
     transform: rotate(45deg);
 }
 
@@ -252,19 +262,19 @@ input::-webkit-inner-spin-button {
 
 .paquetDefausse {
     position: absolute;
-    width: 58px;
-    height: 91px;
-    top: 376px;
-    right: 298px;
+    width: 48px;
+    height: 76px;
+    top: 317px;
+    right: 250px;
     transform: rotate(45deg);
 }
 
 .paquetIntervention {
     position: absolute;
-    width: 60px;
-    height: 95px;
-    top: 280px;
-    right: 393px;
+    width: 51px;
+    height: 79px;
+    top: 235px;
+    right: 327px;
     transform: rotate(45deg);
 }
 
@@ -277,29 +287,19 @@ input::-webkit-inner-spin-button {
     transform: rotate(45deg);
 }
 
-.front {
-    height: inherit;
-    width: inherit;
-}
-
-.back {
-    height: inherit;
-    width: inherit;
-}
-
 .emplacementJoueurA {
     float: left;
-    width: 58px;
-    height: 91px;
-    /* border: 1px solid blue;*/
+    width: 48px;
+    height: 76px;
+    /*border: 1px solid blue;*/
     position: absolute;
     border-radius: 5px;
 }
 
 .emplacementJoueurB {
     float: left;
-    width: 58px;
-    height: 91px;
+    width: 48px;
+    height: 76px;
     /*border: 1px solid pink;*/
     position: absolute;
     border-radius: 5px;
@@ -308,8 +308,8 @@ input::-webkit-inner-spin-button {
 
 .emplacementJoueurC {
     float: left;
-    width: 58px;
-    height: 91px;
+    width: 48px;
+    height: 76px;
     /*border: 1px solid green;*/
     position: absolute;
     border-radius: 5px;
@@ -318,8 +318,8 @@ input::-webkit-inner-spin-button {
 
 .emplacementJoueurD {
     float: left;
-    width: 58px;
-    height: 91px;
+    width: 48px;
+    height: 76px;
     /*border: 1px solid red;*/
     position: absolute;
     border-radius: 5px;
@@ -398,7 +398,7 @@ input::-webkit-inner-spin-button {
 .popUpRegle {
     overflow: auto !important;
     font-family: Arial;
-    max-height: 750px;
+    max-height: 600px;
 }
 
 .popUpChoix {
@@ -430,8 +430,8 @@ input::-webkit-inner-spin-button {
     float: left;
     margin: 15px;
     table-layout: fixed;
-    width: 118px;
-    height: 180px;
+    width: 108px;
+    height: 171px;
 }
 
 .cartesListe {
@@ -503,17 +503,17 @@ input::-webkit-inner-spin-button {
     font-family: Arial;
 }
 
-.divOptions label {
-    display: block;
-    margin: 15px 0px 0px 0px;
-}
-
-    .divOptions label > span {
-        float: left;
-        margin-bottom: 5px;
+    .divOptions label {
+        display: block;
+        margin: 15px 0px 0px 0px;
     }
 
-.divTitreOptions {
+        .divOptions label > span {
+            float: left;
+            margin-bottom: 5px;
+        }
+
+.divTitreSauvegarder {
     font-size: 30px;
 }
 
@@ -524,10 +524,11 @@ input::-webkit-inner-spin-button {
 
 .textBoxSauvegarder {
     float: left;
-    width: 150px;
+    width: 175px;
     display: block;
     margin-top: 5px;
     margin-bottom: 5px;
+    margin-left: 90px;
 }
 
 .labelText {
@@ -551,12 +552,10 @@ input::-webkit-inner-spin-button {
 .divMain {
     background-color: dimgray;
     border: 1px solid #000000;
-    margin-top: 10px;
-    height: 723px;
+    height: 630px;
     width: 300px;
     float: left;
     position: relative;
-    padding: 15px;
 }
 
 .divMainDefausse {
@@ -599,8 +598,7 @@ input::-webkit-inner-spin-button {
     display: none;
 }
 
-.imageCredits{
-
+.imageCredits {
 }
 
 .divFin {
@@ -616,10 +614,10 @@ input::-webkit-inner-spin-button {
     list-style: none;
     display: inline-block;
     float: left;
-    margin: 15px;
+    margin: 10px;
     table-layout: fixed;
-    width: 118px;
-    height: 180px;
+    width: 108px;
+    height: 171px;
 }
 
 /* ------------------Zone droite------------------ */
@@ -627,8 +625,7 @@ input::-webkit-inner-spin-button {
 .divDroite {
     background-color: #61933a;
     border: 1px solid black;
-    margin-top: 10px;
-    height: 753px;
+    height: 630px;
     width: 330px;
     float: left;
     position: relative;
@@ -696,7 +693,7 @@ input::-webkit-inner-spin-button {
 .divTextePointsRessource {
     border: groove 3px black;
     width: 278px;
-    height: 155px;
+    height: 125px;
     margin: 5px;
     padding: 2px;
     position: relative;
@@ -705,7 +702,7 @@ input::-webkit-inner-spin-button {
 }
 
 .titreRessource {
-    margin: 10px;
+    margin: 5px;
     font-family: Arial;
 }
 
@@ -737,7 +734,7 @@ input::-webkit-inner-spin-button {
 /*****Les boutons*****/
 #buttonPasserTour {
     position: absolute;
-    bottom: 195px;
+    bottom: 140px;
     height: 50px;
     width: 250px;
     left: 11%;
@@ -754,7 +751,7 @@ input::-webkit-inner-spin-button {
 
 #buttonRegle {
     position: absolute;
-    bottom: 140px;
+    bottom: 95px;
     height: 40px;
     width: 250px;
     left: 11%;
@@ -762,15 +759,15 @@ input::-webkit-inner-spin-button {
 
 #buttonTableauCarte {
     position: absolute;
-    bottom: 85px;
+    bottom: 50px;
     height: 40px;
     width: 250px;
     left: 11%;
 }
 
-#buttonOption {
+#buttonSauvegarder {
     position: absolute;
-    bottom: 30px;
+    bottom: 5px;
     height: 40px;
     width: 250px;
     left: 11%;
@@ -778,10 +775,10 @@ input::-webkit-inner-spin-button {
 
 #buttonDefausser {
     position: absolute;
-    top: 87%;
-    left: 30%;
+    top: 92%;
+    left: 25%;
     width: 125px;
-    height: 50px;
+    height: 34px;
 }
 
 .buttonJeu {

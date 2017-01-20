@@ -207,7 +207,7 @@
             buttonNouvellePartie.className = 'buttonMenuPrincipal';
             buttonNouvellePartie.innerHTML = 'Nouvelle partie';
             buttonNouvellePartie.onclick = lancerOptionPartie;
-            buttonNouvellePartie.style.top = '435px';
+            buttonNouvellePartie.style.bottom = '140px';
             $('#menuPrincipal').append(buttonNouvellePartie);
 
             //Div Crédits
@@ -217,11 +217,11 @@
             divCredits.innerHTML = "<img class='imageCredits' src='ressources/logo_g3e.png' /><p></p><p><span style='font-size: 20pt;'>Conception du jeu&nbsp;:</span> Jonathan Pedneau</p><p><span style='font-size: 20pt;'>Graphisme&nbsp;:</span> Pierre-Olivier Boucher</p><p><span style='font-size: 20pt;'>Illustrations&nbsp;:</span> Groupe d&rsquo;&eacute;ducation et d&rsquo;&eacute;cosurveillance de l&rsquo;eau</p><p><span style='font-size: 20pt;'>Conception et d&eacute;veloppement du jeu interactif&nbsp;:</span> Samuel Brien et Alexandre Cloutier</p><p><span style='font-size: 20pt;'>Production&nbsp;:</span> Groupe d&rsquo;&eacute;ducation et d&rsquo;&eacute;cosurveillance de l&rsquo;eau (G3E), 2017</p>";
             $('#menuPrincipal').append(divCredits);
 
-            var divTexteEcranAcceuil = document.createElement('div');
-            divTexteEcranAcceuil.id = 'divTexteEcranAcceuil';
-            divTexteEcranAcceuil.className = 'divTexteEcranAcceuil';
-            divTexteEcranAcceuil.innerHTML = 'Un jeu du Groupe d’éducation et d’écosurveillance de l’eau.';
-            $('#menuPrincipal').append(divTexteEcranAcceuil);
+            var divTexteEcranAccueil = document.createElement('div');
+            divTexteEcranAccueil.id = 'divTexteEcranAccueil';
+            divTexteEcranAccueil.className = 'divTexteEcranAccueil';
+            divTexteEcranAccueil.innerHTML = 'Un jeu du Groupe d’éducation et d’écosurveillance de l’eau.';
+            $('#menuPrincipal').append(divTexteEcranAccueil);
 
             //Div Fin
             var divFin = document.createElement('div');
@@ -252,7 +252,7 @@
             buttonChargerPartie.id = 'buttonChargerPartie';
             buttonChargerPartie.className = 'buttonMenuPrincipal';
             buttonChargerPartie.innerHTML = '<p class="buttonCharger">Charger une partie</p>';
-            buttonChargerPartie.style.top = '490px';
+            buttonChargerPartie.style.bottom = '85px';
             $('#menuPrincipal').append(buttonChargerPartie);
 
             var fileReader = document.createElement('input');
@@ -270,7 +270,7 @@
             buttonCredits.id = 'buttonCredits';
             buttonCredits.className = 'buttonMenuPrincipal';
             buttonCredits.innerHTML = 'Crédits';
-            buttonCredits.style.top = '545px';
+            buttonCredits.style.bottom = '30px';
             buttonCredits.onclick = afficherCredits;
             $('#menuPrincipal').append(buttonCredits);
         }
@@ -539,10 +539,15 @@
             option3.innerHTML = 'Difficile';
             dropDownDifficulte.appendChild(option3);
 
+            var divLabelErreur = document.createElement('div');
+            divLabelErreur.id = 'divLabelErreur';
+            divLabelErreur.className = 'divLabelErreur';
+            $(menuCreerPartie).append(divLabelErreur);
+
             var labelErreur = document.createElement('label');
             labelErreur.className = 'labelErreur';
             labelErreur.id = 'labelErreur';
-            $(menuCreerPartie).append(labelErreur);
+            $(divLabelErreur).append(labelErreur);
 
             var buttonDebuter = document.createElement('button');
             buttonDebuter.id = 'buttonDebuter';
@@ -1990,31 +1995,31 @@
                     var emplacementJoueurA = document.createElement('div');
                     emplacementJoueurA.id = 'emplacementJoueurA' + i;
                     emplacementJoueurA.className = 'emplacementJoueurA';
-                    emplacementJoueurA.style.left = 116 + 66 * (i + 1) + 'px';
-                    emplacementJoueurA.style.bottom = '30px';
+                    emplacementJoueurA.style.left = 97 + 56 * (i + 1) + 'px';
+                    emplacementJoueurA.style.bottom = '23px';
                     $('#plateau').append(emplacementJoueurA);
 
                     var emplacementJoueurB = document.createElement('div');
                     emplacementJoueurB.id = 'emplacementJoueurB' + i;
                     emplacementJoueurB.className = 'emplacementJoueurB';
-                    emplacementJoueurB.style.left = 116 + 66 * (i + 1) + 'px';
-                    emplacementJoueurB.style.top = '30px';
+                    emplacementJoueurB.style.left = 97 + 56 * (i + 1) + 'px';
+                    emplacementJoueurB.style.top = '25px';
                     $('#plateau').append(emplacementJoueurB);
 
                     if (nombreJoueur >= 3) {// si 3 joueurs.
                         var emplacementJoueurC = document.createElement('div');
                         emplacementJoueurC.id = 'emplacementJoueurC' + i;
                         emplacementJoueurC.className = 'emplacementJoueurC';
-                        emplacementJoueurC.style.top = 100 + 66 * (i + 1) + 'px';
-                        emplacementJoueurC.style.left = '46px';
+                        emplacementJoueurC.style.top = 82 + 56 * (i + 1) + 'px';
+                        emplacementJoueurC.style.left = '38px';
                         $('#plateau').append(emplacementJoueurC);
                     }
                     if (nombreJoueur === 4) {//Si 4 joueurs.
                         var emplacementJoueurD = document.createElement('div');
                         emplacementJoueurD.id = 'emplacementJoueurD' + i;
                         emplacementJoueurD.className = 'emplacementJoueurD';
-                        emplacementJoueurD.style.top = 100 + 66 * (i + 1) + 'px';
-                        emplacementJoueurD.style.right = '46px';
+                        emplacementJoueurD.style.top = 83 + 56 * (i + 1) + 'px';
+                        emplacementJoueurD.style.right = '37px';
                         $('#plateau').append(emplacementJoueurD);
                     }
                 }
@@ -2022,23 +2027,23 @@
                     var emplacementJoueurA = document.createElement('div');
                     emplacementJoueurA.id = 'emplacementJoueurA' + i;
                     emplacementJoueurA.className = 'emplacementJoueurA';
-                    emplacementJoueurA.style.left = 182 + 66 * (i - 5) + 'px';
-                    emplacementJoueurA.style.bottom = '131px';
+                    emplacementJoueurA.style.left = 152 + 56 * (i - 5) + 'px';
+                    emplacementJoueurA.style.bottom = '108px';
                     $('#plateau').append(emplacementJoueurA);
 
                     var emplacementJoueurB = document.createElement('div');
                     emplacementJoueurB.id = 'emplacementJoueurB' + i;
                     emplacementJoueurB.className = 'emplacementJoueurB';
-                    emplacementJoueurB.style.left = 182 + 66 * (i - 5) + 'px';
-                    emplacementJoueurB.style.top = '130px';
+                    emplacementJoueurB.style.left = 153 + 55 * (i - 5) + 'px';
+                    emplacementJoueurB.style.top = '108px';
                     $('#plateau').append(emplacementJoueurB);
 
                     if (nombreJoueur >= 3) {//Si 3 joueurs.
                         var emplacementJoueurC = document.createElement('div');
                         emplacementJoueurC.id = 'emplacementJoueurC' + i;
                         emplacementJoueurC.className = 'emplacementJoueurC';
-                        emplacementJoueurC.style.top = 166 + 66 * (i - 5) + 'px';
-                        emplacementJoueurC.style.left = '146px'
+                        emplacementJoueurC.style.top = 137 + 56 * (i - 5) + 'px';
+                        emplacementJoueurC.style.left = '123px'
                         $('#plateau').append(emplacementJoueurC);
                     }
 
@@ -2046,8 +2051,8 @@
                         var emplacementJoueurD = document.createElement('div');
                         emplacementJoueurD.id = 'emplacementJoueurD' + i;
                         emplacementJoueurD.className = 'emplacementJoueurD';
-                        emplacementJoueurD.style.top = 166 + 66 * (i - 5) + 'px';
-                        emplacementJoueurD.style.right = '146px';
+                        emplacementJoueurD.style.top = 138 + 55 * (i - 5) + 'px';
+                        emplacementJoueurD.style.right = '122px';
                         $('#plateau').append(emplacementJoueurD);
                     }
                 }
@@ -2309,7 +2314,7 @@
             //Bouton des règles.
             var buttonRegle = document.createElement('button');
             buttonRegle.id = 'buttonRegle';
-            buttonRegle.className = 'buttonJeu';
+            buttonRegle.className = 'buttonJeu'; buttonSauvegarder
             buttonRegle.setAttribute('onclick', 'popUpRegle()');
             buttonRegle.textContent = 'Voir les règles';
             $('#divDroite').append(buttonRegle);
@@ -2323,12 +2328,12 @@
             document.getElementById('divDroite').appendChild(buttonPasserTour);
 
             //Bouton pour les options.
-            var buttonOption = document.createElement('button');
-            buttonOption.id = 'buttonOption';
-            buttonOption.className = 'buttonJeu';
-            buttonOption.textContent = 'Options';
-            buttonOption.setAttribute('onclick', 'ouvrirOptionsEnJeu()');
-            document.getElementById('divDroite').appendChild(buttonOption);
+            var buttonSauvegarder = document.createElement('button');
+            buttonSauvegarder.id = 'buttonSauvegarder';
+            buttonSauvegarder.className = 'buttonJeu';
+            buttonSauvegarder.textContent = 'Sauvegarder';
+            buttonSauvegarder.setAttribute('onclick', 'ouvrirSauvegarder()');
+            document.getElementById('divDroite').appendChild(buttonSauvegarder);
         }
 
         //Fonction qui crée l'espace de la main.
@@ -2414,24 +2419,24 @@
         }
 
         //Function qui retournera l'ordre des joueurs
-        function placementFinal(){
+        function placementFinal() {
             var placement = [nombreJoueur];
-            for(var i = 0;i<nombreJoueur;i++){
+            for (var i = 0; i < nombreJoueur; i++) {
                 placement[i] = pointsJoueur[i];
             }
 
-            placement.sort(function(a, b){return a-b});
+            placement.sort(function (a, b) { return a - b });
 
             return placement;
         }
 
         //Fonction qui retournera le nom des joueurs en ordre
-        function ordreJoueur(){
+        function ordreJoueur() {
             var placement = placementFinal();
             var ordreJoueur = [nombreJoueur];
-            for(var i = 0; i<nombreJoueur;i++){
-                for(var j = 0;j<placement.length;j++){
-                    if(placement[j] === pointsJoueur[i]){
+            for (var i = 0; i < nombreJoueur; i++) {
+                for (var j = 0; j < placement.length; j++) {
+                    if (placement[j] === pointsJoueur[i]) {
                         ordreJoueur[i] = nomJoueur[i];
                     }
                 }
@@ -3025,63 +3030,38 @@
         }
 
         //Fonction appelée lors d'un clic sur le bouton Options en jeu
-        function ouvrirOptionsEnJeu() {
-            var divOptions = document.createElement('div');
-            divOptions.id = 'divOptions';
-            divOptions.className = 'divOptions';
-            $('#plateau').append(divOptions);
+        function ouvrirSauvegarder() {
+            var divSauvegarder = document.createElement('div');
+            divSauvegarder.id = 'divSauvegarder';
+            divSauvegarder.className = 'divSauvegarder';
+            $('#plateau').append(divSauvegarder);
 
-            var divTitreOptions = document.createElement('div');
-            divTitreOptions.id = 'divTitreOptions';
-            divTitreOptions.className = 'divTitreOptions';
-            divTitreOptions.innerHTML = '<p>Options</p>';
-            divOptions.appendChild(divTitreOptions);
-
-            //Résolution
-            var labelResolution = document.createElement('label');
-            labelResolution.id = 'labelResolution';
-            labelResolution.className = 'labelResolution';
-            labelResolution.innerHTML = '<span>Résolution&nbsp;: </span>'
-            divOptions.appendChild(labelResolution);
-
-            var dropDownReso = document.createElement('select');
-            dropDownReso.id = 'dropDownReso';
-            dropDownReso.className = 'dropDownReso';
-            divOptions.appendChild(dropDownReso);
-            var option1 = document.createElement('option');
-            option1.value = '1';
-            option1.innerHTML = '1280 x 720';
-            dropDownReso.appendChild(option1);
-
+            var divTitreSauvegarder = document.createElement('div');
+            divTitreSauvegarder.id = 'divTitreSauvegarder';
+            divTitreSauvegarder.className = 'divTitreSauvegarder';
+            divTitreSauvegarder.innerHTML = '<p>Sauvegarder</p>';
+            divSauvegarder.appendChild(divTitreSauvegarder);
+            
+            var divTexteExplication = document.createElement('div');
+            divTexteExplication.id = 'divTitreExplication';
+            divTexteExplication.className = 'divTexteExplication';
+            divTexteExplication.innerHTML = '<p>Entrez un nom à votre sauvegarde et cliquez sur Valider.</p>';
+            divSauvegarder.appendChild(divTexteExplication);
             //Sauvegarder
             var textBoxSauvegarder = document.createElement('input');
             textBoxSauvegarder.type = 'text';
             textBoxSauvegarder.id = 'textBoxSauvegarder';
             textBoxSauvegarder.className = 'textBoxSauvegarder';
-            divOptions.appendChild(textBoxSauvegarder);
+            divSauvegarder.appendChild(textBoxSauvegarder);
 
-            var labelText = document.createElement('label');
-            labelText.id = 'labelText';
-            labelText.className = 'labelText';
-            labelText.innerHTML = '.jcb';
-            divOptions.appendChild(labelText);
-
-            var buttonSauvegarder = document.createElement('button');
-            buttonSauvegarder.id = 'buttonSauvegarder';
-            buttonSauvegarder.className = 'buttonSauvegarder';
-            $(buttonSauvegarder).click(function () {
-                if (!textBoxSauvegarder.value) {
-                    popUpErreur('Veuillez entrer un nom de fichier avant de sauvegarder.');
-                } else {
-                    sauvegarderPartie(textBoxSauvegarder.value);
-                    $(divOptions).dialog('close');
-                }
-            });
-            buttonSauvegarder.textContent = 'Sauvegarder';
-            divOptions.appendChild(buttonSauvegarder);
+            //var labelText = document.createElement('label');
+            //labelText.id = 'labelText';
+            //labelText.className = 'labelText';
+            //labelText.innerHTML = '.jcb';
+            //divSauvegarder.appendChild(labelText);
 
             //Ouverture du popUp.
-            $(divOptions).dialog({
+            $(divSauvegarder).dialog({
                 classes: {
                     'ui-dialog': 'no-x ui-corner-all',
                 },
@@ -3090,7 +3070,12 @@
                 buttons: [{
                     text: 'Valider',
                     click: function () {
-                        $(this).dialog('close');
+                        if (!textBoxSauvegarder.value) {
+                            popUpErreur('Veuillez entrer un nom de fichier avant de sauvegarder.');
+                        } else {
+                            sauvegarderPartie(textBoxSauvegarder.value);
+                            $(divSauvegarder).dialog('close');
+                        }
                     }
                 }, {
                     text: 'Annuler',
@@ -3407,7 +3392,7 @@
                         popUpAvertissement('Le «Macroinvertébré» doit être de taille inférieure à votre prédateur.');
                     }
                 } else {
-                    popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à '+taillePredateur +' à manger.');
+                    popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                 }
                 /* ---------------Partie pollution organique--------------*/
             } else if (mangerSalmonide) {
@@ -3613,7 +3598,7 @@
                         popUpAvertissement('Le «Macroinvertébré» doit être de taille inférieure au prédateur.')
                     }
                 } else {
-                    popUpAvertissement('Vous devez sélectionner un macroinvertébrés de taille inférieure à ' + taillePredateur+' pour qu\'il soit mangé.');
+                    popUpAvertissement('Vous devez sélectionner un macroinvertébrés de taille inférieure à ' + taillePredateur + ' pour qu\'il soit mangé.');
                 }
                 /* -------------------- carte zonage---------------- */
             } else if (zonage) {
@@ -4894,8 +4879,8 @@
                 ui.draggable.appendTo(drop);
                 ui.draggable.addClass('imageCarteJeu');
                 ui.draggable.removeClass('imageCarteMains');
-                ui.draggable.css('width', '58px');
-                ui.draggable.css('height', '90px');
+                ui.draggable.css('width', '48px');
+                ui.draggable.css('height', '76px');
                 ui.draggable.css('top', '0px');
                 ui.draggable.css('left', '0px');
                 ui.draggable.draggable('disable');
@@ -5062,8 +5047,8 @@
             var y = $('#' + carteMain).offset().top;
 
             $('#carte' + position).animate({
-                height: 180,
-                width: 118,
+                height: 171,
+                width: 108,
                 left: x,
                 top: y,
                 borderSpacing: 0,
@@ -5578,7 +5563,7 @@
             var buttonDefausser = document.createElement('button');
             buttonDefausser.id = 'buttonDefausser';
             buttonDefausser.className = 'buttonJeu';
-            buttonDefausser.innerHTML = '<p>Défausser</p>';
+            buttonDefausser.innerHTML = '<p style="margin-top:2px">Défausser</p>';
             buttonDefausser.onclick = function () {
                 onClickButtonDefausse(cartesDefausse);
             };
@@ -5825,8 +5810,8 @@
                                 if (carteDrag.nom != CarteJeu[numeroJoueurActif][id].nom) {
                                     $(ui).stop();
                                     $(ui).animate({
-                                        height: 180,
-                                        width: 118
+                                        height: 171,
+                                        width: 108
                                     }, {
                                         duration: 500,
                                         queue: false,
@@ -5847,8 +5832,8 @@
                     } else {
                         $(ui).stop();
                         $(ui).animate({
-                            height: 180,
-                            width: 118
+                            height: 152,
+                            width: 108
                         }, {
                             duration: 500,
                             queue: false,
@@ -5861,8 +5846,8 @@
                 } else {
                     $(ui).stop();
                     $(ui).animate({
-                        height: 180,
-                        width: 118
+                        height: 152,
+                        width: 108
                     }, {
                         duration: 500,
                         queue: false,
@@ -5875,8 +5860,8 @@
             } else {
                 $(ui).stop();
                 $(ui).animate({
-                    height: 180,
-                    width: 118
+                    height: 152,
+                    width: 108
                 }, {
                     duration: 500,
                     queue: false,
@@ -6076,14 +6061,14 @@
                     $(image).tooltip({
                         items: 'img',
                         content: cloneImage,
-                        position: { my: "right", at:"left" },
+                        position: { my: "right", at: "left" },
                         show: { delay: 1000 }
                     });
                 }
 
                 if (mains[numeroJoueurActif].length <= 6) {
-                    $('.liMain').css('height', '180px')
-                    $('.liMain').css('width', '118px')
+                    $('.liMain').css('height', '171px')
+                    $('.liMain').css('width', '108px')
                 } else if (mains[numeroJoueurActif].length > 10) {
                     $('.liMain').css('height', '90px')
                     $('.liMain').css('width', '59px')
@@ -6114,8 +6099,8 @@
                 $('.imageCarteMains').draggable({
                     start: function (evt) {
                         $(this).animate({
-                            height: 90,
-                            width: 58
+                            height: 76,
+                            width: 48
                         }, { duration: 400, queue: false }
                         );
                         var id;
@@ -6139,7 +6124,7 @@
                         return revertCarte(socketObj, this);
                     },
                     revertDuration: 400,
-                    cursorAt: { top: 45, left: 29 }
+                    cursorAt: { top: 38, left: 24 }
                 });
             });
         }
