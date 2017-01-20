@@ -129,7 +129,7 @@
         //Tableau contenant toute les cartes du bas de chaque joueur.
         var carteJeu;
         //Tableau contenant le nombres d'exemplaire de chaque carte.
-        var exemplairecarteJeu;
+        var exemplaireCarteJeu;
         //Tableau contenant les position des cartes perturbation.
         var cartePerturbation;
         //Tableau pour savoir si le joueur garder ses points-ressources.
@@ -689,7 +689,7 @@
         //Fonction qui appelle les fonctions qui instancie les différents tableaux.
         function instancierTableaux() {
             instancierTableauJoueur();
-            instancierTableaucarteJeu();
+            instancierTableauCarteJeu();
             instancierTableauPointsRessources();
             instancierTableauExemplaire();
             instancierTableauPerturbation();
@@ -757,20 +757,20 @@
 
         //Fonction qui va instancier le tableau des exemplaires de cartes de la zone de jeu.
         function instancierTableauExemplaire() {
-            exemplairecarteJeu = new Array(nombreJoueur);
-            exemplairecarteJeu[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            exemplairecarteJeu[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            exemplaireCarteJeu = new Array(nombreJoueur);
+            exemplaireCarteJeu[0] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            exemplaireCarteJeu[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
             if (nombreJoueur >= 3) {//3 joueurs.
-                exemplairecarteJeu[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                exemplaireCarteJeu[2] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             }
             if (nombreJoueur === 4) {//4 joueurs.
-                exemplairecarteJeu[3] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                exemplaireCarteJeu[3] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             }
         }
 
         //Fonction qui va instancier le tableau bi-dimensionel des emplacements du jeu.
-        function instancierTableaucarteJeu() {
+        function instancierTableauCarteJeu() {
             carteJeu = new Array(nombreJoueur);
 
             //Minimum de 2 joueurs.
@@ -872,6 +872,7 @@
                                                             }
                                                         }
                                                         $(this).dialog('close');
+                                                        updateAffichageImage();
                                                     }
                                                 } else {
                                                     popUpAvertissement('Veuillez choisir un option.');
@@ -1102,7 +1103,7 @@
                                                                 cartePerturbation[i][j] = null;
                                                                 $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
                                                                 var carteHabitat = document.createElement('img');
-                                                                carteHabitat.className = 'imagecarteJeu';
+                                                                carteHabitat.className = 'imageCarteJeu';
                                                                 carteHabitat.src = 'ressources/' + habitatEroder.nomImage;
                                                                 $('#emplacementJoueur' + lettreJoueur(i) + j).append(carteHabitat);
                                                                 habitatEroder = null;
@@ -1131,7 +1132,7 @@
                                                 
                                                 carteJeu[bandeRiveraineEroder[1]][numeroPosLibre] = bandeRiveraineEroder[0];
                                                 var carte = document.createElement('img');
-                                                carte.className = 'imagecarteJeu';
+                                                carte.className = 'imageCarteJeu';
                                                 carte.src = 'ressources/' + bandeRiveraineEroder[0].nomImage;
                                                 $(posLibre).append(carte);
 
@@ -1351,6 +1352,7 @@
                                                             }
                                                         }
                                                         $(this).dialog('close');
+                                                        updateAffichageImage();
                                                     }
                                                 } else {
                                                     popUpAvertissement('Veuillez choisir un option.');
@@ -1449,6 +1451,7 @@
                                                             }
                                                         }
                                                         $(this).dialog('close');
+                                                        updateAffichageImage();
                                                     }
                                                 } else {
                                                     popUpAvertissement('Veuillez choisir un option.');
@@ -1688,7 +1691,7 @@
                                                                                 if (mains[numeroJoueurActif][k] == null) {
                                                                                     mains[numeroJoueurActif][k] = carteJeu[i][j];
                                                                                     carteJeu[i][j] = null;
-                                                                                    exemplairecarteJeu[i][j] = 0;
+                                                                                    exemplaireCarteJeu[i][j] = 0;
                                                                                     $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
                                                                                     stop = true;
                                                                                 }
@@ -1696,7 +1699,7 @@
                                                                             if (carteJeu[i][j] != null) {
                                                                                 mains[numeroJoueurActif][mains[numeroJoueurActif].length] = carteJeu[i][j];
                                                                                 carteJeu[i][j] = null;
-                                                                                exemplairecarteJeu[i][j] = 0;
+                                                                                exemplaireCarteJeu[i][j] = 0;
                                                                                 $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
                                                                             }
                                                                         }
@@ -1967,7 +1970,7 @@
 
             var imageIntervention = document.createElement('img');
             imageIntervention.src = 'ressources/petitPaquet.png';
-            imageIntervention.className = 'imagecarteJeu';
+            imageIntervention.className = 'imageCarteJeu';
             $(paquetImageIntervention).append(imageIntervention);
         }
 
@@ -2161,6 +2164,7 @@
                                                                             }
                                                                         }
                                                                         $(this).dialog('close');
+                                                                        updateAffichageImage();
                                                                     }
                                                                 } else {
                                                                     popUpAvertissement('Veuillez choisir un option.');
@@ -2471,7 +2475,7 @@
             var mainsJson = '[';
             var carteJeuJson = '[';
             var nomJoueurJson = '[';
-            var exemplairecarteJeuJson = '[';
+            var exemplaireCarteJeuJson = '[';
             var cartePerturbationJson = '[';
             var tableauRetentionJson = '[';
             var dificulteJson;
@@ -2629,20 +2633,20 @@
             nomJoueurJson += ' ]';
 
             //Sauvegarder les exemplaires des cartes
-            exemplairecarteJeu.forEach(function (item1, index1) {
-                exemplairecarteJeuJson += '[';
-                exemplairecarteJeu[index1].forEach(function (item, index) {
-                    exemplairecarteJeuJson += item;
-                    if (index != exemplairecarteJeu[index1].length - 1) {
-                        exemplairecarteJeuJson += ',';
+            exemplaireCarteJeu.forEach(function (item1, index1) {
+                exemplaireCarteJeuJson += '[';
+                exemplaireCarteJeu[index1].forEach(function (item, index) {
+                    exemplaireCarteJeuJson += item;
+                    if (index != exemplaireCarteJeu[index1].length - 1) {
+                        exemplaireCarteJeuJson += ',';
                     }
                 });
-                exemplairecarteJeuJson += ' ]';
-                if (index1 != exemplairecarteJeu.length - 1) {
-                    exemplairecarteJeuJson += ',';
+                exemplaireCarteJeuJson += ' ]';
+                if (index1 != exemplaireCarteJeu.length - 1) {
+                    exemplaireCarteJeuJson += ',';
                 }
             });
-            exemplairecarteJeuJson += ' ]';
+            exemplaireCarteJeuJson += ' ]';
 
             //Sauvegarde les cartes perturbation.
             cartePerturbation.forEach(function (item1, index1) {
@@ -2730,7 +2734,7 @@
                 '"mains":' + mainsJson + ',' +
                 '"carteJeu":' + carteJeuJson + ',' +
                 '"nomJoueur":' + nomJoueurJson + ',' +
-                '"exemplairecarteJeu":' + exemplairecarteJeuJson + ',' +
+                '"exemplaireCarteJeu":' + exemplaireCarteJeuJson + ',' +
                 '"cartePerturbation":' + cartePerturbationJson + ',' +
                 '"tableauRetention":' + tableauRetentionJson + ',' +
                 '"difficulte":' + dificulteJson + ',' +
@@ -3017,9 +3021,9 @@
                     });
 
                     //Recrée le tableau des exemplaires des cartes.
-                    json.exemplairecarteJeu.forEach(function (item1, index1) {
-                        json.exemplairecarteJeu[index1].forEach(function (item, index) {
-                            exemplairecarteJeu[index1][index] = item;
+                    json.exemplaireCarteJeu.forEach(function (item1, index1) {
+                        json.exemplaireCarteJeu[index1].forEach(function (item, index) {
+                            exemplaireCarteJeu[index1][index] = item;
                         });
                     });
 
@@ -3390,9 +3394,9 @@
                         mangerPredateur = false;
                         $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();//Supprime le macro
                         paquetDecharge.push(carteJeu[numeroJoueurEnnemi][numeroEmplacement]);
-                        exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement]--;//Baisse le nombre d'exemplaire.
+                        exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement]--;//Baisse le nombre d'exemplaire.
 
-                        if (exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 0) {//Si il n'y a plus d'exemplaire, supprime la carte.
+                        if (exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 0) {//Si il n'y a plus d'exemplaire, supprime la carte.
                             carteJeu[numeroJoueurEnnemi][numeroEmplacement] = null;
                         }
 
@@ -3413,9 +3417,9 @@
 
                         $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();//Supprime le macro
                         paquetDecharge.push(carteJeu[numeroJoueurEnnemi][numeroEmplacement]);
-                        exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement]--;//Baisse le nombre d'exemplaire.
+                        exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement]--;//Baisse le nombre d'exemplaire.
 
-                        if (exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 0) {//Si il n'y a plus d'exemplaire, supprime la carte.
+                        if (exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 0) {//Si il n'y a plus d'exemplaire, supprime la carte.
                             carteJeu[numeroJoueurEnnemi][numeroEmplacement] = null;
                         }
 
@@ -3436,7 +3440,7 @@
                     if (carteJeu[numeroJoueurEnnemi][numeroEmplacement] != null) {
                         if (carteJeu[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
                             if (carteJeu[numeroJoueurEnnemi][numeroEmplacement].perturber != true) {
-                                if (exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement] >= 2) {
+                                if (exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement] >= 2) {
                                     deplacerCartePerturber(document.getElementById('emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement), evt, ui);
                                 } else {
                                     rendrePerturber(document.getElementById('emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement));
@@ -3462,8 +3466,8 @@
                 if (etapeErosion === 1) {//étape 1, détruire une bande riveraine.
                     if (carteJeu[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
                         paquetDecharge.push(carteJeu[numeroJoueurEnnemi][numeroEmplacement]);
-                        exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement]--;
-                        if (exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 0) {
+                        exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement]--;
+                        if (exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 0) {
                             bandeRiveraineEroder[0] = carteJeu[numeroJoueurEnnemi][numeroEmplacement];
                             bandeRiveraineEroder[1] = numeroJoueurEnnemi;
                             carteJeu[numeroJoueurEnnemi][numeroEmplacement] = null;
@@ -3507,18 +3511,18 @@
                     }
                 } else if (etapeErosion === 2) {//Étape 2, transformer un habitats en sable.
                     if (carteJeu[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.habitats) {
-                        if (exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 1) {//Si il y a seulement une carte non empilée.
+                        if (exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 1) {//Si il y a seulement une carte non empilée.
                             habitatEroder = carteJeu[numeroJoueurEnnemi][numeroEmplacement];
                             cartePerturbation[numeroJoueurEnnemi][numeroEmplacement] = carteDrag;
                             carteJeu[numeroJoueurEnnemi][numeroEmplacement] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().remove();
                             var carteSable = document.createElement('img');
-                            carteSable.className = 'imagecarteJeu imagecarteJeuErosion';
+                            carteSable.className = 'imageCarteJeu imageCarteJeuErosion';
                             carteSable.src = 'ressources/habitatAmenageSable.png';
 
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).append(carteSable);
                             $(function () {
-                                $('.imagecarteJeuErosion').on({
+                                $('.imageCarteJeuErosion').on({
                                     click: function (evt, ui) {
                                         onClickImage($(this).parent().attr("id"), ui);
                                     }
@@ -3536,30 +3540,33 @@
                                 brillerCarte(typeEnum.habitats, 3, false);
                             }
 
-                            $('.imagecarteJeuErosion').removeClass('imagecarteJeuErosion');
+                            $('.imageCarteJeuErosion').removeClass('imageCarteJeuErosion');
 
                             erosion = false;
                             etapeErosion = 1;
                         } else {
                             var positionLibre = trouverPositionLibre();
                             var numeroLettrePosition = positionLibre.substr(positionLibre.length - 2);
+                            if (numeroLettrePosition.substr(0, 1) !== 'A' && numeroLettrePosition.substr(0, 1) !== 'B' && numeroLettrePosition.substr(0, 1) !== 'C' && numeroLettrePosition.substr(0, 1) !== 'D') {
+                                numeroLettrePosition = positionLibre.substr(positionLibre.length - 3);
+                            }
                             var numeroJoueurPositionLibree = numeroJoueur(numeroLettrePosition.substr(0, 1));
-                            var numeroPositionLibre = numeroLettrePosition.substr(1, 2);
+                            var numeroPositionLibre = numeroLettrePosition.substr(1);
 
                             habitatEroder = carteJeu[numeroJoueurPositionLibree][numeroPositionLibre];
                             cartePerturbation[numeroJoueurPositionLibree][numeroPositionLibre] = carteDrag;
                             carteJeu[numeroJoueurPositionLibree][numeroPositionLibre] = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
-                            exemplairecarteJeu[numeroJoueurPositionLibree][numeroPositionLibre] = 1;
+                            exemplaireCarteJeu[numeroJoueurPositionLibree][numeroPositionLibre] = 1;
                             $('#emplacementJoueur' + lettreJoueur(numeroJoueurEnnemi) + numeroEmplacement).children().last().remove();
 
                             var carteSable = document.createElement('img');
-                            carteSable.className = 'imagecarteJeu imagecarteJeuErosion';
+                            carteSable.className = 'imageCarteJeu imageCarteJeuErosion';
                             carteSable.src = 'ressources/habitatAmenageSable.png';
 
                             $(positionLibre).append(carteSable);
 
                             $(function () {
-                                $('.imagecarteJeuErosion').on({
+                                $('.imageCarteJeuErosion').on({
                                     click: function (evt, ui) {
                                         onClickImage($(this).parent().attr("id"), ui);
                                     }
@@ -3577,7 +3584,7 @@
                                 brillerCarte(typeEnum.habitats, 3, false);
                             }
 
-                            $('.imagecarteJeuErosion').removeClass('imagecarteJeuErosion');
+                            $('.imageCarteJeuErosion').removeClass('imageCarteJeuErosion');
                         }
 
                         erosion = false;
@@ -3596,9 +3603,9 @@
                             predation = false;
                             $('#emplacementJoueur' + lettreEmplacement + numeroEmplacement).children().last().remove();
                             paquetDecharge.push(carteJeu[numeroJoueurEnnemi][numeroEmplacement]);
-                            exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement]--;
+                            exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement]--;
 
-                            if (exemplairecarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 1) {
+                            if (exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 1) {
                                 carteJeu[numeroJoueurEnnemi][numeroEmplacement] = null;
                             }
 
@@ -3640,15 +3647,15 @@
                                 lettreJoueur2 = lettreJoueur(numeroJoueurEnnemi);
                                 positionCarte2 = numeroEmplacement;
 
-                                exemplairecarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]--;
-                                exemplairecarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]--;
+                                exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]--;
+                                exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]--;
 
                                 var carte1 = document.createElement('img');
-                                carte1.className = 'imagecarteJeu imageCarteEchange';
+                                carte1.className = 'imageCarteJeu imageCarteEchange';
                                 carte1.src = 'ressources/' + carteEchange1.nomImage;
 
                                 var carte2 = document.createElement('img');
-                                carte2.className = 'imagecarteJeu imageCarteEchange';
+                                carte2.className = 'imageCarteJeu imageCarteEchange';
                                 carte2.src = 'ressources/' + carteEchange2.nomImage;
 
                                 if (verifierCartePresenteEchange(carteEchange1.nom, numeroJoueur(lettreJoueur2)) === '') {//Si la carte n'est pas déjà présente
@@ -3656,26 +3663,32 @@
                                         $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().remove();//Enleve l'enfant.
                                         $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).append(carte1);//Rajoute la carte.
                                         carteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] = carteEchange1;//Rajoute la carte dans les données.
-                                        exemplairecarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]++;
+                                        exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]++;
                                     } else {
                                         var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur2));
                                         var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
+                                        if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
+                                            emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 3);
+                                        }
                                         var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
-                                        var positionCarte = emplacement.substr(1, 2);
+                                        var positionCarte = emplacement.substr(1);
 
                                         $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().last().remove();
                                         $(prochainePositionLibre).append(carte1);
                                         carteJeu[numeroJoueurCarte][positionCarte] = carteEchange1;
-                                        exemplairecarteJeu[numeroJoueurCarte][positionCarte]++;
+                                        exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
                                     }
                                 } else {
                                     var positionCartePresente = verifierCartePresenteEchange(carteEchange1.nom, numeroJoueur(lettreJoueur2));
                                     var emplacement = positionCartePresente.substr(positionCartePresente.length - 2);
+                                    if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
+                                        emplacement = positionCartePresente.substr(positionCartePresente.length - 3);
+                                    }
                                     var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
-                                    var positionCarte = emplacement.substr(1, 2);
+                                    var positionCarte = emplacement.substr(1);
 
-                                    exemplairecarteJeu[numeroJoueurCarte][positionCarte]++;
-                                    $(carte1).css('margin-top', (exemplairecarteJeu[numeroJoueurCarte][positionCarte] - 1) * 10);
+                                    exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
+                                    $(carte1).css('margin-top', (exemplaireCarteJeu[numeroJoueurCarte][positionCarte] - 1) * 8);
 
                                     $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().last().remove();
 
@@ -3688,26 +3701,32 @@
                                         $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
                                         $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).append(carte2);
                                         carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = carteEchange2;
-                                        exemplairecarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]++;
+                                        exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]++;
                                     } else {
                                         var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur1));
                                         var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
+                                        if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
+                                            emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 3);
+                                        }
                                         var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
-                                        var positionCarte = emplacement.substr(1, 2);
+                                        var positionCarte = emplacement.substr(1);
 
                                         $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().last().remove();
                                         $(prochainePositionLibre).append(carte2);
                                         carteJeu[numeroJoueurCarte][positionCarte] = carteEchange2;
-                                        exemplairecarteJeu[numeroJoueurCarte][positionCarte]++;
+                                        exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
                                     }
                                 } else {
                                     var positionCartePresente = verifierCartePresenteEchange(carteEchange2.nom, numeroJoueur(lettreJoueur1));
                                     var emplacement = positionCartePresente.substr(positionCartePresente.length - 2);
+                                    if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
+                                        emplacement = positionCartePresente.substr(positionCartePresente.length - 3);
+                                    }
                                     var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
-                                    var positionCarte = emplacement.substr(1, 2);
+                                    var positionCarte = emplacement.substr(1);
 
-                                    exemplairecarteJeu[numeroJoueurCarte][positionCarte]++;
-                                    $(carte2).css('margin-top', (exemplairecarteJeu[numeroJoueurCarte][positionCarte] - 1) * 10);
+                                    exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
+                                    $(carte2).css('margin-top', (exemplaireCarteJeu[numeroJoueurCarte][positionCarte] - 1) * 8);
 
                                     $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().last().remove();
 
@@ -3801,12 +3820,13 @@
 
         //Fonction qui va déplacer une carte et droper la perturbation dessus pour pas qu'une carte perturbée soit empilée sur une carte non-perturbée.
         function deplacerCartePerturber(positionCarteDepart, evt, ui) {
+            var numeroPosition;
             var emplacement = positionCarteDepart.id.substr(positionCarteDepart.id.length - 2);
             if (!(emplacement.substr(0, 1) === "A" || emplacement.substr(0, 1) === "B" || emplacement.substr(0, 1) === "C" || emplacement.substr(0, 1) === "D")) {
                 emplacement = positionCarteDepart.id.substr(positionCarteDepart.id.length - 3);
-                var numeroPosition = emplacement.substr(1, 3);
+                numeroPosition = emplacement.substr(1, 3);
             } else {
-                var numeroPosition = emplacement.substr(1, 2);
+                numeroPosition = emplacement.substr(1, 2);
             }
             var numeroJoueurPositionDrop = numeroJoueur(emplacement.substr(0, 1));
             
@@ -3814,22 +3834,23 @@
             $(positionCarteDepart).children().last().remove();
 
             var positionDropable = trouverPositionLibre(numeroJoueurPositionDrop);
-            exemplairecarteJeu[numeroJoueurPositionDrop][numeroPosition]--;
+            exemplaireCarteJeu[numeroJoueurPositionDrop][numeroPosition]--;
 
             var carte = document.createElement('img');
-            carte.className = 'imagecarteJeu imageCarteNouvelleCarte ui-perturber-highlight';
+            carte.className = 'imageCarteJeu imageCarteNouvelleCarte ui-perturber-highlight';
             carte.src = 'ressources/' + carteJeu[numeroJoueurPositionDrop][numeroPosition].nomImage;
 
             $(positionDropable).append(carte);
+            var numeroPositionDropper;
             var emplacementDropper = positionDropable.substr(positionDropable.length - 2);//2 derniers caractères de l'emplacement ex: A9.
             if (!(emplacementDropper.substr(0, 1) === "A" || emplacementDropper.substr(0, 1) === "B" || emplacementDropper.substr(0, 1) === "C" || emplacementDropper.substr(0, 1) === "D")) {
-                var numeroPositionDropper = emplacementDropper.substr(1, 3);
+                numeroPositionDropper = emplacementDropper.substr(1, 3);
             } else {
-                var numeroPositionDropper = emplacementDropper.substr(1, 2);
+                numeroPositionDropper = emplacementDropper.substr(1, 2);
             }
             
 
-            exemplairecarteJeu[numeroJoueurPositionDrop][numeroPositionDropper] = 1;
+            exemplaireCarteJeu[numeroJoueurPositionDrop][numeroPositionDropper] = 1;
             var carteCopie = jQuery.extend(new Carte(), carteJeu[numeroJoueurPositionDrop][numeroPosition]);
             carteJeu[numeroJoueurPositionDrop][numeroPositionDropper] = carteCopie;
             carteJeu[numeroJoueurPositionDrop][numeroPositionDropper].perturber = true;
@@ -3861,14 +3882,15 @@
 
         //Fonction qui va mettre la variable perturber à true.
         function rendrePerturber(evt) {
+            var numeroPosition;
             var position = evt.id.substr(evt.id.length - 2);//2 derniers caractères de l'emplacement ex: A9.
             var lettrePositionJoueur = position.substr(0, 1);//Lettre de l'emplacement ex: A.
             if (!(lettrePositionJoueur === 'A' || lettrePositionJoueur === 'B' || lettrePositionJoueur === 'C' || lettrePositionJoueur === 'D')) {
                 position = evt.id.substr(evt.id.length - 3);
                 lettrePositionJoueur = position.substr(0, 1);
-                var numeroPosition = position.substr(position.length - 2);// Numero de la position ex:9.
+                numeroPosition = position.substr(position.length - 2);// Numero de la position ex:9.
             } else {
-                var numeroPosition = position.substr(position.length - 1);// Numero de la position ex:9.
+                numeroPosition = position.substr(position.length - 1);// Numero de la position ex:9.
             }
             var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);//Numero du joueur selon l'emplacement.
 
@@ -3918,12 +3940,12 @@
                 if (carteJeu[numeroDuJoueur][i] != null) {
                     if (carteJeu[numeroDuJoueur][i].nom === carteJeu[numeroDuJoueur][positionCarteAEmpiler].nom) {
                         if (carteJeu[numeroDuJoueur][i].perturber === false) {
-                            exemplairecarteJeu[numeroDuJoueur][i]++;
+                            exemplaireCarteJeu[numeroDuJoueur][i]++;
 
                             var image = document.createElement('img');
-                            image.className = 'imagecarteJeu ajoutOnClick';
+                            image.className = 'imageCarteJeu ajoutOnClick';
                             image.src = 'ressources/' + carteJeu[numeroDuJoueur][i].nomImage;
-                            $(image).css('margin-top', (exemplairecarteJeu[numeroDuJoueur][i] - 1) * 10);
+                            $(image).css('margin-top', (exemplaireCarteJeu[numeroDuJoueur][i] - 1) * 8);
                             $('#emplacementJoueur' + lettreJoueur(numeroDuJoueur) + i).append(image);
                             $('#emplacementJoueur' + lettreJoueur(numeroDuJoueur) + positionCarteAEmpiler).children().first().remove();
 
@@ -3948,7 +3970,7 @@
             paquetDecharge.push(cartePerturbation[numeroActif][positionCarte]);//Envoie la carte à la décharge.
             reempillerCartePasPerturber(numeroActif, positionCarte);
             cartePerturbation[numeroActif][positionCarte] = null;//Rend la position où était la carte pertubation à null.
-            exemplairecarteJeu[numeroActif][positionCarte]--;
+            exemplaireCarteJeu[numeroActif][positionCarte]--;
             $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
         }
 
@@ -4063,7 +4085,7 @@
                             if (carteJeu[0][i].tolerance < 6) {
                                 paquetDecharge.push(carteJeu[0][i]);
                                 carteJeu[0][i] = null;
-                                exemplairecarteJeu[0][i] = 0;
+                                exemplaireCarteJeu[0][i] = 0;
                                 var lettre = lettreJoueur(0);
                                 $('#emplacementJoueur' + lettre + i).children().remove();
                             }
@@ -4078,7 +4100,7 @@
                             if (carteJeu[1][i].tolerance < 6) {
                                 paquetDecharge.push(carteJeu[1][i]);
                                 carteJeu[1][i] = null;
-                                exemplairecarteJeu[1][i] = 0;
+                                exemplaireCarteJeu[1][i] = 0;
                                 var lettre = lettreJoueur(1);
                                 $('#emplacementJoueur' + lettre + i).children().remove();
                             }
@@ -4094,7 +4116,7 @@
                                 if (carteJeu[2][i].tolerance < 6) {
                                     paquetDecharge.push(carteJeu[2][i]);
                                     carteJeu[2][i] = null;
-                                    exemplairecarteJeu[2][i] = 0;
+                                    exemplaireCarteJeu[2][i] = 0;
                                     var lettre = lettreJoueur(2);
                                     $('#emplacementJoueur' + lettre + i).children().remove();
                                 }
@@ -4112,7 +4134,7 @@
                                 if (carteJeu[3][i].tolerance < 6) {
                                     paquetDecharge.push(carteJeu[3][i]);
                                     carteJeu[3][i] = null;
-                                    exemplairecarteJeu[3][i] = 0;
+                                    exemplaireCarteJeu[3][i] = 0;
                                     var lettre = lettreJoueur(3);
                                     $('#emplacementJoueur' + lettre + i).children().remove();
                                 }
@@ -4175,7 +4197,7 @@
                 }
             } else if (carteDrag.type === typeEnum.perturbation) {//Si c'est une carte de perturbation.
                 if (carteDrag.nom === nomEnum.deversement || carteDrag.nom === nomEnum.erosion || carteDrag.nom === nomEnum.pollutionOrganique) {
-                    if (identification === 'au') {//Si c'est droppé sur le plateau.
+                    if (identification === 'eau') {//Si c'est droppé sur le plateau.
                         return true;
                     } else {
                         return false;
@@ -4183,20 +4205,20 @@
                 } else {
                     if (lettreEmplacement === lettre) {
                         return false;
-                    } else if (identification === 'au') {//Si on drope sur le plateau.
+                    } else if (identification === 'eau') {//Si on drope sur le plateau.
                         return false;
                     } else {
                         return true;
                     }
                 }
             } else if (carteDrag.type === typeEnum.action) {//Si c'est une carte action.
-                if (identification === 'au') {//Si on drope sur le plateau.
+                if (identification === 'eau') {//Si on drope sur le plateau.
                     return true;
                 } else {
                     return false;
                 }
             } else if (carteDrag.type === typeEnum.speciale) {//Si c'est une carte speciale.
-                if (identification === 'au') {//Si on drope sur le plateau.
+                if (identification === 'eau') {//Si on drope sur le plateau.
                     return true;
                 } else {
                     return false;
@@ -4609,7 +4631,7 @@
             for (var i = 0; i < carteJeu[numeroJoueur].length; i++) {
                 if (carteJeu[numeroJoueur][i] != null) {
                     if (carteJeu[numeroJoueur][i].type === typeEnum.habitats) {
-                        nombreHabitats += exemplairecarteJeu[numeroJoueur][i];
+                        nombreHabitats += exemplaireCarteJeu[numeroJoueur][i];
                     }
                 }
             }
@@ -4623,9 +4645,17 @@
 
         //Fonction qui vérifie si il y a la présence d'une réglementation qui empècherait la mise en place d'une carte perturbation.
         function presenceReglementation(nomReglementation, evt) {
+            console.log(evt)
             var position = $(evt).attr('id').substr($(evt).attr('id').length - 2);
+            console.log(position);
+            if (position.substr(0, 1) !== 'A' && position.substr(0, 1) !== 'B' && position.substr(0, 1) !== 'C' && position.substr(0, 1) !== 'D') {
+                position = $(evt).attr('id').substr($(evt).attr('id').length - 3);
+            }
+            console.log(position);
             var lettrePositionJoueur = position.substr(0, 1);
+            console.log(lettrePositionJoueur);
             var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);
+            console.log(numeroPositionJoueur);
 
             for (var i = 0; i < carteJeu[numeroPositionJoueur].length; i++) {
                 if (carteJeu[numeroPositionJoueur][i] != null) {
@@ -4645,7 +4675,7 @@
             for (var i = 0; i < carteJeu[numeroJoueur].length; i++) {
                 if (carteJeu[numeroJoueur][i] != null) {
                     if (carteJeu[numeroJoueur][i].type === typeEnum.bandeRiveraine) {
-                        nombreBandeRiveraine += exemplairecarteJeu[numeroJoueur][i];
+                        nombreBandeRiveraine += exemplaireCarteJeu[numeroJoueur][i];
                     }
                 }
             }
@@ -4660,7 +4690,10 @@
         //Fonction qui va vérifier si la carte perturbation respecte son emplacement.
         function verifierConditionPerturbation(evt, ui) {
             var position = $(evt).attr('id').substr($(evt).attr('id').length - 2);
-            var numeroPositionEmplacement = position.substr(position.length - 1);
+            if (position.substr(0, 1) !== 'A' && position.substr(0, 1) !== 'B' && position.substr(0, 1) !== 'C' && position.substr(0, 1) !== 'D') {
+                position = $(evt).attr('id').substr($(evt).attr('id').length - 3);
+            }
+            var numeroPositionEmplacement = position.substr(1);
             var lettrePositionJoueur = position.substr(0, 1);
             var numeroPositionJoueur;
 
@@ -4857,7 +4890,7 @@
                             if (carteJeu[joueur][i] != null) {
                                 if (carteJeu[joueur][i].condition[j] === habitats) {
                                     carteJeu[joueur][i] = null;
-                                    exemplairecarteJeu[joueur][i] = 0;
+                                    exemplaireCarteJeu[joueur][i] = 0;
                                     $('#emplacementJoueur' + lettreJoueur(joueur) + i).children().remove();
                                     tuer = true;
                                 }
@@ -4911,7 +4944,7 @@
             $(function () {
                 $(ui.draggable).click(function () { onClickImage($(this).parent().attr('id'), ui) });
                 ui.draggable.appendTo(drop);
-                ui.draggable.addClass('imagecarteJeu');
+                ui.draggable.addClass('imageCarteJeu');
                 ui.draggable.removeClass('imageCarteMains');
                 ui.draggable.css('width', '48px');
                 ui.draggable.css('height', '76px');
@@ -4919,14 +4952,14 @@
                 ui.draggable.css('left', '0px');
                 ui.draggable.draggable('disable');
                 if ($(drop).children().length > 1) {
-                    ui.draggable.css('margin-top', ($(drop).children().length * 10) - 10 + 'px');
+                    ui.draggable.css('margin-top', ($(drop).children().length * 8) - 8 + 'px');
                     if (carteDrag.type != typeEnum.perturbation) {//Si c'est une perturbation, ne l'ajoute pas.
-                        exemplairecarteJeu[numeroJoueurActif][drop.id.substr(drop.id.length - 1)]++;
+                        exemplaireCarteJeu[numeroJoueurActif][drop.id.substr(18)]++;
                     }
 
                 } else {
                     if (carteDrag.type != typeEnum.perturbation) {//Si c'est une perturbation, ne l'ajoute pas.
-                        exemplairecarteJeu[numeroJoueurActif][drop.id.substr(drop.id.length - 1)] = 1;
+                        exemplaireCarteJeu[numeroJoueurActif][drop.id.substr(18)] = 1;
                     }
                 }
 
@@ -4935,7 +4968,7 @@
                 pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutRessources;
 
                 if (carteDrag.type != typeEnum.perturbation) {//Si c'est une perturbation, ne l'ajoute pas.
-                    var id = drop.id.substr(drop.id.length - 1);
+                    var id = drop.id.substr(18);
                     carteJeu[numeroJoueurActif][id] = carteDrag;
                 }
 
@@ -5075,7 +5108,7 @@
             divCarteAnimee.id = 'carte' + position;
             divCarteAnimee.className = 'divAnimee';
             if (carte != null) {
-                divCarteAnimee.innerHTML = '<img class="imagecarteJeu" src="ressources/' + carte.nomImage + '">';
+                divCarteAnimee.innerHTML = '<img class="imageCarteJeu" src="ressources/' + carte.nomImage + '">';
             }
             $('body').append(divCarteAnimee);
 
@@ -5840,7 +5873,12 @@
             $('.emplacementJoueurA, .emplacementJoueurB, .emplacementJoueurC, .emplacementJoueurD, .plateau').removeClass('droppable-hover');
             if (e != false) {
                 var id;
-                id = $(e).attr('id').substr($(e).attr('id').length - 1);
+                var idTemp = $(e).attr('id').substr($(e).attr('id').length - 2);
+                if (idTemp.substr(0, 1) === 'A' || idTemp.substr(0, 1) === 'B' || idTemp.substr(0, 1) === 'C' || idTemp.substr(0, 1) === 'D') {
+                    id = $(e).attr('id').substr($(e).attr('id').length - 1);
+                } else {
+                    id = idTemp;
+                }
                 if (bonneZoneDrop(e)) {
                     if (accepterDrop(e)) {
                         if ($(e).attr('id') != 'plateau') {
@@ -6152,7 +6190,7 @@
                     }
                     var imageDecharge = document.createElement('img');
                     imageDecharge.src = 'ressources/' + paquetDecharge.filter(function (value) { return value != null })[paquetDecharge.filter(function (value) { return value != null }).length - 1].nomImage;
-                    imageDecharge.className = 'imagecarteJeu';
+                    imageDecharge.className = 'imageCarteJeu';
                     $('#paquetDefausse').append(imageDecharge);
                 }
                 if (paquetIntervention.length === 0) {
@@ -6169,6 +6207,12 @@
                         }, { duration: 400, queue: false }
                         );
                         var id;
+                        var idTemp = evt.target.parentNode.id.substr(evt.target.parentNode.id.length - 2);
+                        if (idTemp.substr(0, 1) === 'A' || idTemp.substr(0, 1) === 'B' || idTemp.substr(0, 1) === 'C' || idTemp.substr(0, 1) === 'D') {
+                            id = evt.target.parentNode.id.substr(evt.target.parentNode.id.length - 1);
+                        } else {
+                            id = idTemp;
+                        }
                         id = evt.target.parentNode.id.substr(evt.target.id.length - 1);
 
                         //Les if qui vont envoyer l'objet carte dans la variable.
@@ -6211,16 +6255,16 @@
                 if (carteJeu[0][i] != null) {
                     pointsJoueur[0] += carteJeu[0][i].coutRessources;
 
-                    if (exemplairecarteJeu[0][i] > 1) {
-                        pointsJoueur[0] + (exemplairecarteJeu[0][i] - 1);
+                    if (exemplaireCarteJeu[0][i] > 1) {
+                        pointsJoueur[0] + (exemplaireCarteJeu[0][i] - 1);
                     }
                 }
                 if (nombreJoueur >= 2) {
                     if (carteJeu[1][i] != null) {
                         pointsJoueur[1] += carteJeu[1][i].coutRessources;
 
-                        if (exemplairecarteJeu[0][i] > 1) {
-                            pointsJoueur[1] + (exemplairecarteJeu[1][i] - 1);
+                        if (exemplaireCarteJeu[0][i] > 1) {
+                            pointsJoueur[1] + (exemplaireCarteJeu[1][i] - 1);
                         }
                     }
                 }
@@ -6228,8 +6272,8 @@
                     if (carteJeu[2][i] != null) {
                         pointsJoueur[2] += carteJeu[2][i].coutRessources;
 
-                        if (exemplairecarteJeu[2][i] > 1) {
-                            pointsJoueur[2] + (exemplairecarteJeu[2][i] - 1);
+                        if (exemplaireCarteJeu[2][i] > 1) {
+                            pointsJoueur[2] + (exemplaireCarteJeu[2][i] - 1);
                         }
                     }
                 }
@@ -6237,8 +6281,8 @@
                     if (carteJeu[3][i] != null) {
                         pointsJoueur[3] += carteJeu[3][i].coutRessources;
 
-                        if (exemplairecarteJeu[3][i] > 1) {
-                            pointsJoueur[3] + (exemplairecarteJeu[3][i] - 1);
+                        if (exemplaireCarteJeu[3][i] > 1) {
+                            pointsJoueur[3] + (exemplaireCarteJeu[3][i] - 1);
                         }
                     }
                 }
@@ -6266,11 +6310,11 @@
                     $('#emplacementJoueur' + lettreJoueur(i) + j).children().remove();
 
                     if (carteJeu[i][j] != null) {//Si la carte n'est pas null.
-                        for (var k = 0; k < exemplairecarteJeu[i][j]; k++) {//Boucle dans le nombre d'exemplaire.
+                        for (var k = 0; k < exemplaireCarteJeu[i][j]; k++) {//Boucle dans le nombre d'exemplaire.
                             var image = document.createElement('img');
-                            image.className = 'imagecarteJeu';
+                            image.className = 'imageCarteJeu';
                             image.setAttribute('src', 'ressources/' + carteJeu[i][j].nomImage);
-                            $(image).css('margin-top', k * 10);
+                            $(image).css('margin-top', k * 8);
                             $('#emplacementJoueur' + lettreJoueur(i) + j).append(image);
                         }
                         if (carteJeu[i][j].perturber) {//Si la carte est perturber.
@@ -6278,9 +6322,9 @@
                             $('#emplacementJoueur' + lettre + j).addClass('ui-perturber-highlight');//Ajoute la classe perturber.
                             if (cartePerturbation[i][j] != null) {//Si il y a une carte perturbation à ajouter par dessus.
                                 var image = document.createElement('img');
-                                image.className = 'imagecarteJeu';
+                                image.className = 'imageCarteJeu';
                                 image.setAttribute('src', 'ressources/' + cartePerturbation[i][j].nomImage);
-                                $(image).css('margin-top', exemplairecarteJeu[i][j] * 10);
+                                $(image).css('margin-top', exemplaireCarteJeu[i][j] * 8);
                                 $('#emplacementJoueur' + lettre + j).append(image);
                             }
                         }
@@ -6288,7 +6332,7 @@
                 }
             }
             $(function () {
-                $('.imagecarteJeu').on({
+                $('.imageCarteJeu').on({
                     click: function (evt, ui) {
                         onClickImage($(this).parent().attr("id"), ui);
                     }
