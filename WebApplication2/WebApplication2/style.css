@@ -741,11 +741,7 @@ input::-webkit-inner-spin-button {
 
 
 #divFin {
-    position: absolute;
-    bottom: 265px;
-    height: 40px;
-    width: 250px;
-    left: 11%;
+
 }
 
 #buttonRegle {
