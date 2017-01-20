@@ -3844,8 +3844,14 @@
         function rendrePerturber(evt) {
             var position = evt.id.substr(evt.id.length - 2);//2 derniers caractères de l'emplacement ex: A9.
             var lettrePositionJoueur = position.substr(0, 1);//Lettre de l'emplacement ex: A.
+            if (!(lettrePositionJoueur === 'A' || lettrePositionJoueur === 'B' || lettrePositionJoueur === 'C' || lettrePositionJoueur === 'D')) {
+                position = evt.id.substr(evt.id.length - 3);
+                lettrePositionJoueur = position.substr(0, 1);
+                var numeroPosition = position.substr(position.length - 2);// Numero de la position ex:9.
+            } else {
+                var numeroPosition = position.substr(position.length - 1);// Numero de la position ex:9.
+            }
             var numeroPositionJoueur = numeroJoueur(lettrePositionJoueur);//Numero du joueur selon l'emplacement.
-            var numeroPosition = position.substr(position.length - 1);// Numero de la position ex:9.
 
             if (carteDrag.nom === nomEnum.dechets || carteDrag.nom === nomEnum.artificialisation) {//Si c'est un déchet ou artificialisation.
                 carteJeu[numeroPositionJoueur][numeroPosition].perturber = true;//rends la carte perturbé.
@@ -4133,6 +4139,11 @@
         function bonneZoneDrop(evt) {
             var identification = $(evt).attr('id').substr($(evt).attr('id').length - 2);
             var lettreEmplacement = identification.substr(0, 1);
+
+            if (!(lettreEmplacement === 'A' || lettreEmplacement === 'B' || lettreEmplacement === 'C' || lettreEmplacement === 'D')) {
+                identification = $(evt).attr('id').substr($(evt).attr('id').length - 3);
+                lettreEmplacement = identification.substr(0, 1);
+            }
 
             var lettre = lettreJoueur(numeroJoueurActif);
 
