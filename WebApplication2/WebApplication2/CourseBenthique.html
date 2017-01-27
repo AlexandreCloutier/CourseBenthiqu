@@ -1989,17 +1989,20 @@
             nomJoueurB.innerHTML = "Équipe B";
             $(plateau).append(nomJoueurB);
 
-            var nomJoueurC = document.createElement('label')
-            nomJoueurC.id = "nomEnJeuJoueurC";
-            nomJoueurC.className = "nomEnJeuJoueur";
-            nomJoueurC.innerHTML = "Équipe C";
-            $(plateau).append(nomJoueurC);
-
-            var nomJoueurD = document.createElement('label')
-            nomJoueurD.id = "nomEnJeuJoueurD";
-            nomJoueurD.className = "nomEnJeuJoueur";
-            nomJoueurD.innerHTML = "Équipe D";
-            $(plateau).append(nomJoueurD);
+            if (nombreJoueur > 2) {
+                var nomJoueurC = document.createElement('label')
+                nomJoueurC.id = "nomEnJeuJoueurC";
+                nomJoueurC.className = "nomEnJeuJoueur";
+                nomJoueurC.innerHTML = "Équipe C";
+                $(plateau).append(nomJoueurC);
+                if (nombreJoueur > 3) {
+                    var nomJoueurD = document.createElement('label')
+                    nomJoueurD.id = "nomEnJeuJoueurD";
+                    nomJoueurD.className = "nomEnJeuJoueur";
+                    nomJoueurD.innerHTML = "Équipe D";
+                    $(plateau).append(nomJoueurD);
+                }
+            }
         }
 
         //Fonction qui crée les divers emplacements sur le tableau.
