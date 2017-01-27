@@ -14,7 +14,7 @@
     <script src="scripts/FileSaver.min.js"></script>
     <script>
         /* ------------------enum---------------------  */
-        
+
         //Enum des type de cartes.
         var typeEnum = {
             'habitats': 'habitats',
@@ -23,7 +23,7 @@
             'speciale': 'special',
             'action': 'action',
             'intervention': 'intervention',
-            'interventionHabitats':'interventionHabitats',
+            'interventionHabitats': 'interventionHabitats',
             'salmonide': 'salmonide',
             'bandeRiveraine': 'bandeRiveraine',
             'reglementation': 'reglementation'
@@ -575,11 +575,16 @@
 
             if ($('#dropDownNombreJoueur').val() === '2') {//Si 2 joueurs.
                 if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '') {//Si les noms ne sont pas vide.
-                    if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {//Si les age ne sont pas vide.
-                        entrerValeurCreationPartie();//Fonction qui va entrer les valeurs.
-                        return '';
+                    if ($('#nomJoueurA').val() != $('#nomJoueurB').val()) {
+                        if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {//Si les age ne sont pas vide.
+                            entrerValeurCreationPartie();//Fonction qui va entrer les valeurs.
+                            return '';
+                        } else {
+                            retour = 'Veuillez entrer l\'âge de chacun des joueurs.';
+                            return retour;
+                        }
                     } else {
-                        retour = 'Veuillez entrer l\'âge de chacun des joueurs.';
+                        retour = 'Veuillez entrer un nom différent pour chacun des joueurs.';
                         return retour;
                     }
                 } else {
@@ -588,11 +593,16 @@
                 }
             } else if ($('#dropDownNombreJoueur').val() === '3') {//Si 3 joueurs.
                 if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '' && $('#nomJoueurC').val() != '') {
-                    if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '') {
-                        entrerValeurCreationPartie();
-                        return '';
+                    if ($('#nomJoueurA').val() != $('#nomJoueurB').val() && $('#nomJoueurA').val() != $('#nomJoueurC').val() && $('#nomJoueurC').val() != $('#nomJoueurB').val()) {
+                        if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '') {
+                            entrerValeurCreationPartie();
+                            return '';
+                        } else {
+                            retour = 'Veuillez entrer l\'age de chacun des joueurs.';
+                            return retour;
+                        }
                     } else {
-                        retour = 'Veuillez entrer l\'age de chacun des joueurs.';
+                        retour = 'Veuillez entrer un nom différent pour chacun des joueurs.';
                         return retour;
                     }
                 } else {
@@ -601,11 +611,16 @@
                 }
             } else if ($('#dropDownNombreJoueur').val() === '4') {//Si 4 joueurs.
                 if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() && $('#nomJoueurC').val() != '' && $('#nomJoueurD').val() != '') {
-                    if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '' && $('#ageJoueurD').val() != '') {
-                        entrerValeurCreationPartie();
-                        return '';
+                    if ($('#nomJoueurA').val() != $('#nomJoueurB').val() && $('#nomJoueurA').val() != $('#nomJoueurC').val() && $('#nomJoueurC').val() != $('#nomJoueurB').val() && $('#nomJoueurD').val() != $('#nomJoueurA').val() && $('#nomJoueurD').val() != $('#nomJoueurB').val() && $('#nomJoueurC').val() != $('#nomJoueurD').val()) {
+                        if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '' && $('#ageJoueurC').val() != '' && $('#ageJoueurD').val() != '') {
+                            entrerValeurCreationPartie();
+                            return '';
+                        } else {
+                            retour = 'Veuillez entrer l\'age de chacun des joueurs.';
+                            return retour;
+                        }
                     } else {
-                        retour = 'Veuillez entrer l\'age de chacun des joueurs.';
+                        retour = 'Veuillez entrer un nom différent pour chacun des joueurs.';
                         return retour;
                     }
                 } else {
@@ -4981,7 +4996,7 @@
 
             return false;
         }
-        
+
         //Fonction qui tue les macroinvertébrés qui ont besoin d'un habitat entré en paramètre.
         function tuerMacroHabitats(habitats, joueur) {
             var tuer = false;
@@ -5938,7 +5953,7 @@
                     $('#divJoueurEnCours').html('Tour de : <strong>' + nomJoueur[numeroJoueurActif] + '</strong>');
 
                     popUpDebutTour(numeroJoueurActif);
-                 
+
                     if (tableauPasserTour[numeroJoueurActif] === true) {
                         setTimeout(function () {
                             passerTour();
@@ -6197,7 +6212,7 @@
                 } else if (nombreJoueur === 4) {
                     divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s " + tour + " tours</p>";
                 }
-            } else if(tourHuit){
+            } else if (tourHuit) {
                 if (nombreJoueur === 2) {
                     divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car nous avons passés les 8 tours de jeu.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s 8 tours</p>";
                 } else if (nombreJoueur === 3) {
@@ -6205,7 +6220,7 @@
                 } else if (nombreJoueur === 4) {
                     divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car nous avons passés les 8 tours de jeu.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s 8 tours</p>";
                 }
-            }else {
+            } else {
                 if (nombreJoueur === 2) {
                     divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave; " + tour + " tours</p>";
                 } else if (nombreJoueur === 3) {
