@@ -227,22 +227,32 @@ input::-webkit-inner-spin-button {
     z-index: 0;
 }
 
-.nomJoueurPlateau {
-    color: white;
-    font-size: 24px;
+.nomEnJeuJoueur {
+    font-size: 20px;
     position: absolute;
 }
 
-#nomJoueurPlateauB {
+#nomEnJeuJoueurA {
+    bottom: 190px;
+    left: 280px;
+}
+
+#nomEnJeuJoueurB {
     transform: rotate(180deg);
+    top: 190px;
+    left: 280px;
 }
 
-#nomJoueurPlateauC {
+#nomEnJeuJoueurC {
     transform: rotate(90deg);
+    top: 300px;
+    left: 165px;
 }
 
-#nomJoueurPlateauD {
+#nomEnJeuJoueurD {
     transform: rotate(-90deg);
+    top: 306px;
+    right: 165px;
 }
 
 .paquetCharge {
@@ -325,9 +335,10 @@ input::-webkit-inner-spin-button {
     border-radius: 5px;
     transform: rotate(-90deg);
 }
-#emplacementJoueurA0, #emplacementJoueurA7, #emplacementJoueurA8, #emplacementJoueurB0, #emplacementJoueurB7, #emplacementJoueurB12, #emplacementJoueurC0, #emplacementJoueurC7, #emplacementJoueurC8, #emplacementJoueurD0,#emplacementJoueurD7, #emplacementJoueurD12 {
+
+#emplacementJoueurA0, #emplacementJoueurA7, #emplacementJoueurA8, #emplacementJoueurB0, #emplacementJoueurB7, #emplacementJoueurB12, #emplacementJoueurC0, #emplacementJoueurC7, #emplacementJoueurC8, #emplacementJoueurD0, #emplacementJoueurD7, #emplacementJoueurD12 {
     background: rgba(255, 255, 255, .37);
-    border : 2px solid rgba(255,255,255, 0.5);
+    border: 2px solid rgba(255,255,255, 0.5);
 }
 
 .zoneGrise {
@@ -408,7 +419,7 @@ input::-webkit-inner-spin-button {
 .popUpChoix {
     overflow: auto !important;
     font-family: Arial;
-    max-height: 750px;
+    max-height: 600px;
 }
 
 .divTableauCarte {
@@ -609,8 +620,9 @@ input::-webkit-inner-spin-button {
 }
 
 .imageTooltip {
-    height: 270px;
-    width: 177px;
+    max-height: 270px;
+    max-width: 177px;
+    position:relative;
 }
 
 .liMain {
@@ -746,13 +758,13 @@ input::-webkit-inner-spin-button {
 
 
 @media print {
-   #buttonImprimer {
-      display:none;
-   }
+    #buttonImprimer {
+        display: none;
+    }
 }
 
 #divFin {
-text-align:center;
+    text-align: center;
 }
 
 #buttonRegle {

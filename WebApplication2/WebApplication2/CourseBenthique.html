@@ -13,7 +13,6 @@
     <script src="scripts/jquery-ui.min.js"></script>
     <script src="scripts/FileSaver.min.js"></script>
     <script>
-        //TODO: Changer fonction lettre joueur et nombrejoueur
         /* ------------------enum---------------------  */
         var typeEnum = {
             'habitats': 'habitats',
@@ -959,7 +958,9 @@
                                                 $('#labelChoix').text('Choisissez la carte «Intervention» désirée')
                                                 $('#divChoixContenu').children().remove('ul');
                                                 $(this).dialog({
+                                                    height: 575,
                                                     width: 575,
+                                                    position: { my: 'top', at: 'top', of: window },
                                                     buttons: {
                                                         Confirmer: function () {
                                                             if (carteSelectionne == null) {
@@ -1126,8 +1127,8 @@
                                                 } else {
                                                     numeroPosLibre = substrTemporaire;
                                                 }
-                                                
-                                                
+
+
                                                 carteJeu[bandeRiveraineEroder[1]][numeroPosLibre] = bandeRiveraineEroder[0];
                                                 var carte = document.createElement('img');
                                                 carte.className = 'imageCarteJeu';
@@ -1150,7 +1151,9 @@
                                                 $('#labelChoix').text('Choisissez la carte «Intervention» désirée.')
                                                 $('#divChoixContenu').children().remove('ul');
                                                 $(this).dialog({
+                                                    height: 575,
                                                     width: 575,
+                                                    position: { my: 'top', at: 'top', of: window },
                                                     buttons: {
                                                         Confirmer: function () {
                                                             if (carteSelectionne == null) {
@@ -1713,6 +1716,8 @@
                                                     $('#divChoixContenu').children().remove('ul');
                                                     $(this).dialog({
                                                         width: 575,
+                                                        height: 575,
+                                                        position: { my: 'top', at: 'top', of: window },
                                                         buttons: {
                                                             Confirmer: function () {
                                                                 if (carteSelectionne == null) {
@@ -1970,6 +1975,31 @@
             imageIntervention.src = 'ressources/petitPaquet.png';
             imageIntervention.className = 'imageCarteJeu';
             $(paquetImageIntervention).append(imageIntervention);
+
+            //Création d'un libéllé au dessus de chaque zone de jeu contenant le nom de chaque joueur
+            var nomJoueurA = document.createElement('label')
+            nomJoueurA.id = "nomEnJeuJoueurA";
+            nomJoueurA.className = "nomEnJeuJoueur";
+            nomJoueurA.innerHTML = "Équipe A";
+            $(plateau).append(nomJoueurA);
+
+            var nomJoueurB = document.createElement('label')
+            nomJoueurB.id = "nomEnJeuJoueurB";
+            nomJoueurB.className = "nomEnJeuJoueur";
+            nomJoueurB.innerHTML = "Équipe B";
+            $(plateau).append(nomJoueurB);
+
+            var nomJoueurC = document.createElement('label')
+            nomJoueurC.id = "nomEnJeuJoueurC";
+            nomJoueurC.className = "nomEnJeuJoueur";
+            nomJoueurC.innerHTML = "Équipe C";
+            $(plateau).append(nomJoueurC);
+
+            var nomJoueurD = document.createElement('label')
+            nomJoueurD.id = "nomEnJeuJoueurD";
+            nomJoueurD.className = "nomEnJeuJoueur";
+            nomJoueurD.innerHTML = "Équipe D";
+            $(plateau).append(nomJoueurD);
         }
 
         //Fonction qui crée les divers emplacements sur le tableau.
@@ -3658,9 +3688,23 @@
                                 carte1.className = 'imageCarteJeu imageCarteEchange';
                                 carte1.src = 'ressources/' + carteEchange1.nomImage;
 
+                                var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
+                                $(carte1).tooltip({
+                                    items: 'img',
+                                    content: cloneImage,
+                                    show: { delay: 1000 }
+                                });
+
                                 var carte2 = document.createElement('img');
                                 carte2.className = 'imageCarteJeu imageCarteEchange';
                                 carte2.src = 'ressources/' + carteEchange2.nomImage;
+
+                                var cloneImage2 = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
+                                $(carte2).tooltip({
+                                    items: 'img',
+                                    content: cloneImage2,
+                                    show: { delay: 1000 }
+                                });
 
                                 if (verifierCartePresenteEchange(carteEchange1.nom, numeroJoueur(lettreJoueur2)) === '') {//Si la carte n'est pas déjà présente
                                     if ($('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().length === 1) {//Si les cartes ne sont pas empilées.
@@ -3833,7 +3877,7 @@
                 numeroPosition = emplacement.substr(1, 2);
             }
             var numeroJoueurPositionDrop = numeroJoueur(emplacement.substr(0, 1));
-            
+
 
             $(positionCarteDepart).children().last().remove();
 
@@ -3852,7 +3896,7 @@
             } else {
                 numeroPositionDropper = emplacementDropper.substr(1, 2);
             }
-            
+
 
             exemplaireCarteJeu[numeroJoueurPositionDrop][numeroPositionDropper] = 1;
             var carteCopie = jQuery.extend(new Carte(), carteJeu[numeroJoueurPositionDrop][numeroPosition]);
@@ -6187,7 +6231,6 @@
                     $(image).tooltip({
                         items: 'img',
                         content: cloneImage,
-                        position: { my: "right", at: "left" },
                         show: { delay: 1000 }
                     });
                 }
