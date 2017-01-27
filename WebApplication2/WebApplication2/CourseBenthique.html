@@ -14,6 +14,8 @@
     <script src="scripts/FileSaver.min.js"></script>
     <script>
         /* ------------------enum---------------------  */
+        
+        //Enum des type de cartes.
         var typeEnum = {
             'habitats': 'habitats',
             'macroInvertebre': 'macroInvertebre',
@@ -26,6 +28,7 @@
             'bandeRiveraine': 'bandeRiveraine',
             'reglementation': 'reglementation'
         };
+        //Enum de tout les noms des cartes.
         var nomEnum = {
             'erosion': 'erosion',
             'assainissement': 'assainissement',
@@ -91,6 +94,7 @@
             'arbustes': 'arbustes',
             'arbres': 'arbres'
         };
+        //Enum de touts les types que peuvent être les macro-invertébrés.
         var typeMacroEnum = {
             'annelide': 'annelide',
             'diptere': 'diptere',
@@ -198,13 +202,16 @@
 
         //Fonction qui affiche l'écran d'introduction.
         function menuPrincipal() {
-            $('#menuCreerPartie').remove();
+            $('#menuCreerPartie').remove();//Enleve la menu de création de partie.
+
+            //logo sur le menu principal.
             var menuPrincipal = document.createElement('div');
             menuPrincipal.id = 'menuPrincipal';
             menuPrincipal.className = 'menuPrincipal';
             menuPrincipal.innerHTML = '<img class="imageMenuPrincipal" src="ressources/logo.png" />';
             $('body').append(menuPrincipal);
 
+            //Bouton pour la nouvelle partie.
             var buttonNouvellePartie = document.createElement('button');
             buttonNouvellePartie.id = 'buttonNouvellePartie';
             buttonNouvellePartie.className = 'buttonMenuPrincipal';
@@ -220,12 +227,14 @@
             divCredits.innerHTML = "<img class='imageCredits' src='ressources/logo_g3e.png' /><p></p><p><span style='font-size: 20pt;'>Conception du jeu&nbsp;:</span> Jonathan Pedneau</p><p><span style='font-size: 20pt;'>Graphisme&nbsp;:</span> Pierre-Olivier Boucher</p><p><span style='font-size: 20pt;'>Illustrations&nbsp;:</span> Groupe d&rsquo;&eacute;ducation et d&rsquo;&eacute;cosurveillance de l&rsquo;eau</p><p><span style='font-size: 20pt;'>Conception et d&eacute;veloppement du jeu interactif&nbsp;:</span> Samuel Brien et Alexandre Cloutier</p><p><span style='font-size: 20pt;'>Production&nbsp;:</span> Groupe d&rsquo;&eacute;ducation et d&rsquo;&eacute;cosurveillance de l&rsquo;eau (G3E), 2017</p>";
             $('#menuPrincipal').append(divCredits);
 
+            //Texte sur l'écran d'accueil.
             var divTexteEcranAccueil = document.createElement('div');
             divTexteEcranAccueil.id = 'divTexteEcranAccueil';
             divTexteEcranAccueil.className = 'divTexteEcranAccueil';
             divTexteEcranAccueil.innerHTML = 'Un jeu du Groupe d’éducation et d’écosurveillance de l’eau.';
             $('#menuPrincipal').append(divTexteEcranAccueil);
 
+            //Bouton pour charger une partie.
             var buttonChargerPartie = document.createElement('div');
             buttonChargerPartie.id = 'buttonChargerPartie';
             buttonChargerPartie.className = 'buttonMenuPrincipal';
@@ -233,6 +242,7 @@
             buttonChargerPartie.style.bottom = '85px';
             $('#menuPrincipal').append(buttonChargerPartie);
 
+            //fileReader si nous chargeons une partie.
             var fileReader = document.createElement('input');
             fileReader.type = 'file';
             fileReader.id = 'fileReader';
@@ -242,8 +252,9 @@
             fileReader.addEventListener("change", function () {
                 chargerPartie(fileReader.files);
             });
-            $('#buttonChargerPartie').append(fileReader);
+            $('#buttonChargerPartie').append(fileReader);//Ajoute le fileReader au bouton de chargement de partie.
 
+            //Bouton crédirts.
             var buttonCredits = document.createElement('button');
             buttonCredits.id = 'buttonCredits';
             buttonCredits.className = 'buttonMenuPrincipal';
@@ -255,30 +266,33 @@
 
         //Fonction qui commence la partie.
         function lancerOptionPartie() {
-            $('#menuPrincipal').remove();
-            menuCreerPartie();
+            $('#menuPrincipal').remove();//Retire le menu principal.
+            menuCreerPartie();//Fonction qui va lancer le menu de création de partie.
         }
 
         //Fonction qui affiche l'écran de création de partie.
         function menuCreerPartie() {
 
+            //Division principal.
             var menuCreerPartie = document.createElement('div');
             menuCreerPartie.id = 'menuCreerPartie';
             menuCreerPartie.className = 'menuCreerPartie';
             $('body').append(menuCreerPartie);
 
-            //Section contre des vrais joueurs
+            //Section contre des vrais joueurs (anciennement il y avais la possibilité de joeur avec IA et nous gardons la div au cas ou.)
             var divContreVJ = document.createElement('div');
             divContreVJ.id = 'divContreVJ';
             divContreVJ.className = 'divContreVJ';
             $(menuCreerPartie).append(divContreVJ);
 
+            //Texte demandant le nombre de joueurs.
             var labelTexteNombreJoueur = document.createElement('label');
             labelTexteNombreJoueur.id = 'labelTexteNombreJoueur';
             labelTexteNombreJoueur.className = 'labelTexteNombreJoueur';
             labelTexteNombreJoueur.innerHTML = 'Nombre de joueurs&nbsp;: ';
             $(divContreVJ).append(labelTexteNombreJoueur);
 
+            //Drop down du nombre de joueur.
             var dropDownNombreJoueur = document.createElement('select');
             dropDownNombreJoueur.id = 'dropDownNombreJoueur';
             dropDownNombreJoueur.className = 'dropDown';
@@ -296,7 +310,7 @@
             option4.innerHTML = '4';
             dropDownNombreJoueur.appendChild(option4);
             $(function () {
-                $(dropDownNombreJoueur).on({
+                $(dropDownNombreJoueur).on({//Quand la valeur change, cache ou montre les divsion de joueurs selon le nombre de joueurs voulu.
                     change: function () {
                         $(divJoueurA).hide();
                         $(divJoueurB).hide();
@@ -482,7 +496,7 @@
             $(divJoueurC).hide();
             $(divJoueurD).hide();
 
-            //Zone choix de difficulté
+            //Zone choix de la difficulté
             var divDifficulte = document.createElement('div');
             divDifficulte.id = 'divDifficulte';
             divDifficulte.className = 'divDifficulte';
@@ -494,6 +508,7 @@
             labelTexteDifficulte.innerHTML = 'Difficulté de la partie&nbsp;: ';
             $(divDifficulte).append(labelTexteDifficulte);
 
+            //DropDown donnant le choix de la difficulté.
             var dropDownDifficulte = document.createElement('select');
             dropDownDifficulte.id = 'dropDownDifficulte';
             dropDownDifficulte.className = 'dropDown';
@@ -511,6 +526,7 @@
             option3.innerHTML = 'Difficile';
             dropDownDifficulte.appendChild(option3);
 
+            //Division ou sera afficher la ou les erreurs.
             var divLabelErreur = document.createElement('div');
             divLabelErreur.id = 'divLabelErreur';
             divLabelErreur.className = 'divLabelErreur';
@@ -521,43 +537,46 @@
             labelErreur.id = 'labelErreur';
             $(divLabelErreur).append(labelErreur);
 
+            //Bouton pour débuter la partie.
             var buttonDebuter = document.createElement('button');
             buttonDebuter.id = 'buttonDebuter';
             buttonDebuter.className = 'buttonMenuPrincipal';
             buttonDebuter.innerHTML = 'Débuter';
             buttonDebuter.style.bottom = '95px';
-            buttonDebuter.onclick = commencerNouvellePartie;
+            buttonDebuter.onclick = commencerNouvellePartie;//Ajouter la fonction sur le bouton.
             $(menuCreerPartie).append(buttonDebuter);
 
+            //Bouton de retour.
             var buttonRetour = document.createElement('button');
             buttonRetour.id = 'buttonRetour';
             buttonRetour.className = 'buttonMenuPrincipal';
             buttonRetour.innerHTML = 'Retour';
             buttonRetour.style.bottom = '35px';
-            buttonRetour.onclick = menuPrincipal;
+            buttonRetour.onclick = menuPrincipal;//Ajout de la fonction sur le bouton.
             $(menuCreerPartie).append(buttonRetour);
         }
 
         //Fonction qui envoie vers les options de création de partie.
         function commencerNouvellePartie() {
-            if (verifierConditionCreationPartie() === '') {
+            if (verifierConditionCreationPartie() === '') {//Si il n'y a pas d'erreurs dans les condition de créations de partie.
                 $('#menuCreerPartie').remove();
                 startGame();//Commence la partie.
                 popUpRegle();//Règles ouvre avant le début de la partie.
             } else {
                 $('#labelErreur').css('color', 'red');
-                $('#labelErreur').html('<p></p>' + verifierConditionCreationPartie());
+                $('#labelErreur').html('<p></p>' + verifierConditionCreationPartie());//Écrit les erreurs.
             }
         }
 
-        //Fonction qui va vérifier les conditions des champs lors de la création d'une nouvelle partie.
+        /*Fonction qui va vérifier les conditions des champs lors de la création d'une nouvelle partie.
+        Retourne rien si toutes les conditons sont OK, sinon retourne l'erreur.*/
         function verifierConditionCreationPartie() {
             var retour;
 
             if ($('#dropDownNombreJoueur').val() === '2') {//Si 2 joueurs.
-                if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '') {
-                    if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {
-                        entrerValeurCreationPartie();
+                if ($('#nomJoueurA').val() != '' && $('#nomJoueurB').val() != '') {//Si les noms ne sont pas vide.
+                    if ($('#ageJoueurA').val() != '' && $('#ageJoueurB').val() != '') {//Si les age ne sont pas vide.
+                        entrerValeurCreationPartie();//Fonction qui va entrer les valeurs.
                         return '';
                     } else {
                         retour = 'Veuillez entrer l\'âge de chacun des joueurs.';
@@ -821,7 +840,7 @@
                             pointsRessourcesUtiliser[numeroJoueurActif] += carteDrag.coutRessources;
                             updatePointsRessources();
                             /* -----------Perturbation--------------*/
-                            if (carteDrag.nom === nomEnum.deversement) {
+                            if (carteDrag.nom === nomEnum.deversement) {//Si c'est la carte déversement.
                                 //Si personne n'a de carte pris sur le fait.
                                 if (verifierPresencePrisSurFait().filter(function (value) { return value != null }).length === 0) {
                                     supprimerCartePrecise(carteDragNumero);
@@ -869,7 +888,7 @@
                                                             }
                                                         }
                                                         $(this).dialog('close');
-                                                        updateAffichageImage();
+                                                        updateAffichageImage();//Update tout l'Affichage.
                                                     }
                                                 } else {
                                                     popUpAvertissement('Veuillez choisir un option.');
@@ -964,7 +983,7 @@
                                                     position: { my: 'top', at: 'top', of: window },
                                                     closeOnEscape: false,
                                                     buttons: {
-                                                        Confirmer: function () {
+                                                        Confirmer: function () {//Appeler lors du clic sur confirmer.
                                                             if (carteSelectionne == null) {
                                                                 popUpAvertissement('Veuillez d\'abord choisir une carte.');
                                                             } else {
@@ -2375,12 +2394,14 @@
 
         //Fonction qui crée l'espace de la main.
         function creerMain() {
+            //Division de la main.
             var divNomMain = document.createElement('div');
             divNomMain.className = 'divNomMain';
             divNomMain.id = 'divNomMain';
             divNomMain.innerHTML = 'Main de : ' + nomJoueur[numeroJoueurActif];
             document.getElementById('divMain').appendChild(divNomMain);
 
+            //boucle pour les 6 emplacement de la main et ajoute des "li" et des "div"
             for (var i = 0; i < 6; i++) {
                 var li = document.createElement('li');
                 li.className = 'liMain';
@@ -2454,7 +2475,7 @@
                 if (salmonide[i] != null) {
                     if (salmonide[i]) {
                         if (tourSalmonide[i] != 0) {
-                            return nomJoueur[i];
+                            return nomJoueur[i];//Retourne le nom du joueur qui a le poisson.
                         }
                     }
                 }
@@ -2463,15 +2484,15 @@
 
         //Function qui retournera l'ordre des joueurs
         function placementFinal() {
-            var placement = new Array(nombreJoueur);
+            var placement = new Array(nombreJoueur);//Tableau du placement initialiser au nombre de joueurs.
 
             for (var i = 0; i < nombreJoueur; i++) {
                 placement[i] = pointsJoueur[i];
             }
 
-            placement.sort(function (a, b) { return b - a });
+            placement.sort(function (a, b) { return b - a });//"sort" les points du plus grand au plus petit.
 
-            return placement;
+            return placement;//Retourne le nombre de points.
         }
 
         //Fonction qui retournera le nom des joueurs en ordre
@@ -2505,7 +2526,7 @@
                 }
             }
 
-            if (present === false) {
+            if (present === false) {//Si le joueur n'est pas déjà présent, return false.
                 return false;
             } else {
                 return true;
@@ -2514,11 +2535,12 @@
 
         //Function qui affichera les crédits.
         function afficherCredits() {
-            popUpCredits();
+            popUpCredits();//Fonction qui va afficher les crédits.
         }
 
         //Fonction qui sera appelé lors d'un clic sur le bouton sauvegarder
         function sauvegarderPartie(nom) {
+            //Liste de toute les variable devant être enregistrer.
             var paquetCarteJson = '[';
             var paquetDechargeJson = '[';
             var paquetInterventionJson = '[';
@@ -3102,12 +3124,14 @@
             divSauvegarder.className = 'divSauvegarder';
             $('#plateau').append(divSauvegarder);
 
+            //Texte sauvegarder.
             var divTitreSauvegarder = document.createElement('div');
             divTitreSauvegarder.id = 'divTitreSauvegarder';
             divTitreSauvegarder.className = 'divTitreSauvegarder';
             divTitreSauvegarder.innerHTML = '<p>Sauvegarder</p>';
             divSauvegarder.appendChild(divTitreSauvegarder);
 
+            //Texte expliquant l'erreur.
             var divTexteExplication = document.createElement('div');
             divTexteExplication.id = 'divTitreExplication';
             divTexteExplication.className = 'divTexteExplication';
@@ -3417,6 +3441,12 @@
 
         //Fonction qui retourne la difficulte sous forme de texte.
         function retourDifficulte() {
+            /*
+            1 = Facile;
+            2 = Moyen;
+            3 = Difficile;
+            */
+
             if (difficulte === '1') {
                 return 'Facile';
             } else if (difficulte === '2') {
@@ -4003,8 +4033,9 @@
         function reempillerCartePasPerturber(numeroDuJoueur, positionCarteAEmpiler) {
             for (var i = 0; i < carteJeu[numeroDuJoueur].length; i++) {
                 if (carteJeu[numeroDuJoueur][i] != null) {
+                    //Si c'est la même carte que celle qui viens de ne plus être perturber.
                     if (carteJeu[numeroDuJoueur][i].nom === carteJeu[numeroDuJoueur][positionCarteAEmpiler].nom) {
-                        if (carteJeu[numeroDuJoueur][i].perturber === false) {
+                        if (!carteJeu[numeroDuJoueur][i].perturber) {//Si elle n'est pas perturber.
                             exemplaireCarteJeu[numeroDuJoueur][i]++;
 
                             var image = document.createElement('img');
@@ -4014,7 +4045,7 @@
                             $('#emplacementJoueur' + lettreJoueur(numeroDuJoueur) + i).append(image);
                             $('#emplacementJoueur' + lettreJoueur(numeroDuJoueur) + positionCarteAEmpiler).children().first().remove();
 
-                            $(function () {
+                            $(function () {//Ajoute la fonction OnClick.
                                 $('.ajoutOnClick').on({
                                     click: function (evt, ui) {
                                         onClickImage($(this).parent().attr("id"), ui);
@@ -4022,7 +4053,7 @@
                                 })
                             });
 
-                            $('.ajoutOnClick').removeClass('ajoutOnClick');
+                            $('.ajoutOnClick').removeClass('ajoutOnClick');//Retire la classe temporaire.
                         }
                     }
                 }
@@ -4099,13 +4130,15 @@
 
         //Fonction qui rend tous les habitats ennemi brillant.
         function brillanceHabitatsEnnemi(brille) {
-            if (brille) {
+            if (brille) {//Si nous voulons ajouter de la brillance.
                 for (var i = 0; i < nombreJoueur; i++) {
-                    if (i !== numeroJoueurActif) {
+                    if (i !== numeroJoueurActif) {//Si c'est pas le joueur actif.
                         for (var j = 0; j < carteJeu[i].length; j++) {
-                            if (carteJeu[i][j] != null) {
-                                if (carteJeu[i][j].type === typeEnum.habitats) {
+                            if (carteJeu[i][j] != null) {//Si la carte n'est pas null.
+                                if (carteJeu[i][j].type === typeEnum.habitats) {//Si c'est un habitats.
                                     if (carteJeu[i][j].perturber !== true) {
+
+                                        //Ajoute la classe de brillance.
                                         $('#emplacementJoueur' + lettreJoueur(i) + j).addClass('ui-echange-highlight');
                                     }
                                 }
@@ -4113,9 +4146,11 @@
                         }
                     }
                 }
-            } else {
+            } else {//Si nous ne voulons plus de brillance.
                 for (var i = 0; i < nombreJoueur; i++) {
                     for (var j = 0; j < carteJeu[i].length; j++) {
+
+                        //Retire la carte de brillance.
                         $('#emplacementJoueur' + lettreJoueur(i) + j).removeClass('ui-echange-highlight');
                     }
                 }
@@ -4213,9 +4248,9 @@
 
         //Fonction qui retourne true si le joueur possede un certificat d'assainissement.
         function possedeAssainissement(numero) {
-            for (var i = 0; i < carteJeu[numero].length; i++) {
-                if (carteJeu[numero][i] != null) {
-                    if (carteJeu[numero][i].nom === nomEnum.assainissement) {
+            for (var i = 0; i < carteJeu[numero].length; i++) {//Boucle dans les cartes du jeu.
+                if (carteJeu[numero][i] != null) {//si la carte n'est pas null.
+                    if (carteJeu[numero][i].nom === nomEnum.assainissement) {//Si c'est un assainissement.
                         return true;
                     }
                 }
