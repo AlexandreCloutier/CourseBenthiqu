@@ -3246,7 +3246,7 @@
                 //pour assurer une chance egale à tous les joueurs d'avoir les mêmes cartes.
 
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere(nomEnum.sable, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
 
@@ -3258,7 +3258,7 @@
                 }
 
                 //Deuxième carte, c'est un habitats au hasard.
-                mains[0][1] = chercherCarteParticuliere(nomEnum.amenagement, paquetCarte);
+                mains[0][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
                 mains[1][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -3269,7 +3269,7 @@
                 }
 
                 //3e carte, piger au hasard.
-                mains[0][2] = chercherCarteParticuliere(nomEnum.ephemeridae, paquetCarte);
+                mains[0][2] = pigerCarte(paquetCarte);
                 mains[1][2] = pigerCarte(paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -4241,7 +4241,7 @@
             var lettre = lettreJoueur(numeroJoueurActif);
 
             //Si c'est un habitat, un macroinvertebré ou une bande riveraine, la carte se joue seulement sur notre territoire.
-            if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.bandeRiveraine || carteDrag.type === typeEnum.salmonide || carteDrag.type === typeEnum.reglementation || carteDrag.type === typeEnum.intervention) {
+            if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.macroInvertebre || carteDrag.type === typeEnum.bandeRiveraine || carteDrag.type === typeEnum.salmonide || carteDrag.type === typeEnum.reglementation || carteDrag.type === typeEnum.intervention || carteDrag.type === typeEnum.interventionHabitats) {
                 if (lettreEmplacement === lettre) {
                     return true;
                 } else {
@@ -4424,7 +4424,7 @@
                         popUpAvertissement('Vous ne respectez pas les conditions nécéssaires.');
                         return false;
                     }
-                } else if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.intervention || carteDrag.type === typeEnum.bandeRiveraine) {
+                } else if (carteDrag.type === typeEnum.habitats || carteDrag.type === typeEnum.intervention || carteDrag.type === typeEnum.bandeRiveraine || carteDrag.type === typeEnum.interventionHabitats) {
                     if (carteDrag.type === typeEnum.habitats) {//Si on joue un habitat.
                         if (verifierNombreHabitats(numeroJoueurActif, 8)) {//Si on n'a pas 8 habitats déjà en jeu.
                             calculer = true;
@@ -4442,6 +4442,9 @@
                             return false;
                         }
                     } else if (carteDrag.type === typeEnum.intervention) {//Si on joue une intervention.
+                        calculer = true;
+                        return true;
+                    } else {
                         calculer = true;
                         return true;
                     }
@@ -4930,7 +4933,7 @@
 
             return false;
         }
-
+        
         //Fonction qui tue les macroinvertébrés qui ont besoin d'un habitat entré en paramètre.
         function tuerMacroHabitats(habitats, joueur) {
             var tuer = false;
@@ -5107,11 +5110,17 @@
                 this.predateur = params.predateur;
                 this.typeMacro = params.typeMacro;
                 this.condition = params.condition;
-            } else if (type === typeEnum.intervention || type === typeEnum.interventionHabitats) {
+            } else if (type === typeEnum.intervention) {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
                 this.coutRessources = coutRessources;
+            } else if (type === typeEnum.interventionHabitats) {
+                this.nom = nom;
+                this.type = type;
+                this.nomImage = nomImage;
+                this.coutRessources = coutRessources;
+                this.habitats = params.habitats;
             }
         }
 
