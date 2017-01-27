@@ -763,6 +763,10 @@ text-align:center;
     left: 11%;
 }
 
+#divNomMain{
+    text-align:center;
+}
+
 #buttonTableauCarte {
     position: absolute;
     bottom: 50px;

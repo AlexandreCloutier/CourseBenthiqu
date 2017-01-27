@@ -22,6 +22,7 @@
             'speciale': 'special',
             'action': 'action',
             'intervention': 'intervention',
+            'interventionHabitats':'interventionHabitats',
             'salmonide': 'salmonide',
             'bandeRiveraine': 'bandeRiveraine',
             'reglementation': 'reglementation'
@@ -106,6 +107,9 @@
             'crustace': 'crustace'
         };
 
+        //Variable qui nous dira si nous sommes au tour 8 pour terminer la partie.
+        var tourHuit = false;
+        //Variable qui va tous stoper dans le passer le tour si elle est égal à true.
         var fin = false;
         //Tableau contenant l'âge des joueurs.
         var ageJoueur;
@@ -2050,7 +2054,7 @@
                                                         taillePredateur = carteDrag.taille;
                                                         onDrop(evt, ui, this);
                                                         mangerPredateur = true;
-                                                        popUpConfirmation('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
+                                                        popUpConfirmation('Vous devez sélectionner un «Macroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                                                         brillanceCarteMangeable(true);
                                                         griserZone(true, false, true);
                                                     } else {//Sinon, met simplement la carte.
@@ -2062,7 +2066,7 @@
                                                     salmonide[numeroJoueurActif] = true;
                                                     mangerSalmonide = true;
                                                     tourSalmonide = 0;
-                                                    popUpConfirmation('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
+                                                    popUpConfirmation('Vous devez sélectionner un «Macroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                                                     brillanceCarteMangeable(true);
                                                     griserZone(true, false, true);
                                                 } else {//Sinon, met simplement la carte.
@@ -2074,7 +2078,7 @@
                                                         taillePredateur = carteDrag.taille;
                                                         onDrop(evt, ui, verifierCartePresente(carteDrag.nomImage));
                                                         mangerPredateur = true;
-                                                        popUpConfirmation('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
+                                                        popUpConfirmation('Vous devez sélectionner un «Macroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                                                         brillanceCarteMangeable(true);
                                                     } else {//Sinon, mes simplement la carte.
                                                         onDrop(evt, ui, verifierCartePresente(carteDrag.nomImage));
@@ -2325,6 +2329,12 @@
 
         //Fonction qui crée l'espace de la main.
         function creerMain() {
+            var divNomMain = document.createElement('div');
+            divNomMain.className = 'divNomMain';
+            divNomMain.id = 'divNomMain';
+            divNomMain.innerHTML = 'Main de : ' + nomJoueur[numeroJoueurActif];
+            document.getElementById('divMain').appendChild(divNomMain);
+
             for (var i = 0; i < 6; i++) {
                 var li = document.createElement('li');
                 li.className = 'liMain';
@@ -3102,7 +3112,7 @@
                     for (var i = 0; i < carteJeu[numeroJoueurActif].length; i++) {
                         if (carteJeu[numeroJoueurActif][i] != null) {// S'il y a une carte.
                             //Si c'est un habitat pas perturbé ou une carte d'intervention d'habitat.
-                            if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.intervention) {// Si la carte est une habitats.
+                            if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.interventionHabitats) {// Si la carte est une habitats.
                                 return true;
                             }
                         }
@@ -3113,7 +3123,7 @@
 
                 for (var i = 0; i < carteJeu[numeroJoueurActif].length; i++) {
                     if (carteJeu[numeroJoueurActif][i] != null) {// S'il y a une carte.
-                        if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.intervention) {// Si la carte est une habitats.
+                        if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.interventionHabitats) {// Si la carte est une habitats.
                             if (carteJeu[numeroJoueurActif][i].habitats === condition1) {//Si l'habitat de la carte est la même que la condition.
                                 return true;
                             }
@@ -3128,7 +3138,7 @@
                 for (var i = 0; i < carteJeu[numeroJoueurActif].length; i++) {
                     if (carteJeu[numeroJoueurActif][i] != null) {// S'il y a une carte.
                         //Si c'est un habitat pas perturbé ou une carte d'intervention d'habitat.
-                        if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.intervention) {// Si la carte est une habitats.
+                        if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.interventionHabitats) {// Si la carte est une habitats.
                             if (carteJeu[numeroJoueurActif][i].habitats === condition1) {//Si l'habitat de la carte est la même que la condition1.
                                 condition1 = 'ok';
                             } else if (carteJeu[numeroJoueurActif][i].habitats === condition2) {//Si l'habitat de la carte est la même que la condition2.
@@ -3150,7 +3160,7 @@
                 for (var i = 0; i < carteJeu[numeroJoueurActif].length; i++) {
                     if (carteJeu[numeroJoueurActif][i] != null) {// S'il y a une carte.
                         //Si c'est un habitat pas perturbé ou une carte d'intervention d'habitat.
-                        if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.intervention) {// Si la carte est une habitats.
+                        if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.interventionHabitats) {// Si la carte est une habitats.
                             if (carteJeu[numeroJoueurActif][i].habitats === condition1) {//Si l'habitat de la carte est la même que la condition1.
                                 condition1 = 'ok';
                             } else if (carteJeu[numeroJoueurActif][i].habitats === condition2) {//Si l'habitat de la carte est la même que la condition2.
@@ -3174,7 +3184,7 @@
                 for (var i = 0; i < carteJeu[numeroJoueurActif].length; i++) {
                     if (carteJeu[numeroJoueurActif][i] != null) {// S'il y a une carte.
                         //Si c'est un habitat pas perturbé ou une carte d'intervention d'habitat.
-                        if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.intervention) {// Si la carte est une habitats.
+                        if ((carteJeu[numeroJoueurActif][i].type === typeEnum.habitats && !carteJeu[numeroJoueurActif][i].perturber) || carteJeu[numeroJoueurActif][i].type === typeEnum.interventionHabitats) {// Si la carte est une habitats.
                             if (carteJeu[numeroJoueurActif][i].habitats === condition1) {//Si l'habitat de la carte est la même que la condition1.
                                 condition1 = 'ok';
                             } else if (carteJeu[numeroJoueurActif][i].habitats === condition2) {//Si l'habitat de la carte est la même que la condition2.
@@ -3203,7 +3213,7 @@
                 //pour assurer une chance egale à tous les joueurs d'avoir les mêmes cartes.
 
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere(nomEnum.accumulation, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.sable, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
 
@@ -3215,7 +3225,7 @@
                 }
 
                 //Deuxième carte, c'est un habitats au hasard.
-                mains[0][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+                mains[0][1] = chercherCarteParticuliere(nomEnum.amenagement, paquetCarte);
                 mains[1][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -3226,7 +3236,7 @@
                 }
 
                 //3e carte, piger au hasard.
-                mains[0][2] = pigerCarte(paquetCarte);
+                mains[0][2] = chercherCarteParticuliere(nomEnum.ephemeridae, paquetCarte);
                 mains[1][2] = pigerCarte(paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -3402,7 +3412,7 @@
                         popUpAvertissement('Le «Macroinvertébré» doit être de taille inférieure à votre prédateur.');
                     }
                 } else {
-                    popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
+                    popUpAvertissement('Vous devez sélectionner un «Macroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                 }
                 /* ---------------Partie pollution organique--------------*/
             } else if (mangerSalmonide) {
@@ -3426,7 +3436,7 @@
                             updateAffichageImage();
                         }
                     } else {
-                        popUpAvertissement('Vous devez sélectionner un «mMacroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
+                        popUpAvertissement('Vous devez sélectionner un «Macroinvertébré» de taille inférieur à ' + taillePredateur + ' à manger.');
                     }
                 }
             } else if (onPollu) {
@@ -3917,6 +3927,7 @@
                                 if (cartePerturbation[numeroJoueurActif][i] != null) {
                                     //Retire la carte dans le tableau de perturbation et sur le plateau.
                                     retirerCartePerturbation(numeroJoueurActif, i);
+                                    console.log(i);
                                 }
                                 updateAffichageImage();
                                 //Retire le highlight de perturbation.
@@ -3965,7 +3976,7 @@
             reempillerCartePasPerturber(numeroActif, positionCarte);
             cartePerturbation[numeroActif][positionCarte] = null;//Rend la position où était la carte pertubation à null.
             exemplaireCarteJeu[numeroActif][positionCarte]--;
-            $('#emplacementJoueur' + lettreActif + positionCarte).children().last().remove();
+            $('#emplacementJoueur' + lettreActif + positionCarte).children().first().remove();
         }
 
         //Fonction qui met en brillance les macroinvertébrés qui sont mangeable.
@@ -5049,7 +5060,7 @@
                 this.predateur = params.predateur;
                 this.typeMacro = params.typeMacro;
                 this.condition = params.condition;
-            } else if (type === typeEnum.intervention) {
+            } else if (type === typeEnum.intervention || type === typeEnum.interventionHabitats) {
                 this.nom = nom;
                 this.type = type;
                 this.nomImage = nomImage;
@@ -5490,21 +5501,22 @@
 
                 //---------------------------------intervention------------------------------
 
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
+                carte = new Carte(typeEnum.interventionHabitats, nomEnum.amenageSable, 'habitatAmenageSable.png', 1, { habitats: nomEnum.sable });
                 paquetIntervention.push(carte);
 
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageRapides, 'habitatAmenageRapides.png', 1, { habitats: nomEnum.rapides });
+                carte = new Carte(typeEnum.interventionHabitats, nomEnum.amenageRapides, 'habitatAmenageRapides.png', 1, { habitats: nomEnum.rapides });
                 paquetIntervention.push(carte);
 
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageFosse, 'habitatAmenageFosse.png', 1, { habitats: nomEnum.fosse });
+                carte = new Carte(typeEnum.interventionHabitats, nomEnum.amenageFosse, 'habitatAmenageFosse.png', 1, { habitats: nomEnum.fosse });
                 paquetIntervention.push(carte);
 
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageGalets, 'habitatAmenageGalets.png', 1, { habitats: nomEnum.galets });
-                paquetIntervention.push(carte);
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageGalets, 'habitatAmenageGalets.png', 1, { habitats: nomEnum.galets });
+                carte = new Carte(typeEnum.interventionHabitats, nomEnum.amenageGalets, 'habitatAmenageGalets.png', 1, { habitats: nomEnum.galets });
                 paquetIntervention.push(carte);
 
-                carte = new Carte(typeEnum.intervention, nomEnum.amenageGravier, 'habitatAmenageGravier.png', 2, { habitats: nomEnum.gravier });
+                carte = new Carte(typeEnum.interventionHabitats, nomEnum.amenageGalets, 'habitatAmenageGalets.png', 1, { habitats: nomEnum.galets });
+                paquetIntervention.push(carte);
+
+                carte = new Carte(typeEnum.interventionHabitats, nomEnum.amenageGravier, 'habitatAmenageGravier.png', 2, { habitats: nomEnum.gravier });
                 paquetIntervention.push(carte);
 
                 carte = new Carte(typeEnum.intervention, nomEnum.amenageHerbace, 'bandeRiveraineHerbace.png', 1);
@@ -5787,8 +5799,15 @@
                     fin = true;
                     popUpFin();
                 }
+                if (tour === 9 && difficulte != 3) {
+                    fin == true;
+                    tourHuit = true;
+                    popUpFin();
+                }
 
                 if (!fin) {
+                    debutTourDeperturber();
+                    updatePlateau();
 
                     //Partie qui passe au prochain joueur.
                     numeroJoueurActif++;
@@ -5797,6 +5816,8 @@
                         tour++;
                         ajoutCarte(tour);
                     }
+
+                    $('#divNomMain').html('Main de : ' + nomJoueur[numeroJoueurActif]);
 
                     //Rend le bouton passer tour inactif lorsqu'on clique dessus pour éviter de "spam" le bouton.
                     setTimeout(function () {
@@ -5813,7 +5834,7 @@
                     $('#divJoueurEnCours').html('Tour de : <strong>' + nomJoueur[numeroJoueurActif] + '</strong>');
 
                     popUpDebutTour(numeroJoueurActif);
-                    debutTourDeperturber();
+                 
                     if (tableauPasserTour[numeroJoueurActif] === true) {
                         setTimeout(function () {
                             passerTour();
@@ -6072,7 +6093,15 @@
                 } else if (nombreJoueur === 4) {
                     divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car il n'y a plus de carte dans le paquet.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s " + tour + " tours</p>";
                 }
-            } else {
+            } else if(tourHuit){
+                if (nombreJoueur === 2) {
+                    divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car nous avons passés les 8 tours de jeu.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s 8 tours</p>";
+                } else if (nombreJoueur === 3) {
+                    divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car nous avons passés les 8 tours de jeu.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s 8 tours</p>";
+                } else if (nombreJoueur === 4) {
+                    divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + ordre[0] + " </p><p>&nbsp;</p><p>La partie s'est termin&eacute;e car nous avons passés les 8 tours de jeu.</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>Troisi&egrave;me place : " + ordre[2] + " avec " + meilleur[2] + " points</p><p>Quatir&egrave;me place : " + ordre[3] + " avec " + meilleur[3] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave;s 8 tours</p>";
+                }
+            }else {
                 if (nombreJoueur === 2) {
                     divFin.innerHTML = "<p><span style='font-size: 20pt;'>Fin de la partie !</span></p><p>F&eacute;licitation &agrave; " + gagnantPoisson() + " </p><p>&nbsp;</p><p>Vous avez gagn&eacute;(e) parce que vous avez r&eacute;ussi &agrave; garder votre carte &laquo;Salmonid&eacute;&raquo; durant 1 tour en entier !</p><p>&nbsp;</p><p>Points:</p><p>Premi&egrave;re place: " + ordre[0] + " avec " + meilleur[0] + " points</p><p>Deuxi&egrave;me place : " + ordre[1] + " avec " + meilleur[1] + " points</p><p>&nbsp;</p><p>La partie s'est termin&eacute;e apr&egrave; " + tour + " tours</p>";
                 } else if (nombreJoueur === 3) {
@@ -6310,6 +6339,12 @@
                             image.setAttribute('src', 'ressources/' + carteJeu[i][j].nomImage);
                             $(image).css('margin-top', k * 8);
                             $('#emplacementJoueur' + lettreJoueur(i) + j).append(image);
+                            var cloneImage = '<img class="imageTooltip" src="ressources/' + carteJeu[i][j].nomImage + '">';
+                            $(image).tooltip({
+                                items: 'img',
+                                content: cloneImage,
+                                show: { delay: 1000 }
+                            });
                         }
                         if (carteJeu[i][j].perturber) {//Si la carte est perturber.
                             var lettre = lettreJoueur(i);
@@ -6320,6 +6355,12 @@
                                 image.setAttribute('src', 'ressources/' + cartePerturbation[i][j].nomImage);
                                 $(image).css('margin-top', exemplaireCarteJeu[i][j] * 8);
                                 $('#emplacementJoueur' + lettre + j).append(image);
+                                var cloneImage = '<img class="imageTooltip" src="ressources/' + carteJeu[i][j].nomImage + '">';
+                                $(image).tooltip({
+                                    items: 'img',
+                                    content: cloneImage,
+                                    show: { delay: 1000 }
+                                });
                             }
                         }
                     }
