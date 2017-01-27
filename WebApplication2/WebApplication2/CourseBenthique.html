@@ -881,6 +881,7 @@
                                         modal: true,
                                         height: 575,
                                         width: 500,
+                                        closeOnEscape: false,
                                         hide: 'fade',
                                         show: 'fade'
                                     });
@@ -961,6 +962,7 @@
                                                     height: 575,
                                                     width: 575,
                                                     position: { my: 'top', at: 'top', of: window },
+                                                    closeOnEscape: false,
                                                     buttons: {
                                                         Confirmer: function () {
                                                             if (carteSelectionne == null) {
@@ -1026,6 +1028,7 @@
                                     modal: true,
                                     height: 575,
                                     width: 500,
+                                    closeOnEscape: false,
                                     hide: 'fade',
                                     show: 'fade'
                                 });
@@ -1047,7 +1050,7 @@
                                                     li.id = '1';
                                                     li.innerHTML = 'Annuler l\'effet d\'une carte «Artificialisation».';
                                                     $(ul).append(li);
-                                                    conte = true;
+                                                    stop = true;
                                                 }
                                             }
                                         }
@@ -1153,6 +1156,7 @@
                                                 $(this).dialog({
                                                     height: 575,
                                                     width: 575,
+                                                    closeOnEscape: false,
                                                     position: { my: 'top', at: 'top', of: window },
                                                     buttons: {
                                                         Confirmer: function () {
@@ -1216,6 +1220,7 @@
                                     draggable: false,
                                     resizable: false,
                                     modal: true,
+                                    closeOnEscape: false,
                                     height: 575,
                                     width: 500,
                                     hide: 'fade',
@@ -1363,6 +1368,7 @@
                                         draggable: false,
                                         resizable: false,
                                         modal: true,
+                                        closeOnEscape: false,
                                         height: 575,
                                         width: 500,
                                         hide: 'fade',
@@ -1464,6 +1470,7 @@
                                         modal: true,
                                         height: 575,
                                         width: 500,
+                                        closeOnEscape: false,
                                         hide: 'fade',
                                         show: 'fade'
                                     });
@@ -1595,6 +1602,7 @@
                                     modal: true,
                                     height: 575,
                                     width: 500,
+                                    closeOnEscape: false,
                                     hide: 'fade',
                                     show: 'fade'
                                 });
@@ -1662,6 +1670,7 @@
                                     modal: true,
                                     height: 575,
                                     width: 500,
+                                    closeOnEscape: false,
                                     hide: 'fade',
                                     show: 'fade'
                                 });
@@ -1718,6 +1727,7 @@
                                                         width: 575,
                                                         height: 575,
                                                         position: { my: 'top', at: 'top', of: window },
+                                                        closeOnEscape: false,
                                                         buttons: {
                                                             Confirmer: function () {
                                                                 if (carteSelectionne == null) {
@@ -1781,6 +1791,7 @@
                                     modal: true,
                                     height: 575,
                                     width: 500,
+                                    closeOnEscape: false,
                                     hide: 'fade',
                                     show: 'fade'
                                 });
@@ -1926,6 +1937,7 @@
                                     modal: true,
                                     height: 575,
                                     width: 500,
+                                    closeOnEscape: false,
                                     hide: 'fade',
                                     show: 'fade'
                                 });
@@ -2207,6 +2219,7 @@
                                                         modal: true,
                                                         height: 575,
                                                         width: 500,
+                                                        closeOnEscape: false,
                                                         hide: 'fade',
                                                         show: 'fade'
                                                     });
@@ -3504,9 +3517,9 @@
                     if (carteJeu[numeroJoueurEnnemi][numeroEmplacement].type === typeEnum.bandeRiveraine) {
                         paquetDecharge.push(carteJeu[numeroJoueurEnnemi][numeroEmplacement]);
                         exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement]--;
+                        bandeRiveraineEroder[0] = carteJeu[numeroJoueurEnnemi][numeroEmplacement];
+                        bandeRiveraineEroder[1] = numeroJoueurEnnemi;
                         if (exemplaireCarteJeu[numeroJoueurEnnemi][numeroEmplacement] === 0) {
-                            bandeRiveraineEroder[0] = carteJeu[numeroJoueurEnnemi][numeroEmplacement];
-                            bandeRiveraineEroder[1] = numeroJoueurEnnemi;
                             carteJeu[numeroJoueurEnnemi][numeroEmplacement] = null;
                         }
 
@@ -3582,7 +3595,7 @@
                             erosion = false;
                             etapeErosion = 1;
                         } else {
-                            var positionLibre = trouverPositionLibre();
+                            var positionLibre = trouverPositionLibre(numeroJoueurEnnemie);
                             var numeroLettrePosition = positionLibre.substr(positionLibre.length - 2);
                             if (numeroLettrePosition.substr(0, 1) !== 'A' && numeroLettrePosition.substr(0, 1) !== 'B' && numeroLettrePosition.substr(0, 1) !== 'C' && numeroLettrePosition.substr(0, 1) !== 'D') {
                                 numeroLettrePosition = positionLibre.substr(positionLibre.length - 3);
