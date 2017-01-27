@@ -2398,13 +2398,21 @@
             buttonPasserTour.textContent = 'Joueur suivant';
             document.getElementById('divDroite').appendChild(buttonPasserTour);
 
-            //Bouton pour les options.
+            //Bouton pour sauvegarder.
             var buttonSauvegarder = document.createElement('button');
             buttonSauvegarder.id = 'buttonSauvegarder';
             buttonSauvegarder.className = 'buttonJeu';
             buttonSauvegarder.textContent = 'Sauvegarder';
             buttonSauvegarder.setAttribute('onclick', 'ouvrirSauvegarder()');
             document.getElementById('divDroite').appendChild(buttonSauvegarder);
+
+            //Bouton permetant de défausser des cartes du jeu
+            var buttonDefJeu = document.createElement('button');
+            buttonDefJeu.id = 'buttonDefJeu';
+            buttonDefJeu.className = 'buttonJeu';
+            buttonDefJeu.textContent = 'Défausser le jeu';
+            buttonDefJeu.setAttribute('onclick', 'defausserLeJeu()');
+            document.getElementById('divDroite').appendChild(buttonDefJeu);
         }
 
         //Fonction qui crée l'espace de la main.
@@ -2497,7 +2505,7 @@
             }
         }
 
-        //Function qui retournera l'ordre des joueurs
+        //Fonction qui retournera l'ordre des joueurs
         function placementFinal() {
             var placement = new Array(nombreJoueur);//Tableau du placement initialiser au nombre de joueurs.
 
@@ -2530,6 +2538,7 @@
             return ordreJoueura;
         }
 
+        //S'assurer que les joueurs avec le même pointage soit tous présents sur l'écran de fin.
         function joueurPasPresent(ordreJoueure, nomJoueur) {
             var present = true;
 
@@ -2548,7 +2557,7 @@
             }
         }
 
-        //Function qui affichera les crédits.
+        //Fonction qui affichera les crédits.
         function afficherCredits() {
             popUpCredits();//Fonction qui va afficher les crédits.
         }
@@ -4341,7 +4350,7 @@
             }
         }
 
-        //function qui transforme la première lettre d'un string en majuscule.
+        //Fonction qui transforme la première lettre d'un string en majuscule.
         function premiereLettreMaj(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
@@ -5187,7 +5196,7 @@
             }
         }
 
-        //function pour piger une carte.
+        //Fonction pour piger une carte.
         function pigerCarte(paquetCarte) {
             if (paquetCarte.length > 0) {
                 if (paquetCarte.length === 31) {
@@ -5267,7 +5276,7 @@
             }, 500);
         }
 
-        //Function qui melange le paquet de carte.
+        //Fonction qui melange le paquet de carte.
         function melangerPaquetCarte(paquetCarte) {
             var currentIndex = paquetCarte.length, temporaryValue, randomIndex;
 
@@ -5764,19 +5773,20 @@
                 onClickButtonDefausse(cartesDefausse);
             };
             $('.divMain').append(buttonDefausser);
-
+            //On permet seulement de cliquer dans la zone de la main.
             griserZone(false, true, true);
             $('#divMain').addClass('divMainDefausse');
             $('.imageCarteMains').draggable('disable');
 
-            mains[numeroJoueurActif].forEach(function (item, index) {
+
+            mains[numeroJoueurActif].forEach(function (item, index) { //Pour chaque carte, on ajoute un event clic pour pouvoir la sauvegarder dans un array.
                 if ($('#divCarte' + index).children().length === 1) {
                     $('#divCarte' + index).click(function () {
-                        if (cartesDefausse[index] != null) {
+                        if (cartesDefausse[index] != null) { //On l'ajoute au array.
                             cartesDefausse[index] = null;
                             $(this).removeAttr('style');
                         }
-                        else {
+                        else { //On le retire du array
                             $(this).css('-moz-box-shadow', '0 0 15px 10px #fff');
                             $(this).css('-webkit-box-shadow', '0 0 15px 10px #fff');
                             $(this).css('box-shadow', '0px 0px 15px 10px #fff');
@@ -5791,12 +5801,13 @@
         function onClickButtonDefausse(cartesDefausse) {
             sizeMain = mains[numeroJoueurActif].filter(function (value) { return value != null }).length;
             sizeADefausse = cartesDefausse.filter(function (value) { return value != null }).length;
-            if ((sizeMain - sizeADefausse) === 4) {
-                if (sizeADefausse != 0) {
-                    cartesDefausse.forEach(function (item, index) {
+            if ((sizeMain - sizeADefausse) === 4) { //Si le nombre de cartes sélectionnées est suffisant.
+                if (sizeADefausse != 0) { //Si la array n'est pas vide.
+                    cartesDefausse.forEach(function (item, index) { //Pour chaque carte, on la push dans la défausse.
                         if (item != null) {
                             paquetDecharge.push(item);
                             mains[numeroJoueurActif][index] = null;
+                            //Animation vers la défausse.
                             var image = $('#divCarte' + index).children();
                             var x = ($('#paquetDefausse').offset().left) - ($(image).offset().left);
                             var y = ($('#paquetDefausse').offset().top) - ($(image).offset().top);
@@ -5815,6 +5826,7 @@
                             });
                         }
                     });
+                    //On remet le jeu a l'état initial.
                     griserZone(false, false, false);
                     $('.imageCarteMains').draggable('enable');
                     $('#divMain').removeClass('divMainDefausse');
@@ -5834,6 +5846,94 @@
             }
             else {
                 popUpErreur('Vous avez sélectionné trop de cartes à défausser.');
+            }
+        }
+
+        //Fonction appelée lors d'un clic sur le bouton Défausser le jeu.
+        function defausserLeJeu() {
+            if (carteJeu[numeroJoueurActif].filter(function (value) { return value == null }).length === 0) { //Si le plateau de jeu est plein.
+                popUpConfirmation('Veuillez selectionner les cartes que vous désirez envoyer à la défausse.');
+                $('#buttonDefJeu').prop('disabled', true);
+                var cartesDefausse = new Array();
+                var buttonDefausserJeu = document.createElement('button');
+                buttonDefausserJeu.id = 'buttonDefausserJeu';
+                buttonDefausserJeu.className = 'buttonJeu';
+                buttonDefausserJeu.innerHTML = '<p style="margin-top:2px">Confirmer</p>';
+                buttonDefausserJeu.onclick = function () {
+                    onClickButtonDefausseJeu(cartesDefausse);
+                };
+                $('body').append(buttonDefausserJeu);
+
+                griserZone(true, false, true);
+
+                carteJeu[numeroJoueurActif].forEach(function (item, index) { //Pour chaque carte, on ajoute un event clic pour pouvoir la sauvegarder dans un array.
+                    if ($('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + index).children().length >= 1 && !carteJeu[numeroJoueurActif][index].perturber) {
+                        $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + index).click(function () {
+                            if (cartesDefausse[index] != null) { //On l'ajoute au array
+                                cartesDefausse[index] = null;
+                                $(this).css('-moz-box-shadow', '');
+                                $(this).css('-webkit-box-shadow', '');
+                                $(this).css('box-shadow', '');
+                            }
+                            else { //On la retire du array
+                                $(this).css('-moz-box-shadow', '0 0 15px 10px #fff');
+                                $(this).css('-webkit-box-shadow', '0 0 15px 10px #fff');
+                                $(this).css('box-shadow', '0px 0px 15px 10px #fff');
+                                cartesDefausse[index] = carteJeu[numeroJoueurActif][index];
+                            }
+                        });
+                    }
+                });
+            } else {
+                popUpAvertissement('Il reste encore des emplacements vides sur le plateau.');
+            }
+        }
+
+        //Fonction appelée lors d'un clic sur le bouton Confirmer
+        function onClickButtonDefausseJeu(cartesDefausse) {
+            sizeADefausse = cartesDefausse.filter(function (value) { return value != null }).length;
+            if (sizeADefausse != 0) { //Si le array contient des cartes.
+                cartesDefausse.forEach(function (item, index) { // on push chaque carte dans la défausse.
+                    if (item != null) {
+                        for (var i = 0; i < exemplaireCarteJeu[numeroJoueurActif][index]; i++) {
+                            paquetDecharge.push(item);
+                        }
+                        //On supprime la carte du jeu.
+                        carteJeu[numeroJoueurActif][index] = null;
+                        exemplaireCarteJeu[numeroJoueurActif][index] = 0;
+                        //Animation vers la défausse.
+                        var image = $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + index).children();
+                        var x = ($('#paquetDefausse').offset().left) - ($(image).offset().left);
+                        var y = ($('#paquetDefausse').offset().top) - ($(image).offset().top);
+                        $(image).animate({
+                            left: x,
+                            top: y,
+                            borderSpacing: 45
+                        }, {
+                            step: function (now, fx) {
+                                $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                                $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                                $(this).css('transform', 'rotate(' + now + 'deg)');
+                            },
+                            complete: function () {
+                                $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + index).empty()
+                            }
+                        });
+                    }
+                });
+                //On remet le jeu a son etat initial.
+                griserZone(false, false, false);
+                carteJeu[numeroJoueurActif].forEach(function (item, index) {
+                    $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + index).css('-moz-box-shadow', '');
+                    $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + index).css('-webkit-box-shadow', '');
+                    $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + index).css('box-shadow', '');
+                    $('#emplacementJoueur' + lettreJoueur(numeroJoueurActif) + index).off('click');
+                });
+                $('#buttonDefausserJeu').remove();
+                updateAffichageImage();
+            }
+            else {
+                popUpAvertissement('Selectionnez d\'abord la/les carte(s) à défausser.');
             }
         }
 
@@ -6430,7 +6530,7 @@
             }
         }
 
-        //fonction qui va update les points des joueurs.
+        //Fonction qui va update les points des joueurs.
         function updateZonePoints() {
             if (nombreJoueur === 4) {
                 divTextePointsJoueurs.innerHTML = '<p class=titreEquipe><strong>Points</strong></p><ul class=listeUlEquipe><li class=listeEquipe>Équipe A&nbsp;: ' + pointsJoueur[0] + '</li><li class=listeEquipe>Équipe B&nbsp;: ' + pointsJoueur[1] + '</li><li class=listeEquipe>Équipe C&nbsp;: ' + pointsJoueur[2] + '</li><li class=listeEquipe>Équipe D&nbsp;: ' + pointsJoueur[3] + '</li></ul>';

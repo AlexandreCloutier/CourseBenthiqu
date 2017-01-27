@@ -791,8 +791,26 @@ input::-webkit-inner-spin-button {
     position: absolute;
     bottom: 5px;
     height: 40px;
-    width: 250px;
-    left: 11%;
+    width: 123px;
+    left: 49%;
+    padding: 1px;
+}
+
+#buttonDefJeu {
+    position: absolute;
+    bottom:5px;
+    height: 40px;
+    width:123px;
+    left:11%;
+    padding: 1px;
+}
+
+#buttonDefausserJeu {
+    position: absolute;
+    top: 60%;
+    left: 40.8%;
+    width: 125px;
+    height: 38px;
 }
 
 #buttonDefausser {
