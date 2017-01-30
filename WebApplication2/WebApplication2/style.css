@@ -617,12 +617,13 @@ input::-webkit-inner-spin-button {
 }
 
 .divFin {
+    font-family: Arial;
 }
 
 .imageTooltip {
     max-height: 270px;
     max-width: 177px;
-    position:relative;
+    position: relative;
 }
 
 .liMain {
@@ -765,6 +766,7 @@ input::-webkit-inner-spin-button {
 
 #divFin {
     text-align: center;
+    font-family: Arial;
 }
 
 #buttonRegle {
@@ -775,8 +777,8 @@ input::-webkit-inner-spin-button {
     left: 11%;
 }
 
-#divNomMain{
-    text-align:center;
+#divNomMain {
+    text-align: center;
 }
 
 #buttonTableauCarte {
