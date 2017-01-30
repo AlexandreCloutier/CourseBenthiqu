@@ -3307,7 +3307,7 @@
                 //pour assurer une chance egale à tous les joueurs d'avoir les mêmes cartes.
 
                 //Première carte c'est un habitats rapides.
-                mains[0][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
+                mains[0][0] = chercherCarteParticuliere(nomEnum.zonage, paquetCarte);
                 mains[1][0] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
 
 
@@ -3319,7 +3319,7 @@
                 }
 
                 //Deuxième carte, c'est un habitats au hasard.
-                mains[0][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
+                mains[0][1] = chercherCarteParticuliere(nomEnum.dechets, paquetCarte);
                 mains[1][1] = chercherCarteParticuliere(habitatsHasard(), paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -3756,7 +3756,7 @@
                                 carte1.className = 'imageCarteJeu imageCarteEchange';
                                 carte1.src = 'ressources/' + carteEchange1.nomImage;
 
-                                var cloneImage = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
+                                var cloneImage = '<img class="imageTooltip" src="ressources/' + carteEchange1.nomImage + '">';
                                 $(carte1).tooltip({
                                     items: 'img',
                                     content: cloneImage,
@@ -3767,88 +3767,122 @@
                                 carte2.className = 'imageCarteJeu imageCarteEchange';
                                 carte2.src = 'ressources/' + carteEchange2.nomImage;
 
-                                var cloneImage2 = '<img class="imageTooltip" src="ressources/' + mains[numeroJoueurActif][i].nomImage + '">';
+                                var cloneImage2 = '<img class="imageTooltip" src="ressources/' + carteEchange2.nomImage + '">';
                                 $(carte2).tooltip({
                                     items: 'img',
                                     content: cloneImage2,
                                     show: { delay: 1000 }
                                 });
 
-                                if (verifierCartePresenteEchange(carteEchange1.nom, numeroJoueur(lettreJoueur2)) === '') {//Si la carte n'est pas déjà présente
-                                    if ($('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().length === 1) {//Si les cartes ne sont pas empilées.
-                                        $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().remove();//Enleve l'enfant.
-                                        $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).append(carte1);//Rajoute la carte.
-                                        carteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] = carteEchange1;//Rajoute la carte dans les données.
-                                        exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]++;
+                                if (carteEchange1.perturber) {
+                                    var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur2));
+                                    var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
+                                    if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
+                                        emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 3);
+                                    }
+                                    var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
+                                    var positionCarte = emplacement.substr(1);
+
+                                    $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
+                                    $(prochainePositionLibre).append(carte1);
+                                    carteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] = null;
+                                    carteJeu[numeroJoueurCarte][positionCarte] = carteEchange1;
+                                    exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
+                                } else {
+                                    if (verifierCartePresenteEchange(carteEchange1.nom, numeroJoueur(lettreJoueur2)) === '') {//Si la carte n'est pas déjà présente
+                                        if ($('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().length === 1) {//Si les cartes ne sont pas empilées.
+                                            $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().remove();//Enleve l'enfant.
+                                            $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).append(carte1);//Rajoute la carte.
+                                            carteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] = carteEchange1;//Rajoute la carte dans les données.
+                                            exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]++;
+                                        } else {
+                                            var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur2));
+                                            var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
+                                            if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
+                                                emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 3);
+                                            }
+                                            var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
+                                            var positionCarte = emplacement.substr(1);
+
+                                            $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().last().remove();
+                                            $(prochainePositionLibre).append(carte1);
+                                            carteJeu[numeroJoueurCarte][positionCarte] = carteEchange1;
+                                            exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
+                                        }
                                     } else {
-                                        var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur2));
-                                        var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
+                                        var positionCartePresente = verifierCartePresenteEchange(carteEchange1.nom, numeroJoueur(lettreJoueur2));
+                                        var emplacement = positionCartePresente.substr(positionCartePresente.length - 2);
                                         if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
-                                            emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 3);
+                                            emplacement = positionCartePresente.substr(positionCartePresente.length - 3);
                                         }
                                         var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
                                         var positionCarte = emplacement.substr(1);
+
+                                        exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
+                                        $(carte1).css('margin-top', (exemplaireCarteJeu[numeroJoueurCarte][positionCarte] - 1) * 8);
 
                                         $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().last().remove();
-                                        $(prochainePositionLibre).append(carte1);
+
                                         carteJeu[numeroJoueurCarte][positionCarte] = carteEchange1;
-                                        exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
+                                        $(positionCartePresente).append(carte1);
                                     }
-                                } else {
-                                    var positionCartePresente = verifierCartePresenteEchange(carteEchange1.nom, numeroJoueur(lettreJoueur2));
-                                    var emplacement = positionCartePresente.substr(positionCartePresente.length - 2);
+                                }
+
+                                if (carteEchange2.perturber) {
+                                    var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur1));
+                                    var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
                                     if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
-                                        emplacement = positionCartePresente.substr(positionCartePresente.length - 3);
+                                        emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 3);
                                     }
                                     var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
                                     var positionCarte = emplacement.substr(1);
 
+                                    $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().remove();
+                                    $(prochainePositionLibre).append(carte2);
+                                    carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = null;
+                                    carteJeu[numeroJoueurCarte][positionCarte] = carteEchange2;
                                     exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
-                                    $(carte1).css('margin-top', (exemplaireCarteJeu[numeroJoueurCarte][positionCarte] - 1) * 8);
+                                } else {
+                                    if (verifierCartePresenteEchange(carteEchange2.nom, numeroJoueur(lettreJoueur1)) === '') {
+                                        if ($('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().length === 1) {
+                                            $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
+                                            $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).append(carte2);
+                                            carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = carteEchange2;
+                                            exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]++;
+                                        } else {
+                                            var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur1));
+                                            var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
+                                            if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
+                                                emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 3);
+                                            }
+                                            var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
+                                            var positionCarte = emplacement.substr(1);
 
-                                    $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().last().remove();
-
-                                    carteJeu[numeroJoueurCarte][positionCarte] = carteEchange1;
-                                    $(positionCartePresente).append(carte1);
-                                }
-
-                                if (verifierCartePresenteEchange(carteEchange2.nom, numeroJoueur(lettreJoueur1)) === '') {
-                                    if ($('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().length === 1) {
-                                        $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
-                                        $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).append(carte2);
-                                        carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = carteEchange2;
-                                        exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]++;
+                                            $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().last().remove();
+                                            $(prochainePositionLibre).append(carte2);
+                                            carteJeu[numeroJoueurCarte][positionCarte] = carteEchange2;
+                                            exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
+                                        }
                                     } else {
-                                        var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur1));
-                                        var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
+                                        var positionCartePresente = verifierCartePresenteEchange(carteEchange2.nom, numeroJoueur(lettreJoueur1));
+                                        var emplacement = positionCartePresente.substr(positionCartePresente.length - 2);
                                         if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
-                                            emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 3);
+                                            emplacement = positionCartePresente.substr(positionCartePresente.length - 3);
                                         }
                                         var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
                                         var positionCarte = emplacement.substr(1);
 
-                                        $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().last().remove();
-                                        $(prochainePositionLibre).append(carte2);
-                                        carteJeu[numeroJoueurCarte][positionCarte] = carteEchange2;
                                         exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
+                                        $(carte2).css('margin-top', (exemplaireCarteJeu[numeroJoueurCarte][positionCarte] - 1) * 8);
+
+                                        $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().last().remove();
+
+                                        carteJeu[numeroJoueurCarte][positionCarte] = carteEchange2;
+                                        $(positionCartePresente).append(carte2);
                                     }
-                                } else {
-                                    var positionCartePresente = verifierCartePresenteEchange(carteEchange2.nom, numeroJoueur(lettreJoueur1));
-                                    var emplacement = positionCartePresente.substr(positionCartePresente.length - 2);
-                                    if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
-                                        emplacement = positionCartePresente.substr(positionCartePresente.length - 3);
-                                    }
-                                    var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
-                                    var positionCarte = emplacement.substr(1);
-
-                                    exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
-                                    $(carte2).css('margin-top', (exemplaireCarteJeu[numeroJoueurCarte][positionCarte] - 1) * 8);
-
-                                    $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().last().remove();
-
-                                    carteJeu[numeroJoueurCarte][positionCarte] = carteEchange2;
-                                    $(positionCartePresente).append(carte2);
                                 }
+
+                                updatePlateau();
 
                                 $(function () {
                                     $('.imageCarteEchange').on({
@@ -6576,6 +6610,8 @@
 
         //Fonction qui va update le plateau
         function updatePlateau() {
+            $('.ui-perturber-highlight').removeClass('ui-perturber-highlight');
+
             //Crée les cartes qui sont sur le platea.
             for (var i = 0; i < nombreJoueur; i++) {//Boucle pour chaque joueur.
                 for (var j = 0; j < carteJeu[i].length; j++) {//Boucle dans tous les emplacements.
