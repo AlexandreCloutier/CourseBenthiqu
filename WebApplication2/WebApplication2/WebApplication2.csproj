@@ -122,6 +122,7 @@
     <Content Include="ressources\cartes.png" />
     <Content Include="ressources\carteVerso.png" />
     <Content Include="ressources\chironomidae.png" />
+    <Content Include="ressources\configurationCarte.png" />
     <Content Include="ressources\corveNettoyage.png" />
     <Content Include="ressources\corydalidae.png" />
     <Content Include="ressources\credits.png" />
