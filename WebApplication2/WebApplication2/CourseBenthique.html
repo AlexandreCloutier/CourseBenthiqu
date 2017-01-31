@@ -3756,10 +3756,12 @@
                                 lettreJoueur2 = lettreJoueur(numeroJoueurEnnemi);
                                 positionCarte2 = numeroEmplacement;
 
+                                //Création de la carte 1.
                                 var carte1 = document.createElement('img');
                                 carte1.className = 'imageCarteJeu imageCarteEchange';
                                 carte1.src = 'ressources/' + carteEchange1.nomImage;
 
+                                //Ajout du tooltip à la carte.
                                 var cloneImage = '<img class="imageTooltip" src="ressources/' + carteEchange1.nomImage + '">';
                                 $(carte1).tooltip({
                                     items: 'img',
@@ -3767,10 +3769,12 @@
                                     show: { delay: 1000 }
                                 });
 
+                                //Création de la carte 2.
                                 var carte2 = document.createElement('img');
                                 carte2.className = 'imageCarteJeu imageCarteEchange';
                                 carte2.src = 'ressources/' + carteEchange2.nomImage;
 
+                                //Ajotu du tooltip.
                                 var cloneImage2 = '<img class="imageTooltip" src="ressources/' + carteEchange2.nomImage + '">';
                                 $(carte2).tooltip({
                                     items: 'img',
@@ -3778,19 +3782,22 @@
                                     show: { delay: 1000 }
                                 });
 
+                                //Si la carte est perturber ou si elel a juste un exemplaire, rends la position à null tout de suite.
                                 if (carteEchange2.perturber || exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] == 1) {
                                     carteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] = null;
                                 }
 
+                                //Si la carte est perturber ou si elel a juste un exemplaire, rends la position à null tout de suite.
                                 if (carteEchange1.perturber || exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] == 1) {
                                     carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = null;
                                 }
 
+                                //Baisse le nombre d'exemplaire de 1.
                                 exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]--;
                                 exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]--;
 
 
-                                if (carteEchange1.perturber) {
+                                if (carteEchange1.perturber) {//Si la première carte est perturber.
                                     var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur2));
                                     var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
                                     if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
@@ -3799,9 +3806,11 @@
                                     var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
                                     var positionCarte = emplacement.substr(1);
 
+                                    //Remes la carte perturbation à la nouvelle position.
                                     cartePerturbation[numeroJoueurCarte][positionCarte] = cartePerturbation[numeroJoueur(lettreJoueur1)][positionCarte1];
                                     cartePerturbation[numeroJoueur(lettreJoueur1)][positionCarte1] = null;
 
+                                    //Remove tout les enfants.
                                     $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
                                     $(prochainePositionLibre).append(carte1);
 
@@ -3813,7 +3822,7 @@
                                             $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().remove();//Enleve l'enfant.
                                             $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).append(carte1);//Rajoute la carte.
                                             carteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] = carteEchange1;//Rajoute la carte dans les données.
-                                        } else {
+                                        } else {//Si la carte est empillés.
                                             var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur2));
                                             var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
                                             if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
@@ -3827,7 +3836,7 @@
                                             carteJeu[numeroJoueurCarte][positionCarte] = carteEchange1;
                                             exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
                                         }
-                                    } else {
+                                    } else {//Si la carte est déjà présente, l'empille.
                                         var positionCartePresente = verifierCartePresenteEchange(carteEchange1.nom, numeroJoueur(lettreJoueur2));
                                         var emplacement = positionCartePresente.substr(positionCartePresente.length - 2);
                                         if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
@@ -3847,7 +3856,7 @@
                                     }
                                 }
 
-                                if (carteEchange2.perturber) {
+                                if (carteEchange2.perturber) {//Si la 2e carte est perturber
                                     var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur1));
                                     var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
                                     if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
@@ -3856,21 +3865,23 @@
                                     var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
                                     var positionCarte = emplacement.substr(1);
 
+                                    //Remes la carte perturbation à la nouvelle position.
                                     cartePerturbation[numeroJoueurCarte][positionCarte] = cartePerturbation[numeroJoueur(lettreJoueur2)][positionCarte2];
                                     cartePerturbation[numeroJoueur(lettreJoueur2)][positionCarte2] = null;
 
+                                    //Remove tout les enfants.
                                     $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
                                     $(prochainePositionLibre).append(carte2);
                                     carteJeu[numeroJoueurCarte][positionCarte] = carteEchange2;
                                     exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
                                 } else {
-                                    if (verifierCartePresenteEchange(carteEchange2.nom, numeroJoueur(lettreJoueur1)) === '') {
-                                        if ($('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().length === 1) {
-                                            $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
-                                            $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).append(carte2);
-                                            carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = carteEchange2;
+                                    if (verifierCartePresenteEchange(carteEchange2.nom, numeroJoueur(lettreJoueur1)) === '') {//Si la carte n'est pas déjà présente.
+                                        if ($('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().length === 1) {//Si les cartes ne sont pas empillés
+                                            $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();//Enleve l'enfants.
+                                            $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).append(carte2);//Rajoute la carte.
+                                            carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = carteEchange2;//Change la carte dans les données 
                                             exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]++;
-                                        } else {
+                                        } else {//Si les cartes sont empillés
                                             var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur1));
                                             var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
                                             if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
@@ -3884,7 +3895,7 @@
                                             carteJeu[numeroJoueurCarte][positionCarte] = carteEchange2;
                                             exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
                                         }
-                                    } else {
+                                    } else {//Si la carte est déjà présente, l'empille.
                                         var positionCartePresente = verifierCartePresenteEchange(carteEchange2.nom, numeroJoueur(lettreJoueur1));
                                         var emplacement = positionCartePresente.substr(positionCartePresente.length - 2);
                                         if (emplacement.substr(0, 1) !== 'A' && emplacement.substr(0, 1) !== 'B' && emplacement.substr(0, 1) !== 'C' && emplacement.substr(0, 1) !== 'D') {
