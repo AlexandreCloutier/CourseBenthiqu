@@ -3756,9 +3756,6 @@
                                 lettreJoueur2 = lettreJoueur(numeroJoueurEnnemi);
                                 positionCarte2 = numeroEmplacement;
 
-                                exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]--;
-                                exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]--;
-
                                 var carte1 = document.createElement('img');
                                 carte1.className = 'imageCarteJeu imageCarteEchange';
                                 carte1.src = 'ressources/' + carteEchange1.nomImage;
@@ -3781,15 +3778,16 @@
                                     show: { delay: 1000 }
                                 });
 
-                                if (carteEchange2.perturber || exemplaireCarteBas[numeroJoueur(lettreJoueur2)][positionCarte2] == 1) {
+                                if (carteEchange2.perturber || exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] == 1) {
                                     carteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] = null;
                                 }
-                                if (carteEchange1.perturber || exemplaireCarteBas[numeroJoueur(lettreJoueur1)][positionCarte1] == 1) {
+
+                                if (carteEchange1.perturber || exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] == 1) {
                                     carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = null;
                                 }
 
-                                exemplaireCarteBas[numeroJoueur(lettreJoueur1)][positionCarte1]--;
-                                exemplaireCarteBas[numeroJoueur(lettreJoueur2)][positionCarte2]--;
+                                exemplaireCarteJeu[numeroJoueur(lettreJoueur1)][positionCarte1]--;
+                                exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]--;
 
 
                                 if (carteEchange1.perturber) {
@@ -3801,8 +3799,8 @@
                                     var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
                                     var positionCarte = emplacement.substr(1);
 
-                                    cartePerturbation[numeroJoueurCarte][positionCarte] = cartePerturbation[numeroJouuer(lettreJoueur1)][positionCarte1];
-                                    cartePerturbation[numeroJouuer(lettreJoueur1)][positionCarte1] = null;
+                                    cartePerturbation[numeroJoueurCarte][positionCarte] = cartePerturbation[numeroJoueur(lettreJoueur1)][positionCarte1];
+                                    cartePerturbation[numeroJoueur(lettreJoueur1)][positionCarte1] = null;
 
                                     $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
                                     $(prochainePositionLibre).append(carte1);
@@ -3857,8 +3855,8 @@
                                     var numeroJoueurCarte = numeroJoueur(emplacement.substr(0, 1));
                                     var positionCarte = emplacement.substr(1);
 
-                                    cartePerturbation[numeroJoueurCarte][positionCarte] = cartePerturbation[numeroJouuer(lettreJoueur2)][positionCarte2];
-                                    cartePerturbation[numeroJouuer(lettreJoueur2)][positionCarte2] = null;
+                                    cartePerturbation[numeroJoueurCarte][positionCarte] = cartePerturbation[numeroJoueur(lettreJoueur2)][positionCarte2];
+                                    cartePerturbation[numeroJoueur(lettreJoueur2)][positionCarte2] = null;
 
                                     $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
                                     $(prochainePositionLibre).append(carte2);
