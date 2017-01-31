@@ -3337,7 +3337,7 @@
                 }
 
                 //3e carte, piger au hasard.
-                mains[0][2] = pigerCarte(paquetCarte);
+                mains[0][2] = chercherCarteParticuliere(nomEnum.rapides, paquetCarte);
                 mains[1][2] = pigerCarte(paquetCarte);
 
                 if (nombreJoueur >= 3) {//3 joueurs.
@@ -3792,7 +3792,9 @@
 
                                     $('#emplacementJoueur' + lettreJoueur1 + positionCarte1).children().remove();
                                     $(prochainePositionLibre).append(carte1);
-                                    carteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] = null;
+                                    carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = null;
+                                    cartePerturbation[numeroJoueurCarte][positionCarte] = cartePerturbation[numeroJouuer(lettreJoueur1)][positionCarte1];
+                                    cartePerturbation[numeroJouuer(lettreJoueur1)][positionCarte1] = null;
                                     carteJeu[numeroJoueurCarte][positionCarte] = carteEchange1;
                                     exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
                                 } else {
@@ -3801,7 +3803,6 @@
                                             $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().remove();//Enleve l'enfant.
                                             $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).append(carte1);//Rajoute la carte.
                                             carteJeu[numeroJoueur(lettreJoueur2)][positionCarte2] = carteEchange1;//Rajoute la carte dans les données.
-                                            exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]++;
                                         } else {
                                             var prochainePositionLibre = trouverPositionLibre(numeroJoueur(lettreJoueur2));
                                             var emplacement = prochainePositionLibre.substr(prochainePositionLibre.length - 2);
@@ -3829,6 +3830,7 @@
                                         $(carte1).css('margin-top', (exemplaireCarteJeu[numeroJoueurCarte][positionCarte] - 1) * 8);
 
                                         $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().last().remove();
+                                        exemplaireCarteJeu[numeroJoueur(lettreJoueur2)][positionCarte2]--;
 
                                         carteJeu[numeroJoueurCarte][positionCarte] = carteEchange1;
                                         $(positionCartePresente).append(carte1);
@@ -3846,7 +3848,6 @@
 
                                     $('#emplacementJoueur' + lettreJoueur2 + positionCarte2).children().remove();
                                     $(prochainePositionLibre).append(carte2);
-                                    carteJeu[numeroJoueur(lettreJoueur1)][positionCarte1] = null;
                                     carteJeu[numeroJoueurCarte][positionCarte] = carteEchange2;
                                     exemplaireCarteJeu[numeroJoueurCarte][positionCarte]++;
                                 } else {

@@ -210,13 +210,14 @@ input::-webkit-inner-spin-button {
     bottom: 75px;
     font-family: Arial;
 }
+
 .logoAccueil {
     position: absolute;
-    text-align:center;
-    left:33.5%;
+    text-align: center;
+    left: 33.5%;
     bottom: 13px;
-    width:463px;
-    height:62px;
+    width: 463px;
+    height: 62px;
 }
 
 
@@ -780,6 +781,8 @@ input::-webkit-inner-spin-button {
 #divFin {
     text-align: center;
     font-family: Arial;
+    width: 900px;
+    margin: auto;
 }
 
 #buttonRegle {
