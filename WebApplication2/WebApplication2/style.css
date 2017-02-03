@@ -417,7 +417,14 @@ input::-webkit-inner-spin-button {
     width: 575px;
     height: 1150px;
     display: none;
+    font-family:Arial;
+    text-align:left !important;
 }
+
+    .divRegle p {
+            margin-top: 10px;
+    margin-bottom: 10px;
+    }
 
 .popUpRegle {
     overflow: auto !important;
